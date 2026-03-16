@@ -116,22 +116,51 @@ export default function PillarStats({ pillarId, pillarName, videos: pillarVideos
             }), { total: 0, totalDuration: 0, quizzes: 0 }) || { total: 0, totalDuration: 0, quizzes: 0 };
 
             // ============================================
-            // 4. Calculer les stats quiz
+            // 4. Calculer les stats quiz & progression
+            //    via user_progress (données réelles)
             // ============================================
             let totalScore = 0;
             let totalPassed = 0;
             let totalAttempts = 0;
             let scoreCount = 0;
 
-            // Compter uniquement le nombre de questions par quiz
-            // (les stats de réussite nécessitent une table user_progress)
-            videos?.forEach(video => {
-                video.quizzes?.forEach(quiz => {
-                    if (quiz.questions?.length > 0) {
-                        scoreCount++;
+            if (videoIds.length > 0) {
+                try {
+                    const { data: progressData, error: progressError } = await supabase
+                        .from('user_progress')
+                        .select('user_id, video_id, watched, quiz_passed, quiz_score, quiz_attempts')
+                        .in('video_id', videoIds);
+
+                    if (progressError) {
+                        console.warn('⚠️ user_progress:', progressError);
+                    } else if (progressData) {
+                        // Vidéos vues
+                        totalWatched = progressData.filter(p => p.watched).length;
+
+                        // Tentatives quiz
+                        totalAttempts = progressData.reduce((sum, p) => sum + (p.quiz_attempts || 0), 0);
+
+                        // Quiz réussis
+                        totalPassed = progressData.filter(p => p.quiz_passed).length;
+
+                        // Scores moyens
+                        const scoresWithValue = progressData.filter(p => p.quiz_score != null);
+                        totalScore = scoresWithValue.reduce((sum, p) => sum + p.quiz_score, 0);
+                        scoreCount = scoresWithValue.length;
+
+                        // Étudiants ayant terminé TOUTES les vidéos du pilier
+                        const studentVideoWatchMap = {};
+                        progressData.filter(p => p.watched).forEach(p => {
+                            if (!studentVideoWatchMap[p.user_id]) studentVideoWatchMap[p.user_id] = new Set();
+                            studentVideoWatchMap[p.user_id].add(p.video_id);
+                        });
+                        totalCompleted = Object.values(studentVideoWatchMap)
+                            .filter(watchedSet => watchedSet.size >= videoIds.length).length;
                     }
-                });
-            });
+                } catch (progressErr) {
+                    console.warn('⚠️ Impossible de charger user_progress:', progressErr);
+                }
+            }
 
             // ============================================
             // 5. Mettre à jour les stats

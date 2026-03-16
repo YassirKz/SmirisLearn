@@ -1,17 +1,21 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Building, Mail, Lock, AlertCircle, Eye, EyeOff } from 'lucide-react';
+import { Building, Mail, Lock, AlertCircle, Eye, EyeOff, Users } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { isTokenExpired } from '../utils/tokenGenerator';
+import { useMemberInvitation } from '../hooks/useMemberInvitation';
 
 export default function AcceptInvitePage() {
     const [searchParams] = useSearchParams();
     const navigate = useNavigate();
     const token = searchParams.get('token');
 
+    const { getInvitationByToken: getMemberInvitation, acceptInvitation: acceptMemberInvitation } = useMemberInvitation();
+
     const [loading, setLoading] = useState(true);
     const [invitation, setInvitation] = useState(null);
+    const [invitationType, setInvitationType] = useState(null); // 'company' ou 'member'
     const [error, setError] = useState(null);
 
     // Formulaire d'inscription
@@ -26,6 +30,7 @@ export default function AcceptInvitePage() {
         confirmPassword: false
     });
     const [submitting, setSubmitting] = useState(false);
+    const [existingUser, setExistingUser] = useState(null);
 
     // ============================================
     // VÉRIFICATION DU TOKEN
@@ -39,30 +44,52 @@ export default function AcceptInvitePage() {
             }
 
             try {
-                // Récupérer l'invitation depuis pending_companies
-                const { data, error } = await supabase
+                // 1. Chercher d'abord dans member_invitations
+                const memberInv = await getMemberInvitation(token);
+                if (memberInv) {
+                    if (isTokenExpired(memberInv.expires_at)) {
+                        setError('Cette invitation a expiré (24h)');
+                        setLoading(false);
+                        return;
+                    }
+                    setInvitation(memberInv);
+                    setInvitationType('member');
+
+                    // Vérifier si l'utilisateur avec cet email existe déjà
+                    const { data: user } = await supabase
+                        .from('profiles')
+                        .select('id, email')
+                        .eq('email', memberInv.email)
+                        .maybeSingle();
+                    setExistingUser(user);
+                    setLoading(false);
+                    return;
+                }
+
+                // 2. Sinon, chercher dans pending_companies
+                const { data: companyInv, error: companyError } = await supabase
                     .from('pending_companies')
                     .select('*')
                     .eq('token', token)
                     .maybeSingle();
 
-                if (error) throw error;
+                if (companyError) throw companyError;
 
-                if (!data) {
+                if (!companyInv) {
                     setError('Cette invitation n\'existe pas ou a déjà été utilisée');
                     setLoading(false);
                     return;
                 }
 
                 // Vérifier l'expiration
-                if (isTokenExpired(data.expires_at)) {
+                if (isTokenExpired(companyInv.expires_at)) {
                     setError('Cette invitation a expiré (24h)');
                     setLoading(false);
                     return;
                 }
 
-                // Tout est bon
-                setInvitation(data);
+                setInvitation(companyInv);
+                setInvitationType('company');
                 setLoading(false);
 
             } catch (err) {
@@ -73,7 +100,7 @@ export default function AcceptInvitePage() {
         };
 
         verifyToken();
-    }, [token]);
+    }, [token, getMemberInvitation]);
 
     // ============================================
     // VALIDATION DU FORMULAIRE
@@ -98,7 +125,7 @@ export default function AcceptInvitePage() {
     const isValid = !passwordError && !confirmError && formData.password && formData.confirmPassword;
 
     // ============================================
-    // CRÉATION DU COMPTE ET DE L'ORGANISATION
+    // CRÉATION DU COMPTE ET ACCEPTATION
     // ============================================
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -108,46 +135,70 @@ export default function AcceptInvitePage() {
         setError(null);
 
         try {
-            // Créer l'utilisateur dans auth.users
-            const { data: authData, error: authError } = await supabase.auth.signUp({
-                email: invitation.admin_email,
-                password: formData.password,
-                options: {
-                    data: {
-                        full_name: invitation.admin_name,
-                        role: 'org_admin'
+            if (invitationType === 'company') {
+                // === INVITATION ENTREPRISE ===
+                const { data: authData, error: authError } = await supabase.auth.signUp({
+                    email: invitation.admin_email,
+                    password: formData.password,
+                    options: {
+                        data: {
+                            full_name: invitation.admin_name,
+                            role: 'org_admin'
+                        }
                     }
-                }
-            });
-
-            if (authError) throw authError;
-
-            if (!authData.user) {
-                throw new Error("Erreur lors de la création du compte");
-            }
-
-            // CONNEXION IMMÉDIATE (pour que l'utilisateur soit authentifié)
-            const { error: signInError } = await supabase.auth.signInWithPassword({
-                email: invitation.admin_email,
-                password: formData.password
-            });
-
-            if (signInError) throw signInError;
-
-            // Appeler la fonction sécurisée pour créer l'organisation
-            // Le plan par défaut est 'free' (géré dans la fonction SQL)
-            const { data: orgId, error: rpcError } = await supabase
-                .rpc('accept_invitation_and_create_org', {
-                    p_org_name: invitation.name,
-                    p_admin_id: authData.user.id,
-                    p_admin_name: invitation.admin_name,
-                    p_token: token
                 });
 
-            if (rpcError) throw rpcError;
+                if (authError) throw authError;
 
-            // Succès ! Rediriger vers le dashboard admin
-            navigate('/admin', { replace: true });
+                if (!authData.user) {
+                    throw new Error("Erreur lors de la création du compte");
+                }
+
+                // CONNEXION IMMÉDIATE (pour que l'utilisateur soit authentifié)
+                const { error: signInError } = await supabase.auth.signInWithPassword({
+                    email: invitation.admin_email,
+                    password: formData.password
+                });
+
+                if (signInError) throw signInError;
+
+                // Appeler la fonction sécurisée pour créer l'organisation
+                const { error: rpcError } = await supabase
+                    .rpc('accept_invitation_and_create_org', {
+                        p_org_name: invitation.name,
+                        p_admin_id: authData.user.id,
+                        p_admin_name: invitation.admin_name,
+                        p_token: token
+                    });
+
+                if (rpcError) throw rpcError;
+
+                navigate('/admin', { replace: true });
+
+            } else {
+                // === INVITATION MEMBRE ===
+                if (existingUser) {
+                    // L'utilisateur existe déjà : on le connecte puis on accepte l'invitation
+                    const { data: authData, error: signInError } = await supabase.auth.signInWithPassword({
+                        email: existingUser.email,
+                        password: formData.password,
+                    });
+                    if (signInError) throw signInError;
+                    await acceptMemberInvitation(token, authData.user.id);
+                } else {
+                    // Nouvel utilisateur : on crée le compte
+                    const { data: authData, error: signUpError } = await supabase.auth.signUp({
+                        email: invitation.email,
+                        password: formData.password,
+                        options: {
+                            data: { role: invitation.role }
+                        }
+                    });
+                    if (signUpError) throw signUpError;
+                    await acceptMemberInvitation(token, authData.user.id);
+                }
+                navigate('/student/learning', { replace: true });
+            }
 
         } catch (err) {
             console.error('Erreur création compte:', err);
@@ -158,7 +209,7 @@ export default function AcceptInvitePage() {
     };
 
     // ============================================
-    // 4. AFFICHAGE
+    // AFFICHAGE
     // ============================================
     if (loading) {
         return (
@@ -221,127 +272,166 @@ export default function AcceptInvitePage() {
                     </div>
                 </div>
 
-                {/* Logo */}
+                {/* Logo / Icône selon le type */}
                 <div className="text-center mb-8">
-                    <div className="w-20 h-20 bg-gradient-to-br from-green-500 to-emerald-600 rounded-2xl mx-auto mb-4 flex items-center justify-center shadow-lg">
-                        <span className="text-3xl font-bold text-white">✓</span>
+                    <div className={`w-20 h-20 bg-gradient-to-br ${invitationType === 'company' ? 'from-green-500 to-emerald-600' : 'from-indigo-500 to-purple-600'} rounded-2xl mx-auto mb-4 flex items-center justify-center shadow-lg`}>
+                        {invitationType === 'company' ? (
+                            <Building className="w-10 h-10 text-white" />
+                        ) : (
+                            <Users className="w-10 h-10 text-white" />
+                        )}
                     </div>
                     <h1 className="text-3xl font-bold text-gray-800 mb-2">Bienvenue !</h1>
                     <p className="text-gray-500 text-sm">
-                        Créez votre compte pour rejoindre <span className="font-semibold">{invitation?.name}</span>
+                        {invitationType === 'company' 
+                            ? `Créez votre compte pour rejoindre ${invitation?.name}`
+                            : `Vous êtes invité à rejoindre ${invitation?.organizations?.name} en tant que ${invitation?.role === 'org_admin' ? 'administrateur' : 'étudiant'}`
+                        }
                     </p>
                 </div>
 
                 {/* Informations de l'invitation */}
                 <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-4 mb-6 border border-blue-100">
-                    <div className="flex items-center gap-3 mb-3">
-                        <Building className="w-5 h-5 text-blue-600" />
-                        <span className="text-gray-700 font-medium">{invitation?.name}</span>
-                    </div>
-                    <div className="flex items-center gap-3">
-                        <Mail className="w-5 h-5 text-blue-600" />
-                        <span className="text-gray-600 text-sm">{invitation?.admin_email}</span>
-                    </div>
-                    <div className="flex items-center gap-3 mt-2">
-                        <div className="bg-green-100 text-green-700 text-xs px-2 py-1 rounded-full">
-                            Plan Starter - Essai 14 jours
-                        </div>
-                    </div>
+                    {invitationType === 'company' ? (
+                        <>
+                            <div className="flex items-center gap-3 mb-3">
+                                <Building className="w-5 h-5 text-blue-600" />
+                                <span className="text-gray-700 font-medium">{invitation?.name}</span>
+                            </div>
+                            <div className="flex items-center gap-3">
+                                <Mail className="w-5 h-5 text-blue-600" />
+                                <span className="text-gray-600 text-sm">{invitation?.admin_email}</span>
+                            </div>
+                            <div className="flex items-center gap-3 mt-2">
+                                <div className="bg-green-100 text-green-700 text-xs px-2 py-1 rounded-full">
+                                    Plan Starter - Essai 14 jours
+                                </div>
+                            </div>
+                        </>
+                    ) : (
+                        <>
+                            <div className="flex items-center gap-3 mb-3">
+                                <Building className="w-5 h-5 text-blue-600" />
+                                <span className="text-gray-700 font-medium">{invitation?.organizations?.name}</span>
+                            </div>
+                            <div className="flex items-center gap-3">
+                                <Mail className="w-5 h-5 text-blue-600" />
+                                <span className="text-gray-600 text-sm">{invitation?.email}</span>
+                            </div>
+                            <div className="flex items-center gap-3 mt-2">
+                                <div className={`px-2 py-1 rounded-full text-xs font-medium ${
+                                    invitation?.role === 'org_admin' ? 'bg-purple-100 text-purple-700' : 'bg-blue-100 text-blue-700'
+                                }`}>
+                                    {invitation?.role === 'org_admin' ? 'Administrateur' : 'Étudiant'}
+                                </div>
+                            </div>
+                        </>
+                    )}
                 </div>
 
                 {/* Formulaire */}
                 <form onSubmit={handleSubmit} className="space-y-5">
-                    {/* Mot de passe */}
-                    <div className="space-y-1">
-                        <label className="block text-sm font-medium text-gray-700">
-                            Mot de passe <span className="text-red-500">*</span>
-                        </label>
-                        <div className="relative group">
-                            <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-                            <input
-                                type={showPassword ? "text" : "password"}
-                                value={formData.password}
-                                onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                                onBlur={() => setTouched({ ...touched, password: true })}
-                                className={`
-                                    w-full pl-10 pr-12 py-3 border-2 rounded-xl outline-none transition-all
-                                    ${passwordError && touched.password
-                                        ? 'border-red-300 focus:border-red-500 focus:ring-4 focus:ring-red-100'
-                                        : formData.password && !passwordError
-                                            ? 'border-green-300 focus:border-green-500 focus:ring-4 focus:ring-green-100'
-                                            : 'border-gray-200 focus:border-blue-400 focus:ring-4 focus:ring-blue-100'
-                                    }
-                                `}
-                                placeholder="********"
-                            />
-                            <button
-                                type="button"
-                                onClick={() => setShowPassword(!showPassword)}
-                                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
-                            >
-                                {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-                            </button>
-                        </div>
-                        <AnimatePresence>
-                            {passwordError && touched.password && (
-                                <motion.p
-                                    initial={{ opacity: 0, y: -10 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    exit={{ opacity: 0, y: -10 }}
-                                    className="text-sm text-red-500 flex items-center gap-1"
-                                >
-                                    <AlertCircle className="w-4 h-4" />
-                                    {passwordError}
-                                </motion.p>
-                            )}
-                        </AnimatePresence>
-                    </div>
+                    {invitationType === 'member' && existingUser && (
+                        <p className="text-sm text-indigo-600 text-center">
+                            Vous avez déjà un compte. Connectez-vous pour accepter l'invitation.
+                        </p>
+                    )}
 
-                    {/* Confirmation mot de passe */}
-                    <div className="space-y-1">
-                        <label className="block text-sm font-medium text-gray-700">
-                            Confirmer le mot de passe <span className="text-red-500">*</span>
-                        </label>
-                        <div className="relative group">
-                            <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-                            <input
-                                type={showConfirmPassword ? "text" : "password"}
-                                value={formData.confirmPassword}
-                                onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
-                                onBlur={() => setTouched({ ...touched, confirmPassword: true })}
-                                className={`
-                                    w-full pl-10 pr-12 py-3 border-2 rounded-xl outline-none transition-all
-                                    ${confirmError && touched.confirmPassword
-                                        ? 'border-red-300 focus:border-red-500 focus:ring-4 focus:ring-red-100'
-                                        : formData.confirmPassword && !confirmError
-                                            ? 'border-green-300 focus:border-green-500 focus:ring-4 focus:ring-green-100'
-                                            : 'border-gray-200 focus:border-blue-400 focus:ring-4 focus:ring-blue-100'
-                                    }
-                                `}
-                                placeholder="********"
-                            />
-                            <button
-                                type="button"
-                                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
-                            >
-                                {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-                            </button>
-                        </div>
-                        <AnimatePresence>
-                            {confirmError && touched.confirmPassword && (
-                                <motion.p
-                                    initial={{ opacity: 0, y: -10 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    exit={{ opacity: 0, y: -10 }}
-                                    className="text-sm text-red-500 flex items-center gap-1"
-                                >
-                                    <AlertCircle className="w-4 h-4" />
-                                    {confirmError}
-                                </motion.p>
-                            )}
-                        </AnimatePresence>
-                    </div>
+                    {!(invitationType === 'member' && existingUser) && (
+                        <>
+                            {/* Mot de passe */}
+                            <div className="space-y-1">
+                                <label className="block text-sm font-medium text-gray-700">
+                                    Mot de passe <span className="text-red-500">*</span>
+                                </label>
+                                <div className="relative group">
+                                    <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                                    <input
+                                        type={showPassword ? "text" : "password"}
+                                        value={formData.password}
+                                        onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                                        onBlur={() => setTouched({ ...touched, password: true })}
+                                        className={`
+                                            w-full pl-10 pr-12 py-3 border-2 rounded-xl outline-none transition-all
+                                            ${passwordError && touched.password
+                                                ? 'border-red-300 focus:border-red-500 focus:ring-4 focus:ring-red-100'
+                                                : formData.password && !passwordError
+                                                    ? 'border-green-300 focus:border-green-500 focus:ring-4 focus:ring-green-100'
+                                                    : 'border-gray-200 focus:border-blue-400 focus:ring-4 focus:ring-blue-100'
+                                            }
+                                        `}
+                                        placeholder="********"
+                                    />
+                                    <button
+                                        type="button"
+                                        onClick={() => setShowPassword(!showPassword)}
+                                        className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                                    >
+                                        {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                                    </button>
+                                </div>
+                                <AnimatePresence>
+                                    {passwordError && touched.password && (
+                                        <motion.p
+                                            initial={{ opacity: 0, y: -10 }}
+                                            animate={{ opacity: 1, y: 0 }}
+                                            exit={{ opacity: 0, y: -10 }}
+                                            className="text-sm text-red-500 flex items-center gap-1"
+                                        >
+                                            <AlertCircle className="w-4 h-4" />
+                                            {passwordError}
+                                        </motion.p>
+                                    )}
+                                </AnimatePresence>
+                            </div>
+
+                            {/* Confirmation mot de passe */}
+                            <div className="space-y-1">
+                                <label className="block text-sm font-medium text-gray-700">
+                                    Confirmer le mot de passe <span className="text-red-500">*</span>
+                                </label>
+                                <div className="relative group">
+                                    <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                                    <input
+                                        type={showConfirmPassword ? "text" : "password"}
+                                        value={formData.confirmPassword}
+                                        onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
+                                        onBlur={() => setTouched({ ...touched, confirmPassword: true })}
+                                        className={`
+                                            w-full pl-10 pr-12 py-3 border-2 rounded-xl outline-none transition-all
+                                            ${confirmError && touched.confirmPassword
+                                                ? 'border-red-300 focus:border-red-500 focus:ring-4 focus:ring-red-100'
+                                                : formData.confirmPassword && !confirmError
+                                                    ? 'border-green-300 focus:border-green-500 focus:ring-4 focus:ring-green-100'
+                                                    : 'border-gray-200 focus:border-blue-400 focus:ring-4 focus:ring-blue-100'
+                                            }
+                                        `}
+                                        placeholder="********"
+                                    />
+                                    <button
+                                        type="button"
+                                        onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                                        className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                                    >
+                                        {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                                    </button>
+                                </div>
+                                <AnimatePresence>
+                                    {confirmError && touched.confirmPassword && (
+                                        <motion.p
+                                            initial={{ opacity: 0, y: -10 }}
+                                            animate={{ opacity: 1, y: 0 }}
+                                            exit={{ opacity: 0, y: -10 }}
+                                            className="text-sm text-red-500 flex items-center gap-1"
+                                        >
+                                            <AlertCircle className="w-4 h-4" />
+                                            {confirmError}
+                                        </motion.p>
+                                    )}
+                                </AnimatePresence>
+                            </div>
+                        </>
+                    )}
 
                     {/* Message d'erreur global */}
                     <AnimatePresence>
@@ -360,13 +450,13 @@ export default function AcceptInvitePage() {
                     {/* Bouton de création */}
                     <motion.button
                         type="submit"
-                        disabled={!isValid || submitting}
-                        whileHover={isValid ? { scale: 1.02 } : {}}
-                        whileTap={isValid ? { scale: 0.98 } : {}}
+                        disabled={!isValid || submitting || (invitationType === 'member' && existingUser && !formData.password)}
+                        whileHover={(isValid || (invitationType === 'member' && existingUser && formData.password)) ? { scale: 1.02 } : {}}
+                        whileTap={(isValid || (invitationType === 'member' && existingUser && formData.password)) ? { scale: 0.98 } : {}}
                         className={`
                             w-full py-4 rounded-xl font-semibold text-white
                             transition-all duration-300 relative overflow-hidden
-                            ${isValid && !submitting
+                            ${(isValid || (invitationType === 'member' && existingUser && formData.password)) && !submitting
                                 ? 'bg-gradient-to-r from-green-600 to-emerald-600 shadow-lg shadow-green-200 hover:shadow-xl'
                                 : 'bg-gray-300 cursor-not-allowed'
                             }
@@ -377,6 +467,8 @@ export default function AcceptInvitePage() {
                                 <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
                                 <span>Création en cours...</span>
                             </div>
+                        ) : invitationType === 'member' && existingUser ? (
+                            'Se connecter et accepter'
                         ) : (
                             'Créer mon compte'
                         )}

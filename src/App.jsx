@@ -26,9 +26,18 @@ import AdminSettings from './pages/admin/AdminSettings';
 import PillarsPage from './pages/admin/PillarsPage';
 import PillarDetailPage from './pages/admin/PillarDetailPage';
 import VideosPage from './pages/admin/VideosPage';
-import VideoDetailPage from './pages/admin/VideoDetailPage';  
-import QuizPage from './pages/admin/QuizPage';  
+import VideoDetailPage from './pages/admin/VideoDetailPage';
+import QuizPage from './pages/admin/QuizPage';
+import GroupsPage from './pages/admin/GroupsPage';
+import MembersPage from './pages/admin/MembersPage';
 
+// ============================================
+// STUDENT PAGES
+// ============================================
+import StudentDashboard from './pages/student/StudentDashboard';
+import StudentLearningPage from './pages/student/StudentLearningPage';
+import StudentVideoPage from './pages/student/StudentVideoPage';
+import StudentQuizPage from './pages/student/StudentQuizPage';
 
 function App() {
   const { user, loading } = useAuth();
@@ -59,6 +68,7 @@ function App() {
       <Route path="/auth/callback" element={<AuthCallback />} />
       <Route path="/unauthorized" element={<Unauthorized />} />
       <Route path="/accept-invite" element={<AcceptInvitePage />} />
+      <Route path="/accept-member-invite" element={<AcceptInvitePage />} />
 
       {/* ============================================
           SUPER ADMIN ROUTES
@@ -173,6 +183,60 @@ function App() {
         }
       />
 
+      <Route
+        path="/admin/groups"
+        element={
+            <ProtectedRoute allowedRoles={["super_admin", "org_admin"]}>
+                <GroupsPage />
+            </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/admin/members"
+        element={
+            <ProtectedRoute allowedRoles={["super_admin", "org_admin"]}>
+                <MembersPage />
+            </ProtectedRoute>
+        }
+      />
+
+      {/* ============================================
+          STUDENT ROUTES
+      ============================================ */}
+      <Route
+        path="/student"
+        element={
+          <ProtectedRoute allowedRoles={["student", "super_admin", "org_admin"]}>
+            <StudentDashboard />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/student/learning"
+        element={
+          <ProtectedRoute allowedRoles={["student", "super_admin", "org_admin"]}>
+            <StudentLearningPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/student/video/:id"
+        element={
+            <ProtectedRoute allowedRoles={["student", "super_admin", "org_admin"]}>
+                <StudentVideoPage />
+            </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/student/quiz/:id"
+        element={
+            <ProtectedRoute allowedRoles={["student", "super_admin", "org_admin"]}>
+                <StudentQuizPage />
+            </ProtectedRoute>
+        }
+      />
+
       {/* ============================================
           REDIRECTIONS
       ============================================ */}
@@ -186,7 +250,7 @@ function App() {
           ) : role === "org_admin" ? (
             <Navigate to="/admin" replace />
           ) : (
-            <Navigate to="/admin" replace />
+            <Navigate to="/student" replace />
           )
         }
       />

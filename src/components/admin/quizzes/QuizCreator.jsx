@@ -1,7 +1,7 @@
 // src/components/admin/quizzes/QuizCreator.jsx
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Plus, Save, X, AlertCircle, CheckCircle, Loader } from 'lucide-react';
+import { Plus, Save, X, AlertCircle, Loader } from 'lucide-react';
 import { supabase } from '../../../lib/supabase';
 import { useAuth } from '../../../hooks/useAuth';
 import { useToast } from '../../ui/Toast';
@@ -28,6 +28,7 @@ export default function QuizCreator({ quiz, videoId, onSuccess, onCancel }) {
     const [form, setForm] = useState({
         video_id: videoId || quiz?.video_id || '',
         passing_score: quiz?.passing_score ?? 70,
+        max_attempts: quiz?.max_attempts ?? 2,   // ← AJOUT
         timer_minutes: quiz?.timer_minutes ?? '',
         questions: quiz?.questions?.length
             ? quiz.questions.map(q => ({ ...q, id: q.id || crypto.randomUUID() }))
@@ -74,6 +75,11 @@ export default function QuizCreator({ quiz, videoId, onSuccess, onCancel }) {
             newErrors.passing_score = 'Le score doit être entre 0 et 100';
         }
 
+        const attempts = parseInt(form.max_attempts);
+        if (isNaN(attempts) || (attempts !== -1 && attempts < 1)) {
+            newErrors.max_attempts = 'Le nombre de tentatives doit être -1 (illimité) ou ≥ 1';
+        }
+
         if (form.questions.length === 0) {
             newErrors.questions = 'Ajoutez au moins une question';
         }
@@ -105,12 +111,12 @@ export default function QuizCreator({ quiz, videoId, onSuccess, onCancel }) {
 
         setSaving(true);
         try {
-            // Nettoyer les questions (supprimer l'id temporaire)
             const cleanQuestions = form.questions.map(({ id, ...q }) => q);
 
             const payload = {
                 video_id: form.video_id,
                 passing_score: Number(form.passing_score),
+                max_attempts: parseInt(form.max_attempts) || 2,   
                 timer_minutes: form.timer_minutes ? Number(form.timer_minutes) : null,
                 questions: cleanQuestions
             };
@@ -220,7 +226,7 @@ export default function QuizCreator({ quiz, videoId, onSuccess, onCancel }) {
             </div>
 
             {/* Paramètres */}
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
                         Score minimum (%)
@@ -233,6 +239,9 @@ export default function QuizCreator({ quiz, videoId, onSuccess, onCancel }) {
                         onChange={(e) => setForm(f => ({ ...f, passing_score: e.target.value }))}
                         className="w-full p-2 border border-gray-200 rounded-lg focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 outline-none"
                     />
+                    {errors.passing_score && (
+                        <p className="text-xs text-red-500 mt-1">{errors.passing_score}</p>
+                    )}
                 </div>
                 <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -246,6 +255,23 @@ export default function QuizCreator({ quiz, videoId, onSuccess, onCancel }) {
                         placeholder="Pas de limite"
                         className="w-full p-2 border border-gray-200 rounded-lg focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 outline-none"
                     />
+                </div>
+                {/* NOUVEAU : Tentatives max */}
+                <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Tentatives max <span className="text-xs text-gray-400">(-1 = illimité)</span>
+                    </label>
+                    <input
+                        type="number"
+                        min="-1"
+                        step="1"
+                        value={form.max_attempts}
+                        onChange={(e) => setForm(f => ({ ...f, max_attempts: e.target.value }))}
+                        className="w-full p-2 border border-gray-200 rounded-lg focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 outline-none"
+                    />
+                    {errors.max_attempts && (
+                        <p className="text-xs text-red-500 mt-1">{errors.max_attempts}</p>
+                    )}
                 </div>
             </div>
 

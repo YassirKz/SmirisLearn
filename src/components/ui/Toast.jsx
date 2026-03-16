@@ -261,21 +261,21 @@ export function useToast() {
     setToasts([]);
   }, []);
 
-  // Méthodes raccourcies
-  const success = (message, options = {}) => 
-    addToast({ message, type: 'success', ...options });
+  // Méthodes raccourcies mémoïsées pour éviter les boucles de rendu
+  const success = useCallback((message, options = {}) => 
+    addToast({ message, type: 'success', ...options }), [addToast]);
 
-  const error = (message, options = {}) => 
-    addToast({ message, type: 'error', ...options });
+  const error = useCallback((message, options = {}) => 
+    addToast({ message, type: 'error', ...options }), [addToast]);
 
-  const warning = (message, options = {}) => 
-    addToast({ message, type: 'warning', ...options });
+  const warning = useCallback((message, options = {}) => 
+    addToast({ message, type: 'warning', ...options }), [addToast]);
 
-  const info = (message, options = {}) => 
-    addToast({ message, type: 'info', ...options });
+  const info = useCallback((message, options = {}) => 
+    addToast({ message, type: 'info', ...options }), [addToast]);
 
-  const security = (message, options = {}) => 
-    addToast({ message, type: 'security', ...options });
+  const security = useCallback((message, options = {}) => 
+    addToast({ message, type: 'security', ...options }), [addToast]);
 
   return {
     toasts,

@@ -96,9 +96,9 @@ export default function VideoCard({ video, index, onEdit, onDelete, isReadOnly, 
                             {escapeText(untrusted(video.pillar?.name))}
                         </span>
                         {video.quizzes?.length > 0 && (
-                            <span className="px-2 py-1 rounded-full text-xs font-medium bg-amber-100 text-amber-700 flex items-center gap-1">
-                                <Award className="w-3 h-3" />
-                                Quiz
+                            <span className="px-2 py-1 rounded-full text-xs font-medium bg-amber-100 text-amber-700 border border-amber-300 flex items-center gap-1 shadow-sm">
+                                <Award className="w-3 h-3 text-amber-600" />
+                                Quiz attaché
                             </span>
                         )}
                     </div>
@@ -198,9 +198,9 @@ export default function VideoCard({ video, index, onEdit, onDelete, isReadOnly, 
                             {escapeText(untrusted(video.pillar?.name))}
                         </span>
                         {video.quizzes?.length > 0 && (
-                            <span className="px-2 py-1 rounded-full text-xs font-medium bg-amber-100 text-amber-700 flex items-center gap-1">
-                                <Award className="w-3 h-3" />
-                                Quiz
+                            <span className="px-2 py-1 rounded-full text-xs font-medium bg-amber-100 text-amber-700 border border-amber-300 flex items-center gap-1 shadow-sm">
+                                <Award className="w-3 h-3 text-amber-600" />
+                                Quiz attaché
                             </span>
                         )}
                     </div>

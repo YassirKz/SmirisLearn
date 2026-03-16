@@ -181,14 +181,14 @@ export default function PillarsList({ isReadOnly = false, orgId: propOrgId }) {
                 const pillarIds = data.map(p => p.id);
 
                 try {
-                    // STEP 1 : récupérer les group_id liés aux piliers
+                    // récupérer les group_id liés aux piliers
                     const { data: accessData, error: accessError } = await supabase
                         .from('group_pillar_access')
                         .select('pillar_id, group_id')
                         .in('pillar_id', pillarIds);
 
                     if (accessError) {
-                        console.warn('⚠️ Impossible de charger les accès groupe/pilier:', accessError);
+                        console.warn('Impossible de charger les accès groupe/pilier:', accessError);
                     } else if (accessData && accessData.length > 0) {
                         // STEP 2 : compter les membres dans ces groupes
                         const groupIds = [...new Set(accessData.map(r => r.group_id))];
@@ -199,7 +199,8 @@ export default function PillarsList({ isReadOnly = false, orgId: propOrgId }) {
                             .in('group_id', groupIds);
 
                         if (membersError) {
-                            console.warn('⚠️ Impossible de charger les membres des groupes:', membersError);
+                            console.warn('Impossible de charger les membres des groupes:', membersError);
+                           
                         } else if (membersData) {
                             // Compter les membres par groupe
                             const memberCountByGroup = {};
@@ -216,7 +217,7 @@ export default function PillarsList({ isReadOnly = false, orgId: propOrgId }) {
                         }
                     }
                 } catch (studentsErr) {
-                    console.warn('⚠️ Erreur lors du calcul des étudiants par pilier:', studentsErr);
+                    console.warn('Erreur lors du calcul des étudiants par pilier:', studentsErr);
                 }
             }
 
@@ -255,7 +256,7 @@ export default function PillarsList({ isReadOnly = false, orgId: propOrgId }) {
             });
 
         } catch (err) {
-            console.error('❌ Erreur chargement piliers:', err);
+            console.error('Erreur chargement piliers:', err);
             if (isMounted.current) {
                 setError(err.message || 'Impossible de charger les piliers');
                 showError('Impossible de charger les piliers');
@@ -366,7 +367,14 @@ export default function PillarsList({ isReadOnly = false, orgId: propOrgId }) {
             <div className="bg-red-50 border-l-4 border-red-500 p-4 rounded-lg">
                 <div className="flex items-center gap-3">
                     <Shield className="w-5 h-5 text-red-600" />
-                    <p className="text-sm text-red-700">{error}</p>
+                    <div>
+                        <p className="text-sm text-red-700">{error}</p>
+                        {error.includes('infinite recursion') && (
+                            <p className="text-xs text-red-500 mt-1 font-medium">
+                                💡 Conseil : Un problème de sécurité (RLS) récursif est détecté sur la table group_members.
+                            </p>
+                        )}
+                    </div>
                 </div>
                 <button
                     onClick={handleRefresh}

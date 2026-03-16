@@ -1,0 +1,483 @@
+// src/components/admin/members/MembersList.jsx
+import { useState, useEffect, useCallback } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import {
+  Users,
+  UserPlus,
+  Trash2,
+  Shield,
+  GraduationCap,
+  Loader2,
+  Search,
+  Mail,
+  AlertCircle,
+  Check,
+  Filter,
+  Ban
+} from 'lucide-react';
+import { useAuth } from '../../../hooks/useAuth';
+import { useToast } from '../../../hooks/useToast'; // <- import depuis hooks
+import { useDebounce } from '../../../hooks/useDebounce';
+import { useMemberInvitation } from '../../../hooks/useMemberInvitation';
+import { supabase } from '../../../lib/supabase';
+import { untrusted, escapeText, validateEmail } from '../../../utils/security';
+import ConfirmationModal from '../../ui/ConfirmationModal';
+import SanitizedInput from '../../ui/SanitizedInput';
+
+const ROLE_CONFIG = {
+  org_admin: {
+    label: 'Admin',
+    icon: Shield,
+    color: 'bg-purple-100 text-purple-700 border-purple-200'
+  },
+  student: {
+    label: 'Étudiant',
+    icon: GraduationCap,
+    color: 'bg-blue-100 text-blue-700 border-blue-200'
+  }
+};
+
+export default function MembersList({ isReadOnly = false, orgId: propOrgId }) {
+  const { user } = useAuth();
+  const { success, error: showError } = useToast();
+  const { createInvitation, loading: inviting } = useMemberInvitation();
+
+  const [members, setMembers] = useState([]);
+  const [groups, setGroups] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [organizationId, setOrganizationId] = useState(null);
+  const [search, setSearch] = useState('');
+  const debouncedSearch = useDebounce(search, 300);
+  const [selectedGroup, setSelectedGroup] = useState('all');
+  const [updatingId, setUpdatingId] = useState(null);
+  const [deletingId, setDeletingId] = useState(null);
+  const [showInviteForm, setShowInviteForm] = useState(false);
+  const [inviteEmail, setInviteEmail] = useState('');
+  const [inviteRole, setInviteRole] = useState('student');
+
+  // Récupérer l'organization_id
+  useEffect(() => {
+    const getOrgId = async () => {
+      try {
+        if (propOrgId) {
+          setOrganizationId(propOrgId);
+          return;
+        }
+        if (user?.organization_id) {
+          setOrganizationId(user.organization_id);
+        } else if (user) {
+          const { data: profile } = await supabase
+            .from('profiles')
+            .select('organization_id')
+            .eq('id', user.id)
+            .single();
+          if (profile?.organization_id) {
+            setOrganizationId(profile.organization_id);
+          } else {
+            setLoading(false);
+          }
+        } else {
+          setLoading(false);
+        }
+      } catch (err) {
+        console.error("Error fetching orgId:", err);
+        setLoading(false);
+      }
+    };
+    getOrgId();
+  }, [user, propOrgId]);
+
+  // Charger les groupes pour le filtre
+  useEffect(() => {
+    const fetchGroups = async () => {
+      if (!organizationId) return;
+      const { data } = await supabase
+        .from('groups')
+        .select('id, name')
+        .eq('organization_id', organizationId)
+        .order('name');
+      setGroups(data || []);
+    };
+    fetchGroups();
+  }, [organizationId]);
+
+  const fetchMembers = useCallback(async () => {
+    if (!organizationId) return;
+
+    setLoading(true);
+    try {
+      let query = supabase
+        .from('profiles')
+        .select(`
+          id,
+          full_name,
+          email,
+          role,
+          created_at
+        `)
+        .eq('organization_id', organizationId)
+        .in('role', ['student', 'org_admin']);
+
+      if (debouncedSearch) {
+        query = query.or(
+          `full_name.ilike.%${debouncedSearch}%,email.ilike.%${debouncedSearch}%`
+        );
+      }
+
+      const { data: profiles, error: profilesError } = await query;
+      if (profilesError) throw profilesError;
+
+      if (!profiles || profiles.length === 0) {
+        setMembers([]);
+        setLoading(false);
+        return;
+      }
+
+      const memberIds = profiles.map(p => p.id);
+      const { data: memberships, error: membershipsError } = await supabase
+        .from('group_members')
+        .select(`
+          user_id,
+          groups ( id, name )
+        `)
+        .in('user_id', memberIds);
+
+      if (membershipsError) throw membershipsError;
+
+      const groupsByUser = {};
+      memberships?.forEach(m => {
+        if (!groupsByUser[m.user_id]) groupsByUser[m.user_id] = [];
+        groupsByUser[m.user_id].push(m.groups);
+      });
+
+      const formatted = profiles.map(p => ({
+        ...p,
+        groups: groupsByUser[p.id] || []
+      }));
+
+      let filtered = formatted;
+      if (selectedGroup !== 'all') {
+        filtered = formatted.filter(m =>
+          m.groups.some(g => g.id === selectedGroup)
+        );
+      }
+
+      setMembers(filtered);
+    } catch (err) {
+      console.error('Erreur chargement membres:', err);
+      showError('Impossible de charger les membres');
+    } finally {
+      setLoading(false);
+    }
+  }, [organizationId, debouncedSearch, selectedGroup, showError]);
+
+  useEffect(() => {
+    fetchMembers();
+  }, [fetchMembers]);
+
+  const handleChangeRole = async (member) => {
+    if (member.id === user.id) {
+      showError('Vous ne pouvez pas modifier votre propre rôle');
+      return;
+    }
+    const newRole = member.role === 'student' ? 'org_admin' : 'student';
+    if (!confirm(`Changer le rôle de ${member.full_name || member.email} en "${ROLE_CONFIG[newRole].label}" ?`)) return;
+
+    setUpdatingId(member.id);
+    try {
+      const { error } = await supabase
+        .from('profiles')
+        .update({ role: newRole })
+        .eq('id', member.id);
+      if (error) throw error;
+      setMembers(prev => prev.map(m => m.id === member.id ? { ...m, role: newRole } : m));
+      success('Rôle mis à jour');
+    } catch (err) {
+      showError(err.message);
+    } finally {
+      setUpdatingId(null);
+    }
+  };
+
+  const handleRemove = async (member) => {
+    if (member.id === user.id) {
+      showError('Vous ne pouvez pas vous supprimer');
+      return;
+    }
+    if (!confirm(`Retirer ${member.full_name || member.email} de l'organisation ?`)) return;
+
+    setDeletingId(member.id);
+    try {
+      const { error } = await supabase
+        .from('profiles')
+        .update({ organization_id: null, role: 'student' })
+        .eq('id', member.id);
+      if (error) throw error;
+      setMembers(prev => prev.filter(m => m.id !== member.id));
+      success('Membre retiré');
+    } catch (err) {
+      showError(err.message);
+    } finally {
+      setDeletingId(null);
+    }
+  };
+
+  const handleInvite = async (e) => {
+    e.preventDefault();
+    if (!organizationId) return;
+
+    try {
+      await createInvitation({
+        email: inviteEmail,
+        role: inviteRole,
+        organization_id: organizationId,
+        invited_by: user.id,
+      });
+      success('Invitation envoyée !');
+      setInviteEmail('');
+      setShowInviteForm(false);
+      fetchMembers(); // pour voir si l'utilisateur existait déjà et a été ajouté
+    } catch (err) {
+      showError(err.message);
+    }
+  };
+
+  const stats = {
+    total: members.length,
+    admins: members.filter(m => m.role === 'org_admin').length,
+    students: members.filter(m => m.role === 'student').length
+  };
+
+  return (
+    <div className="space-y-6">
+      {/* Barre d'outils */}
+      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 justify-between">
+        <div className="relative flex-1 max-w-md">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+          <input
+            type="text"
+            placeholder="Rechercher un membre..."
+            value={search}
+            onChange={e => setSearch(e.target.value)}
+            className="w-full pl-10 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:border-indigo-400 focus:ring-4 focus:ring-indigo-100 outline-none transition-all text-sm"
+          />
+        </div>
+
+        <div className="flex items-center gap-2 w-full sm:w-auto">
+          <div className="relative flex-1 sm:flex-none">
+            <Filter className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+            <select
+              value={selectedGroup}
+              onChange={e => setSelectedGroup(e.target.value)}
+              className="pl-10 pr-8 py-3 border-2 border-gray-200 rounded-xl focus:border-indigo-400 focus:ring-4 focus:ring-indigo-100 outline-none transition-all text-sm appearance-none bg-white"
+            >
+              <option value="all">Tous les groupes</option>
+              {groups.map((g, idx) => (
+                <option key={g.id || `grp-${idx}`} value={g.id}>
+                  {escapeText(untrusted(g.name))}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {!isReadOnly && (
+            <button
+              onClick={() => setShowInviteForm(!showInviteForm)}
+              className="flex items-center gap-2 px-5 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-xl font-medium shadow-lg hover:shadow-xl transition-all whitespace-nowrap"
+            >
+              <UserPlus className="w-4 h-4" />
+              Inviter
+            </button>
+          )}
+        </div>
+      </div>
+
+      {/* Formulaire d'invitation */}
+      <AnimatePresence>
+        {showInviteForm && !isReadOnly && (
+          <motion.form
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            onSubmit={handleInvite}
+            className="bg-indigo-50 border-2 border-indigo-200 rounded-2xl p-5 flex flex-col sm:flex-row gap-3 items-end overflow-hidden"
+          >
+            <div className="flex-1 space-y-1">
+              <label className="text-xs font-semibold text-indigo-700">Email</label>
+              <div className="relative">
+                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-indigo-400" />
+                <input
+                  type="email"
+                  required
+                  value={inviteEmail}
+                  onChange={e => setInviteEmail(e.target.value)}
+                  placeholder="email@exemple.com"
+                  className="w-full pl-10 pr-4 py-3 bg-white border-2 border-indigo-200 rounded-xl focus:border-indigo-400 outline-none text-sm"
+                />
+              </div>
+            </div>
+            <div className="space-y-1">
+              <label className="text-xs font-semibold text-indigo-700">Rôle</label>
+              <select
+                value={inviteRole}
+                onChange={e => setInviteRole(e.target.value)}
+                className="px-4 py-3 bg-white border-2 border-indigo-200 rounded-xl focus:border-indigo-400 outline-none text-sm"
+              >
+                <option value="student">Étudiant</option>
+                <option value="org_admin">Admin</option>
+              </select>
+            </div>
+            <button
+              type="submit"
+              disabled={inviting}
+              className="flex items-center gap-2 px-5 py-3 bg-indigo-600 text-white rounded-xl font-medium hover:bg-indigo-700 transition-colors disabled:opacity-50"
+            >
+              {inviting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Check className="w-4 h-4" />}
+              Inviter
+            </button>
+          </motion.form>
+        )}
+      </AnimatePresence>
+
+      {/* Stats */}
+      <div className="grid grid-cols-3 gap-4">
+        {[
+          { label: 'Total membres', value: stats.total, color: 'text-gray-800', key: 'st-tot' },
+          { label: 'Étudiants', value: stats.students, color: 'text-blue-600', key: 'st-stud' },
+          { label: 'Admins', value: stats.admins, color: 'text-purple-600', key: 'st-adm' },
+        ].map((stat, idx) => (
+          <div key={stat.key || idx} className="bg-white border-2 border-gray-100 rounded-2xl p-4 text-center">
+            <p className={`text-2xl font-bold ${stat.color}`}>{stat.value}</p>
+            <p className="text-xs text-gray-500 mt-1">{stat.label}</p>
+          </div>
+        ))}
+      </div>
+
+      {/* Tableau des membres */}
+      {loading ? (
+        <div className="flex items-center justify-center py-16">
+          <Loader2 className="w-8 h-8 animate-spin text-indigo-600" />
+        </div>
+      ) : members.length === 0 ? (
+        <div className="text-center py-16">
+          <Users className="w-12 h-12 mx-auto text-gray-200 mb-3" />
+          <p className="text-gray-400">
+            {search || selectedGroup !== 'all' ? 'Aucun résultat' : 'Aucun membre dans cette organisation'}
+          </p>
+        </div>
+      ) : (
+        <div className="bg-white rounded-2xl border-2 border-gray-100 overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              <thead>
+                <tr className="border-b border-gray-100 bg-gray-50">
+                  <th className="text-left px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">Membre</th>
+                  <th className="text-left px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">Rôle</th>
+                  <th className="text-left px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider hidden lg:table-cell">Groupes</th>
+                  <th className="text-left px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider hidden sm:table-cell">Inscrit le</th>
+                  {!isReadOnly && (
+                    <th className="text-right px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">Actions</th>
+                  )}
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-50">
+                {members.map((member, i) => {
+                  const rc = ROLE_CONFIG[member.role] || ROLE_CONFIG.student;
+                  const initials = (member.full_name || member.email || '?')[0].toUpperCase();
+                  return (
+                    <motion.tr
+                      key={member.id || `member-${i}`}
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ delay: i * 0.02 }}
+                      className="hover:bg-gray-50 transition-colors"
+                    >
+                      <td className="px-6 py-4">
+                        <div className="flex items-center gap-3">
+                          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center font-bold text-white text-sm shrink-0">
+                            {initials}
+                          </div>
+                          <div className="min-w-0">
+                            <p className="font-semibold text-gray-800 text-sm truncate">
+                              {escapeText(untrusted(member.full_name || 'Sans nom'))}
+                              {member.id === user.id && (
+                                <span className="ml-2 text-xs text-indigo-500">(vous)</span>
+                              )}
+                            </p>
+                            <p className="text-xs text-gray-500 truncate">{member.email}</p>
+                          </div>
+                        </div>
+                      </td>
+                      <td className="px-6 py-4">
+                        <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium border ${rc.color}`}>
+                          <rc.icon className="w-3 h-3" />
+                          {rc.label}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 hidden lg:table-cell">
+                          <div className="flex flex-wrap gap-1 max-w-xs">
+                            {member.groups.length === 0 ? (
+                              <span className="text-xs text-gray-400">Aucun groupe</span>
+                            ) : (
+                              member.groups.slice(0, 3).map((g, idx) => (
+                                <span key={g.id || `m-g-${idx}`} className="inline-block px-2 py-1 bg-indigo-50 text-indigo-700 rounded-lg text-xs">
+                                  {escapeText(untrusted(g.name))}
+                                </span>
+                              ))
+                            )}
+                          {member.groups.length > 3 && (
+                            <span className="text-xs text-gray-500">+{member.groups.length - 3}</span>
+                          )}
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 hidden sm:table-cell">
+                        <span className="text-xs text-gray-500">
+                          {new Date(member.created_at).toLocaleDateString('fr-FR')}
+                        </span>
+                      </td>
+                      {!isReadOnly && (
+                        <td className="px-6 py-4">
+                          <div className="flex items-center justify-end gap-2">
+                            {/* Changer rôle */}
+                            <button
+                              onClick={() => handleChangeRole(member)}
+                              disabled={updatingId === member.id || member.id === user.id}
+                              title={member.role === 'student' ? 'Promouvoir Admin' : 'Rétrograder Étudiant'}
+                              className="p-2 hover:bg-purple-50 rounded-xl transition-colors disabled:opacity-30"
+                            >
+                              {updatingId === member.id ? (
+                                <Loader2 className="w-4 h-4 animate-spin text-purple-500" />
+                              ) : (
+                                <Shield className="w-4 h-4 text-purple-500" />
+                              )}
+                            </button>
+
+                            {/* Supprimer (uniquement étudiants) */}
+                            {member.role === 'student' && (
+                              <button
+                                onClick={() => handleRemove(member)}
+                                disabled={deletingId === member.id || member.id === user.id}
+                                title="Retirer de l'organisation"
+                                className="p-2 hover:bg-red-50 rounded-xl transition-colors disabled:opacity-30"
+                              >
+                                {deletingId === member.id ? (
+                                  <Loader2 className="w-4 h-4 animate-spin text-red-400" />
+                                ) : (
+                                  <Trash2 className="w-4 h-4 text-red-400" />
+                                )}
+                              </button>
+                            )}
+                          </div>
+                        </td>
+                      )}
+                    </motion.tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}

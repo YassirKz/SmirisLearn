@@ -227,8 +227,8 @@ export default function QuizList({ onEdit, onDelete, onDuplicate, onViewStats, r
                             className="px-4 py-2 border border-gray-200 rounded-lg focus:border-indigo-400 focus:ring-4 focus:ring-indigo-100 bg-white"
                         >
                             <option value="all">Toutes les vidéos</option>
-                            {videos.map(v => (
-                                <option key={v.id} value={v.id}>
+                            {videos.map((v, idx) => (
+                                <option key={v.id || `v-opt-${idx}`} value={v.id}>
                                     {escapeText(untrusted(v.title))}
                                 </option>
                             ))}
@@ -284,7 +284,7 @@ export default function QuizList({ onEdit, onDelete, onDuplicate, onViewStats, r
                             <tbody className="divide-y divide-gray-100">
                                 {quizzes.map((quiz, idx) => (
                                     <motion.tr
-                                        key={quiz.id}
+                                        key={quiz.id || `quiz-${idx}`}
                                         initial={{ opacity: 0, y: 10 }}
                                         animate={{ opacity: 1, y: 0 }}
                                         transition={{ delay: idx * 0.03 }}

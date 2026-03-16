@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
     Search, X, Building2, User, Video, 
@@ -23,7 +23,7 @@ export default function SearchComponent({
     const debouncedQuery = useDebounce(query, 300);
 
     // Recherche automatique après debounce
-    useState(() => {
+    useEffect(() => {
         if (debouncedQuery.length >= 2) {
             handleSearch();
         } else {

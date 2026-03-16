@@ -250,7 +250,9 @@ export function AuthProvider({ children }) {
     }
   };
 
-  const value = {
+  const clearError = useCallback(() => setError(null), []);
+
+  const value = React.useMemo(() => ({
     user,
     session,
     loading,
@@ -259,8 +261,8 @@ export function AuthProvider({ children }) {
     signIn,
     signOut,
     signInWithGoogle,
-    clearError: () => setError(null),
-  };
+    clearError
+  }), [user, session, loading, error, signUp, signIn, signOut, signInWithGoogle, clearError]);
 
   if (loading) {
     return (

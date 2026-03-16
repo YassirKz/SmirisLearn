@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
     Menu, X, LayoutDashboard, BookOpen, Video, 
-    Award, Users, Settings, LogOut, Sparkles,
+    Award, Users, Users2, Settings, LogOut, Sparkles,
     Shield, Zap
 } from 'lucide-react';
 import { NavLink, useNavigate, useSearchParams } from 'react-router-dom';
@@ -102,6 +102,7 @@ export default function AdminLayout({ children }) {
         { path: '/admin/pillars', icon: BookOpen, label: 'Piliers', badge: null },
         { path: '/admin/videos', icon: Video, label: 'Vidéos', badge: null },
         { path: '/admin/quizzes', icon: Award, label: 'QCM', badge: null },
+        { path: '/admin/groups', icon: Users2, label: 'Groupes', badge: null },
         { path: '/admin/members', icon: Users, label: 'Membres', badge: null },
         { path: '/admin/settings', icon: Settings, label: 'Paramètres', badge: null  },
     ];

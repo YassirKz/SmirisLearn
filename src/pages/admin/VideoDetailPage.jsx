@@ -4,7 +4,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import {
     ArrowLeft, Edit, Trash2,
-    Clock, Film, Calendar, Award, Plus, X
+    Clock, Film, Calendar, Award, Plus, X , RefreshCw
 } from 'lucide-react';
 import AdminLayout from '../../components/layout/AdminLayout';
 import { supabase } from '../../lib/supabase';
@@ -233,12 +233,17 @@ export default function VideoDetailPage() {
 
                     {quiz ? (
                         <div className="space-y-3">
-                            <div className="flex items-center gap-6 text-sm text-gray-600">
+                            <div className="flex items-center gap-6 text-sm text-gray-600 flex-wrap">
                                 <span className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full font-medium">
                                     {quiz.questions?.length || 0} question{(quiz.questions?.length || 0) > 1 ? 's' : ''}
                                 </span>
                                 <span className="flex items-center gap-1">
                                     Score minimum : <strong>{quiz.passing_score}%</strong>
+                                </span>
+                                {/* NOUVEAU */}
+                                <span className="flex items-center gap-1">
+                                    <RefreshCw className="w-4 h-4" />
+                                    Tentatives : <strong>{quiz.max_attempts === -1 ? '∞' : quiz.max_attempts}</strong>
                                 </span>
                                 {quiz.timer_minutes && (
                                     <span className="flex items-center gap-1">
@@ -253,13 +258,12 @@ export default function VideoDetailPage() {
                             >
                                 Modifier le quiz
                             </button>
-                        </div>
-                    ) : (
-                        <p className="text-sm text-gray-500">
-                            Aucun quiz n'est associé à cette vidéo.
-                        </p>
-                    )}
-                </div>
+                            </div>
+                        ) : (
+                            <p className="text-sm text-gray-500">Aucun quiz n'est associé à cette vidéo.</p>
+                        )}
+                    </div>
+                
 
                 {/* Modal Quiz */}
                 {showQuizModal && (

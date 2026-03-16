@@ -17,7 +17,11 @@ export default function ScreenRecorder({ orgId, onRecordSuccess, onClose }) {
 
     const stopStream = () => {
         if (streamRef.current) {
-            streamRef.current.getTracks().forEach(t => t.stop());
+            if (streamRef.current.customStop) {
+                streamRef.current.customStop();
+            } else if (streamRef.current.getTracks) {
+                streamRef.current.getTracks().forEach(t => t.stop());
+            }
             streamRef.current = null;
         }
     };
@@ -30,15 +34,60 @@ export default function ScreenRecorder({ orgId, onRecordSuccess, onClose }) {
                 throw new Error("Votre navigateur ne supporte pas l'enregistrement d'écran.");
             }
 
+            // 1. Capture écran (+ audio système)
             const displayStream = await navigator.mediaDevices.getDisplayMedia({
                 video: true,
                 audio: true
             });
 
-            streamRef.current = displayStream;
+            // 2. Capture microphone
+            let voiceStream = null;
+            try {
+                voiceStream = await navigator.mediaDevices.getUserMedia({
+                    audio: true,
+                    video: false
+                });
+            } catch (err) {
+                console.warn("Accès au microphone refusé ou micro non disponible.", err);
+            }
+
+            // 3. Mixage de l'audio si le micro est présent
+            let combinedStream;
+            let audioContext = null;
+
+            if (voiceStream) {
+                audioContext = new AudioContext();
+                const dest = audioContext.createMediaStreamDestination();
+
+                if (displayStream.getAudioTracks().length > 0) {
+                    const displaySource = audioContext.createMediaStreamSource(displayStream);
+                    displaySource.connect(dest);
+                }
+
+                if (voiceStream.getAudioTracks().length > 0) {
+                    const voiceSource = audioContext.createMediaStreamSource(voiceStream);
+                    voiceSource.connect(dest);
+                }
+
+                combinedStream = new MediaStream([
+                    ...displayStream.getVideoTracks(),
+                    ...dest.stream.getAudioTracks()
+                ]);
+            } else {
+                combinedStream = displayStream;
+            }
+
+            streamRef.current = {
+                customStop: () => {
+                    displayStream.getTracks().forEach(t => t.stop());
+                    if (voiceStream) voiceStream.getTracks().forEach(t => t.stop());
+                    if (audioContext && audioContext.state !== 'closed') audioContext.close();
+                }
+            };
+
             chunksRef.current = [];
 
-            const mediaRecorder = new MediaRecorder(displayStream, {
+            const mediaRecorder = new MediaRecorder(combinedStream, {
                 mimeType: 'video/webm'
             });
 
