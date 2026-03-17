@@ -69,6 +69,16 @@ export function useInvitation() {
 
             if (error) throw error;
 
+            // --- LOGS AJOUTÉS ---
+            console.log('📨 Email destinataire (validatedEmail) :', validatedEmail);
+            console.log('📦 Données envoyées à sendInvitationEmail :', {
+                to: validatedEmail,
+                organizationName: companyData.name.trim(),
+                adminName: companyData.adminName.trim(),
+                token: data.token
+            });
+            // ---------------------
+
             // Envoi email
             const { data: { user: superAdmin } } = await supabase.auth.getUser();
             const fromEmail = superAdmin?.email || "kezziyassir005@gmail.com";
@@ -77,7 +87,7 @@ export function useInvitation() {
                 fromEmail,
                 to: validatedEmail,
                 fromName: "Super Admin Smiris Learn",
-                companyName: companyData.name.trim(),
+                organizationName: companyData.name.trim(),
                 adminName: companyData.adminName.trim(),
                 token: data.token
             });
@@ -138,7 +148,7 @@ export function useInvitation() {
         }
     }, []);
 
-    // ✅ NOUVEAU : Nettoyer les invitations expirées
+    // Nettoyer les invitations expirées
     const cleanupExpiredInvitations = useCallback(async () => {
         try {
             setLoading(true);
@@ -160,7 +170,7 @@ export function useInvitation() {
         }
     }, []);
 
-    // ✅ NOUVEAU : Vérifier les limites avant d'ajouter
+    // ✅ Vérifier les limites avant d'ajouter
     const checkOrganizationLimits = useCallback(async (orgId, resourceType = 'users') => {
         try {
             const { data, error } = await supabase

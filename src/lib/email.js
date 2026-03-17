@@ -1,24 +1,11 @@
 import emailjs from '@emailjs/browser';
 
-// Initialiser EmailJS (à faire une seule fois)
 emailjs.init(import.meta.env.VITE_EMAILJS_PUBLIC_KEY);
 
-/**
- * Envoie un email d'invitation
- * @param {Object} params
- * @param {string} params.to - Email du destinataire
- * @param {string} params.type - 'company' ou 'member'
- * @param {string} params.organizationName - Nom de l'organisation (pour le membre) ou nom de l'entreprise (pour l'invité entreprise)
- * @param {string} params.token - Token d'invitation
- * @param {string} params.invitedByName - Nom de la personne qui invite (admin)
- * @param {string} params.fromEmail - Email de l'expéditeur (pour le type company)
- * @param {string} params.fromName - Nom de l'expéditeur (pour le type company)
- * @param {string} params.adminName - Nom de l'admin (pour le type company)
- */
 export const sendInvitationEmail = async ({ 
   to, 
   type = 'company', 
-  organizationName, 
+  organizationName,
   token, 
   invitedByName,
   fromEmail,
@@ -26,59 +13,60 @@ export const sendInvitationEmail = async ({
   adminName 
 }) => {
   try {
-    console.log(`📧 Envoi email de type "${type}" via EmailJS...`);
+    console.log('📧 Envoi email de type', type, 'via EmailJS...', { to, organizationName, adminName });
 
-    // Construire le lien d'invitation en fonction du type
+    const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID;
+    const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
+    if (!serviceId) throw new Error('VITE_EMAILJS_SERVICE_ID manquant');
+    if (!publicKey) throw new Error('VITE_EMAILJS_PUBLIC_KEY manquant');
+
     const inviteLink = type === 'member'
       ? `${window.location.origin}/accept-member-invite?token=${token}`
       : `${window.location.origin}/accept-invite?token=${token}`;
 
-    // Préparer les variables du template selon le type
+    console.log('🔗 Lien d\'invitation :', inviteLink);
+
     let templateParams;
+    let templateId;
 
     if (type === 'member') {
-      // Template pour invitation membre
+      templateId = import.meta.env.VITE_EMAILJS_MEMBER_TEMPLATE_ID;
       templateParams = {
         to_email: to,
         organization_name: organizationName,
-        invited_by: invitedByName,
+        invited_by: invitedByName || 'Un administrateur',
         invite_link: inviteLink,
-        // Ajoutez d'autres variables si votre template en a besoin
       };
     } else {
-      // Template pour invitation entreprise (existant)
+      templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
       templateParams = {
-        from_name: fromName || "Smiris Learn",
+        from_name: fromName || 'Smiris Learn',
         from_email: fromEmail,
         reply_to: fromEmail,
         to_email: to,
-        adminName: adminName,
-        companyName: organizationName,
-        inviteLink: inviteLink
+        adminName: adminName || '',
+        companyName: organizationName || '',
+        inviteLink: inviteLink,
       };
     }
 
-    // Choisir le bon template ID selon le type
-    const templateId = type === 'member'
-      ? import.meta.env.VITE_EMAILJS_MEMBER_TEMPLATE_ID   // À définir dans .env
-      : import.meta.env.VITE_EMAILJS_TEMPLATE_ID;        // Template existant
-
     if (!templateId) {
-      throw new Error(`Template ID manquant pour le type ${type}`);
+      throw new Error(`Template ID manquant pour le type "${type}"`);
     }
 
-    // Envoyer l'email
-    const response = await emailjs.send(
-      import.meta.env.VITE_EMAILJS_SERVICE_ID,
-      templateId,
-      templateParams
-    );
+    console.log('🔑 Service ID :', serviceId);
+    console.log('📋 Template ID :', templateId);
+    console.log('📤 Paramètres du template :', templateParams);
+    console.log('📧 to_email =', templateParams.to_email);
 
-    console.log('✅ Email envoyé!', response);
-    return { success: true };
-    
+    const response = await emailjs.send(serviceId, templateId, templateParams);
+
+    console.log('✅ Réponse EmailJS :', response.status, response.text);
+    return { success: true, data: response };
+
   } catch (error) {
-    console.error('❌ Erreur EmailJS:', error);
+    console.error('❌ Erreur EmailJS :', error);
+    if (error.text) console.error('Détails :', error.text);
     return { 
       success: false, 
       error: error.text || error.message || 'Erreur inconnue' 
