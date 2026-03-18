@@ -473,6 +473,7 @@ export default function SuperAdminSettings() {
                                     validate="text"
                                     minLength={3}
                                     required
+                                    className="dark:text-white dark:bg-gray-900 dark:border-gray-700 dark:focus:border-purple-500 dark:focus:bg-gray-900 dark:focus:text-white dark:placeholder-gray-400 dark:focus:placeholder-gray-500 dark:focus:ring-purple-500 dark:focus:ring-offset-purple-500 dark:focus:ring-offset-gray-900 dark:focus:ring-offset-2 dark:focus:ring-offset-gray-900"
                                 />
 
                                 <div className="bg-gray-50 dark:bg-gray-900 p-4 rounded-xl">
