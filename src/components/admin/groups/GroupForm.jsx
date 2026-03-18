@@ -102,6 +102,7 @@ export default function GroupForm({ isOpen, onClose, onSuccess, group }) {
                   maxLength={60}
                   required
                   error={errors.name}
+                  className='dark:bg-gray-800/50 dark:border-gray-500 dark:text-white'
                 />
 
                 <div>
