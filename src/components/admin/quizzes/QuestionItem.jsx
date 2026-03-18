@@ -124,6 +124,7 @@ export default function QuestionItem({ question, index, onChange, onRemove, onDu
                     validate="text"
                     required
                     placeholder="Entrez votre question"
+                    className='dark:bg-gray-800/50 dark:border-gray-500 dark:text-white'
                 />
             </div>
 
