@@ -200,7 +200,7 @@ export default function CreatePillarModal({ isOpen, onClose, onSuccess, orgId: p
                                             required
                                             error={touched.name ? errors.name : ''}
                                             placeholder="ex: Développement web"
-                                            className='block text-sm font-semibold text-gray-700 dark:text-white dark:bg-gray-900 dark:border-gray-700 dark:focus:border-purple-500 dark:focus:bg-gray-900 dark:focus:text-white dark:placeholder-gray-400 dark:focus:placeholder-gray-500 dark:focus:ring-purple-500 dark:focus:ring-offset-purple-500 dark:focus:ring-offset-gray-900 dark:focus:ring-offset-2 dark:focus:ring-offset-gray-900'
+                                            className="w-full px-4 py-3 bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 rounded-xl focus:border-indigo-400 dark:focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 dark:focus:ring-indigo-900/30 outline-none transition-all resize-none dark:text-white"
                                         />
 
                                         <div className="space-y-2">
