@@ -9,12 +9,14 @@ import {
 } from 'lucide-react';
 import { Cell, RadialBar, RadialBarChart, PolarAngleAxis, ResponsiveContainer, Tooltip, Legend } from 'recharts';
 import { useAuth } from '../../hooks/useAuth';
+import { useTheme } from '../../hooks/useTheme';
 import { supabase } from '../../lib/supabase';
 import { untrusted, escapeText } from '../../utils/security';
 import MainLayout from '../../components/layout/MainLayout';
 
 export default function StudentDashboard() {
   const { user } = useAuth();
+  const { theme } = useTheme();
   const navigate = useNavigate();
   const [orgName, setOrgName] = useState('');
   const [loading, setLoading] = useState(true);
@@ -525,7 +527,7 @@ export default function StudentDashboard() {
                   />
                   <RadialBar
                     minAngle={15}
-                    background={{ fill: '#f3f4f6' }}
+                    background={{ fill: theme === 'dark' ? '#374151' : '#f3f4f6' }}
                     clockWise
                     dataKey="value"
                     cornerRadius={10}
@@ -539,11 +541,12 @@ export default function StudentDashboard() {
                     cursor={false}
                     formatter={(value, name, props) => [`${value}%`, props.payload.name]}
                     contentStyle={{
-                      backgroundColor: 'rgba(255,255,255,0.9)',
+                      backgroundColor: theme === 'dark' ? 'rgba(31,41,55,0.95)' : 'rgba(255,255,255,0.9)',
                       backdropFilter: 'blur(8px)',
                       borderRadius: '12px',
-                      border: '1px solid #e5e7eb',
-                      boxShadow: '0 4px 6px rgba(0,0,0,0.1)'
+                      border: theme === 'dark' ? '1px solid #374151' : '1px solid #e5e7eb',
+                      boxShadow: '0 4px 6px rgba(0,0,0,0.1)',
+                      color: theme === 'dark' ? '#f3f4f6' : '#111827'
                     }}
                   />
                   <Legend 
@@ -551,7 +554,7 @@ export default function StudentDashboard() {
                     layout="vertical" 
                     verticalAlign="middle" 
                     align="right"
-                    wrapperStyle={{ fontSize: '12px', fontWeight: 500, color: '#1f2937' }}
+                    wrapperStyle={{ fontSize: '12px', fontWeight: 500, color: theme === 'dark' ? '#d1d5db' : '#1f2937' }}
                   />
                 </RadialBarChart>
               </ResponsiveContainer>

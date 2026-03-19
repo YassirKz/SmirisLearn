@@ -45,10 +45,10 @@ function App() {
 
   if (loading || roleLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-purple-50">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-purple-50 dark:from-gray-900 dark:to-gray-800 transition-colors duration-300">
         <div className="text-center">
           <LoadingSpinner size="lg" color="primary" />
-          <p className="mt-4 text-gray-600 animate-pulse">
+          <p className="mt-4 text-gray-600 dark:text-gray-400 animate-pulse">
             Chargement de votre session...
           </p>
         </div>

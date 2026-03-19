@@ -251,14 +251,14 @@ export default function Unauthorized() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-red-50 via-orange-50 to-yellow-50 flex items-center justify-center p-4 relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-red-50 via-orange-50 to-yellow-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex items-center justify-center p-4 relative overflow-hidden transition-colors duration-300">
       {/* Particules animées dynamiques */}
       <div className="absolute inset-0 overflow-hidden">
         {[...Array(errorType === 'maintenance_mode' ? 30 : 20)].map((_, i) => (
           <motion.div
             key={i}
             className={`absolute w-1 h-1 rounded-full ${
-              errorType === 'maintenance_mode' ? 'bg-blue-200' : 'bg-red-200'
+              errorType === 'maintenance_mode' ? 'bg-blue-200 dark:bg-blue-800' : 'bg-red-200 dark:bg-red-800'
             }`}
             initial={{
               x: Math.random() * window.innerWidth,
@@ -280,18 +280,18 @@ export default function Unauthorized() {
 
       {/* Blobs flous dynamiques */}
       <div className="absolute inset-0 overflow-hidden">
-        <div className={`absolute -top-40 -right-40 w-96 h-96 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-float ${
-          errorType === 'maintenance_mode' ? 'bg-blue-200' : 'bg-red-200'
+        <div className={`absolute -top-40 -right-40 w-96 h-96 rounded-full mix-blend-multiply dark:mix-blend-normal filter blur-3xl opacity-30 dark:opacity-20 animate-float ${
+          errorType === 'maintenance_mode' ? 'bg-blue-200 dark:bg-blue-900' : 'bg-red-200 dark:bg-red-900'
         }`} />
-        <div className={`absolute -bottom-40 -left-40 w-96 h-96 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-float ${
-          errorType === 'maintenance_mode' ? 'bg-cyan-200' : 'bg-orange-200'
+        <div className={`absolute -bottom-40 -left-40 w-96 h-96 rounded-full mix-blend-multiply dark:mix-blend-normal filter blur-3xl opacity-30 dark:opacity-20 animate-float ${
+          errorType === 'maintenance_mode' ? 'bg-cyan-200 dark:bg-cyan-900' : 'bg-orange-200 dark:bg-orange-900'
         }`} style={{ animationDelay: '2s' }} />
       </div>
 
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="relative bg-white/90 backdrop-blur-xl rounded-3xl p-8 shadow-2xl max-w-md w-full border border-red-100"
+        className="relative bg-white/90 dark:bg-gray-800/90 backdrop-blur-xl rounded-3xl p-8 shadow-2xl dark:shadow-gray-900/50 max-w-md w-full border border-red-100 dark:border-gray-700 transition-colors duration-300"
       >
         {/* Badge dynamique */}
         <motion.div
@@ -343,7 +343,7 @@ export default function Unauthorized() {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="text-2xl font-bold text-gray-800 text-center mb-2"
+          className="text-2xl font-bold text-gray-800 dark:text-white text-center mb-2"
         >
           {config.title}
         </motion.h1>
@@ -352,7 +352,7 @@ export default function Unauthorized() {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
-          className="text-gray-600 text-center mb-4"
+          className="text-gray-600 dark:text-gray-300 text-center mb-4"
         >
           {config.message}
         </motion.p>
@@ -361,7 +361,7 @@ export default function Unauthorized() {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.35 }}
-          className="text-sm text-gray-500 text-center mb-6 bg-gray-50 p-3 rounded-xl"
+          className="text-sm text-gray-500 dark:text-gray-400 text-center mb-6 bg-gray-50 dark:bg-gray-700/50 p-3 rounded-xl"
         >
           💡 {config.solution}
         </motion.p>
@@ -372,15 +372,15 @@ export default function Unauthorized() {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4 }}
-            className="bg-gradient-to-r from-gray-50 to-white rounded-xl p-4 mb-6 border border-gray-200"
+            className="bg-gradient-to-r from-gray-50 to-white dark:from-gray-700/50 dark:to-gray-700/30 rounded-xl p-4 mb-6 border border-gray-200 dark:border-gray-600"
           >
             <div className="flex items-center gap-3 mb-3">
-              <User className="w-4 h-4 text-gray-500" />
-              <span className="text-sm font-medium text-gray-700">Informations session</span>
+              <User className="w-4 h-4 text-gray-500 dark:text-gray-400" />
+              <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Informations session</span>
               
               <button
                 onClick={() => setShowDetails(!showDetails)}
-                className="ml-auto text-xs text-blue-600 hover:text-blue-700 flex items-center gap-1"
+                className="ml-auto text-xs text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 flex items-center gap-1"
               >
                 {showDetails ? 'Masquer' : 'Détails'}
                 <ChevronRight className={`w-3 h-3 transition-transform ${showDetails ? 'rotate-90' : ''}`} />
@@ -390,12 +390,12 @@ export default function Unauthorized() {
             <div className="space-y-2 text-sm">
               <div className="flex items-center gap-2">
                 <Mail className="w-3 h-3 text-gray-400" />
-                <span className="text-gray-600">{user.email}</span>
+                <span className="text-gray-600 dark:text-gray-300">{user.email}</span>
               </div>
               
               <div className="flex items-center gap-2">
                 <Shield className="w-3 h-3 text-gray-400" />
-                <span className="text-gray-600">Rôle actuel : <span className="font-medium text-gray-800">{role || 'non défini'}</span></span>
+                <span className="text-gray-600 dark:text-gray-300">Rôle actuel : <span className="font-medium text-gray-800 dark:text-gray-100">{role || 'non défini'}</span></span>
               </div>
 
               {requiredRole && (
@@ -413,7 +413,7 @@ export default function Unauthorized() {
                     exit={{ opacity: 0, height: 0 }}
                     className="overflow-hidden"
                   >
-                    <div className="pt-2 mt-2 border-t border-gray-200 space-y-2">
+                    <div className="pt-2 mt-2 border-t border-gray-200 dark:border-gray-600 space-y-2">
                       <div className="flex items-center gap-2 text-xs text-gray-500">
                         <Clock className="w-3 h-3" />
                         <span>Session créée: {new Date(user.created_at).toLocaleString()}</span>
@@ -430,18 +430,18 @@ export default function Unauthorized() {
 
             {/* Informations organisation */}
             {organization && (
-              <div className="mt-3 pt-3 border-t border-gray-200">
+              <div className="mt-3 pt-3 border-t border-gray-200 dark:border-gray-600">
                 <div className="flex items-center gap-2 mb-2">
-                  <Building2 className="w-4 h-4 text-purple-500" />
-                  <span className="text-sm font-medium text-gray-700">{organization.name}</span>
+                  <Building2 className="w-4 h-4 text-purple-500 dark:text-purple-400" />
+                  <span className="text-sm font-medium text-gray-700 dark:text-gray-300">{organization.name}</span>
                 </div>
                 <div className="flex items-center gap-2 text-xs">
                   <span className={`px-2 py-1 rounded-full ${
                     organization.subscription_status === 'active' 
-                      ? 'bg-green-100 text-green-700'
+                      ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400'
                       : organization.subscription_status === 'trial'
-                        ? 'bg-blue-100 text-blue-700'
-                        : 'bg-gray-100 text-gray-700'
+                        ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400'
+                        : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300'
                   }`}>
                     {organization.plan_type} • {organization.subscription_status}
                   </span>
@@ -466,11 +466,11 @@ export default function Unauthorized() {
                 whileHover={{ scale: 1.02, x: 5 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={action.action}
-                className="w-full flex items-center justify-between p-3 bg-gradient-to-r from-gray-50 to-white rounded-xl hover:shadow-md transition-all group"
+                className="w-full flex items-center justify-between p-3 bg-gradient-to-r from-gray-50 to-white dark:from-gray-700/50 dark:to-gray-700/30 rounded-xl hover:shadow-md dark:hover:shadow-gray-900/30 transition-all group"
               >
                 <div className="flex items-center gap-2">
                   <action.icon className={`w-4 h-4 text-${action.color}-500`} />
-                  <span className="text-sm text-gray-700">{action.label}</span>
+                  <span className="text-sm text-gray-700 dark:text-gray-300">{action.label}</span>
                 </div>
                 <ChevronRight className="w-4 h-4 text-gray-400 group-hover:translate-x-1 transition-transform" />
               </motion.button>
@@ -494,7 +494,7 @@ export default function Unauthorized() {
               key={countdown}
               initial={{ scale: 1.5 }}
               animate={{ scale: 1 }}
-              className="text-2xl font-bold text-gray-800"
+              className="text-2xl font-bold text-gray-800 dark:text-white"
             >
               {countdown}s
             </motion.div>
@@ -536,7 +536,7 @@ export default function Unauthorized() {
           <div className="grid grid-cols-2 gap-2">
             <button
               onClick={() => navigate(-1)}
-              className="flex items-center justify-center gap-2 px-4 py-2 bg-white border-2 border-gray-200 text-gray-700 rounded-xl hover:border-blue-300 hover:text-blue-600 transition-all group text-sm"
+              className="flex items-center justify-center gap-2 px-4 py-2 bg-white dark:bg-gray-700 border-2 border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-xl hover:border-blue-300 dark:hover:border-blue-500 hover:text-blue-600 dark:hover:text-blue-400 transition-all group text-sm"
             >
               <ArrowLeft className="w-3 h-3 group-hover:-translate-x-1 transition-transform" />
               Retour
@@ -545,7 +545,7 @@ export default function Unauthorized() {
             {user && (
               <button
                 onClick={handleSignOut}
-                className="flex items-center justify-center gap-2 px-4 py-2 bg-red-50 text-red-600 rounded-xl hover:bg-red-100 transition-all group text-sm"
+                className="flex items-center justify-center gap-2 px-4 py-2 bg-red-50 dark:bg-red-900/30 text-red-600 dark:text-red-400 rounded-xl hover:bg-red-100 dark:hover:bg-red-900/50 transition-all group text-sm"
               >
                 <RefreshCw className="w-3 h-3 group-hover:rotate-180 transition-transform" />
                 Déconnexion
@@ -563,7 +563,7 @@ export default function Unauthorized() {
         >
           <button
             onClick={() => setShowSupport(!showSupport)}
-            className="text-sm text-gray-500 hover:text-gray-700 flex items-center justify-center gap-1 mx-auto"
+            className="text-sm text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 flex items-center justify-center gap-1 mx-auto"
           >
             <HelpCircle className="w-4 h-4" />
             Besoin d'aide ?
@@ -577,37 +577,37 @@ export default function Unauthorized() {
                 exit={{ opacity: 0, height: 0 }}
                 className="overflow-hidden"
               >
-                <div className="mt-4 p-4 bg-gray-50 rounded-xl space-y-3">
+                <div className="mt-4 p-4 bg-gray-50 dark:bg-gray-700/50 rounded-xl space-y-3">
                   <button
                     onClick={() => window.location.href = 'mailto:support@smiris-learn.com'}
-                    className="w-full flex items-center gap-3 p-2 hover:bg-white rounded-lg transition-colors text-left"
+                    className="w-full flex items-center gap-3 p-2 hover:bg-white dark:hover:bg-gray-600 rounded-lg transition-colors text-left"
                   >
                     <Mail className="w-4 h-4 text-blue-600" />
                     <div>
-                      <p className="text-sm font-medium text-gray-700">Email</p>
-                      <p className="text-xs text-gray-500">support@smiris-learn.com</p>
+                      <p className="text-sm font-medium text-gray-700 dark:text-gray-200">Email</p>
+                      <p className="text-xs text-gray-500 dark:text-gray-400">support@smiris-learn.com</p>
                     </div>
                   </button>
 
                   <a
                     href="tel:+33123456789"
-                    className="w-full flex items-center gap-3 p-2 hover:bg-white rounded-lg transition-colors text-left"
+                    className="w-full flex items-center gap-3 p-2 hover:bg-white dark:hover:bg-gray-600 rounded-lg transition-colors text-left"
                   >
                     <Phone className="w-4 h-4 text-green-600" />
                     <div>
-                      <p className="text-sm font-medium text-gray-700">Téléphone</p>
-                      <p className="text-xs text-gray-500">+33 1 23 45 67 89</p>
+                      <p className="text-sm font-medium text-gray-700 dark:text-gray-200">Téléphone</p>
+                      <p className="text-xs text-gray-500 dark:text-gray-400">+33 1 23 45 67 89</p>
                     </div>
                   </a>
 
                   <button
                     onClick={() => window.open('https://t.me/smiris_support', '_blank')}
-                    className="w-full flex items-center gap-3 p-2 hover:bg-white rounded-lg transition-colors text-left"
+                    className="w-full flex items-center gap-3 p-2 hover:bg-white dark:hover:bg-gray-600 rounded-lg transition-colors text-left"
                   >
                     <MessageCircle className="w-4 h-4 text-purple-600" />
                     <div>
-                      <p className="text-sm font-medium text-gray-700">Telegram</p>
-                      <p className="text-xs text-gray-500">@smiris_support</p>
+                      <p className="text-sm font-medium text-gray-700 dark:text-gray-200">Telegram</p>
+                      <p className="text-xs text-gray-500 dark:text-gray-400">@smiris_support</p>
                     </div>
                   </button>
                 </div>
@@ -623,10 +623,10 @@ export default function Unauthorized() {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0 }}
-              className="mt-4 p-3 bg-red-50 border-l-4 border-red-500 rounded-lg flex items-start gap-2"
+              className="mt-4 p-3 bg-red-50 dark:bg-red-900/30 border-l-4 border-red-500 rounded-lg flex items-start gap-2"
             >
               <AlertTriangle className="w-4 h-4 text-red-500 mt-0.5" />
-              <p className="text-xs text-red-600">{error}</p>
+              <p className="text-xs text-red-600 dark:text-red-400">{error}</p>
             </motion.div>
           )}
         </AnimatePresence>
@@ -636,7 +636,7 @@ export default function Unauthorized() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.8 }}
-          className="mt-6 flex justify-center gap-4 text-xs text-gray-400"
+          className="mt-6 flex justify-center gap-4 text-xs text-gray-400 dark:text-gray-500"
         >
           <div className="flex items-center gap-1">
             <Shield className="w-3 h-3" />

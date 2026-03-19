@@ -213,22 +213,22 @@ export default function AcceptInvitePage() {
     // ============================================
     if (loading) {
         return (
-            <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 flex items-center justify-center p-4">
+            <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex items-center justify-center p-4 transition-colors duration-300">
                 <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     className="text-center"
                 >
                     <div className="relative mx-auto w-20 h-20 mb-6">
-                        <div className="absolute inset-0 rounded-full border-4 border-blue-200"></div>
+                        <div className="absolute inset-0 rounded-full border-4 border-blue-200 dark:border-blue-800"></div>
                         <motion.div
                             className="absolute inset-0 rounded-full border-4 border-blue-600 border-t-transparent"
                             animate={{ rotate: 360 }}
                             transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
                         />
                     </div>
-                    <h2 className="text-xl font-semibold text-gray-800 mb-2">Vérification de votre invitation</h2>
-                    <p className="text-gray-500">Veuillez patienter...</p>
+                    <h2 className="text-xl font-semibold text-gray-800 dark:text-white mb-2">Vérification de votre invitation</h2>
+                    <p className="text-gray-500 dark:text-gray-400">Veuillez patienter...</p>
                 </motion.div>
             </div>
         );
@@ -236,17 +236,17 @@ export default function AcceptInvitePage() {
 
     if (error) {
         return (
-            <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 flex items-center justify-center p-4">
+            <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex items-center justify-center p-4 transition-colors duration-300">
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="bg-white rounded-2xl p-8 shadow-xl max-w-md w-full text-center"
+                    className="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-xl dark:shadow-gray-900/50 max-w-md w-full text-center transition-colors duration-300"
                 >
-                    <div className="w-20 h-20 bg-red-100 rounded-full mx-auto mb-6 flex items-center justify-center">
+                    <div className="w-20 h-20 bg-red-100 dark:bg-red-900/30 rounded-full mx-auto mb-6 flex items-center justify-center">
                         <AlertCircle className="w-10 h-10 text-red-500" />
                     </div>
-                    <h2 className="text-2xl font-bold text-gray-800 mb-2">Oups !</h2>
-                    <p className="text-gray-600 mb-6">{error}</p>
+                    <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-2">Oups !</h2>
+                    <p className="text-gray-600 dark:text-gray-300 mb-6">{error}</p>
                     <button
                         onClick={() => navigate('/login')}
                         className="px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl hover:shadow-lg transition-all"
@@ -259,11 +259,11 @@ export default function AcceptInvitePage() {
     }
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 flex items-center justify-center p-4">
+        <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex items-center justify-center p-4 transition-colors duration-300">
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="bg-white rounded-3xl p-8 shadow-xl border border-blue-100 max-w-md w-full relative overflow-hidden"
+                className="bg-white dark:bg-gray-800 rounded-3xl p-8 shadow-xl dark:shadow-gray-900/50 border border-blue-100 dark:border-gray-700 max-w-md w-full relative overflow-hidden transition-colors duration-300"
             >
                 {/* Badge */}
                 <div className="absolute -top-1 -right-1">
@@ -281,8 +281,8 @@ export default function AcceptInvitePage() {
                             <Users className="w-10 h-10 text-white" />
                         )}
                     </div>
-                    <h1 className="text-3xl font-bold text-gray-800 mb-2">Bienvenue !</h1>
-                    <p className="text-gray-500 text-sm">
+                    <h1 className="text-3xl font-bold text-gray-800 dark:text-white mb-2">Bienvenue !</h1>
+                    <p className="text-gray-500 dark:text-gray-400 text-sm">
                         {invitationType === 'company' 
                             ? `Créez votre compte pour rejoindre ${invitation?.name}`
                             : `Vous êtes invité à rejoindre ${invitation?.organizations?.name} en tant que ${invitation?.role === 'org_admin' ? 'administrateur' : 'étudiant'}`
@@ -291,19 +291,19 @@ export default function AcceptInvitePage() {
                 </div>
 
                 {/* Informations de l'invitation */}
-                <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-4 mb-6 border border-blue-100">
+                <div className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-xl p-4 mb-6 border border-blue-100 dark:border-gray-600">
                     {invitationType === 'company' ? (
                         <>
                             <div className="flex items-center gap-3 mb-3">
                                 <Building className="w-5 h-5 text-blue-600" />
-                                <span className="text-gray-700 font-medium">{invitation?.name}</span>
+                                <span className="text-gray-700 dark:text-gray-200 font-medium">{invitation?.name}</span>
                             </div>
                             <div className="flex items-center gap-3">
                                 <Mail className="w-5 h-5 text-blue-600" />
-                                <span className="text-gray-600 text-sm">{invitation?.admin_email}</span>
+                                <span className="text-gray-600 dark:text-gray-300 text-sm">{invitation?.admin_email}</span>
                             </div>
                             <div className="flex items-center gap-3 mt-2">
-                                <div className="bg-green-100 text-green-700 text-xs px-2 py-1 rounded-full">
+                                <div className="bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 text-xs px-2 py-1 rounded-full">
                                     Plan Starter - Essai 14 jours
                                 </div>
                             </div>
@@ -312,15 +312,15 @@ export default function AcceptInvitePage() {
                         <>
                             <div className="flex items-center gap-3 mb-3">
                                 <Building className="w-5 h-5 text-blue-600" />
-                                <span className="text-gray-700 font-medium">{invitation?.organizations?.name}</span>
+                                <span className="text-gray-700 dark:text-gray-200 font-medium">{invitation?.organizations?.name}</span>
                             </div>
                             <div className="flex items-center gap-3">
                                 <Mail className="w-5 h-5 text-blue-600" />
-                                <span className="text-gray-600 text-sm">{invitation?.email}</span>
+                                <span className="text-gray-600 dark:text-gray-300 text-sm">{invitation?.email}</span>
                             </div>
                             <div className="flex items-center gap-3 mt-2">
                                 <div className={`px-2 py-1 rounded-full text-xs font-medium ${
-                                    invitation?.role === 'org_admin' ? 'bg-purple-100 text-purple-700' : 'bg-blue-100 text-blue-700'
+                                    invitation?.role === 'org_admin' ? 'bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-400' : 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400'
                                 }`}>
                                     {invitation?.role === 'org_admin' ? 'Administrateur' : 'Étudiant'}
                                 </div>
@@ -332,7 +332,7 @@ export default function AcceptInvitePage() {
                 {/* Formulaire */}
                 <form onSubmit={handleSubmit} className="space-y-5">
                     {invitationType === 'member' && existingUser && (
-                        <p className="text-sm text-indigo-600 text-center">
+                        <p className="text-sm text-indigo-600 dark:text-indigo-400 text-center">
                             Vous avez déjà un compte. Connectez-vous pour accepter l'invitation.
                         </p>
                     )}
@@ -341,23 +341,23 @@ export default function AcceptInvitePage() {
                         <>
                             {/* Mot de passe */}
                             <div className="space-y-1">
-                                <label className="block text-sm font-medium text-gray-700">
+                                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                                     Mot de passe <span className="text-red-500">*</span>
                                 </label>
                                 <div className="relative group">
-                                    <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                                    <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500 w-5 h-5" />
                                     <input
                                         type={showPassword ? "text" : "password"}
                                         value={formData.password}
                                         onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                                         onBlur={() => setTouched({ ...touched, password: true })}
                                         className={`
-                                            w-full pl-10 pr-12 py-3 border-2 rounded-xl outline-none transition-all
+                                            w-full pl-10 pr-12 py-3 border-2 rounded-xl outline-none transition-all bg-white dark:bg-gray-700 dark:text-white
                                             ${passwordError && touched.password
-                                                ? 'border-red-300 focus:border-red-500 focus:ring-4 focus:ring-red-100'
+                                                ? 'border-red-300 dark:border-red-500/50 focus:border-red-500 focus:ring-4 focus:ring-red-100 dark:focus:ring-red-900/30'
                                                 : formData.password && !passwordError
-                                                    ? 'border-green-300 focus:border-green-500 focus:ring-4 focus:ring-green-100'
-                                                    : 'border-gray-200 focus:border-blue-400 focus:ring-4 focus:ring-blue-100'
+                                                    ? 'border-green-300 dark:border-green-500/50 focus:border-green-500 focus:ring-4 focus:ring-green-100 dark:focus:ring-green-900/30'
+                                                    : 'border-gray-200 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-500 focus:ring-4 focus:ring-blue-100 dark:focus:ring-blue-900/30'
                                             }
                                         `}
                                         placeholder="********"
@@ -365,7 +365,7 @@ export default function AcceptInvitePage() {
                                     <button
                                         type="button"
                                         onClick={() => setShowPassword(!showPassword)}
-                                        className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                                        className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300"
                                     >
                                         {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                                     </button>
@@ -387,23 +387,23 @@ export default function AcceptInvitePage() {
 
                             {/* Confirmation mot de passe */}
                             <div className="space-y-1">
-                                <label className="block text-sm font-medium text-gray-700">
+                                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                                     Confirmer le mot de passe <span className="text-red-500">*</span>
                                 </label>
                                 <div className="relative group">
-                                    <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                                    <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500 w-5 h-5" />
                                     <input
                                         type={showConfirmPassword ? "text" : "password"}
                                         value={formData.confirmPassword}
                                         onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
                                         onBlur={() => setTouched({ ...touched, confirmPassword: true })}
                                         className={`
-                                            w-full pl-10 pr-12 py-3 border-2 rounded-xl outline-none transition-all
+                                            w-full pl-10 pr-12 py-3 border-2 rounded-xl outline-none transition-all bg-white dark:bg-gray-700 dark:text-white
                                             ${confirmError && touched.confirmPassword
-                                                ? 'border-red-300 focus:border-red-500 focus:ring-4 focus:ring-red-100'
+                                                ? 'border-red-300 dark:border-red-500/50 focus:border-red-500 focus:ring-4 focus:ring-red-100 dark:focus:ring-red-900/30'
                                                 : formData.confirmPassword && !confirmError
-                                                    ? 'border-green-300 focus:border-green-500 focus:ring-4 focus:ring-green-100'
-                                                    : 'border-gray-200 focus:border-blue-400 focus:ring-4 focus:ring-blue-100'
+                                                    ? 'border-green-300 dark:border-green-500/50 focus:border-green-500 focus:ring-4 focus:ring-green-100 dark:focus:ring-green-900/30'
+                                                    : 'border-gray-200 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-500 focus:ring-4 focus:ring-blue-100 dark:focus:ring-blue-900/30'
                                             }
                                         `}
                                         placeholder="********"
@@ -411,7 +411,7 @@ export default function AcceptInvitePage() {
                                     <button
                                         type="button"
                                         onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                                        className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                                        className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300"
                                     >
                                         {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                                     </button>
@@ -440,9 +440,9 @@ export default function AcceptInvitePage() {
                                 initial={{ opacity: 0, y: -10 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 exit={{ opacity: 0 }}
-                                className="p-3 bg-red-50 border-l-4 border-red-500 rounded-lg"
+                                className="p-3 bg-red-50 dark:bg-red-900/30 border-l-4 border-red-500 rounded-lg"
                             >
-                                <p className="text-sm text-red-600">{error}</p>
+                                <p className="text-sm text-red-600 dark:text-red-400">{error}</p>
                             </motion.div>
                         )}
                     </AnimatePresence>
@@ -458,7 +458,7 @@ export default function AcceptInvitePage() {
                             transition-all duration-300 relative overflow-hidden
                             ${(isValid || (invitationType === 'member' && existingUser && formData.password)) && !submitting
                                 ? 'bg-gradient-to-r from-green-600 to-emerald-600 shadow-lg shadow-green-200 hover:shadow-xl'
-                                : 'bg-gray-300 cursor-not-allowed'
+                                : 'bg-gray-300 dark:bg-gray-600 cursor-not-allowed'
                             }
                         `}
                     >
@@ -479,7 +479,7 @@ export default function AcceptInvitePage() {
                 <p className="text-center mt-6">
                     <button
                         onClick={() => navigate('/login')}
-                        className="text-sm text-blue-600 hover:text-blue-700 hover:underline"
+                        className="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 hover:underline"
                     >
                         Déjà un compte ? Se connecter
                     </button>
