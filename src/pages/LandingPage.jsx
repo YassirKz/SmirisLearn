@@ -6,7 +6,7 @@ import {
   Sparkles, BookOpen, Video, Award, Users, Moon, Globe,
   CheckCircle, Star, ChevronRight, Menu, X, Send,
   Building, Mail, User, MessageSquare, ArrowRight, Lock,
-  Zap, Shield, TrendingUp, PlayCircle
+  Zap, Shield, TrendingUp, PlayCircle, ChevronDown, ChevronUp
 } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
 import { useTheme } from '../hooks/useTheme';
@@ -106,8 +106,39 @@ const TestimonialCard = ({ name, role, content, rating, avatar, delay }) => (
   </motion.div>
 );
 
+// Composant FAQ
+const FaqItem = ({ question, answer, isOpen, onClick }) => (
+  <div className="border border-indigo-100 dark:border-gray-700 rounded-2xl bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm overflow-hidden transition-all">
+    <button
+      onClick={onClick}
+      className="w-full px-6 py-4 flex items-center justify-between text-left focus:outline-none"
+    >
+      <span className="font-bold text-gray-800 dark:text-white">{question}</span>
+      {isOpen ? (
+        <ChevronUp className="w-5 h-5 text-indigo-600 dark:text-indigo-400 shrink-0" />
+      ) : (
+        <ChevronDown className="w-5 h-5 text-gray-400 dark:text-gray-500 shrink-0" />
+      )}
+    </button>
+    <AnimatePresence>
+      {isOpen && (
+        <motion.div
+          initial={{ height: 0, opacity: 0 }}
+          animate={{ height: 'auto', opacity: 1 }}
+          exit={{ height: 0, opacity: 0 }}
+          transition={{ duration: 0.3 }}
+        >
+          <div className="px-6 pb-4 text-gray-600 dark:text-gray-300">
+            {answer}
+          </div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  </div>
+);
+
 // Carte de prix
-const PricingCard = ({ name, price, features, isPopular, delay, onSelect }) => (
+const PricingCard = ({ name, price, subtext, features, isPopular, delay, onSelect }) => (
   <motion.div
     initial={{ opacity: 0, y: 30 }}
     whileInView={{ opacity: 1, y: 0 }}
@@ -128,9 +159,18 @@ const PricingCard = ({ name, price, features, isPopular, delay, onSelect }) => (
     <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 dark:via-gray-700/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
     <div className="relative z-10">
       <h3 className="text-2xl font-bold text-gray-800 dark:text-white mb-2">{name}</h3>
-      <div className="mb-6">
-        <span className="text-4xl font-bold text-indigo-600 dark:text-indigo-400">{price}</span>
-        {price !== 'Gratuit' && <span className="text-gray-500 dark:text-gray-400">/mois</span>}
+      <div className="mb-6 h-16">
+        <div className="flex items-baseline gap-1">
+          <span className="text-4xl font-bold text-indigo-600 dark:text-indigo-400">{price}</span>
+          {price !== '0€' && price !== 'Sur devis' && <span className="text-gray-500 dark:text-gray-400">/mois</span>}
+        </div>
+        {subtext ? (
+          <div className="text-sm font-medium text-green-500 dark:text-green-400 mt-1">
+            {subtext}
+          </div>
+        ) : (
+          <div className="text-sm text-transparent mt-1 select-none">.</div>
+        )}
       </div>
       <ul className="space-y-3 mb-8">
         {features.map((feature, i) => (
@@ -162,6 +202,8 @@ export default function LandingPage() {
   const containerRef = useRef(null);
   const [activeSection, setActiveSection] = useState('hero');
   const [menuOpen, setMenuOpen] = useState(false);
+  const [isAnnual, setIsAnnual] = useState(false);
+  const [openFaq, setOpenFaq] = useState(0);
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
@@ -171,6 +213,25 @@ export default function LandingPage() {
   const [formErrors, setFormErrors] = useState({});
   const [sending, setSending] = useState(false);
 
+  const faqs = [
+    {
+      question: "Puis-je changer de plan en cours de route ?",
+      answer: "Absolument. Vous pouvez upgrader ou downgrader votre forfait à tout moment depuis les paramètres de votre compte. Le montant sera proratisé."
+    },
+    {
+      question: "Les vidéos sont-elles hébergées chez vous ?",
+      answer: "Oui, nous hébergeons toutes vos vidéos sur des serveurs sécurisés et optimisés pour une lecture fluide partout dans le monde."
+    },
+    {
+      question: "Comment fonctionne l'essai gratuit ?",
+      answer: "L'essai gratuit dure 14 jours et vous donne accès à toutes les fonctionnalités du plan Starter. Aucune carte bancaire n'est requise pour l'inscription."
+    },
+    {
+      question: "Puis-je personnaliser la plateforme ?",
+      answer: "Oui, le plan Business vous permet d'ajouter votre logo, vos couleurs (marque blanche) et d'utiliser un domaine personnalisé."
+    }
+  ];
+
   // Sections pour la navigation
   const sections = [
     { id: 'hero', label: 'Accueil' },
@@ -178,26 +239,34 @@ export default function LandingPage() {
     { id: 'testimonials', label: 'Témoignages' },
     { id: 'demo', label: 'Aperçu' },
     { id: 'pricing', label: 'Tarifs' },
+    { id: 'faq', label: 'FAQ' },
     { id: 'contact', label: 'Contact' },
     { id: 'cta', label: 'Inscription' }
   ];
 
-  // Détecter la section active lors du scroll
+  // Détecter la section active lors du scroll (optimisé)
   useEffect(() => {
+    let ticking = false;
     const handleScroll = () => {
-      const scrollPosition = window.scrollY + 100;
-      for (const section of sections) {
-        const element = document.getElementById(section.id);
-        if (element) {
-          const { offsetTop, offsetHeight } = element;
-          if (scrollPosition >= offsetTop && scrollPosition < offsetTop + offsetHeight) {
-            setActiveSection(section.id);
-            break;
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const scrollPosition = window.scrollY + 100;
+          for (const section of sections) {
+            const element = document.getElementById(section.id);
+            if (element) {
+              const { offsetTop, offsetHeight } = element;
+              if (scrollPosition >= offsetTop && scrollPosition < offsetTop + offsetHeight) {
+                setActiveSection(section.id);
+                break;
+              }
+            }
           }
-        }
+          ticking = false;
+        });
+        ticking = true;
       }
     };
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, [sections]);
 
@@ -649,10 +718,30 @@ export default function LandingPage() {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-xl text-center text-gray-600 dark:text-gray-300 mb-16"
+            className="text-xl text-center text-gray-600 dark:text-gray-300 mb-8"
           >
             Choisissez le plan qui correspond à la taille de votre équipe.
           </motion.p>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="flex justify-center items-center gap-4 mb-16"
+          >
+            <span className={`text-sm font-medium ${!isAnnual ? 'text-gray-900 dark:text-white' : 'text-gray-500 dark:text-gray-400'}`}>Mensuel</span>
+            <button
+              onClick={() => setIsAnnual(!isAnnual)}
+              className="relative inline-flex h-7 w-14 items-center rounded-full bg-indigo-100 dark:bg-gray-700 transition-colors focus:outline-none"
+            >
+              <span
+                className={`inline-block h-5 w-5 transform rounded-full bg-indigo-600 transition-transform ${isAnnual ? 'translate-x-8' : 'translate-x-1'}`}
+              />
+            </button>
+            <span className={`text-sm font-medium flex items-center gap-2 ${isAnnual ? 'text-gray-900 dark:text-white' : 'text-gray-500 dark:text-gray-400'}`}>
+              Annuel <span className="px-2 py-0.5 rounded-full bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400 text-xs font-bold">-20%</span>
+            </span>
+          </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
             <PricingCard
@@ -670,7 +759,8 @@ export default function LandingPage() {
             />
             <PricingCard
               name="Starter"
-              price="49€"
+              price={isAnnual ? "39€" : "49€"}
+              subtext={isAnnual ? "Facturé 468€ / an" : null}
               features={[
                 "20 utilisateurs",
                 "50 vidéos",
@@ -683,7 +773,8 @@ export default function LandingPage() {
             />
             <PricingCard
               name="Business"
-              price="99€"
+              price={isAnnual ? "79€" : "99€"}
+              subtext={isAnnual ? "Facturé 948€ / an" : null}
               features={[
                 "Utilisateurs illimités",
                 "Vidéos illimitées",
@@ -695,6 +786,42 @@ export default function LandingPage() {
               onSelect={() => navigate('/contact')}
             />
           </div>
+        </div>
+      </Section>
+
+      {/* Section FAQ */}
+      <Section id="faq" className="bg-white/50 dark:bg-gray-800/20">
+        <div className="max-w-4xl mx-auto w-full">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-12"
+          >
+            <h2 className="text-4xl md:text-5xl font-black text-gray-900 dark:text-white mb-4">
+              Questions fréquentes
+            </h2>
+            <p className="text-xl text-gray-600 dark:text-gray-300">
+              Tout ce que vous devez savoir sur Smiris Learn.
+            </p>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="space-y-4"
+          >
+            {faqs.map((faq, index) => (
+              <FaqItem
+                key={index}
+                question={faq.question}
+                answer={faq.answer}
+                isOpen={openFaq === index}
+                onClick={() => setOpenFaq(openFaq === index ? -1 : index)}
+              />
+            ))}
+          </motion.div>
         </div>
       </Section>
 
@@ -905,11 +1032,11 @@ export default function LandingPage() {
               <ul className="space-y-2">
                 <li className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
                   <Mail className="w-4 h-4" />
-                  you.faqir@gmail.com
+                  [you.faqir@gmail.com]
                 </li>
                 <li className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
                   <Building className="w-4 h-4" />
-                  Paris, France
+                  dortmund, Germany
                 </li>
               </ul>
             </div>
