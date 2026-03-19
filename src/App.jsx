@@ -10,6 +10,11 @@ import LoadingSpinner from "./components/ui/LoadingSpinner";
 import AcceptInvitePage from './pages/AcceptInvitePage';
 
 // ============================================
+// LANDING PAGE
+// ============================================
+import LandingPage from './pages/LandingPage'; // ← AJOUT
+
+// ============================================
 // SUPER ADMIN PAGES
 // ============================================
 import SuperAdminDashboard from "./pages/super-admin/SuperAdminDashboard";
@@ -61,6 +66,7 @@ function App() {
       {/* ============================================
           ROUTES PUBLIQUES
       ============================================ */}
+      <Route path="/" element={<LandingPage />} /> 
       <Route
         path="/login"
         element={user ? <Navigate to="/" replace /> : <LoginPage />}
@@ -234,24 +240,6 @@ function App() {
             <ProtectedRoute allowedRoles={["student", "super_admin", "org_admin"]}>
                 <StudentQuizPage />
             </ProtectedRoute>
-        }
-      />
-
-      {/* ============================================
-          REDIRECTIONS
-      ============================================ */}
-      <Route
-        path="/"
-        element={
-          !user ? (
-            <Navigate to="/login" replace />
-          ) : role === "super_admin" ? (
-            <Navigate to="/super-admin" replace />
-          ) : role === "org_admin" ? (
-            <Navigate to="/admin" replace />
-          ) : (
-            <Navigate to="/student" replace />
-          )
         }
       />
 
