@@ -3,9 +3,11 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Bell, Check, Trash2, X, Info, AlertTriangle, CheckCircle, AlertCircle } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import { useAuth } from '../../hooks/useAuth';
+import { useNavigate } from 'react-router-dom';
 
 export default function NotificationDropdown({ isOpen, onClose }) {
     const { user } = useAuth();
+    const navigate = useNavigate();
     const [notifications, setNotifications] = useState([]);
     const [loading, setLoading] = useState(true);
 
@@ -102,6 +104,16 @@ export default function NotificationDropdown({ isOpen, onClose }) {
         }
     };
 
+    const handleNotificationClick = async (notification) => {
+        if (!notification.read) {
+            await markAsRead(notification.id);
+        }
+        if (notification.link) {
+            navigate(notification.link);
+            onClose();
+        }
+    };
+
     return (
         <AnimatePresence>
             {isOpen && (
@@ -154,7 +166,10 @@ export default function NotificationDropdown({ isOpen, onClose }) {
                                     {notifications.map((notification) => (
                                         <div 
                                             key={notification.id}
-                                            className={`p-4 hover:bg-blue-50/30 dark:hover:bg-gray-700/50 transition-colors flex gap-3 relative group ${!notification.read ? 'bg-blue-50/10 dark:bg-blue-900/20' : ''}`}
+                                            onClick={() => handleNotificationClick(notification)}
+                                            role="button"
+                                            tabIndex={0}
+                                            className={`p-4 hover:bg-blue-50/30 dark:hover:bg-gray-700/50 transition-colors flex gap-3 relative group cursor-pointer ${!notification.read ? 'bg-blue-50/10 dark:bg-blue-900/20' : ''}`}
                                         >
                                             {!notification.read && (
                                                 <div className="absolute left-0 top-0 bottom-0 w-1 bg-blue-600 dark:bg-blue-400"></div>
@@ -176,7 +191,7 @@ export default function NotificationDropdown({ isOpen, onClose }) {
                                             <div className="flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                                                 {!notification.read && (
                                                     <button 
-                                                        onClick={() => markAsRead(notification.id)}
+                                                        onClick={(e) => { e.stopPropagation(); markAsRead(notification.id); }}
                                                         className="p-1.5 bg-white dark:bg-gray-700 shadow-sm border border-gray-100 dark:border-gray-600 rounded-lg text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-gray-600"
                                                         title="Marquer comme lu"
                                                     >
@@ -184,7 +199,7 @@ export default function NotificationDropdown({ isOpen, onClose }) {
                                                     </button>
                                                 )}
                                                 <button 
-                                                    onClick={() => deleteNotification(notification.id)}
+                                                    onClick={(e) => { e.stopPropagation(); deleteNotification(notification.id); }}
                                                     className="p-1.5 bg-white dark:bg-gray-700 shadow-sm border border-gray-100 dark:border-gray-600 rounded-lg text-red-500 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30"
                                                     title="Supprimer"
                                                 >
@@ -195,13 +210,6 @@ export default function NotificationDropdown({ isOpen, onClose }) {
                                     ))}
                                 </div>
                             )}
-                        </div>
-
-                        {/* Footer */}
-                        <div className="p-3 border-t border-blue-50 dark:border-gray-700 bg-gray-50/50 dark:bg-gray-900/50 text-center">
-                            <button className="text-xs text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors">
-                                Voir toutes les notifications
-                            </button>
                         </div>
                     </motion.div>
                 </>
