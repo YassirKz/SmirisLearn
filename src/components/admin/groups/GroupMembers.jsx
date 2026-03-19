@@ -1,4 +1,5 @@
 // src/components/admin/groups/GroupMembers.jsx
+import { useTranslation } from 'react-i18next';
 import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, UserMinus, Search, Plus, Upload, Loader2 } from 'lucide-react';
@@ -12,6 +13,7 @@ import { untrusted, escapeText } from '../../../utils/security';
 
 export default function GroupMembers({ isOpen, onClose, group, orgId, onUpdate }) {
   const { user } = useAuth();
+  const { t } = useTranslation('admin');
   const { success, error: showError } = useToast();
   const [members, setMembers] = useState([]);
   const [availableStudents, setAvailableStudents] = useState([]);
@@ -56,7 +58,7 @@ export default function GroupMembers({ isOpen, onClose, group, orgId, onUpdate }
       setMembers(mergedMembers);
     } catch (err) {
       console.error('Erreur chargement membres:', err);
-      showError('Impossible de charger les membres');
+      showError(t('groups.errors.fetch_members_failed'));
     }
   }, [group, showError]);
 
@@ -110,7 +112,7 @@ export default function GroupMembers({ isOpen, onClose, group, orgId, onUpdate }
     }
 
     if (!studentToInvite) {
-      showError('Veuillez sélectionner un étudiant dans la liste déroulante');
+      showError(t('groups.errors.add_member_select_required'));
       return;
     }
 
@@ -126,7 +128,7 @@ export default function GroupMembers({ isOpen, onClose, group, orgId, onUpdate }
 
       if (error) throw error;
 
-      success('Membre ajouté');
+      success(t('groups.success.member_added'));
       setSelectedStudent(null);
       setShowAddDropdown(false);
       setSearchTerm('');
@@ -135,7 +137,7 @@ export default function GroupMembers({ isOpen, onClose, group, orgId, onUpdate }
       onUpdate?.();
     } catch (err) {
       console.error('Erreur ajout membre:', err);
-      showError('Échec de l\'ajout');
+      showError(t('groups.errors.add_member_failed'));
     } finally {
       setAdding(false);
     }
@@ -150,14 +152,14 @@ export default function GroupMembers({ isOpen, onClose, group, orgId, onUpdate }
 
       if (error) throw error;
 
-      success('Membre retiré');
+      success(t('groups.success.member_removed'));
       setRemoveCandidate(null);
       fetchMembers();
       fetchAvailableStudents();
       onUpdate?.();
     } catch (err) {
       console.error('Erreur retrait membre:', err);
-      showError('Échec du retrait');
+      showError(t('groups.errors.remove_member_failed'));
     }
   };
 
@@ -174,7 +176,7 @@ export default function GroupMembers({ isOpen, onClose, group, orgId, onUpdate }
         return;
       }
 
-      success(`Importation de ${emails.length} étudiants...`);
+      success(t('groups.members.import.starting', { count: emails.length }));
       setAdding(true);
 
       let successCount = 0;
@@ -212,12 +214,15 @@ export default function GroupMembers({ isOpen, onClose, group, orgId, onUpdate }
         }
       }
 
-      success(`${successCount} membres ajoutés${failCount > 0 ? `, ${failCount} échecs` : ''}`);
+      success(t('groups.members.import.result', { 
+        success: successCount, 
+        failed: failCount > 0 ? `, ${failCount} échecs` : '' 
+      }));
       fetchMembers();
       fetchAvailableStudents();
       onUpdate?.();
     } catch (err) {
-      showError('Erreur lors de l\'import');
+      showError(t('groups.errors.import_failed'));
     } finally {
       setAdding(false);
       if (e.target) e.target.value = '';
@@ -247,7 +252,7 @@ export default function GroupMembers({ isOpen, onClose, group, orgId, onUpdate }
             <div className="p-6 bg-gradient-to-r from-indigo-600 to-purple-600 text-white shrink-0">
               <div className="flex items-center justify-between">
                 <h2 className="text-xl font-bold">
-                  Membres du groupe : {escapeText(untrusted(group.name))}
+                  {t('groups.members.title', { name: escapeText(untrusted(group.name)) })}
                 </h2>
                 <button onClick={onClose} className="p-2 hover:bg-white/20 rounded-xl transition-colors">
                   <X className="w-5 h-5" />
@@ -264,7 +269,7 @@ export default function GroupMembers({ isOpen, onClose, group, orgId, onUpdate }
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-gray-500" />
                     <input
                       type="text"
-                      placeholder="Rechercher un étudiant..."
+                      placeholder={t('groups.members.search_placeholder')}
                       value={searchTerm}
                       onChange={(e) => {
                         setSearchTerm(e.target.value);
@@ -303,7 +308,7 @@ export default function GroupMembers({ isOpen, onClose, group, orgId, onUpdate }
                             ))
                           ) : (
                             <div className="px-4 py-8 text-center text-gray-500 dark:text-gray-400 text-sm">
-                              Aucun étudiant trouvé
+                              {t('groups.members.no_students_found')}
                             </div>
                           )}
                         </motion.div>
@@ -316,7 +321,7 @@ export default function GroupMembers({ isOpen, onClose, group, orgId, onUpdate }
                     className="px-4 py-2.5 bg-indigo-600 text-white rounded-xl font-medium hover:bg-indigo-700 transition-colors disabled:opacity-50 flex items-center gap-2"
                   >
                     {adding ? <Loader2 className="w-4 h-4 animate-spin" /> : <Plus className="w-4 h-4" />}
-                    Ajouter
+                    {t('groups.members.btn_add')}
                   </button>
                   <label className="px-4 py-2.5 border-2 border-gray-200 dark:border-gray-700 rounded-xl text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors cursor-pointer flex items-center justify-center">
                     <Upload className="w-4 h-4" />
@@ -331,7 +336,7 @@ export default function GroupMembers({ isOpen, onClose, group, orgId, onUpdate }
                 {selectedStudent && (
                   <div className="mt-2 p-2 bg-indigo-50 dark:bg-indigo-900/30 rounded-xl flex items-center justify-between">
                     <span className="text-sm text-indigo-800 dark:text-indigo-300 font-medium">
-                      Sélectionné : {selectedStudent.full_name || selectedStudent.email}
+                      {t('groups.members.selected', { name: selectedStudent.full_name || selectedStudent.email })}
                     </span>
                     <button onClick={() => setSelectedStudent(null)} className="p-1 hover:bg-indigo-100 dark:hover:bg-indigo-800 rounded">
                       <X className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
@@ -341,13 +346,15 @@ export default function GroupMembers({ isOpen, onClose, group, orgId, onUpdate }
               </div>
 
               {/* Liste des membres actuels */}
-              <h3 className="font-semibold text-gray-700 dark:text-gray-300 mb-3">Membres actuels ({members.length})</h3>
+              <h3 className="font-semibold text-gray-700 dark:text-gray-300 mb-3">
+                {t('groups.members.current_count', { count: members.length })}
+              </h3>
               {loading ? (
                 <div className="flex justify-center py-8">
                   <LoadingSpinner />
                 </div>
               ) : members.length === 0 ? (
-                <p className="text-center text-gray-500 dark:text-gray-400 py-8">Aucun membre dans ce groupe</p>
+                <p className="text-center text-gray-500 dark:text-gray-400 py-8">{t('groups.members.empty')}</p>
               ) : (
                 <div className="space-y-3">
                   {members.map((member, idx) => (
@@ -380,14 +387,14 @@ export default function GroupMembers({ isOpen, onClose, group, orgId, onUpdate }
             isOpen={!!removeCandidate}
             onClose={() => setRemoveCandidate(null)}
             onConfirm={() => handleRemoveMember(removeCandidate.id)}
-            title="Retirer le membre"
-            message={`Êtes-vous sûr de vouloir retirer ${
+            title={t('groups.members.remove_confirm_title')}
+            message={
               removeCandidate.profiles?.full_name
-                ? escapeText(untrusted(removeCandidate.profiles.full_name))
-                : 'cet utilisateur'
-            } du groupe ?`}
-            confirmText="Retirer"
-            cancelText="Annuler"
+                ? t('groups.members.remove_confirm_msg', { name: escapeText(untrusted(removeCandidate.profiles.full_name)) })
+                : t('groups.members.remove_confirm_msg_generic')
+            }
+            confirmText={t('common.delete')}
+            cancelText={t('common.cancel')}
             type="warning"
           />
         )}

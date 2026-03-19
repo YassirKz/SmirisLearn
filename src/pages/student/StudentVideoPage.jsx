@@ -1,5 +1,6 @@
 // src/pages/student/StudentVideoPage.jsx
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowLeft, BookOpen, Clock, Info, Shield, ChevronRight } from 'lucide-react';
@@ -11,6 +12,7 @@ import StudentVideoPlayer from '../../components/student/StudentVideoPlayer';
 import { untrusted, escapeText } from '../../utils/security';
 
 export default function StudentVideoPage() {
+  const { t } = useTranslation('student');
   const { id } = useParams();
   const navigate = useNavigate();
   const { user } = useAuth();
@@ -32,7 +34,7 @@ export default function StudentVideoPage() {
           });
 
         if (accessError || !canAccess) {
-          showError("Accès refusé. Terminez la vidéo précédente et son quiz.");
+          showError(t('errors.access_denied'));
           navigate('/student/learning');
           return;
         }
@@ -114,7 +116,7 @@ export default function StudentVideoPage() {
           className="flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors group"
         >
           <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
-          <span>Retour aux formations</span>
+          <span>{t('video_page.back')}</span>
         </button>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -126,7 +128,7 @@ export default function StudentVideoPage() {
             >
               <Info className="w-5 h-5 text-indigo-600 dark:text-indigo-400 mt-0.5 flex-shrink-0" />
               <p className="text-sm text-indigo-800 dark:text-indigo-300">
-                <span className="font-semibold">Visionnage linéaire :</span> Pour garantir un apprentissage progressif, vous ne pouvez pas avancer rapidement.
+                <span className="font-semibold">{t('video_page.linear_viewing.title')}</span> {t('video_page.linear_viewing.desc')}
               </p>
             </motion.div>
 
@@ -198,24 +200,24 @@ export default function StudentVideoPage() {
                       }}
                       className="w-full py-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-xl font-bold shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-2 group"
                     >
-                      <span>Suivant</span>
+                      <span>{t('video_page.next')}</span>
                       <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                     </button>
                   ) : (
                     <div className="p-4 bg-green-50 dark:bg-green-900/30 border border-green-200 dark:border-green-800 rounded-xl text-center">
-                      <p className="text-green-700 dark:text-green-300 font-semibold">✨ Parcours terminé !</p>
+                      <p className="text-green-700 dark:text-green-300 font-semibold">{t('video_page.completed')}</p>
                       <button
                         onClick={() => navigate('/student/learning')}
                         className="mt-2 text-sm text-green-600 dark:text-green-400 hover:underline"
                       >
-                        Retour aux formations
+                        {t('video_page.back')}
                       </button>
                     </div>
                   )
                 ) : (
                   <div className="p-4 bg-amber-50 dark:bg-amber-900/30 border border-amber-200 dark:border-amber-800 rounded-xl">
                     <p className="text-amber-700 dark:text-amber-300 text-sm">
-                      Terminez le visionnage pour débloquer la suite.
+                      {t('video_page.locked_next')}
                     </p>
                   </div>
                 )}
@@ -231,7 +233,7 @@ export default function StudentVideoPage() {
           className="text-center text-xs text-gray-400 dark:text-gray-500 flex items-center justify-center gap-1"
         >
           <Shield className="w-3 h-3" />
-          <span>Progression enregistrée automatiquement</span>
+          <span>{t('video_page.footer')}</span>
         </motion.div>
       </motion.div>
     </MainLayout>

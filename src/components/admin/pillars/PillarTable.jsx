@@ -8,8 +8,10 @@ import {
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { untrusted, escapeText } from '../../../utils/security';
+import { useTranslation } from 'react-i18next';
 
 export default function PillarTable({ pillars, onEdit, onDelete, isReadOnly }) {
+    const { t, i18n } = useTranslation('admin');
     const [page, setPage] = useState(1);
     const itemsPerPage = 8;
     const navigate = useNavigate();
@@ -67,19 +69,19 @@ export default function PillarTable({ pillars, onEdit, onDelete, isReadOnly }) {
                     <thead className="bg-gradient-to-r from-indigo-50 to-purple-50 dark:from-gray-800 dark:to-gray-800">
                         <tr>
                             <th className="px-6 py-4 text-left text-xs font-medium text-gray-600 dark:text-gray-400 uppercase tracking-wider">
-                                Pilier
+                                {t('pillars.table.pillar')}
                             </th>
                             <th className="px-6 py-4 text-left text-xs font-medium text-gray-600 dark:text-gray-400 uppercase tracking-wider">
-                                Vidéos
+                                {t('pillars.table.videos')}
                             </th>
                             <th className="px-6 py-4 text-left text-xs font-medium text-gray-600 dark:text-gray-400 uppercase tracking-wider">
-                                Étudiants
+                                {t('pillars.table.students')}
                             </th>
                             <th className="px-6 py-4 text-left text-xs font-medium text-gray-600 dark:text-gray-400 uppercase tracking-wider">
-                                Création
+                                {t('pillars.table.creation')}
                             </th>
                             <th className="px-6 py-4 text-right text-xs font-medium text-gray-600 dark:text-gray-400 uppercase tracking-wider">
-                                Actions
+                                {t('pillars.table.actions')}
                             </th>
                         </tr>
                     </thead>
@@ -141,7 +143,7 @@ export default function PillarTable({ pillars, onEdit, onDelete, isReadOnly }) {
                                         <div className="flex items-center gap-2 min-w-[120px]">
                                             <Calendar className="w-4 h-4 text-gray-400 dark:text-gray-500" />
                                             <span className="text-sm text-gray-600 dark:text-gray-300 whitespace-nowrap">
-                                                {new Date(pillar.created_at).toLocaleDateString('fr-FR')}
+                                                {new Date(pillar.created_at).toLocaleDateString(i18n.language)}
                                             </span>
                                         </div>
                                     </td>
@@ -153,7 +155,7 @@ export default function PillarTable({ pillars, onEdit, onDelete, isReadOnly }) {
                                                 whileTap={{ scale: 0.9 }}
                                                 onClick={(e) => handleViewDetails(e, pillar.id)}
                                                 className="p-2 hover:bg-blue-100 dark:hover:bg-blue-900/50 rounded-lg transition-colors text-blue-600 dark:text-blue-400 sm:opacity-0 sm:group-hover:opacity-100"
-                                                title="Voir détails"
+                                                title={t('pillars.card.view_details')}
                                             >
                                                 <Eye className="w-4 h-4" />
                                             </motion.button>
@@ -165,7 +167,7 @@ export default function PillarTable({ pillars, onEdit, onDelete, isReadOnly }) {
                                                         whileTap={{ scale: 0.9 }}
                                                         onClick={(e) => handleEditClick(e, pillar)}
                                                         className="p-2 hover:bg-purple-100 dark:hover:bg-purple-900/50 rounded-lg transition-colors text-purple-600 dark:text-purple-400 sm:opacity-0 sm:group-hover:opacity-100"
-                                                        title="Modifier"
+                                                        title={t('pillars.card.edit')}
                                                     >
                                                         <Edit className="w-4 h-4" />
                                                     </motion.button>
@@ -175,7 +177,7 @@ export default function PillarTable({ pillars, onEdit, onDelete, isReadOnly }) {
                                                         whileTap={{ scale: 0.9 }}
                                                         onClick={(e) => handleDeleteClick(e, pillar)}
                                                         className="p-2 hover:bg-red-100 dark:hover:bg-red-900/50 rounded-lg transition-colors text-red-600 dark:text-red-400 sm:opacity-0 sm:group-hover:opacity-100"
-                                                        title="Supprimer"
+                                                        title={t('pillars.card.delete')}
                                                     >
                                                         <Trash2 className="w-4 h-4" />
                                                     </motion.button>
@@ -193,7 +195,7 @@ export default function PillarTable({ pillars, onEdit, onDelete, isReadOnly }) {
             {totalPages > 1 && (
                 <div className="px-6 py-4 border-t border-gray-100 dark:border-gray-700 flex items-center justify-between">
                     <p className="text-sm text-gray-600 dark:text-gray-400">
-                        Page {page} sur {totalPages}
+                        {t('pillars.table.page_info', { current: page, total: totalPages })}
                     </p>
                     <div className="flex items-center gap-2">
                         <button

@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
     Settings, Save, RefreshCw, Mail, 
@@ -16,6 +17,7 @@ import { untrusted, escapeText } from '../../utils/security';
 import SanitizedInput from '../../components/ui/SanitizedInput';
 
 export default function AdminSettings() {
+    const { t } = useTranslation('admin');
     const { user } = useAuth();
     const { role } = useUserRole();
     const { theme, setTheme } = useTheme(); // ← AJOUT
@@ -127,10 +129,10 @@ export default function AdminSettings() {
     // Validation
     // ============================================
     const validatePassword = (value) => {
-        if (!value) return "Mot de passe requis";
-        if (value.length < 8) return "Minimum 8 caractères";
-        if (!/[A-Z]/.test(value)) return "Au moins une majuscule";
-        if (!/[0-9]/.test(value)) return "Au moins un chiffre";
+        if (!value) return t('settings.errors.password_required');
+        if (value.length < 8) return t('settings.errors.min_length');
+        if (!/[A-Z]/.test(value)) return t('settings.errors.need_uppercase');
+        if (!/[0-9]/.test(value)) return t('settings.errors.need_number');
         return "";
     };
 
@@ -138,7 +140,7 @@ export default function AdminSettings() {
         current: passwordTouched.current ? validatePassword(passwordData.current) : '',
         new: passwordTouched.new ? validatePassword(passwordData.new) : '',
         confirm: passwordTouched.confirm && passwordData.confirm !== passwordData.new 
-            ? "Les mots de passe ne correspondent pas" 
+            ? t('settings.errors.mismatch') 
             : ''
     };
 
@@ -194,12 +196,12 @@ export default function AdminSettings() {
             localStorage.setItem('videoUploaded', settings.videoUploaded);
             localStorage.setItem('quizCompleted', settings.quizCompleted);
 
-            setSuccess('Paramètres mis à jour avec succès');
+            setSuccess(t('settings.success.updated'));
             setOriginalSettings(settings);
 
         } catch (error) {
             console.error('Erreur sauvegarde:', error);
-            setError(error.message || 'Erreur lors de la sauvegarde');
+            setError(error.message || t('settings.errors.save_failed'));
         } finally {
             setSaving(false);
         }
@@ -222,13 +224,13 @@ export default function AdminSettings() {
 
             if (error) throw error;
 
-            setSuccess('Mot de passe modifié avec succès');
+            setSuccess(t('settings.success.password_changed'));
             setPasswordData({ current: '', new: '', confirm: '' });
             setPasswordTouched({});
 
         } catch (error) {
             console.error('Erreur changement mot de passe:', error);
-            setError(error.message || 'Erreur lors du changement de mot de passe');
+            setError(error.message || t('settings.errors.password_change_failed'));
         } finally {
             setSaving(false);
         }
@@ -258,10 +260,10 @@ export default function AdminSettings() {
                 <div>
                     <h1 className="text-3xl font-bold text-gray-800 dark:text-white flex items-center gap-2">
                         <Settings className="w-8 h-8 text-indigo-600 dark:text-indigo-400" />
-                        Paramètres
+                        {t('settings.title')}
                     </h1>
                     <p className="text-gray-500 dark:text-gray-400 mt-1">
-                        Gérez les préférences de votre entreprise
+                        {t('settings.subtitle')}
                     </p>
                 </div>
 
@@ -311,12 +313,12 @@ export default function AdminSettings() {
                         >
                             <h2 className="text-lg font-semibold text-gray-800 dark:text-white mb-4 flex items-center gap-2">
                                 <Building className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
-                                Informations générales
+                                {t('settings.sections.general.title')}
                             </h2>
 
                             <div className="space-y-4">
                                 <SanitizedInput
-                                    label="Nom de l'entreprise"
+                                    label={t('settings.sections.general.company_name')}
                                     value={settings.companyName}
                                     onChange={(e) => setSettings({...settings, companyName: e.target.value})}
                                     validate="text"
@@ -328,18 +330,18 @@ export default function AdminSettings() {
                                 />
 
                                 <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-xl">
-                                    <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">Email de l'organisation</p>
+                                    <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">{t('settings.sections.general.org_email')}</p>
                                     <p className="text-lg font-medium text-gray-800 dark:text-white flex items-center gap-2">
                                         <Mail className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
                                         {settings.companyEmail}
                                     </p>
                                     <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                                        L'email ne peut pas être modifié. C'est votre identifiant de connexion.
+                                        {t('settings.sections.general.org_email_hint')}
                                     </p>
                                 </div>
 
                                 <SanitizedInput
-                                    label="Nom de l'administrateur"
+                                    label={t('settings.sections.general.admin_name')}
                                     value={settings.adminName}
                                     onChange={(e) => setSettings({...settings, adminName: e.target.value})}
                                     validate="text"
@@ -360,14 +362,14 @@ export default function AdminSettings() {
                         >
                             <h2 className="text-lg font-semibold text-gray-800 dark:text-white mb-4 flex items-center gap-2">
                                 <Bell className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
-                                Notifications
+                                {t('settings.sections.notifications.title')}
                             </h2>
 
                             <div className="space-y-3">
                                 <label className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-xl cursor-pointer hover:bg-indigo-50 dark:hover:bg-gray-600 transition-colors">
                                     <div>
-                                        <p className="font-medium text-gray-700 dark:text-gray-300">Notifications par email</p>
-                                        <p className="text-xs text-gray-500 dark:text-gray-400">Recevoir les notifications importantes</p>
+                                        <p className="font-medium text-gray-700 dark:text-gray-300">{t('settings.sections.notifications.email_notifications')}</p>
+                                        <p className="text-xs text-gray-500 dark:text-gray-400">{t('settings.sections.notifications.email_notifications_desc')}</p>
                                     </div>
                                     <div className="relative">
                                         <input
@@ -389,9 +391,9 @@ export default function AdminSettings() {
                                 {settings.emailNotifications && (
                                     <div className="ml-8 space-y-2">
                                         { [
-                                            { key: 'memberJoined', label: 'Nouveau membre rejoint' },
-                                            { key: 'videoUploaded', label: 'Nouvelle vidéo uploadée' },
-                                            { key: 'quizCompleted', label: 'Quiz complété' }
+                                            { key: 'memberJoined', label: t('settings.sections.notifications.member_joined') },
+                                            { key: 'videoUploaded', label: t('settings.sections.notifications.video_uploaded') },
+                                            { key: 'quizCompleted', label: t('settings.sections.notifications.quiz_completed') }
                                         ].map(item => (
                                             <label key={item.key} className="flex items-center gap-2 p-2 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg">
                                                 <input
@@ -418,12 +420,12 @@ export default function AdminSettings() {
                         >
                             <h2 className="text-lg font-semibold text-gray-800 dark:text-white mb-4 flex items-center gap-2">
                                 <Globe className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
-                                Apparence
+                                {t('settings.sections.appearance.title')}
                             </h2>
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div>
-                                    <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">Thème</p>
+                                    <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">{t('settings.sections.appearance.theme')}</p>
                                     <div className="flex gap-2">
                                         <button
                                             onClick={() => setTheme('light')}
@@ -434,7 +436,7 @@ export default function AdminSettings() {
                                             }`}
                                         >
                                             <Sun className="w-5 h-5 mx-auto mb-1 text-yellow-500" />
-                                            <span className="text-xs dark:text-gray-300">Clair</span>
+                                            <span className="text-xs dark:text-gray-300">{t('settings.sections.appearance.theme_light')}</span>
                                         </button>
                                         <button
                                             onClick={() => setTheme('dark')}
@@ -445,13 +447,13 @@ export default function AdminSettings() {
                                             }`}
                                         >
                                             <Moon className="w-5 h-5 mx-auto mb-1 text-indigo-600 dark:text-indigo-400" />
-                                            <span className="text-xs dark:text-gray-300">Sombre</span>
+                                            <span className="text-xs dark:text-gray-300">{t('settings.sections.appearance.theme_dark')}</span>
                                         </button>
                                     </div>
                                 </div>
 
                                 <div>
-                                    <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">Langue</p>
+                                    <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">{t('settings.sections.appearance.language')}</p>
                                     <select
                                         value={settings.language}
                                         onChange={(e) => setSettings({...settings, language: e.target.value})}
@@ -479,22 +481,22 @@ export default function AdminSettings() {
                         >
                             <h2 className="text-lg font-semibold text-gray-800 dark:text-white mb-4 flex items-center gap-2">
                                 <Lock className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
-                                Sécurité
+                                {t('settings.sections.security.title')}
                             </h2>
 
                             <div>
-                                <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">Expiration de session</p>
+                                <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">{t('settings.sections.security.session_timeout')}</p>
                                 <select
                                     value={settings.sessionTimeout}
                                     onChange={(e) => setSettings({...settings, sessionTimeout: e.target.value})}
                                     className="w-full p-3 border-2 border-gray-200 dark:border-gray-700 rounded-xl focus:border-indigo-400 dark:focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 dark:focus:ring-indigo-900/30 outline-none transition-all dark:bg-gray-700 dark:text-white"
                                     disabled={isReadOnly}
                                 >
-                                    <option value="15">15 minutes</option>
-                                    <option value="30">30 minutes</option>
-                                    <option value="60">1 heure</option>
-                                    <option value="120">2 heures</option>
-                                    <option value="240">4 heures</option>
+                                    <option value="15">{t('settings.sections.security.timeout_mins', { count: 15 })}</option>
+                                    <option value="30">{t('settings.sections.security.timeout_mins', { count: 30 })}</option>
+                                    <option value="60">{t('settings.sections.security.timeout_hour', { count: 1 })}</option>
+                                    <option value="120">{t('settings.sections.security.timeout_hours', { count: 2 })}</option>
+                                    <option value="240">{t('settings.sections.security.timeout_hours', { count: 4 })}</option>
                                 </select>
                             </div>
                         </motion.div>
@@ -508,13 +510,13 @@ export default function AdminSettings() {
                         >
                             <h2 className="text-lg font-semibold text-gray-800 dark:text-white mb-4 flex items-center gap-2">
                                 <Key className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
-                                Changer le mot de passe
+                                {t('settings.sections.password.title')}
                             </h2>
 
                             <div className="space-y-4">
                                 {/* Mot de passe actuel */}
                                 <div>
-                                    <label className="block text-sm text-gray-600 dark:text-gray-400 mb-1">Mot de passe actuel</label>
+                                    <label className="block text-sm text-gray-600 dark:text-gray-400 mb-1">{t('settings.sections.password.current')}</label>
                                     <div className="relative">
                                         <input
                                             type={showPassword ? "text" : "password"}
@@ -545,7 +547,7 @@ export default function AdminSettings() {
 
                                 {/* Nouveau mot de passe */}
                                 <div>
-                                    <label className="block text-sm text-gray-600 dark:text-gray-400 mb-1">Nouveau mot de passe</label>
+                                    <label className="block text-sm text-gray-600 dark:text-gray-400 mb-1">{t('settings.sections.password.new')}</label>
                                     <input
                                         type="password"
                                         value={passwordData.new}
@@ -567,7 +569,7 @@ export default function AdminSettings() {
 
                                 {/* Confirmation */}
                                 <div>
-                                    <label className="block text-sm text-gray-600 dark:text-gray-400 mb-1">Confirmer</label>
+                                    <label className="block text-sm text-gray-600 dark:text-gray-400 mb-1">{t('settings.sections.password.confirm')}</label>
                                     <input
                                         type="password"
                                         value={passwordData.confirm}
@@ -596,7 +598,7 @@ export default function AdminSettings() {
                                             : 'bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400 cursor-not-allowed'
                                     }`}
                                 >
-                                    Changer le mot de passe
+                                    {t('settings.sections.password.submit')}
                                 </button>
                             </div>
                         </motion.div>
@@ -618,12 +620,12 @@ export default function AdminSettings() {
                             {saving ? (
                                 <>
                                     <RefreshCw className="w-5 h-5 animate-spin" />
-                                    <span>Sauvegarde...</span>
+                                    <span>{t('settings.actions.saving')}</span>
                                 </>
                             ) : (
                                 <>
                                     <Save className="w-5 h-5 group-hover:scale-110 transition-transform" />
-                                    <span>Sauvegarder</span>
+                                    <span>{t('settings.actions.save')}</span>
                                 </>
                             )}
                         </button>

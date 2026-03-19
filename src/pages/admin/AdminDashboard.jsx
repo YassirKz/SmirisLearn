@@ -10,8 +10,10 @@ import { supabase } from '../../lib/supabase';
 import { useAuth } from '../../hooks/useAuth';
 import { useSearchParams } from 'react-router-dom';
 import { useUserRole } from '../../hooks/useUserRole';
+import { useTranslation } from 'react-i18next';
 
 export default function AdminDashboard() {
+    const { t, i18n } = useTranslation('admin');
     const { user } = useAuth();
     const { role } = useUserRole();
     const [searchParams] = useSearchParams();
@@ -109,7 +111,7 @@ export default function AdminDashboard() {
             setError(null);
 
         } catch (err) {
-            console.error('Erreur chargement dashboard:', err);
+            console.error(t('admin_dashboard.error_loading', { error: '' }), err);
             setError(err.message);
         } finally {
             setLoading(false);
@@ -123,7 +125,7 @@ export default function AdminDashboard() {
                     <div className="relative">
                         <div className="w-20 h-20 border-4 border-indigo-200 dark:border-indigo-800 rounded-full"></div>
                         <div className="absolute top-0 left-0 w-20 h-20 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin"></div>
-                        <p className="mt-4 text-gray-500 dark:text-gray-400">Chargement de votre dashboard...</p>
+                        <p className="mt-4 text-gray-500 dark:text-gray-400">{t('admin_dashboard.loading')}</p>
                     </div>
                 </div>
             </AdminLayout>
@@ -136,13 +138,15 @@ export default function AdminDashboard() {
                 <div className="bg-red-50 dark:bg-red-900/30 border-l-4 border-red-500 p-4 rounded-lg">
                     <div className="flex items-center gap-3">
                         <AlertCircle className="w-5 h-5 text-red-600 dark:text-red-400" />
-                        <p className="text-sm text-red-700 dark:text-red-300">Erreur de chargement: {error || "Données non disponibles"}</p>
+                        <p className="text-sm text-red-700 dark:text-red-300">
+                            {t('admin_dashboard.error_loading', { error: error || '?' })}
+                        </p>
                     </div>
                     <button
                         onClick={fetchDashboardData}
                         className="mt-2 text-sm text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 underline"
                     >
-                        Réessayer
+                        {t('admin_dashboard.retry')}
                     </button>
                 </div>
             </AdminLayout>
@@ -153,40 +157,40 @@ export default function AdminDashboard() {
 
     const cards = [
         { 
-            label: 'Membres', 
+            label: t('admin_dashboard.stats.members'), 
             value: stats?.total_members || 0,
             growth: dashboardData?.growth?.members || 0,
             icon: Users, 
             color: 'from-indigo-500 to-indigo-600',
             bg: 'bg-indigo-50 dark:bg-indigo-900/30',
-            description: 'Total utilisateurs'
+            description: t('admin_dashboard.stats.members_desc')
         },
         { 
-            label: 'Vidéos', 
+            label: t('admin_dashboard.stats.videos'), 
             value: stats?.total_videos || 0,
             growth: dashboardData?.growth?.videos || 0,
             icon: Video, 
             color: 'from-purple-500 to-purple-600',
             bg: 'bg-purple-50 dark:bg-purple-900/30',
-            description: 'Contenu disponible'
+            description: t('admin_dashboard.stats.videos_desc')
         },
         { 
-            label: 'Quiz', 
+            label: t('admin_dashboard.stats.quizzes'), 
             value: stats?.total_quizzes || 0,
             growth: dashboardData?.growth?.quizzes || 0,
             icon: Award, 
             color: 'from-pink-500 to-pink-600',
             bg: 'bg-pink-50 dark:bg-pink-900/30',
-            description: 'Évaluations'
+            description: t('admin_dashboard.stats.quizzes_desc')
         },
         { 
-            label: 'Score moyen', 
+            label: t('admin_dashboard.stats.avg_score'), 
             value: `${Math.round(stats?.avg_score || 0)}%`,
             growth: dashboardData?.growth?.score || 0,
             icon: TrendingUp, 
             color: 'from-green-500 to-green-600',
             bg: 'bg-green-50 dark:bg-green-900/30',
-            description: 'Moyenne quiz'
+            description: t('admin_dashboard.stats.avg_score_desc')
         },
     ];
 
@@ -207,7 +211,7 @@ export default function AdminDashboard() {
                     >
                         <div className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-4 py-2 rounded-bl-2xl rounded-tr-2xl text-xs font-bold shadow-lg flex items-center gap-1">
                             <Sparkles className="w-3 h-3" />
-                            {new Date().toLocaleDateString('fr-FR', { 
+                            {new Date().toLocaleDateString(i18n.language, { 
                                 weekday: 'long', 
                                 day: 'numeric', 
                                 month: 'long' 
@@ -218,19 +222,19 @@ export default function AdminDashboard() {
                     <div className="flex flex-col md:flex-row md:items-center md:justify-between">
                         <div>
                             <h1 className="text-3xl font-bold text-gray-800 dark:text-white flex items-center gap-2">
-                                {organization?.name || 'Dashboard Admin'}
+                                {organization?.name || t('admin_dashboard.title')}
                                 {organization?.plan_type === 'starter' && (
                                     <span className="text-xs bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 px-2 py-1 rounded-full">
-                                        Essai
+                                        {t('admin_dashboard.trial_badge')}
                                     </span>
                                 )}
                             </h1>
                             <p className="text-gray-500 dark:text-gray-400 mt-1 flex items-center gap-2">
                                 <Activity className="w-4 h-4" />
-                                {stats?.total_members || 0} membre{stats?.total_members > 1 ? 's' : ''} • 
-                                {stats?.total_videos || 0} vidéo{stats?.total_videos > 1 ? 's' : ''}
+                                {stats?.total_members || 0} {t('members').toLowerCase()} • 
+                                {stats?.total_videos || 0} {t('admin_dashboard.stats.videos').toLowerCase()}
                                 <span className="text-xs text-gray-400 dark:text-gray-500">
-                                    Mis à jour à {lastUpdate.toLocaleTimeString()}
+                                    {t('admin_dashboard.updated_at', { time: lastUpdate.toLocaleTimeString(i18n.language) })}
                                 </span>
                             </p>
                         </div>
@@ -243,7 +247,7 @@ export default function AdminDashboard() {
                             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                             </svg>
-                            Rafraîchir
+                            {t('admin_dashboard.refresh')}
                         </button>
                     </div>
                 </div>
@@ -278,7 +282,7 @@ export default function AdminDashboard() {
                                             <span className={`text-xs font-medium ${isPositive ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
                                                 {isPositive ? '↑' : '↓'} {Math.abs(card.growth)}%
                                             </span>
-                                            <span className="text-xs text-gray-400 dark:text-gray-500">vs mois dernier</span>
+                                            <span className="text-xs text-gray-400 dark:text-gray-500">{t('admin_dashboard.stats.vs_last_month')}</span>
                                         </div>
                                         <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">{card.description}</p>
                                     </div>
@@ -314,10 +318,10 @@ export default function AdminDashboard() {
                         <div className="flex items-center justify-between mb-6">
                             <h2 className="text-lg font-semibold text-gray-800 dark:text-white flex items-center gap-2">
                                 <Activity className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
-                                Activités récentes
+                                {t('admin_dashboard.recent_activities.title')}
                             </h2>
                             <span className="text-xs text-gray-400 dark:text-gray-500 bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded-full">
-                                {recent_activities?.length || 0} activité(s)
+                                {t('admin_dashboard.recent_activities.count', { count: recent_activities?.length || 0 })}
                             </span>
                         </div>
 
@@ -338,7 +342,7 @@ export default function AdminDashboard() {
                                             <p className="text-sm font-medium text-gray-800 dark:text-gray-200">{activity.description}</p>
                                             <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400">
                                                 <Clock className="w-3 h-3" />
-                                                <span>{new Date(activity.timestamp).toLocaleDateString('fr-FR')}</span>
+                                                <span>{new Date(activity.timestamp).toLocaleDateString(i18n.language)}</span>
                                             </div>
                                         </div>
                                     </motion.div>
@@ -347,7 +351,7 @@ export default function AdminDashboard() {
                         ) : (
                             <div className="text-center py-8 text-gray-400 dark:text-gray-500">
                                 <Activity className="w-12 h-12 mx-auto mb-3 opacity-30" />
-                                <p>Aucune activité récente</p>
+                                <p>{t('admin_dashboard.recent_activities.empty')}</p>
                             </div>
                         )}
                     </motion.div>
@@ -362,10 +366,10 @@ export default function AdminDashboard() {
                         <div className="flex items-center justify-between mb-6">
                             <h2 className="text-lg font-semibold text-gray-800 dark:text-white flex items-center gap-2">
                                 <TrendingUp className="w-5 h-5 text-purple-600 dark:text-purple-400" />
-                                Top progression
+                                {t('admin_dashboard.top_progression.title')}
                             </h2>
                             <span className="text-xs text-gray-400 dark:text-gray-500 bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded-full">
-                                {top_students?.length || 0} étudiants
+                                {t('admin_dashboard.top_progression.count', { count: top_students?.length || 0 })}
                             </span>
                         </div>
 
@@ -402,7 +406,7 @@ export default function AdminDashboard() {
                         ) : (
                             <div className="text-center py-8 text-gray-400 dark:text-gray-500">
                                 <Users className="w-12 h-12 mx-auto mb-3 opacity-30" />
-                                <p>Aucun étudiant pour l'instant</p>
+                                <p>{t('admin_dashboard.top_progression.empty')}</p>
                             </div>
                         )}
 
@@ -410,7 +414,7 @@ export default function AdminDashboard() {
                         <div className="mt-4 p-2 bg-gradient-to-r from-indigo-50 to-purple-50 dark:from-indigo-900/30 dark:to-purple-900/30 rounded-lg">
                             <p className="text-xs text-gray-600 dark:text-gray-300 flex items-center gap-1">
                                 <Shield className="w-3 h-3 text-indigo-600 dark:text-indigo-400" />
-                                Données mises à jour en temps réel via RPC
+                                {t('admin_dashboard.realtime_data')}
                             </p>
                         </div>
                     </motion.div>

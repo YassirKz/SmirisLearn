@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { Users2, Sparkles, Shield } from 'lucide-react';
 import AdminLayout from '../../components/layout/AdminLayout';
@@ -8,6 +9,7 @@ import { untrusted, escapeText } from '../../utils/security';
 
 export default function GroupsPage() {
   const { role, isAdminAccess, loading: roleLoading } = useUserRole();
+  const { t } = useTranslation('admin');
   const [searchParams] = useSearchParams();
   const orgIdFromUrl = searchParams.get('orgId');
   const isImpersonating = role === 'super_admin' && orgIdFromUrl;
@@ -31,21 +33,21 @@ export default function GroupsPage() {
           >
             <div className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-4 py-2 rounded-bl-2xl rounded-tr-2xl text-xs font-bold shadow-lg flex items-center gap-1">
               <Sparkles className="w-3 h-3" />
-              Gestion des groupes
+              {t('groups.management_badge')}
             </div>
           </motion.div>
 
           <div>
             <h1 className="text-3xl font-bold text-gray-800 dark:text-white flex items-center gap-2">
               <Users2 className="w-8 h-8 text-indigo-600 dark:text-indigo-400" />
-              Groupes de formation
+              {t('groups.title')}
             </h1>
             <p className="text-gray-500 dark:text-gray-400 mt-1 flex items-center gap-2">
               <Shield className="w-4 h-4" />
-              Créez des groupes, assignez des étudiants et contrôlez l'accès aux piliers
+              {t('groups.subtitle')}
               {isImpersonating && (
                 <span className="text-xs bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 px-2 py-1 rounded-full">
-                  Mode lecture seule - Entreprise #{escapeText(untrusted(orgIdFromUrl))}
+                  {t('videos.read_only_mode', { org: escapeText(untrusted(orgIdFromUrl)) })}
                 </span>
               )}
             </p>

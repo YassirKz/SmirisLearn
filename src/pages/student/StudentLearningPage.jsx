@@ -1,5 +1,6 @@
 // src/pages/student/StudentLearningPage.jsx
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { BookOpen, Lock, PlayCircle, Clock, AlertCircle, Sparkles, Shield, ArrowLeft } from 'lucide-react';
@@ -11,6 +12,7 @@ import MainLayout from '../../components/layout/MainLayout';
 import { useNavigate } from 'react-router-dom';
 
 export default function StudentLearningPage() {
+  const { t } = useTranslation('student');
   const { user } = useAuth();
   const navigate = useNavigate();
   const { error: showError } = useToast();
@@ -89,7 +91,7 @@ export default function StudentLearningPage() {
       setPillars(pillarsWithAccess);
     } catch (err) {
       console.error('Erreur chargement contenu:', err);
-      showError('Impossible de charger vos formations');
+      showError(t('errors.fetch_learning_failed'));
     } finally {
       setLoading(false);
     }
@@ -125,7 +127,7 @@ export default function StudentLearningPage() {
           className="flex items-center gap-2 text-indigo-600 dark:text-indigo-400 font-medium hover:text-indigo-700 dark:hover:text-indigo-300 transition-colors group"
         >
           <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
-          Retour au Dashboard
+          {t('learning_page.back')}
         </motion.button>
         {/* En-tête avec badge */}
         <div className="relative">          <motion.div
@@ -135,18 +137,18 @@ export default function StudentLearningPage() {
           >
             <div className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-4 py-2 rounded-bl-2xl rounded-tr-2xl text-xs font-bold shadow-lg flex items-center gap-1">
               <Sparkles className="w-3 h-3" />
-              Mes formations
+              {t('learning_page.badge')}
             </div>
           </motion.div>
 
           <div>
             <h1 className="text-2xl sm:text-3xl font-bold text-gray-800 dark:text-white flex items-center gap-2">
               <BookOpen className="w-7 h-7 sm:w-8 sm:h-8 text-indigo-600 dark:text-indigo-400" />
-              Formations disponibles
+              {t('learning_page.title')}
             </h1>
             <p className="text-sm sm:text-base text-gray-500 dark:text-gray-400 mt-1 flex items-center gap-2">
               <Shield className="w-4 h-4" />
-              Accédez aux piliers qui vous sont assignés
+              {t('learning_page.subtitle')}
             </p>
           </div>
         </div>
@@ -154,8 +156,8 @@ export default function StudentLearningPage() {
         {pillars.length === 0 ? (
           <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl p-8 sm:p-12 shadow-xl border border-indigo-100 dark:border-gray-700 text-center">
             <BookOpen className="w-12 h-12 sm:w-16 sm:h-16 text-gray-300 dark:text-gray-600 mx-auto mb-4" />
-            <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-2">Aucune formation disponible</h3>
-            <p className="text-sm text-gray-500 dark:text-gray-400">Vous n'avez pas encore accès à des piliers.</p>
+            <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-2">{t('learning_page.no_pillars')}</h3>
+            <p className="text-sm text-gray-500 dark:text-gray-400">{t('learning_page.no_pillars_desc')}</p>
           </div>
         ) : (
           <div className="space-y-8">
@@ -233,7 +235,7 @@ export default function StudentLearningPage() {
                           to={`/student/video/${video.id}`}
                           className="px-4 py-2 bg-indigo-600 dark:bg-indigo-600 text-white rounded-lg text-sm font-medium hover:bg-indigo-700 dark:hover:bg-indigo-700 transition-colors shadow-md hover:shadow-lg"
                         >
-                          Voir
+                          {t('learning_page.video.view')}
                         </Link>
                       ) : (
                         <div className="relative">
@@ -251,7 +253,7 @@ export default function StudentLearningPage() {
                               >
                                 <div className="flex items-start gap-2">
                                   <AlertCircle className="w-4 h-4 text-amber-400 dark:text-amber-400 flex-shrink-0" />
-                                  <p>Terminez la vidéo précédente et réussissez le quiz pour débloquer.</p>
+                                  <p>{t('learning_page.video.locked_hint')}</p>
                                 </div>
                                 <div className="absolute top-full right-6 w-3 h-3 bg-gray-900 dark:bg-gray-800 rotate-45 -translate-y-1.5" />
                               </motion.div>
@@ -275,7 +277,7 @@ export default function StudentLearningPage() {
           className="text-center text-xs text-gray-400 dark:text-gray-500 flex items-center justify-center gap-1"
         >
           <Shield className="w-3 h-3" />
-          <span>Accès séquentiel • Progression sauvegardée automatiquement</span>
+          <span>{t('learning_page.footer')}</span>
         </motion.div>
       </div>
     </MainLayout>

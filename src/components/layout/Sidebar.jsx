@@ -15,33 +15,35 @@ import {
 import { useAuth } from '../../hooks/useAuth'
 import { useUserRole } from '../../hooks/useUserRole'
 import { useTheme } from '../../hooks/useTheme'
+import { useTranslation } from 'react-i18next'
 
 export default function Sidebar({ onClose }) {    
     const { signOut } = useAuth()
     const { role } = useUserRole()
     const { theme, toggleTheme } = useTheme()
+    const { t } = useTranslation(['admin', 'student', 'common'])
 
     const getMenuItems = () => {
         if (role === 'super_admin') {
             return [
-                { path: '/super-admin', icon: LayoutDashboard, label: 'Dashboard' },
-                { path: '/super-admin/companies', icon: Building2, label: 'Entreprises' },
-                { path: '/super-admin/users', icon: Users, label: 'Utilisateurs' },
-                { path: '/super-admin/settings', icon: Settings, label: 'Paramètres' },
+                { path: '/super-admin', icon: LayoutDashboard, label: t('admin:dashboard') },
+                { path: '/super-admin/companies', icon: Building2, label: t('admin:companies') },
+                { path: '/super-admin/users', icon: Users, label: t('admin:users') },
+                { path: '/super-admin/settings', icon: Settings, label: t('admin:settings.title') },
             ];
         } else if (role === 'org_admin') {
             return [
-                { path: '/admin', icon: LayoutDashboard, label: 'Dashboard' },
-                { path: '/admin/pillars', icon: Building2, label: 'Piliers' },
-                { path: '/admin/members', icon: Users, label: 'Membres' },
-                { path: '/admin/groups', icon: Users, label: 'Groupes' },
-                { path: '/admin/settings', icon: Settings, label: 'Paramètres' },
+                { path: '/admin', icon: LayoutDashboard, label: t('admin:dashboard') },
+                { path: '/admin/pillars', icon: Building2, label: t('admin:pillars') },
+                { path: '/admin/members', icon: Users, label: t('admin:members') },
+                { path: '/admin/groups', icon: Users, label: t('admin:groups') },
+                { path: '/admin/settings', icon: Settings, label: t('admin:settings.title') },
             ];
         } else {
             // Student
             return [
-                { path: '/student', icon: LayoutDashboard, label: 'Dashboard' },
-                { path: '/student/learning', icon: BookOpen, label: 'Formations' },
+                { path: '/student', icon: LayoutDashboard, label: t('student:dashboard') },
+                { path: '/student/learning', icon: BookOpen, label: t('student:formations') },
             ];
         }
     };
@@ -63,7 +65,7 @@ export default function Sidebar({ onClose }) {
                     <div>
                         <h2 className="font-bold text-gray-800 dark:text-gray-200">Smiris Learn</h2>
                         <p className="text-xs text-gray-500 dark:text-gray-400">
-                            {role === 'super_admin' ? 'Super Admin' : role === 'org_admin' ? 'Administration' : 'Espace Étudiant'}
+                            {role === 'super_admin' ? t('admin:roles.superAdmin') : role === 'org_admin' ? t('admin:roles.administration') : t('admin:roles.studentSpace')}
                         </p>
                     </div>
                 </div>
@@ -92,7 +94,7 @@ export default function Sidebar({ onClose }) {
                         >
                             <item.icon size={20} />
                             <span className="font-medium">{item.label}</span>
-                            {item.label === 'Dashboard' && (
+                            {item.label === t('admin:dashboard') && (
                                 <Sparkles className="w-4 h-4 ml-auto opacity-50" />
                             )}
                         </NavLink>
@@ -107,7 +109,7 @@ export default function Sidebar({ onClose }) {
                     className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-gray-600 dark:text-gray-400 hover:bg-blue-50 dark:hover:bg-gray-800 transition-colors"
                 >
                     {theme === 'light' ? <Moon className="w-5 h-5" /> : <Sun className="w-5 h-5" />}
-                    <span className="font-medium">Mode {theme === 'light' ? 'sombre' : 'clair'}</span>
+                    <span className="font-medium">{theme === 'light' ? t('common:darkMode') : t('common:lightMode')}</span>
                 </button>
 
                 <motion.button
@@ -117,7 +119,7 @@ export default function Sidebar({ onClose }) {
                     className="flex items-center gap-3 px-4 py-3 w-full rounded-xl text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30 transition-all duration-300"
                 >
                     <LogOut size={20} />
-                    <span className="font-medium">Déconnexion</span>
+                    <span className="font-medium">{t('common:logout')}</span>
                 </motion.button>
             </div>
         </motion.aside>

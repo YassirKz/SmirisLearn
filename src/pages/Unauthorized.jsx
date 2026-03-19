@@ -11,6 +11,7 @@ import {
 import { useAuth } from '../hooks/useAuth';
 import { useUserRole } from '../hooks/useUserRole';
 import { supabase } from '../lib/supabase';
+import { useTranslation } from 'react-i18next';
 
 // Configuration des redirections par rôle
 const REDIRECTS = {
@@ -20,60 +21,40 @@ const REDIRECTS = {
   default: '/login'
 };
 
-// Messages personnalisés par type d'erreur
-const ERROR_MESSAGES = {
+// Icônes et couleurs par type d'erreur
+const ERROR_CONFIG = {
   'insufficient_permissions': {
-    title: 'Permissions insuffisantes',
-    message: 'Vous n\'avez pas les droits nécessaires pour accéder à cette ressource.',
     icon: ShieldAlert,
-    color: 'from-red-500 to-pink-500',
-    solution: 'Contactez votre administrateur pour demander des droits supplémentaires.'
+    color: 'from-red-500 to-pink-500'
   },
   'session_expired': {
-    title: 'Session expirée',
-    message: 'Votre session a expiré. Veuillez vous reconnecter.',
     icon: Clock,
-    color: 'from-orange-500 to-amber-500',
-    solution: 'Connectez-vous à nouveau pour continuer.'
+    color: 'from-orange-500 to-amber-500'
   },
   'resource_not_found': {
-    title: 'Ressource introuvable',
-    message: 'La page ou la ressource demandée n\'existe pas.',
     icon: XCircle,
-    color: 'from-gray-500 to-gray-600',
-    solution: 'Vérifiez l\'URL ou retournez à l\'accueil.'
+    color: 'from-gray-500 to-gray-600'
   },
   'organization_inactive': {
-    title: 'Organisation inactive',
-    message: 'Votre organisation n\'est plus active.',
     icon: Building2,
-    color: 'from-purple-500 to-indigo-500',
-    solution: 'Contactez le support pour réactiver votre abonnement.'
+    color: 'from-purple-500 to-indigo-500'
   },
   'trial_expired': {
-    title: 'Période d\'essai expirée',
-    message: 'La période d\'essai de votre organisation est terminée.',
     icon: Zap,
-    color: 'from-yellow-500 to-orange-500',
-    solution: 'Choisissez un plan pour continuer à utiliser la plateforme.'
+    color: 'from-yellow-500 to-orange-500'
   },
   'maintenance_mode': {
-    title: 'Mode maintenance',
-    message: 'La plateforme est actuellement en maintenance.',
     icon: Shield,
-    color: 'from-blue-500 to-cyan-500',
-    solution: 'Réessayez dans quelques minutes.'
+    color: 'from-blue-500 to-cyan-500'
   },
   'default': {
-    title: 'Accès non autorisé',
-    message: 'Vous n\'avez pas les permissions nécessaires.',
     icon: Lock,
-    color: 'from-red-500 to-pink-500',
-    solution: 'Vérifiez vos identifiants ou contactez le support.'
+    color: 'from-red-500 to-pink-500'
   }
 };
 
 export default function Unauthorized() {
+  const { t } = useTranslation('common');
   const navigate = useNavigate();
   const location = useLocation();
   const { user, signOut } = useAuth();
@@ -92,8 +73,12 @@ export default function Unauthorized() {
   const errorType = location.state?.errorType || 'default';
   const from = location.state?.from || location.search?.get('from') || '/';
   const requiredRole = location.state?.requiredRole || null;
-  const config = ERROR_MESSAGES[errorType] || ERROR_MESSAGES.default;
+  const config = ERROR_CONFIG[errorType] || ERROR_CONFIG.default;
   const Icon = config.icon;
+
+  const errorTitle = t(`unauthorized.${errorType}.title`);
+  const errorMessage = t(`unauthorized.${errorType}.message`);
+  const errorSolution = t(`unauthorized.${errorType}.solution`);
 
   // ============================================
   // CHARGEMENT DYNAMIQUE DES INFORMATIONS
@@ -126,7 +111,7 @@ export default function Unauthorized() {
           
           if (role === 'student' && requiredRole === 'org_admin') {
             actions.push({
-              label: 'Demander les droits admin',
+              label: t('unauthorized.labels.requestAccess', { role: 'admin' }),
               action: () => handleRequestAccess('org_admin'),
               icon: Key,
               color: 'purple'
@@ -137,7 +122,7 @@ export default function Unauthorized() {
             const daysLeft = Math.ceil((new Date(organization.trial_ends_at) - new Date()) / (1000 * 60 * 60 * 24));
             if (daysLeft <= 3) {
               actions.push({
-                label: `Prolonger l'essai (${daysLeft}j restants)`,
+                label: t('unauthorized.labels.extendTrial', { days: daysLeft }),
                 action: () => navigate('/admin/settings?tab=billing'),
                 icon: Zap,
                 color: 'orange'
@@ -184,7 +169,7 @@ export default function Unauthorized() {
       navigate('/login', { 
         state: { 
           from: location.pathname,
-          message: 'Veuillez vous connecter pour continuer'
+          message: t('auth:errors.sessionExpired')
         } 
       });
     }
@@ -243,7 +228,7 @@ export default function Unauthorized() {
     try {
       await signOut();
       navigate('/login', { 
-        state: { message: 'Vous avez été déconnecté' }
+        state: { message: t('auth:success.loggedOut') }
       });
     } catch (err) {
       setError(err.message);
@@ -302,7 +287,7 @@ export default function Unauthorized() {
         >
           <div className={`bg-gradient-to-r ${config.color} text-white px-4 py-2 rounded-bl-2xl rounded-tr-2xl text-xs font-bold shadow-lg flex items-center gap-1`}>
             <Shield className="w-3 h-3" />
-            {config.title}
+            {errorTitle}
           </div>
         </motion.div>
 
@@ -345,7 +330,7 @@ export default function Unauthorized() {
           transition={{ delay: 0.2 }}
           className="text-2xl font-bold text-gray-800 dark:text-white text-center mb-2"
         >
-          {config.title}
+          {errorTitle}
         </motion.h1>
 
         <motion.p 
@@ -354,7 +339,7 @@ export default function Unauthorized() {
           transition={{ delay: 0.3 }}
           className="text-gray-600 dark:text-gray-300 text-center mb-4"
         >
-          {config.message}
+          {errorMessage}
         </motion.p>
 
         <motion.p 
@@ -363,7 +348,7 @@ export default function Unauthorized() {
           transition={{ delay: 0.35 }}
           className="text-sm text-gray-500 dark:text-gray-400 text-center mb-6 bg-gray-50 dark:bg-gray-700/50 p-3 rounded-xl"
         >
-          💡 {config.solution}
+          💡 {errorSolution}
         </motion.p>
 
         {/* Informations utilisateur dynamiques */}
@@ -376,13 +361,13 @@ export default function Unauthorized() {
           >
             <div className="flex items-center gap-3 mb-3">
               <User className="w-4 h-4 text-gray-500 dark:text-gray-400" />
-              <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Informations session</span>
+              <span className="text-sm font-medium text-gray-700 dark:text-gray-300">{t('unauthorized.labels.sessionInfo')}</span>
               
               <button
                 onClick={() => setShowDetails(!showDetails)}
                 className="ml-auto text-xs text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 flex items-center gap-1"
               >
-                {showDetails ? 'Masquer' : 'Détails'}
+                {showDetails ? t('unauthorized.labels.hide') : t('unauthorized.labels.details')}
                 <ChevronRight className={`w-3 h-3 transition-transform ${showDetails ? 'rotate-90' : ''}`} />
               </button>
             </div>
@@ -395,13 +380,13 @@ export default function Unauthorized() {
               
               <div className="flex items-center gap-2">
                 <Shield className="w-3 h-3 text-gray-400" />
-                <span className="text-gray-600 dark:text-gray-300">Rôle actuel : <span className="font-medium text-gray-800 dark:text-gray-100">{role || 'non défini'}</span></span>
+                <span className="text-gray-600 dark:text-gray-300">{t('unauthorized.labels.currentRole')} : <span className="font-medium text-gray-800 dark:text-gray-100">{role || t('common:none')}</span></span>
               </div>
 
               {requiredRole && (
                 <div className="flex items-center gap-2 text-orange-600">
                   <Lock className="w-3 h-3" />
-                  <span>Rôle requis : {requiredRole}</span>
+                  <span>{t('unauthorized.labels.requiredRole')} : {requiredRole}</span>
                 </div>
               )}
 
@@ -416,11 +401,11 @@ export default function Unauthorized() {
                     <div className="pt-2 mt-2 border-t border-gray-200 dark:border-gray-600 space-y-2">
                       <div className="flex items-center gap-2 text-xs text-gray-500">
                         <Clock className="w-3 h-3" />
-                        <span>Session créée: {new Date(user.created_at).toLocaleString()}</span>
+                        <span>{t('unauthorized.labels.sessionCreated')}: {new Date(user.created_at).toLocaleString()}</span>
                       </div>
                       <div className="flex items-center gap-2 text-xs text-gray-500">
                         <Fingerprint className="w-3 h-3" />
-                        <span>ID: {user.id.substring(0, 16)}...</span>
+                        <span>{t('unauthorized.labels.id')}: {user.id.substring(0, 16)}...</span>
                       </div>
                     </div>
                   </motion.div>
@@ -488,7 +473,7 @@ export default function Unauthorized() {
           >
             <div className="flex items-center justify-center gap-2 text-sm text-gray-500">
               <Clock className="w-4 h-4" />
-              <span>Redirection dans</span>
+              <span>{t('unauthorized.labels.redirecting')}</span>
             </div>
             <motion.div
               key={countdown}
@@ -496,7 +481,7 @@ export default function Unauthorized() {
               animate={{ scale: 1 }}
               className="text-2xl font-bold text-gray-800 dark:text-white"
             >
-              {countdown}s
+              {countdown}{t('unauthorized.labels.sec')}
             </motion.div>
           </motion.div>
         )}
@@ -520,7 +505,7 @@ export default function Unauthorized() {
               ) : (
                 <RefreshCw className="w-4 h-4 group-hover:rotate-180 transition-transform" />
               )}
-              Vérifier à nouveau
+              {t('unauthorized.labels.checkAgain')}
             </button>
           ) : (
             <Link
@@ -528,7 +513,7 @@ export default function Unauthorized() {
               className="w-full flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl hover:shadow-lg transition-all group"
             >
               <Home className="w-4 h-4 group-hover:-translate-y-1 transition-transform" />
-              {user ? 'Mon dashboard' : 'Se connecter'}
+              {user ? t('unauthorized.labels.myDashboard') : t('cta.login')}
             </Link>
           )}
 
@@ -539,7 +524,7 @@ export default function Unauthorized() {
               className="flex items-center justify-center gap-2 px-4 py-2 bg-white dark:bg-gray-700 border-2 border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-xl hover:border-blue-300 dark:hover:border-blue-500 hover:text-blue-600 dark:hover:text-blue-400 transition-all group text-sm"
             >
               <ArrowLeft className="w-3 h-3 group-hover:-translate-x-1 transition-transform" />
-              Retour
+              {t('unauthorized.labels.back')}
             </button>
 
             {user && (
@@ -548,7 +533,7 @@ export default function Unauthorized() {
                 className="flex items-center justify-center gap-2 px-4 py-2 bg-red-50 dark:bg-red-900/30 text-red-600 dark:text-red-400 rounded-xl hover:bg-red-100 dark:hover:bg-red-900/50 transition-all group text-sm"
               >
                 <RefreshCw className="w-3 h-3 group-hover:rotate-180 transition-transform" />
-                Déconnexion
+                {t('unauthorized.labels.signOut')}
               </button>
             )}
           </div>
@@ -566,7 +551,7 @@ export default function Unauthorized() {
             className="text-sm text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 flex items-center justify-center gap-1 mx-auto"
           >
             <HelpCircle className="w-4 h-4" />
-            Besoin d'aide ?
+            {t('unauthorized.labels.needHelp')}
           </button>
 
           <AnimatePresence>
@@ -640,15 +625,15 @@ export default function Unauthorized() {
         >
           <div className="flex items-center gap-1">
             <Shield className="w-3 h-3" />
-            <span>Protégé par RLS</span>
+            <span>{t('unauthorized.labels.protectedBy', { system: 'RLS' })}</span>
           </div>
           <div className="flex items-center gap-1">
             <Fingerprint className="w-3 h-3" />
-            <span>Session {user ? 'active' : 'inactive'}</span>
+            <span>{t('unauthorized.labels.sessionState', { state: user ? t('unauthorized.labels.active') : t('unauthorized.labels.inactive') })}</span>
           </div>
           <div className="flex items-center gap-1">
             <Lock className="w-3 h-3" />
-            <span>Chiffré</span>
+            <span>{t('unauthorized.labels.encrypted')}</span>
           </div>
         </motion.div>
       </motion.div>

@@ -6,8 +6,10 @@ import {
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { untrusted, escapeText } from '../../../utils/security';
+import { useTranslation } from 'react-i18next';
 
 export default function PillarCard({ pillar, index, onEdit, onDelete, isReadOnly }) {
+    const { t, i18n } = useTranslation('admin');
     const navigate = useNavigate();
 
     const getColorGradient = (color) => {
@@ -84,7 +86,7 @@ export default function PillarCard({ pillar, index, onEdit, onDelete, isReadOnly
             <div className="absolute top-4 right-4" style={{ transform: "translateZ(30px)" }}>
                 <div className={`bg-gradient-to-r ${getColorGradient(pillar.color)} text-white px-2 py-1 rounded-full text-xs font-medium shadow-lg flex items-center gap-1`}>
                     <Sparkles className="w-3 h-3" />
-                    {pillar.videoCount} vidéo{pillar.videoCount > 1 ? 's' : ''}
+                    {pillar.videoCount} {t('pillars.card.videos')}
                 </div>
             </div>
 
@@ -110,24 +112,24 @@ export default function PillarCard({ pillar, index, onEdit, onDelete, isReadOnly
                 <div className="flex sm:flex-col items-center justify-between sm:justify-center p-2 bg-white/50 dark:bg-gray-800/50 rounded-lg">
                     <div className="flex items-center gap-2 sm:block sm:text-center">
                         <Video className="w-4 h-4 sm:mx-auto mb-0 sm:mb-1 text-indigo-600 dark:text-indigo-400" />
-                        <p className="text-[10px] sm:text-xs text-gray-500 dark:text-gray-400">Vidéos</p>
+                        <p className="text-[10px] sm:text-xs text-gray-500 dark:text-gray-400">{t('pillars.card.videos')}</p>
                     </div>
                     <p className="text-sm sm:text-lg font-bold text-gray-800 dark:text-gray-200">{pillar.videoCount}</p>
                 </div>
                 <div className="flex sm:flex-col items-center justify-between sm:justify-center p-2 bg-white/50 dark:bg-gray-800/50 rounded-lg">
                     <div className="flex items-center gap-2 sm:block sm:text-center">
                         <Users className="w-4 h-4 sm:mx-auto mb-0 sm:mb-1 text-purple-600 dark:text-purple-400" />
-                        <p className="text-[10px] sm:text-xs text-gray-500 dark:text-gray-400">Étudiants</p>
+                        <p className="text-[10px] sm:text-xs text-gray-500 dark:text-gray-400">{t('pillars.card.students_label')}</p>
                     </div>
                     <p className="text-sm sm:text-lg font-bold text-gray-800 dark:text-gray-200">{pillar.studentCount}</p>
                 </div>
                 <div className="flex sm:flex-col items-center justify-between sm:justify-center p-2 bg-white/50 dark:bg-gray-800/50 rounded-lg">
                     <div className="flex items-center gap-2 sm:block sm:text-center">
                         <Calendar className="w-4 h-4 sm:mx-auto mb-0 sm:mb-1 text-green-600 dark:text-green-400" />
-                        <p className="text-[10px] sm:text-xs text-gray-500 dark:text-gray-400">Création</p>
+                        <p className="text-[10px] sm:text-xs text-gray-500 dark:text-gray-400">{t('pillars.card.creation')}</p>
                     </div>
                     <p className="text-xs sm:text-sm font-bold text-gray-800 dark:text-gray-200">
-                        {new Date(pillar.created_at).toLocaleDateString('fr-FR')}
+                        {new Date(pillar.created_at).toLocaleDateString(i18n.language)}
                     </p>
                 </div>
             </div>
@@ -140,7 +142,7 @@ export default function PillarCard({ pillar, index, onEdit, onDelete, isReadOnly
                     whileTap={{ scale: 0.9 }}
                     onClick={handleViewDetails}
                     className="p-2 hover:bg-blue-100 dark:hover:bg-blue-900/50 rounded-lg transition-colors text-blue-600 dark:text-blue-400"
-                    title="Voir détails"
+                    title={t('pillars.card.view_details')}
                 >
                     <Eye className="w-4 h-4" />
                 </motion.button>
@@ -153,7 +155,7 @@ export default function PillarCard({ pillar, index, onEdit, onDelete, isReadOnly
                             whileTap={{ scale: 0.9 }}
                             onClick={handleEditClick}
                             className="p-2 hover:bg-purple-100 dark:hover:bg-purple-900/50 rounded-lg transition-colors text-purple-600 dark:text-purple-400"
-                            title="Modifier"
+                            title={t('pillars.card.edit')}
                         >
                             <Edit className="w-4 h-4" />
                         </motion.button>
@@ -164,7 +166,7 @@ export default function PillarCard({ pillar, index, onEdit, onDelete, isReadOnly
                             whileTap={{ scale: 0.9 }}
                             onClick={handleDeleteClick}
                             className="p-2 hover:bg-red-100 dark:hover:bg-red-900/50 rounded-lg transition-colors text-red-600 dark:text-red-400"
-                            title="Supprimer"
+                            title={t('pillars.card.delete')}
                         >
                             <Trash2 className="w-4 h-4" />
                         </motion.button>

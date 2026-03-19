@@ -1,4 +1,5 @@
 // src/components/admin/groups/GroupsList.jsx
+import { useTranslation } from 'react-i18next';
 import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
@@ -27,6 +28,7 @@ const ITEMS_PER_PAGE = 10;
 
 export default function GroupsList({ isReadOnly = false, orgId: propOrgId }) {
   const { user } = useAuth();
+  const { t, i18n } = useTranslation('admin');
   const { success, error: showError } = useToast();
   const [groups, setGroups] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -111,7 +113,7 @@ export default function GroupsList({ isReadOnly = false, orgId: propOrgId }) {
       setTotalPages(Math.ceil((count || 0) / ITEMS_PER_PAGE));
     } catch (error) {
       console.error('Erreur lors du chargement des groupes:', error);
-      showError('Impossible de charger les groupes');
+      showError(t('groups.errors.fetch_failed'));
     } finally {
       setLoading(false);
     }
@@ -131,12 +133,12 @@ export default function GroupsList({ isReadOnly = false, orgId: propOrgId }) {
 
       if (error) throw error;
 
-      success('Groupe supprimé avec succès');
+      success(t('groups.success.deleted'));
       setShowDeleteConfirm(null);
       fetchGroups();
     } catch (error) {
       console.error('Erreur suppression groupe:', error);
-      showError('Échec de la suppression');
+      showError(t('groups.errors.delete_failed'));
     }
   };
 
@@ -168,12 +170,12 @@ export default function GroupsList({ isReadOnly = false, orgId: propOrgId }) {
     <div className="space-y-6">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <h1 className="text-2xl font-bold text-gray-800 dark:text-white">Groupes</h1>
+        <h1 className="text-2xl font-bold text-gray-800 dark:text-white">{t('groups.title')}</h1>
         <div className="flex items-center gap-3">
           <button
             onClick={handleRefresh}
             className="p-2 bg-gray-100 dark:bg-gray-700 rounded-xl hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
-            aria-label="Rafraîchir"
+            title={t('common.refresh')}
           >
             <RefreshCw className="w-5 h-5 text-gray-600 dark:text-gray-300" />
           </button>
@@ -183,7 +185,7 @@ export default function GroupsList({ isReadOnly = false, orgId: propOrgId }) {
               className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-xl text-white font-medium hover:shadow-lg transition-all"
             >
               <Plus className="w-5 h-5" />
-              Nouveau groupe
+              {t('groups.btn_new')}
             </button>
           )}
         </div>
@@ -196,7 +198,7 @@ export default function GroupsList({ isReadOnly = false, orgId: propOrgId }) {
           type="text"
           value={searchTerm}
           onChange={(e) => handleSearch(e.target.value)}
-          placeholder="Rechercher un groupe..."
+          placeholder={t('groups.list.search_placeholder')}
           className="w-full pl-10 pr-4 py-2 bg-white dark:bg-gray-800 border-2 border-gray-100 dark:border-gray-700 rounded-xl focus:border-indigo-400 dark:focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 dark:focus:ring-indigo-900/30 outline-none transition-all dark:text-white"
         />
       </div>
@@ -207,12 +209,12 @@ export default function GroupsList({ isReadOnly = false, orgId: propOrgId }) {
           <table className="w-full">
             <thead className="bg-gray-50 dark:bg-gray-900 border-b border-gray-100 dark:border-gray-700">
               <tr>
-                <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Nom</th>
-                <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Description</th>
-                <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Membres</th>
-                <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Piliers</th>
-                <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Créé le</th>
-                <th className="px-6 py-4 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Actions</th>
+                <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">{t('groups.list.name')}</th>
+                <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">{t('groups.list.description')}</th>
+                <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">{t('groups.list.members')}</th>
+                <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">{t('groups.list.pillars')}</th>
+                <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">{t('groups.list.created_at')}</th>
+                <th className="px-6 py-4 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">{t('groups.list.actions')}</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100 dark:divide-gray-700">
@@ -227,7 +229,7 @@ export default function GroupsList({ isReadOnly = false, orgId: propOrgId }) {
               ) : groups.length === 0 ? (
                 <tr>
                   <td colSpan="6" className="px-6 py-12 text-center text-gray-500 dark:text-gray-400">
-                    {debouncedSearch ? 'Aucun groupe ne correspond à votre recherche' : 'Aucun groupe créé'}
+                    {debouncedSearch ? t('groups.list.no_results') : t('groups.list.empty')}
                   </td>
                 </tr>
               ) : (
@@ -260,7 +262,7 @@ export default function GroupsList({ isReadOnly = false, orgId: propOrgId }) {
                       </div>
                     </td>
                     <td className="px-6 py-4 text-gray-500 dark:text-gray-400">
-                      {new Date(group.created_at).toLocaleDateString('fr-FR')}
+                      {new Date(group.created_at).toLocaleDateString(i18n.language === 'ar' ? 'ar-EG' : i18n.language === 'fr' ? 'fr-FR' : 'en-US')}
                     </td>
                     <td className="px-6 py-4">
                       <div className="flex items-center justify-end gap-2">
@@ -269,28 +271,28 @@ export default function GroupsList({ isReadOnly = false, orgId: propOrgId }) {
                             <button
                               onClick={() => setShowMembers(group)}
                               className="p-2 hover:bg-indigo-50 dark:hover:bg-gray-700 rounded-lg transition-colors text-indigo-600 dark:text-indigo-400"
-                              title="Gérer les membres"
+                              title={t('groups.actions.manage_members')}
                             >
                               <UserPlus className="w-4 h-4" />
                             </button>
                             <button
                               onClick={() => setShowPillarAccess(group)}
                               className="p-2 hover:bg-purple-50 dark:hover:bg-gray-700 rounded-lg transition-colors text-purple-600 dark:text-purple-400"
-                              title="Gérer l'accès aux piliers"
+                              title={t('groups.actions.manage_pillars')}
                             >
                               <Shield className="w-4 h-4" />
                             </button>
                             <button
                               onClick={() => handleEdit(group)}
                               className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors text-gray-600 dark:text-gray-300"
-                              title="Modifier"
+                              title={t('groups.actions.edit')}
                             >
                               <Edit className="w-4 h-4" />
                             </button>
                             <button
                               onClick={() => setShowDeleteConfirm(group)}
                               className="p-2 hover:bg-red-50 dark:hover:bg-red-900/50 rounded-lg transition-colors text-red-500 dark:text-red-400"
-                              title="Supprimer"
+                              title={t('groups.actions.delete')}
                             >
                               <Trash2 className="w-4 h-4" />
                             </button>
@@ -310,7 +312,7 @@ export default function GroupsList({ isReadOnly = false, orgId: propOrgId }) {
           <div className="flex items-center justify-between px-6 py-4 border-t border-gray-100 dark:border-gray-700">
             <div className="text-sm text-gray-500 dark:text-gray-400">
               {Math.min((currentPage - 1) * ITEMS_PER_PAGE + 1, totalCount)} -{' '}
-              {Math.min(currentPage * ITEMS_PER_PAGE, totalCount)} sur {totalCount}
+              {Math.min(currentPage * ITEMS_PER_PAGE, totalCount)} {t('common.pagination.of')} {totalCount}
             </div>
             <div className="flex gap-2">
               <button
@@ -318,14 +320,14 @@ export default function GroupsList({ isReadOnly = false, orgId: propOrgId }) {
                 disabled={currentPage === 1}
                 className="px-3 py-1 rounded-lg bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-gray-700 dark:text-gray-300"
               >
-                Précédent
+                {t('common.pagination.prev')}
               </button>
               <button
                 onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
                 disabled={currentPage === totalPages}
                 className="px-3 py-1 rounded-lg bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-gray-700 dark:text-gray-300"
               >
-                Suivant
+                {t('common.pagination.next')}
               </button>
             </div>
           </div>
@@ -368,10 +370,10 @@ export default function GroupsList({ isReadOnly = false, orgId: propOrgId }) {
             isOpen={!!showDeleteConfirm}
             onClose={() => setShowDeleteConfirm(null)}
             onConfirm={() => handleDelete(showDeleteConfirm.id)}
-            title="Supprimer le groupe"
-            message={`Êtes-vous sûr de vouloir supprimer le groupe "${escapeText(untrusted(showDeleteConfirm.name))}" ? Cette action est irréversible et retirera l'accès aux piliers pour tous ses membres.`}
-            confirmText="Supprimer"
-            cancelText="Annuler"
+            title={t('groups.actions.delete')}
+            message={t('groups.confirm_delete_msg', { name: escapeText(untrusted(showDeleteConfirm.name)) })}
+            confirmText={t('common.delete')}
+            cancelText={t('common.cancel')}
             type="danger"
           />
         )}

@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
     X, Sparkles, Save, Eye
 } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { supabase } from '../../../lib/supabase';
 import { useAuth } from '../../../hooks/useAuth';
 import { useToast } from '../../ui/Toast';
@@ -25,6 +26,7 @@ const COLORS = [
 ];
 
 export default function CreatePillarModal({ isOpen, onClose, onSuccess, orgId: propOrgId }) {
+    const { t } = useTranslation('admin');
     const { user } = useAuth();
     const { success, error: showError } = useToast();
     const [loading, setLoading] = useState(false);
@@ -39,12 +41,12 @@ export default function CreatePillarModal({ isOpen, onClose, onSuccess, orgId: p
 
     const validateForm = () => {
         const errors = {};
-        if (!formData.name) errors.name = 'Nom requis';
-        else if (formData.name.length < 3) errors.name = 'Minimum 3 caractères';
-        else if (formData.name.length > 50) errors.name = 'Maximum 50 caractères';
+        if (!formData.name) errors.name = t('pillars.create_modal.validation.required');
+        else if (formData.name.length < 3) errors.name = t('pillars.create_modal.validation.min_length', { count: 3 });
+        else if (formData.name.length > 50) errors.name = t('pillars.create_modal.validation.max_length', { count: 50 });
         
         if (formData.description && formData.description.length > 200) {
-            errors.description = 'Maximum 200 caractères';
+            errors.description = t('pillars.create_modal.validation.desc_max', { count: 200 });
         }
         return errors;
     };
@@ -72,7 +74,7 @@ export default function CreatePillarModal({ isOpen, onClose, onSuccess, orgId: p
                 orgId = profile?.organization_id;
             }
 
-            if (!orgId) throw new Error('Organisation non trouvée');
+            if (!orgId) throw new Error(t('pillars.errors.no_org'));
 
             const { error } = await supabase
                 .from('pillars')
@@ -86,7 +88,7 @@ export default function CreatePillarModal({ isOpen, onClose, onSuccess, orgId: p
 
             if (error) throw error;
 
-            success('Pilier créé avec succès');
+            success(t('pillars.create_modal.success'));
             onSuccess?.();
             onClose();
         } catch (err) {
@@ -131,7 +133,7 @@ export default function CreatePillarModal({ isOpen, onClose, onSuccess, orgId: p
                                 <div className="absolute top-4 right-4 z-10">
                                     <div className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-3 py-1 rounded-full text-xs font-medium flex items-center gap-1 shadow-lg">
                                         <Sparkles className="w-3 h-3" />
-                                        Nouveau pilier
+                                        {t('pillars.new_pillar')}
                                     </div>
                                 </div>
 
@@ -142,10 +144,10 @@ export default function CreatePillarModal({ isOpen, onClose, onSuccess, orgId: p
                                             <div className="text-4xl">{formData.icon}</div>
                                             <div>
                                                 <h2 className="text-2xl font-bold">
-                                                    Créer un pilier
+                                                    {t('pillars.create_modal.title')}
                                                 </h2>
                                                 <p className="text-white/80 text-sm mt-1">
-                                                    Ajoutez un nouveau pilier de formation
+                                                    {t('pillars.create_modal.subtitle')}
                                                 </p>
                                             </div>
                                         </div>
@@ -162,7 +164,7 @@ export default function CreatePillarModal({ isOpen, onClose, onSuccess, orgId: p
                                         className="absolute bottom-6 right-8 flex items-center gap-2 px-3 py-1.5 bg-white/20 rounded-lg hover:bg-white/30 transition-all text-sm"
                                     >
                                         <Eye className="w-4 h-4" />
-                                        {previewMode ? 'Mode édition' : 'Aperçu'}
+                                        {previewMode ? t('pillars.create_modal.edit_mode') : t('pillars.create_modal.preview')}
                                     </button>
                                 </div>
 
@@ -172,17 +174,17 @@ export default function CreatePillarModal({ isOpen, onClose, onSuccess, orgId: p
                                         <div className={`bg-gradient-to-br ${selectedColor.gradient} rounded-2xl p-8 text-white shadow-xl`}>
                                             <div className="text-6xl mb-4">{formData.icon}</div>
                                             <h3 className="text-2xl font-bold mb-2">
-                                                {formData.name || 'Nom du pilier'}
+                                                {formData.name || t('pillars.create_modal.name')}
                                             </h3>
                                             <p className="text-white/80">
-                                                {formData.description || 'Description du pilier...'}
+                                                {formData.description || t('pillars.create_modal.description_placeholder')}
                                             </p>
                                             <div className="mt-4 flex gap-2">
                                                 <span className="px-3 py-1 bg-white/20 rounded-full text-sm">
-                                                    0 vidéo
+                                                    {t('pillars.stats_summary.videos', { count: 0 })}
                                                 </span>
                                                 <span className="px-3 py-1 bg-white/20 rounded-full text-sm">
-                                                    0 étudiant
+                                                    {t('pillars.stats_summary.students', { count: 0 })}
                                                 </span>
                                             </div>
                                         </div>
@@ -190,7 +192,7 @@ export default function CreatePillarModal({ isOpen, onClose, onSuccess, orgId: p
                                 ) : (
                                     <form onSubmit={handleSubmit} className="p-8 space-y-6">
                                         <SanitizedInput
-                                            label="Nom du pilier"
+                                            label={t('pillars.create_modal.name')}
                                             value={formData.name}
                                             onChange={(e) => handleChange('name', e.target.value)}
                                             onBlur={() => setTouched({ ...touched, name: true })}
@@ -199,14 +201,14 @@ export default function CreatePillarModal({ isOpen, onClose, onSuccess, orgId: p
                                             maxLength={50}
                                             required
                                             error={touched.name ? errors.name : ''}
-                                            placeholder="ex: Développement web"
+                                            placeholder={t('pillars.create_modal.name_placeholder')}
                                             className="w-full px-4 py-3 bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 rounded-xl focus:border-indigo-400 dark:focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 dark:focus:ring-indigo-900/30 outline-none transition-all resize-none dark:text-white"
                                         />
 
                                         <div className="space-y-2">
                                             <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300">
-                                                Description
-                                                <span className="text-gray-400 dark:text-gray-500 text-xs ml-2">(optionnelle)</span>
+                                                {t('pillars.create_modal.description')}
+                                                <span className="text-gray-400 dark:text-gray-500 text-xs ml-2">{t('pillars.create_modal.optional')}</span>
                                             </label>
                                             <textarea
                                                 value={formData.description}
@@ -214,7 +216,7 @@ export default function CreatePillarModal({ isOpen, onClose, onSuccess, orgId: p
                                                 onBlur={() => setTouched({ ...touched, description: true })}
                                                 rows={3}
                                                 className="w-full px-4 py-3 bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 rounded-xl focus:border-indigo-400 dark:focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 dark:focus:ring-indigo-900/30 outline-none transition-all resize-none dark:text-white"
-                                                placeholder="Décrivez ce pilier..."
+                                                placeholder={t('pillars.create_modal.description_placeholder')}
                                             />
                                             <div className="flex justify-end">
                                                 <span className={`text-xs ${(formData.description?.length || 0) > 180 ? 'text-orange-500 dark:text-orange-400' : 'text-gray-400 dark:text-gray-500'}`}>
@@ -226,7 +228,7 @@ export default function CreatePillarModal({ isOpen, onClose, onSuccess, orgId: p
                                         {/* Icône */}
                                         <div className="space-y-2">
                                             <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300">
-                                                Icône
+                                                {t('pillars.create_modal.icon')}
                                             </label>
                                             <div className="grid grid-cols-6 gap-2">
                                                 {ICONS.map(icon => (
@@ -249,7 +251,7 @@ export default function CreatePillarModal({ isOpen, onClose, onSuccess, orgId: p
                                         {/* Couleur */}
                                         <div className="space-y-2">
                                             <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300">
-                                                Couleur
+                                                {t('pillars.create_modal.color')}
                                             </label>
                                             <div className="flex gap-2">
                                                 {COLORS.map(color => (
@@ -274,7 +276,7 @@ export default function CreatePillarModal({ isOpen, onClose, onSuccess, orgId: p
                                                 onClick={onClose}
                                                 className="flex-1 px-6 py-4 text-gray-600 dark:text-gray-400 font-semibold rounded-2xl hover:bg-gray-100 dark:hover:bg-gray-800 transition-all"
                                             >
-                                                Annuler
+                                                {t('pillars.create_modal.cancel')}
                                             </button>
                                             <motion.button
                                                 type="submit"
@@ -291,12 +293,12 @@ export default function CreatePillarModal({ isOpen, onClose, onSuccess, orgId: p
                                                 {loading ? (
                                                     <div className="flex items-center justify-center gap-2">
                                                         <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                                                        <span>Création...</span>
+                                                        <span>{t('pillars.create_modal.sending')}</span>
                                                     </div>
                                                 ) : (
                                                     <span className="flex items-center justify-center gap-2">
                                                         <Save className="w-5 h-5" />
-                                                        Créer le pilier
+                                                        {t('pillars.create_modal.submit')}
                                                     </span>
                                                 )}
                                             </motion.button>

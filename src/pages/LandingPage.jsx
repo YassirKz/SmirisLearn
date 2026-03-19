@@ -10,8 +10,10 @@ import {
 } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
 import { useTheme } from '../hooks/useTheme';
+import { useTranslation } from 'react-i18next';
 import { useToast } from '../hooks/useToast';
 import { supabase } from '../lib/supabase';
+import LanguageSwitcher from '../components/ui/LanguageSwitcher';
 import { untrusted, escapeText, validateEmail } from '../utils/security';
 
 // Composant pour chaque section avec scroll snap
@@ -197,6 +199,7 @@ const PricingCard = ({ name, price, subtext, features, isPopular, delay, onSelec
 export default function LandingPage() {
   const { user } = useAuth();
   const { theme, toggleTheme } = useTheme();
+  const { t } = useTranslation(['common', 'auth']);
   const navigate = useNavigate();
   const { success, error: showError } = useToast();
   const containerRef = useRef(null);
@@ -213,35 +216,21 @@ export default function LandingPage() {
   const [formErrors, setFormErrors] = useState({});
   const [sending, setSending] = useState(false);
 
-  const faqs = [
-    {
-      question: "Puis-je changer de plan en cours de route ?",
-      answer: "Absolument. Vous pouvez upgrader ou downgrader votre forfait à tout moment depuis les paramètres de votre compte. Le montant sera proratisé."
-    },
-    {
-      question: "Les vidéos sont-elles hébergées chez vous ?",
-      answer: "Oui, nous hébergeons toutes vos vidéos sur des serveurs sécurisés et optimisés pour une lecture fluide partout dans le monde."
-    },
-    {
-      question: "Comment fonctionne l'essai gratuit ?",
-      answer: "L'essai gratuit dure 14 jours et vous donne accès à toutes les fonctionnalités du plan Starter. Aucune carte bancaire n'est requise pour l'inscription."
-    },
-    {
-      question: "Puis-je personnaliser la plateforme ?",
-      answer: "Oui, le plan Business vous permet d'ajouter votre logo, vos couleurs (marque blanche) et d'utiliser un domaine personnalisé."
-    }
-  ];
+  const faqs = (t('faq.items', { returnObjects: true }) || []).map((faq, index) => ({
+    question: faq.q,
+    answer: faq.a
+  }));
 
   // Sections pour la navigation
   const sections = [
-    { id: 'hero', label: 'Accueil' },
-    { id: 'features', label: 'Fonctionnalités' },
-    { id: 'testimonials', label: 'Témoignages' },
-    { id: 'demo', label: 'Aperçu' },
-    { id: 'pricing', label: 'Tarifs' },
-    { id: 'faq', label: 'FAQ' },
-    { id: 'contact', label: 'Contact' },
-    { id: 'cta', label: 'Inscription' }
+    { id: 'hero', label: t('nav.home') },
+    { id: 'features', label: t('nav.features') },
+    { id: 'testimonials', label: t('nav.testimonials') },
+    { id: 'demo', label: t('nav.demo') },
+    { id: 'pricing', label: t('nav.pricing') },
+    { id: 'faq', label: t('nav.faq') },
+    { id: 'contact', label: t('nav.contact') },
+    { id: 'cta', label: t('nav.signup') }
   ];
 
   // Détecter la section active lors du scroll (optimisé)
@@ -287,8 +276,8 @@ export default function LandingPage() {
   // Validation du formulaire de contact
   const validateForm = () => {
     const errors = {};
-    if (!formData.fullName.trim()) errors.fullName = 'Nom requis';
-    else if (formData.fullName.length < 2) errors.fullName = 'Minimum 2 caractères';
+    if (!formData.fullName.trim()) errors.fullName = t('auth.errors.nameRequired');
+    else if (formData.fullName.length < 2) errors.fullName = t('auth.errors.nameMin');
     
     try {
       validateEmail(untrusted(formData.email.trim()));
@@ -384,13 +373,15 @@ export default function LandingPage() {
                       : 'text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400'
                   }`}
                 >
-                  {label}
+                  {t(`nav.${id}`)}
                 </button>
               ))}
             </nav>
 
             {/* Boutons */}
             <div className="flex items-center gap-1.5 sm:gap-3">
+              <LanguageSwitcher />
+
               <button
                 onClick={toggleTheme}
                 className="p-1.5 sm:p-2 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
@@ -403,14 +394,14 @@ export default function LandingPage() {
                 onClick={() => navigate('/login')}
                 className="hidden md:inline-flex items-center gap-2 px-3 lg:px-4 py-2 text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-medium transition-colors whitespace-nowrap"
               >
-                Se connecter
+                {t('cta.login')}
               </button>
               
               <button
                 onClick={() => navigate('/login?signup=true')}
                 className="hidden sm:inline-flex px-4 lg:px-6 py-2 lg:py-2.5 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-xl font-bold shadow-lg hover:shadow-xl transition-all whitespace-nowrap"
               >
-                Essai gratuit
+                {t('cta.freeTrial')}
               </button>
 
               <button
@@ -450,7 +441,7 @@ export default function LandingPage() {
                     }}
                     className="block w-full text-left px-4 py-3 rounded-xl hover:bg-indigo-50 dark:hover:bg-gray-800 transition-colors"
                   >
-                    <span className="text-gray-800 dark:text-white font-medium">{label}</span>
+                    <span className="text-gray-800 dark:text-white font-medium">{t(`nav.${id}`)}</span>
                   </button>
                 ))}
                 <hr className="border-gray-200 dark:border-gray-700" />
@@ -512,26 +503,25 @@ export default function LandingPage() {
             <Sparkles className="w-14 h-14 text-white" />
           </motion.div>
           
-          <motion.h1
+           <motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
             className="text-5xl md:text-7xl font-black text-gray-900 dark:text-white mb-6 tracking-tight"
           >
-            Formez vos équipes
+            {t('hero.title1')}
             <span className="block text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600">
-              sans effort
+              {t('hero.title2')}
             </span>
           </motion.h1>
           
-          <motion.p
+           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4 }}
             className="text-xl text-gray-600 dark:text-gray-300 mb-12 max-w-3xl mx-auto"
           >
-            Smiris Learn, la plateforme SaaS qui simplifie la création de parcours pédagogiques. 
-            Gérez vidéos, quiz, et suivez la progression en temps réel.
+            {t('hero.description')}
           </motion.p>
           
           <motion.div
@@ -540,18 +530,18 @@ export default function LandingPage() {
             transition={{ delay: 0.6 }}
             className="flex flex-col sm:flex-row gap-4 justify-center items-center"
           >
-            <button
+             <button
               onClick={() => navigate('/login?signup=true')}
               className="px-10 py-5 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-2xl text-lg font-bold shadow-2xl hover:shadow-3xl hover:scale-105 transition-all flex items-center gap-2 group"
             >
-              Commencer gratuitement
+              {t('hero.ctaStart')}
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </button>
-            <button
+             <button
               onClick={() => document.getElementById('features').scrollIntoView({ behavior: 'smooth' })}
               className="px-10 py-5 bg-white/20 dark:bg-gray-800/20 backdrop-blur-sm border-2 border-indigo-200 dark:border-indigo-800 text-gray-800 dark:text-white rounded-2xl text-lg font-bold hover:bg-white/30 dark:hover:bg-gray-800/30 transition-all"
             >
-              Découvrir
+              {t('hero.ctaDiscover')}
             </button>
           </motion.div>
 
@@ -561,8 +551,8 @@ export default function LandingPage() {
             transition={{ delay: 0.8 }}
             className="mt-16 text-sm text-gray-400 dark:text-gray-500 flex items-center justify-center gap-2"
           >
-            <Shield className="w-4 h-4" />
-            <span>Plus de 500 entreprises nous font confiance</span>
+             <Shield className="w-4 h-4" />
+            <span>{t('hero.trustText')}</span>
           </motion.div>
         </motion.div>
       </Section>
@@ -576,7 +566,7 @@ export default function LandingPage() {
             viewport={{ once: true }}
             className="text-4xl md:text-5xl font-black text-center text-gray-900 dark:text-white mb-4"
           >
-            Tout ce dont vous avez besoin
+            {t('features.title')}
           </motion.h2>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -585,32 +575,32 @@ export default function LandingPage() {
             transition={{ delay: 0.1 }}
             className="text-xl text-center text-gray-600 dark:text-gray-300 mb-16 max-w-3xl mx-auto"
           >
-            Une suite complète pour créer, gérer et analyser vos formations.
+            {t('features.subtitle')}
           </motion.p>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             <FeatureCard
               icon={BookOpen}
-              title="Piliers de formation"
-              description="Organisez vos cours en piliers thématiques, gérez l'ordre séquentiel."
+              title={t('features.items.pillars.title')}
+              description={t('features.items.pillars.desc')}
               delay={0.2}
             />
             <FeatureCard
               icon={Video}
-              title="Vidéos interactives"
-              description="Upload simple, lecteur intégré, progression automatique."
+              title={t('features.items.videos.title')}
+              description={t('features.items.videos.desc')}
               delay={0.3}
             />
             <FeatureCard
               icon={Award}
-              title="Quiz personnalisés"
-              description="QCM, vrai/faux, timer, tentatives, feedback détaillé."
+              title={t('features.items.quiz.title')}
+              description={t('features.items.quiz.desc')}
               delay={0.4}
             />
             <FeatureCard
               icon={Users}
-              title="Groupes & accès"
-              description="Affectez des étudiants à des groupes, contrôlez l'accès."
+              title={t('features.items.groups.title')}
+              description={t('features.items.groups.desc')}
               delay={0.5}
             />
           </div>
@@ -624,15 +614,15 @@ export default function LandingPage() {
           >
             <div className="flex items-center gap-2 px-4 py-2 bg-indigo-50 dark:bg-indigo-900/30 rounded-full">
               <Moon className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
-              <span className="text-sm text-gray-700 dark:text-gray-300">Dark mode inclus</span>
+              <span className="text-sm text-gray-700 dark:text-gray-300">{t('features.badges.darkMode')}</span>
             </div>
             <div className="flex items-center gap-2 px-4 py-2 bg-purple-50 dark:bg-purple-900/30 rounded-full">
               <Globe className="w-5 h-5 text-purple-600 dark:text-purple-400" />
-              <span className="text-sm text-gray-700 dark:text-gray-300">Multilingue (FR/EN/DE/AR)</span>
+              <span className="text-sm text-gray-700 dark:text-gray-300">{t('features.badges.multilingual')}</span>
             </div>
             <div className="flex items-center gap-2 px-4 py-2 bg-green-50 dark:bg-green-900/30 rounded-full">
               <Lock className="w-5 h-5 text-green-600 dark:text-green-400" />
-              <span className="text-sm text-gray-700 dark:text-gray-300">Sécurité renforcée (RLS)</span>
+              <span className="text-sm text-gray-700 dark:text-gray-300">{t('features.badges.security')}</span>
             </div>
           </motion.div>
         </div>
@@ -647,7 +637,7 @@ export default function LandingPage() {
             viewport={{ once: true }}
             className="text-4xl md:text-5xl font-black text-center text-gray-900 dark:text-white mb-4"
           >
-            Ils nous font confiance
+            {t('testimonials.title')}
           </motion.h2>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -655,30 +645,30 @@ export default function LandingPage() {
             viewport={{ once: true }}
             className="text-xl text-center text-gray-600 dark:text-gray-300 mb-16"
           >
-            Découvrez ce que nos clients pensent de Smiris Learn.
+            {t('testimonials.subtitle')}
           </motion.p>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             <TestimonialCard
-              name="Marie D."
-              role="Responsable RH, Groupe XYZ"
-              content="Smiris Learn a transformé notre façon de former nos équipes. L'interface est intuitive et le suivi des progrès est un vrai plus."
+              name={t('testimonials.items.marie.name')}
+              role={t('testimonials.items.marie.role')}
+              content={t('testimonials.items.marie.content')}
               rating={5}
               avatar="M"
               delay={0.2}
             />
             <TestimonialCard
-              name="Thomas L."
-              role="Formateur indépendant"
-              content="La gestion des groupes et des accès est incroyablement simple. Mes étudiants adorent la clarté des quiz."
+              name={t('testimonials.items.thomas.name')}
+              role={t('testimonials.items.thomas.role')}
+              content={t('testimonials.items.thomas.content')}
               rating={5}
               avatar="T"
               delay={0.3}
             />
             <TestimonialCard
-              name="Sophie M."
-              role="Directrice pédagogique"
-              content="Le dark mode et le support multilingue sont un vrai plus pour nos équipes internationales. Un outil moderne et efficace."
+              name={t('testimonials.items.sophie.name')}
+              role={t('testimonials.items.sophie.role')}
+              content={t('testimonials.items.sophie.content')}
               rating={5}
               avatar="S"
               delay={0.4}
@@ -697,10 +687,10 @@ export default function LandingPage() {
             className="text-center mb-12"
           >
             <h2 className="text-4xl md:text-5xl font-black text-gray-900 dark:text-white mb-4">
-              Un aperçu de l'interface
+              {t('demo.title')}
             </h2>
             <p className="text-xl text-gray-600 dark:text-gray-300">
-              Dashboard, lecteur vidéo, quiz... tout est pensé pour une expérience fluide.
+              {t('demo.subtitle')}
             </p>
           </motion.div>
 
@@ -728,7 +718,7 @@ export default function LandingPage() {
             viewport={{ once: true }}
             className="text-4xl md:text-5xl font-black text-center text-gray-900 dark:text-white mb-4"
           >
-            Des formules adaptées
+            {t('pricing.title')}
           </motion.h2>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -736,7 +726,7 @@ export default function LandingPage() {
             viewport={{ once: true }}
             className="text-xl text-center text-gray-600 dark:text-gray-300 mb-8"
           >
-            Choisissez le plan qui correspond à la taille de votre équipe.
+            {t('pricing.subtitle')}
           </motion.p>
 
           <motion.div
@@ -745,7 +735,7 @@ export default function LandingPage() {
             viewport={{ once: true }}
             className="flex justify-center items-center gap-4 mb-16"
           >
-            <span className={`text-sm font-medium ${!isAnnual ? 'text-gray-900 dark:text-white' : 'text-gray-500 dark:text-gray-400'}`}>Mensuel</span>
+            <span className={`text-sm font-medium ${!isAnnual ? 'text-gray-900 dark:text-white' : 'text-gray-500 dark:text-gray-400'}`}>{t('pricing.monthly')}</span>
             <button
               onClick={() => setIsAnnual(!isAnnual)}
               className="relative inline-flex h-7 w-14 items-center rounded-full bg-indigo-100 dark:bg-gray-700 transition-colors focus:outline-none"
@@ -755,48 +745,33 @@ export default function LandingPage() {
               />
             </button>
             <span className={`text-sm font-medium flex items-center gap-2 ${isAnnual ? 'text-gray-900 dark:text-white' : 'text-gray-500 dark:text-gray-400'}`}>
-              Annuel <span className="px-2 py-0.5 rounded-full bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400 text-xs font-bold">-20%</span>
+              {t('pricing.annual')} <span className="px-2 py-0.5 rounded-full bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400 text-xs font-bold">{t('pricing.discount')}</span>
             </span>
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
             <PricingCard
-              name="Gratuit"
+              name={t('pricing.plans.free.name')}
               price="0€"
-              features={[
-                "5 utilisateurs max",
-                "5 vidéos",
-                "1 Go stockage",
-                "Support email"
-              ]}
+              features={t('pricing.plans.free.features', { returnObjects: true })}
               isPopular={false}
               delay={0.2}
               onSelect={() => navigate('/login?signup=true')}
             />
             <PricingCard
-              name="Starter"
+              name={t('pricing.plans.starter.name')}
               price={isAnnual ? "39€" : "49€"}
-              subtext={isAnnual ? "Facturé 468€ / an" : null}
-              features={[
-                "20 utilisateurs",
-                "50 vidéos",
-                "10 Go stockage",
-                "Support prioritaire"
-              ]}
+              subtext={isAnnual ? t('pricing.plans.billedYearly', { price: '468€' }) : null}
+              features={t('pricing.plans.starter.features', { returnObjects: true })}
               isPopular={true}
               delay={0.3}
               onSelect={() => navigate('/login?signup=true&plan=starter')}
             />
             <PricingCard
-              name="Business"
+              name={t('pricing.plans.business.name')}
               price={isAnnual ? "79€" : "99€"}
-              subtext={isAnnual ? "Facturé 948€ / an" : null}
-              features={[
-                "Utilisateurs illimités",
-                "Vidéos illimitées",
-                "100 Go stockage",
-                "API publique"
-              ]}
+              subtext={isAnnual ? t('pricing.plans.billedYearly', { price: '948€' }) : null}
+              features={t('pricing.plans.business.features', { returnObjects: true })}
               isPopular={false}
               delay={0.4}
               onSelect={() => navigate('/contact')}
@@ -815,10 +790,10 @@ export default function LandingPage() {
             className="text-center mb-12"
           >
             <h2 className="text-4xl md:text-5xl font-black text-gray-900 dark:text-white mb-4">
-              Questions fréquentes
+              {t('faq.title')}
             </h2>
             <p className="text-xl text-gray-600 dark:text-gray-300">
-              Tout ce que vous devez savoir sur Smiris Learn.
+              {t('faq.subtitle')}
             </p>
           </motion.div>
 
@@ -851,10 +826,10 @@ export default function LandingPage() {
             className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-3xl p-8 md:p-12 shadow-2xl border border-indigo-100 dark:border-gray-700"
           >
             <h2 className="text-4xl md:text-5xl font-black text-gray-900 dark:text-white mb-4 text-center">
-              Contactez-nous
+              {t('contact.title')}
             </h2>
             <p className="text-xl text-center text-gray-600 dark:text-gray-300 mb-10">
-              Une question ? Notre équipe vous répondra dans les plus brefs délais.
+              {t('contact.subtitle')}
             </p>
 
             <form onSubmit={handleSubmitContact} className="space-y-6">
@@ -862,7 +837,7 @@ export default function LandingPage() {
                 {/* Nom complet */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Nom complet <span className="text-red-500">*</span>
+                    {t('contact.fields.fullName')} <span className="text-red-500">*</span>
                   </label>
                   <div className="relative">
                     <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 dark:text-gray-500" />
@@ -876,7 +851,7 @@ export default function LandingPage() {
                           ? 'border-red-300 dark:border-red-600 focus:border-red-500 focus:ring-red-100 dark:focus:ring-red-900/30'
                           : 'border-gray-200 dark:border-gray-700 focus:border-indigo-400 dark:focus:border-indigo-500 focus:ring-indigo-100 dark:focus:ring-indigo-900/30'
                       }`}
-                      placeholder="Jean Dupont"
+                      placeholder={t('contact.fields.placeholders.name')}
                     />
                   </div>
                   {formErrors.fullName && (
@@ -887,7 +862,7 @@ export default function LandingPage() {
                 {/* Email */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Email <span className="text-red-500">*</span>
+                    {t('contact.fields.email')} <span className="text-red-500">*</span>
                   </label>
                   <div className="relative">
                     <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 dark:text-gray-500" />
@@ -901,7 +876,7 @@ export default function LandingPage() {
                           ? 'border-red-300 dark:border-red-600 focus:border-red-500 focus:ring-red-100 dark:focus:ring-red-900/30'
                           : 'border-gray-200 dark:border-gray-700 focus:border-indigo-400 dark:focus:border-indigo-500 focus:ring-indigo-100 dark:focus:ring-indigo-900/30'
                       }`}
-                      placeholder="contact@exemple.com"
+                      placeholder={t('contact.fields.placeholders.email')}
                     />
                   </div>
                   {formErrors.email && (
@@ -913,7 +888,7 @@ export default function LandingPage() {
               {/* Nom de l'entreprise (optionnel) */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  Nom de l'entreprise <span className="text-gray-400 dark:text-gray-500 text-xs">(optionnel)</span>
+                  {t('contact.fields.company')} <span className="text-gray-400 dark:text-gray-500 text-xs">{t('contact.fields.optional')}</span>
                 </label>
                 <div className="relative">
                   <Building className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 dark:text-gray-500" />
@@ -923,7 +898,7 @@ export default function LandingPage() {
                     value={formData.companyName}
                     onChange={handleInputChange}
                     className="w-full pl-12 pr-4 py-3 bg-white dark:bg-gray-900 border-2 border-gray-200 dark:border-gray-700 rounded-xl focus:border-indigo-400 dark:focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 dark:focus:ring-indigo-900/30 outline-none transition-all dark:text-white"
-                    placeholder="Smiris Learn"
+                    placeholder={t('contact.fields.placeholders.company')}
                   />
                 </div>
               </div>
@@ -931,7 +906,7 @@ export default function LandingPage() {
               {/* Message */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  Message <span className="text-red-500">*</span>
+                  {t('contact.fields.message')} <span className="text-red-500">*</span>
                 </label>
                 <div className="relative">
                   <MessageSquare className="absolute left-4 top-5 w-5 h-5 text-gray-400 dark:text-gray-500" />
@@ -945,7 +920,7 @@ export default function LandingPage() {
                         ? 'border-red-300 dark:border-red-600 focus:border-red-500 focus:ring-red-100 dark:focus:ring-red-900/30'
                         : 'border-gray-200 dark:border-gray-700 focus:border-indigo-400 dark:focus:border-indigo-500 focus:ring-indigo-100 dark:focus:ring-indigo-900/30'
                     }`}
-                    placeholder="Bonjour, j'aimerais en savoir plus sur..."
+                    placeholder={t('contact.fields.placeholders.message')}
                   />
                 </div>
                 {formErrors.message && (
@@ -961,12 +936,12 @@ export default function LandingPage() {
                 {sending ? (
                   <>
                     <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                    <span>Envoi en cours...</span>
+                    <span>{t('contact.sending')}</span>
                   </>
                 ) : (
                   <>
                     <Send className="w-5 h-5" />
-                    <span>Envoyer le message</span>
+                    <span>{t('contact.submit')}</span>
                   </>
                 )}
               </button>
@@ -984,19 +959,19 @@ export default function LandingPage() {
           className="max-w-4xl mx-auto text-center"
         >
           <h2 className="text-5xl md:text-6xl font-black text-gray-900 dark:text-white mb-6">
-            Prêt à révolutionner
+            {t('finalCta.title1')}
             <span className="block text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600">
-              vos formations ?
+              {t('finalCta.title2')}
             </span>
           </h2>
           <p className="text-xl text-gray-600 dark:text-gray-300 mb-10">
-            Rejoignez des milliers d'entreprises qui forment leurs équipes avec Smiris Learn.
+            {t('finalCta.subtitle')}
           </p>
           <button
             onClick={() => navigate('/login?signup=true')}
             className="px-12 py-6 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-2xl text-xl font-bold shadow-2xl hover:shadow-3xl hover:scale-105 transition-all inline-flex items-center gap-3 group"
           >
-            Créer mon compte gratuit
+            {t('finalCta.button')}
             <ArrowRight className="w-6 h-6 group-hover:translate-x-1 transition-transform" />
           </button>
         </motion.div>
@@ -1014,12 +989,12 @@ export default function LandingPage() {
                 <span className="font-bold text-gray-800 dark:text-white">Smiris Learn</span>
               </div>
               <p className="text-sm text-gray-600 dark:text-gray-400">
-                La plateforme de formation SaaS pour les entreprises modernes.
+                {t('footer.desc')}
               </p>
             </div>
             
             <div>
-              <h4 className="font-bold text-gray-800 dark:text-white mb-4">Liens rapides</h4>
+              <h4 className="font-bold text-gray-800 dark:text-white mb-4">{t('footer.links')}</h4>
               <ul className="space-y-2">
                 {sections.map(({ id, label }) => (
                   <li key={id}>
@@ -1035,16 +1010,16 @@ export default function LandingPage() {
             </div>
 
             <div>
-              <h4 className="font-bold text-gray-800 dark:text-white mb-4">Légal</h4>
+              <h4 className="font-bold text-gray-800 dark:text-white mb-4">{t('footer.legal')}</h4>
               <ul className="space-y-2">
                 <li><a href="#" className="text-sm text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400">CGU</a></li>
-                <li><a href="#" className="text-sm text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400">Politique de confidentialité</a></li>
-                <li><a href="#" className="text-sm text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400">Mentions légales</a></li>
+                <li><a href="#" className="text-sm text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400">{t('footer.legalLinks.privacy')}</a></li>
+                <li><a href="#" className="text-sm text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400">{t('footer.legalLinks.terms')}</a></li>
               </ul>
             </div>
 
             <div>
-              <h4 className="font-bold text-gray-800 dark:text-white mb-4">Contact</h4>
+              <h4 className="font-bold text-gray-800 dark:text-white mb-4">{t('footer.contact')}</h4>
               <ul className="space-y-2">
                 <li className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
                   <Mail className="w-4 h-4" />
@@ -1059,7 +1034,7 @@ export default function LandingPage() {
           </div>
 
           <div className="mt-8 pt-8 border-t border-indigo-100 dark:border-gray-800 text-center text-sm text-gray-400 dark:text-gray-500">
-            © 2026 Smiris Learn. Tous droits réservés.
+            {t('footer.rights')}
           </div>
         </div>
       </footer>

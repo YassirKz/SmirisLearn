@@ -6,8 +6,10 @@ import {
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { untrusted, escapeText } from '../../../utils/security';
+import { useTranslation } from 'react-i18next';
 
 export default function VideoCard({ video, index, onEdit, onDelete, isReadOnly, viewMode = 'cards' }) {
+    const { t, i18n } = useTranslation('admin');
     const navigate = useNavigate();
 
     const getPillarColor = (color) => {
@@ -32,7 +34,7 @@ export default function VideoCard({ video, index, onEdit, onDelete, isReadOnly, 
     };
 
     const formatDate = (date) => {
-        return new Date(date).toLocaleDateString('fr-FR', {
+        return new Date(date).toLocaleDateString(i18n.language, {
             day: '2-digit',
             month: '2-digit',
             year: 'numeric'
@@ -98,7 +100,7 @@ export default function VideoCard({ video, index, onEdit, onDelete, isReadOnly, 
                         {video.quizzes?.length > 0 && (
                             <span className="px-2 py-1 rounded-full text-xs font-medium bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300 border border-amber-300 dark:border-amber-800 flex items-center gap-1 shadow-sm">
                                 <Award className="w-3 h-3 text-amber-600 dark:text-amber-400" />
-                                Quiz attaché
+                                {t('videos.table.quiz_attached')}
                             </span>
                         )}
                     </div>
@@ -119,7 +121,7 @@ export default function VideoCard({ video, index, onEdit, onDelete, isReadOnly, 
                             whileTap={{ scale: 0.9 }}
                             onClick={handleView}
                             className="p-2 hover:bg-blue-100 dark:hover:bg-blue-900/50 rounded-lg transition-colors text-blue-600 dark:text-blue-400 sm:opacity-0 sm:group-hover:opacity-100"
-                            title="Voir détails"
+                            title={t('pillars.card.view_details')}
                         >
                             <Eye className="w-4 h-4" />
                         </motion.button>
@@ -131,7 +133,7 @@ export default function VideoCard({ video, index, onEdit, onDelete, isReadOnly, 
                                     whileTap={{ scale: 0.9 }}
                                     onClick={handleEdit}
                                     className="p-2 hover:bg-purple-100 dark:hover:bg-purple-900/50 rounded-lg transition-colors text-purple-600 dark:text-purple-400 sm:opacity-0 sm:group-hover:opacity-100"
-                                    title="Modifier"
+                                    title={t('pillars.card.edit')}
                                 >
                                     <Edit className="w-4 h-4" />
                                 </motion.button>
@@ -141,7 +143,7 @@ export default function VideoCard({ video, index, onEdit, onDelete, isReadOnly, 
                                     whileTap={{ scale: 0.9 }}
                                     onClick={handleDelete}
                                     className="p-2 hover:bg-red-100 dark:hover:bg-red-900/50 rounded-lg transition-colors text-red-600 dark:text-red-400 sm:opacity-0 sm:group-hover:opacity-100"
-                                    title="Supprimer"
+                                    title={t('pillars.card.delete')}
                                 >
                                     <Trash2 className="w-4 h-4" />
                                 </motion.button>
@@ -200,7 +202,7 @@ export default function VideoCard({ video, index, onEdit, onDelete, isReadOnly, 
                         {video.quizzes?.length > 0 && (
                             <span className="px-2 py-1 rounded-full text-xs font-medium bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300 border border-amber-300 dark:border-amber-800 flex items-center gap-1 shadow-sm">
                                 <Award className="w-3 h-3 text-amber-600 dark:text-amber-400" />
-                                Quiz attaché
+                                {t('videos.table.quiz_attached')}
                             </span>
                         )}
                     </div>
@@ -216,7 +218,7 @@ export default function VideoCard({ video, index, onEdit, onDelete, isReadOnly, 
                         whileTap={{ scale: 0.9 }}
                         onClick={handleView}
                         className="p-2 hover:bg-blue-100 dark:hover:bg-blue-900/50 rounded-lg transition-colors text-blue-600 dark:text-blue-400"
-                        title="Voir détails"
+                        title={t('pillars.card.view_details')}
                     >
                         <Eye className="w-4 h-4" />
                     </motion.button>
@@ -228,7 +230,7 @@ export default function VideoCard({ video, index, onEdit, onDelete, isReadOnly, 
                                 whileTap={{ scale: 0.9 }}
                                 onClick={handleEdit}
                                 className="p-2 hover:bg-purple-100 dark:hover:bg-purple-900/50 rounded-lg transition-colors text-purple-600 dark:text-purple-400"
-                                title="Modifier"
+                                title={t('pillars.card.edit')}
                             >
                                 <Edit className="w-4 h-4" />
                             </motion.button>
@@ -238,7 +240,7 @@ export default function VideoCard({ video, index, onEdit, onDelete, isReadOnly, 
                                 whileTap={{ scale: 0.9 }}
                                 onClick={handleDelete}
                                 className="p-2 hover:bg-red-100 dark:hover:bg-red-900/50 rounded-lg transition-colors text-red-600 dark:text-red-400"
-                                title="Supprimer"
+                                title={t('pillars.card.delete')}
                             >
                                 <Trash2 className="w-4 h-4" />
                             </motion.button>

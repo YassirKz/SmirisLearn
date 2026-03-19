@@ -1,4 +1,5 @@
 // src/components/admin/groups/GroupForm.jsx
+import { useTranslation } from 'react-i18next';
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Save } from 'lucide-react';
@@ -9,6 +10,7 @@ import SanitizedInput from '../../ui/SanitizedInput';
 
 export default function GroupForm({ isOpen, onClose, onSuccess, group }) {
   const { user } = useAuth();
+  const { t } = useTranslation('admin');
   const { success, error: showError } = useToast();
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({ name: '', description: '' });
@@ -25,9 +27,9 @@ export default function GroupForm({ isOpen, onClose, onSuccess, group }) {
 
   const validate = () => {
     const errs = {};
-    if (!formData.name.trim()) errs.name = 'Nom requis';
-    else if (formData.name.trim().length < 2) errs.name = 'Minimum 2 caractères';
-    else if (formData.name.trim().length > 60) errs.name = 'Maximum 60 caractères';
+    if (!formData.name.trim()) errs.name = t('groups.modals.fields.name_required');
+    else if (formData.name.trim().length < 2) errs.name = t('groups.modals.fields.name_min');
+    else if (formData.name.trim().length > 60) errs.name = t('groups.modals.fields.name_max');
     return errs;
   };
 
@@ -55,7 +57,7 @@ export default function GroupForm({ isOpen, onClose, onSuccess, group }) {
       }
       if (error) throw error;
 
-      success(group ? 'Groupe modifié' : 'Groupe créé');
+      success(group ? t('groups.success.updated') : t('groups.success.created'));
       onSuccess?.();
       onClose();
     } catch (err) {
@@ -85,7 +87,7 @@ export default function GroupForm({ isOpen, onClose, onSuccess, group }) {
             <div className="p-6">
               <div className="flex items-center justify-between mb-6">
                 <h2 className="text-xl font-bold text-gray-800 dark:text-white">
-                  {group ? 'Modifier le groupe' : 'Nouveau groupe'}
+                  {group ? t('groups.modals.edit_title') : t('groups.modals.create_title')}
                 </h2>
                 <button onClick={onClose} className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg">
                   <X className="w-5 h-5 text-gray-500 dark:text-gray-400" />
@@ -94,7 +96,7 @@ export default function GroupForm({ isOpen, onClose, onSuccess, group }) {
 
               <form onSubmit={handleSubmit} className="space-y-5">
                 <SanitizedInput
-                  label="Nom du groupe"
+                  label={t('groups.modals.fields.name')}
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                   validate="text"
@@ -107,7 +109,7 @@ export default function GroupForm({ isOpen, onClose, onSuccess, group }) {
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                    Description <span className="text-gray-400 dark:text-gray-500 text-xs">(optionnelle)</span>
+                    {t('groups.modals.fields.description')} <span className="text-gray-400 dark:text-gray-500 text-xs">{t('groups.modals.fields.description_optional')}</span>
                   </label>
                   <textarea
                     value={formData.description}
@@ -124,7 +126,7 @@ export default function GroupForm({ isOpen, onClose, onSuccess, group }) {
                     onClick={onClose}
                     className="flex-1 px-4 py-2 border border-gray-200 dark:border-gray-700 rounded-xl text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
                   >
-                    Annuler
+                    {t('common.cancel')}
                   </button>
                   <button
                     type="submit"
@@ -136,7 +138,7 @@ export default function GroupForm({ isOpen, onClose, onSuccess, group }) {
                     ) : (
                       <>
                         <Save className="w-4 h-4" />
-                        <span>{group ? 'Enregistrer' : 'Créer'}</span>
+                        <span>{group ? t('common.save') : t('common.create')}</span>
                       </>
                     )}
                   </button>

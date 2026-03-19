@@ -9,6 +9,7 @@ import { uploadVideo } from '../../../lib/storage/videos';
 import { STORAGE_CONFIG } from '../../../lib/storage/config';
 import { useToast } from '../../ui/Toast';
 import { untrusted, escapeText } from '../../../utils/security';
+import { useTranslation } from 'react-i18next';
 
 export default function VideoUploader({ onUploadSuccess, onClose, orgId }) {
     const [dragActive, setDragActive] = useState(false);
@@ -17,14 +18,15 @@ export default function VideoUploader({ onUploadSuccess, onClose, orgId }) {
     const [progress, setProgress] = useState(0);
     const [error, setError] = useState(null);
     const { success, error: showError } = useToast();
+    const { t } = useTranslation('admin');
 
     const validateFile = (file) => {
-        if (!file) return 'Aucun fichier sélectionné';
+        if (!file) return t('videos.modals.upload.errors.no_file');
         if (!STORAGE_CONFIG.ALLOWED_TYPES.includes(file.type)) {
-            return 'Format non supporté. Utilisez MP4, WebM ou MOV';
+            return t('videos.modals.upload.errors.unsupported_format');
         }
         if (file.size > STORAGE_CONFIG.MAX_FILE_SIZE) {
-            return `Fichier trop volumineux (max ${STORAGE_CONFIG.MAX_FILE_SIZE / 1024 / 1024} Mo)`;
+            return t('videos.modals.upload.errors.file_too_large', { size: STORAGE_CONFIG.MAX_FILE_SIZE / 1024 / 1024 });
         }
         return null;
     };
@@ -71,7 +73,7 @@ export default function VideoUploader({ onUploadSuccess, onClose, orgId }) {
 
     const handleUpload = async () => {
         if (!file || !orgId) {
-            if (!orgId) showError('Organisation non identifiée');
+            if (!orgId) showError(t('videos.modals.upload.errors.no_org'));
             return;
         }
 
@@ -89,7 +91,7 @@ export default function VideoUploader({ onUploadSuccess, onClose, orgId }) {
         }
 
         if (result.success) {
-            success('Vidéo uploadée avec succès !');
+            success(t('videos.modals.upload.success'));
             onUploadSuccess?.(result);
             setTimeout(() => {
                 onClose?.();
@@ -109,9 +111,9 @@ export default function VideoUploader({ onUploadSuccess, onClose, orgId }) {
     };
 
     const formatFileSize = (bytes) => {
-        if (bytes < 1024) return bytes + ' o';
-        if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' Ko';
-        return (bytes / (1024 * 1024)).toFixed(1) + ' Mo';
+        if (bytes < 1024) return bytes + ' ' + t('videos.modals.upload.size_units.b');
+        if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' ' + t('videos.modals.upload.size_units.kb');
+        return (bytes / (1024 * 1024)).toFixed(1) + ' ' + t('videos.modals.upload.size_units.mb');
     };
 
     return (
@@ -147,20 +149,20 @@ export default function VideoUploader({ onUploadSuccess, onClose, orgId }) {
                         <>
                             <Upload className="w-12 h-12 mx-auto mb-4 text-gray-400 dark:text-gray-500" />
                             <p className="text-lg font-medium text-gray-700 dark:text-gray-300 mb-2">
-                                Glissez votre vidéo ici
+                                {t('videos.modals.upload.drop_zone')}
                             </p>
                             <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
-                                ou
+                                {t('videos.modals.upload.or')}
                             </p>
                             <label
                                 htmlFor="video-upload"
                                 className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-xl font-medium shadow-lg hover:shadow-xl transition-all cursor-pointer"
                             >
                                 <FileVideo className="w-4 h-4" />
-                                Sélectionner un fichier
+                                {t('videos.modals.upload.select_file')}
                             </label>
                             <p className="text-xs text-gray-400 dark:text-gray-500 mt-4">
-                                Formats supportés: MP4, WebM, MOV (max 500 Mo)
+                                {t('videos.modals.upload.formats_help')}
                             </p>
                         </>
                     ) : (
@@ -188,7 +190,7 @@ export default function VideoUploader({ onUploadSuccess, onClose, orgId }) {
                             {uploading && (
                                 <div className="space-y-2">
                                     <div className="flex justify-between text-sm">
-                                        <span className="text-gray-600 dark:text-gray-300">Upload en cours...</span>
+                                        <span className="text-gray-600 dark:text-gray-300">{t('videos.modals.upload.uploading')}</span>
                                         <span className="font-medium text-indigo-600 dark:text-indigo-400">{progress}%</span>
                                     </div>
                                     <div className="h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
@@ -207,13 +209,13 @@ export default function VideoUploader({ onUploadSuccess, onClose, orgId }) {
                                         onClick={handleUpload}
                                         className="flex-1 px-6 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-xl font-medium shadow-lg hover:shadow-xl transition-all"
                                     >
-                                        Uploader la vidéo
+                                        {t('videos.modals.upload.btn_upload')}
                                     </button>
                                     <button
                                         onClick={handleCancel}
                                         className="px-6 py-3 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-xl font-medium hover:bg-gray-200 dark:hover:bg-gray-600 transition-all"
                                     >
-                                        Annuler
+                                        {t('videos.modals.upload.btn_cancel')}
                                     </button>
                                 </div>
                             )}

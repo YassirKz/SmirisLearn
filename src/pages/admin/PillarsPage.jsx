@@ -7,8 +7,10 @@ import { useUserRole } from '../../hooks/useUserRole';
 import { useAuth } from '../../hooks/useAuth';
 import { useSearchParams, Navigate } from 'react-router-dom';
 import { untrusted, escapeText } from '../../utils/security';
+import { useTranslation } from 'react-i18next';
 
 export default function PillarsPage() {
+    const { t } = useTranslation('admin');
     const { user } = useAuth();
     const { role, isAdminAccess, loading: roleLoading } = useUserRole();
     const [searchParams] = useSearchParams();
@@ -35,21 +37,21 @@ export default function PillarsPage() {
                     >
                         <div className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-4 py-2 rounded-bl-2xl rounded-tr-2xl text-xs font-bold shadow-lg flex items-center gap-1">
                             <Sparkles className="w-3 h-3" />
-                            Gestion des piliers
+                            {t('pillars.manage')}
                         </div>
                     </motion.div>
 
                     <div>
                         <h1 className="text-3xl font-bold text-gray-800 dark:text-white flex items-center gap-2">
                             <BookOpen className="w-8 h-8 text-indigo-600 dark:text-indigo-400" />
-                            Piliers de formation
+                            {t('pillars.title')}
                         </h1>
                         <p className="text-gray-500 dark:text-gray-400 mt-1 flex items-center gap-2">
                             <Shield className="w-4 h-4" />
-                            Gérez les piliers de votre académie
+                            {t('pillars.subtitle')}
                             {isImpersonating && (
                                 <span className="text-xs bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 px-2 py-1 rounded-full">
-                                    Mode lecture seule - Entreprise #{escapeText(untrusted(orgIdFromUrl))}
+                                    {t('pillars.read_only_mode', { id: escapeText(untrusted(orgIdFromUrl)) })}
                                 </span>
                             )}
                         </p>

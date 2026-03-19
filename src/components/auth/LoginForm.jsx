@@ -10,12 +10,14 @@ import {
   CheckCircle,
 } from "lucide-react";
 import { useAuth } from "../../hooks/useAuth";
+import { useTranslation } from "react-i18next";
 
 export default function LoginForm() {
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [fullName, setFullName] = useState("");
+  const { t } = useTranslation("auth");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [touched, setTouched] = useState({
@@ -29,21 +31,21 @@ export default function LoginForm() {
   // Validation
   const validateEmail = (value) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!value) return "Email requis";
-    if (!emailRegex.test(value)) return "Email invalide";
+    if (!value) return t('errors.required');
+    if (!emailRegex.test(value)) return t('errors.invalidEmail');
     return "";
   };
 
   const validatePassword = (value) => {
-    if (!value) return "Mot de passe requis";
-    if (value.length < 8) return "Minimum 8 caractères";
-    if (!/[A-Z]/.test(value)) return "Au moins une majuscule";
-    if (!/[0-9]/.test(value)) return "Au moins un chiffre";
+    if (!value) return t('errors.required');
+    if (value.length < 8) return t('errors.passwordTooShort');
+    if (!/[A-Z]/.test(value)) return t('errors.passwordUpper');
+    if (!/[0-9]/.test(value)) return t('errors.passwordNumber');
     return "";
   };
 
   const validateFullName = (value) => {
-    if (!isLogin && !value) return "Nom complet requis";
+    if (!isLogin && !value) return t('errors.nameRequired');
     return "";
   };
 
@@ -76,7 +78,7 @@ export default function LoginForm() {
           data: { full_name: fullName },
         });
         if (error) throw error;
-        alert("Inscription réussie ! Vérifie tes emails.");
+        alert(t('errors.checkEmails'));
       }
     } catch (err) {
       setError(err.message);
@@ -103,7 +105,7 @@ export default function LoginForm() {
 
         <h1 className="text-3xl font-bold text-gray-800 dark:text-white mb-2">Smiris Learn</h1>
         <p className="text-gray-500 dark:text-gray-400 text-sm">
-          {isLogin ? "Bon retour parmi nous" : "Rejoignez l'aventure"}
+          {isLogin ? t('labels.welcomeBack') : t('labels.joinAdventure')}
         </p>
       </div>
 
@@ -117,7 +119,7 @@ export default function LoginForm() {
               : "text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400"
           }`}
         >
-          Connexion
+          {t('login')}
         </button>
         <button
           onClick={() => setIsLogin(false)}
@@ -127,7 +129,7 @@ export default function LoginForm() {
               : "text-gray-500 dark:text-gray-400 hover:text-purple-600 dark:hover:text-purple-400"
           }`}
         >
-          Inscription
+          {t('register')}
         </button>
       </div>
 
@@ -170,7 +172,7 @@ export default function LoginForm() {
               }`}
             >
               <span className="flex items-center gap-1">
-                Nom complet
+                {t('placeholders.name')}
                 <span className="text-red-400">*</span>
               </span>
             </label>
@@ -201,7 +203,7 @@ export default function LoginForm() {
             }`}
           >
             <span className="flex items-center gap-1">
-              Adresse email
+              {t('email')}
               <span className="text-red-400">*</span>
             </span>
           </label>
@@ -231,7 +233,7 @@ export default function LoginForm() {
             }`}
           >
             <span className="flex items-center gap-1">
-              Mot de passe
+              {t('password')}
               <span className="text-red-400">*</span>
             </span>
           </label>
@@ -262,7 +264,7 @@ export default function LoginForm() {
           {loading ? (
             <div className="flex items-center justify-center gap-2">
               <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-              <span>Chargement...</span>
+              <span>{t('common:loading')}</span>
             </div>
           ) : (
             <span className="flex items-center justify-center gap-2">
@@ -271,7 +273,7 @@ export default function LoginForm() {
               ) : (
                 <UserPlus className="w-5 h-5" />
               )}
-              {isLogin ? "Se connecter" : "Créer mon compte"}
+              {isLogin ? t('signIn') : t('register')}
             </span>
           )}
         </motion.button>
@@ -285,8 +287,8 @@ export default function LoginForm() {
         >
           <span className="relative">
             {isLogin
-              ? "Pas encore de compte ? S'inscrire"
-              : "Déjà un compte ? Se connecter"}
+              ? t('dontHaveAccount')
+              : t('alreadyHaveAccount')}
             <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-600 dark:bg-blue-400 group-hover:w-full transition-all duration-300" />
           </span>
         </button>
@@ -298,7 +300,7 @@ export default function LoginForm() {
           <div className="w-full border-t border-gray-200 dark:border-gray-600"></div>
         </div>
         <div className="relative flex justify-center text-sm">
-          <span className="px-4 bg-white dark:bg-gray-800 text-gray-400 dark:text-gray-500">ou</span>
+          <span className="px-4 bg-white dark:bg-gray-800 text-gray-400 dark:text-gray-500">{t('common:or')}</span>
         </div>
       </div>
 
@@ -330,7 +332,7 @@ export default function LoginForm() {
             />
           </svg>
           <span className="text-gray-700 dark:text-gray-200 font-medium group-hover:text-gray-900 dark:group-hover:text-white transition-colors">
-            {loading ? "Connexion en cours..." : "Continuer avec Google"}
+            {loading ? t('social.googleLoading') : t('social.google')}
           </span>
         </div>
       </button>
@@ -340,19 +342,19 @@ export default function LoginForm() {
         <div className="flex items-center gap-1 text-gray-400 dark:text-gray-500 text-xs group cursor-default">
           <Shield className="w-3 h-3 text-blue-400 dark:text-blue-500 group-hover:text-blue-500 dark:group-hover:text-blue-400 transition-colors" />
           <span className="group-hover:text-gray-600 dark:group-hover:text-gray-300 transition-colors">
-            Chiffré
+            {t('security.encrypted')}
           </span>
         </div>
         <div className="flex items-center gap-1 text-gray-400 dark:text-gray-500 text-xs group cursor-default">
           <Zap className="w-3 h-3 text-purple-400 dark:text-purple-500 group-hover:text-purple-500 dark:group-hover:text-purple-400 transition-colors" />
           <span className="group-hover:text-gray-600 dark:group-hover:text-gray-300 transition-colors">
-            Rapide
+            {t('security.fast')}
           </span>
         </div>
         <div className="flex items-center gap-1 text-gray-400 dark:text-gray-500 text-xs group cursor-default">
           <CheckCircle className="w-3 h-3 text-green-400 dark:text-green-500 group-hover:text-green-500 dark:group-hover:text-green-400 transition-colors" />
           <span className="group-hover:text-gray-600 dark:group-hover:text-gray-300 transition-colors">
-            Sécurisé
+            {t('security.secure')}
           </span>
         </div>
       </div>

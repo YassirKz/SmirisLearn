@@ -7,13 +7,16 @@ import {
 import { supabase } from '../lib/supabase';
 import { useNavigate } from 'react-router-dom';
 import { useDebounce } from '../hooks/useDebounce';
+import { useTranslation } from 'react-i18next';
 
 export default function SearchComponent({ 
-    placeholder = "Rechercher entreprises, utilisateurs, vidéos...",
+    placeholder,
     onResultClick,
     autoFocus = false,
     className = ""
 }) {
+    const { t } = useTranslation('common');
+    const displayPlaceholder = placeholder || t('search_component.placeholder');
     const [query, setQuery] = useState('');
     const [results, setResults] = useState(null);
     const [loading, setLoading] = useState(false);
@@ -54,7 +57,7 @@ export default function SearchComponent({
             }
 
         } catch (error) {
-            console.error('Erreur recherche:', error);
+            console.error(t('search_component.error'), error);
         } finally {
             setLoading(false);
         }
@@ -123,7 +126,7 @@ export default function SearchComponent({
                     onBlur={() => {
                         setTimeout(() => setShowResults(false), 200);
                     }}
-                    placeholder={placeholder}
+                    placeholder={displayPlaceholder}
                     autoFocus={autoFocus}
                     className="w-full pl-10 pr-20 py-3 bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 rounded-xl focus:border-blue-400 dark:focus:border-blue-500 focus:ring-4 focus:ring-blue-100 dark:focus:ring-blue-900/30 outline-none transition-all text-sm dark:text-white dark:placeholder-gray-400"
                 />
@@ -149,7 +152,7 @@ export default function SearchComponent({
                     disabled={loading || !query.trim()}
                     className="absolute right-2 top-1/2 transform -translate-y-1/2 px-3 py-1.5 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg text-xs font-medium disabled:opacity-50 hover:shadow-md transition-all"
                 >
-                    {loading ? <Loader2 className="w-3 h-3 animate-spin" /> : 'Rechercher'}
+                    {loading ? <Loader2 className="w-3 h-3 animate-spin" /> : t('search_component.button')}
                 </button>
             </form>
 
@@ -166,14 +169,18 @@ export default function SearchComponent({
                             results.total_results === 0 ? (
                                 <div className="p-6 text-center">
                                     <Search className="w-8 h-8 text-gray-300 dark:text-gray-600 mx-auto mb-2" />
-                                    <p className="text-sm text-gray-500 dark:text-gray-400">Aucun résultat pour "{results.query}"</p>
-                                    <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">Essayez d'autres mots-clés</p>
+                                    <p className="text-sm text-gray-500 dark:text-gray-400">
+                                        {t('search_component.no_results', { query: results.query })}
+                                    </p>
+                                    <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">
+                                        {t('search_component.try_others')}
+                                    </p>
                                 </div>
                             ) : (
                                 <div className="p-2">
                                     <div className="flex items-center justify-between px-3 py-2">
                                         <p className="text-xs font-medium text-gray-500 dark:text-gray-400">
-                                            {results.total_results} résultat(s) trouvé(s)
+                                            {t('search_component.results_found', { count: results.total_results })}
                                         </p>
                                         <Sparkles className="w-3 h-3 text-blue-500 dark:text-blue-400" />
                                     </div>
@@ -220,7 +227,7 @@ export default function SearchComponent({
                             recentSearches.length > 0 && (
                                 <div className="p-2">
                                     <p className="text-xs font-medium text-gray-500 dark:text-gray-400 px-3 py-2">
-                                        Recherches récentes
+                                        {t('search_component.recent_searches')}
                                     </p>
                                     {recentSearches.map((search, index) => (
                                         <button

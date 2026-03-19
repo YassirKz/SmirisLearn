@@ -1,11 +1,13 @@
 // src/components/admin/videos/ScreenRecorder.jsx
 import { useState, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { Monitor, Mic, Square, Circle, AlertCircle, Loader2 } from 'lucide-react';
 import { uploadVideo } from '../../../lib/storage/videos';
 import { useToast } from '../../ui/Toast';
 
 export default function ScreenRecorder({ orgId, onRecordSuccess, onClose }) {
+    const { t } = useTranslation('admin');
     const { error: showError, success } = useToast();
     const [recording, setRecording] = useState(false);
     const [uploading, setUploading] = useState(false);
@@ -31,7 +33,7 @@ export default function ScreenRecorder({ orgId, onRecordSuccess, onClose }) {
             setError(null);
 
             if (!navigator.mediaDevices || !navigator.mediaDevices.getDisplayMedia) {
-                throw new Error("Votre navigateur ne supporte pas l'enregistrement d'écran.");
+                throw new Error(t('videos.modals.recorder.errors.browser_support'));
             }
 
             const displayStream = await navigator.mediaDevices.getDisplayMedia({
@@ -46,7 +48,7 @@ export default function ScreenRecorder({ orgId, onRecordSuccess, onClose }) {
                     video: false
                 });
             } catch (err) {
-                console.warn("Accès au microphone refusé ou micro non disponible.", err);
+                console.warn(t('videos.modals.recorder.errors.mic_denied'), err);
             }
 
             let combinedStream;
@@ -110,10 +112,10 @@ export default function ScreenRecorder({ orgId, onRecordSuccess, onClose }) {
                     setUploading(false);
 
                     if (!result.success) {
-                        throw new Error(result.error || "Erreur lors de l'upload de l'enregistrement.");
+                        throw new Error(result.error || t('videos.modals.recorder.errors.upload_failed'));
                     }
 
-                    success("Enregistrement envoyé avec succès.");
+                    success(t('videos.modals.recorder.success'));
                     onRecordSuccess?.({
                         url: result.url,
                         path: result.path,
@@ -163,10 +165,10 @@ export default function ScreenRecorder({ orgId, onRecordSuccess, onClose }) {
                 </div>
                 <div>
                     <h2 className="text-lg font-semibold text-gray-800 dark:text-gray-200">
-                        Enregistrer l'écran
+                        {t('videos.modals.recorder.title')}
                     </h2>
                     <p className="text-sm text-gray-500 dark:text-gray-400">
-                        Capturez votre écran (et le son) pour créer une vidéo de formation.
+                        {t('videos.modals.recorder.subtitle')}
                     </p>
                 </div>
             </div>
@@ -174,7 +176,7 @@ export default function ScreenRecorder({ orgId, onRecordSuccess, onClose }) {
             <div className="p-4 bg-gray-50 dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 space-y-3">
                 <p className="text-sm text-gray-600 dark:text-gray-300 flex items-center gap-2">
                     <Mic className="w-4 h-4 text-gray-500 dark:text-gray-400" />
-                    Lors du partage, choisissez la fenêtre ou l'écran à capturer. Pensez à activer le son si nécessaire.
+                    {t('videos.modals.recorder.help')}
                 </p>
 
                 <div className="flex items-center gap-3">
@@ -185,7 +187,7 @@ export default function ScreenRecorder({ orgId, onRecordSuccess, onClose }) {
                             className="inline-flex items-center gap-2 px-6 py-3 bg-red-600 text-white rounded-xl font-medium shadow-lg hover:bg-red-700 transition-colors disabled:opacity-60"
                         >
                             <Circle className="w-4 h-4" />
-                            Démarrer l'enregistrement
+                            {t('videos.modals.recorder.btn_start')}
                         </button>
                     ) : (
                         <button
@@ -193,7 +195,7 @@ export default function ScreenRecorder({ orgId, onRecordSuccess, onClose }) {
                             className="inline-flex items-center gap-2 px-6 py-3 bg-gray-900 text-white rounded-xl font-medium shadow-lg hover:bg-gray-800 transition-colors"
                         >
                             <Square className="w-4 h-4" />
-                            Arrêter et envoyer
+                            {t('videos.modals.recorder.btn_stop')}
                         </button>
                     )}
 
@@ -202,14 +204,14 @@ export default function ScreenRecorder({ orgId, onRecordSuccess, onClose }) {
                         disabled={uploading || recording}
                         className="px-4 py-3 text-sm text-gray-600 dark:text-gray-300 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors disabled:opacity-50"
                     >
-                        Fermer
+                        {t('videos.modals.recorder.btn_close')}
                     </button>
                 </div>
 
                 {uploading && (
                     <div className="mt-3 space-y-2">
                         <div className="flex justify-between text-sm">
-                            <span className="text-gray-600 dark:text-gray-300">Upload en cours...</span>
+                            <span className="text-gray-600 dark:text-gray-300">{t('videos.modals.upload.uploading')}</span>
                             <span className="font-medium text-indigo-600 dark:text-indigo-400">{progress}%</span>
                         </div>
                         <div className="h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
@@ -232,7 +234,7 @@ export default function ScreenRecorder({ orgId, onRecordSuccess, onClose }) {
                 {recording && !uploading && (
                     <div className="mt-2 inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-50 dark:bg-red-900/30 text-xs text-red-700 dark:text-red-300">
                         <Loader2 className="w-3 h-3 animate-spin" />
-                        <span>Enregistrement en cours...</span>
+                        <span>{t('videos.modals.recorder.status.recording')}</span>
                     </div>
                 )}
             </div>

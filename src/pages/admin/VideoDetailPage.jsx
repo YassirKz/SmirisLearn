@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import {
@@ -16,6 +17,7 @@ export default function VideoDetailPage() {
     const { id } = useParams();
     const navigate = useNavigate();
     const { success, error: showError } = useToast();
+    const { t, i18n } = useTranslation('admin');
     const [loading, setLoading] = useState(true);
     const [video, setVideo] = useState(null);
     const [pillar, setPillar] = useState(null);
@@ -56,14 +58,14 @@ export default function VideoDetailPage() {
             setQuiz(quizData || null);
         } catch (err) {
             console.error('Erreur chargement vidéo:', err);
-            showError('Impossible de charger la vidéo');
+            showError(t('videos.detail_page.error_load'));
         } finally {
             setLoading(false);
         }
     };
 
     const handleDelete = async () => {
-        if (!window.confirm('Êtes-vous sûr de vouloir supprimer cette vidéo ?')) return;
+        if (!window.confirm(t('videos.detail_page.confirm_delete'))) return;
         
         try {
             if (video.video_path) {
@@ -79,11 +81,11 @@ export default function VideoDetailPage() {
 
             if (error) throw error;
 
-            success('Vidéo supprimée');
+            success(t('videos.detail_page.success_delete'));
             navigate('/admin/videos');
         } catch (err) {
             console.error('❌ Erreur suppression:', err);
-            showError('Impossible de supprimer la vidéo');
+            showError(t('videos.detail_page.error_delete'));
         }
     };
 
@@ -95,7 +97,7 @@ export default function VideoDetailPage() {
     };
 
     const formatDate = (date) => {
-        return new Date(date).toLocaleDateString('fr-FR', {
+        return new Date(date).toLocaleDateString(i18n.language === 'ar' ? 'ar-SA' : i18n.language, {
             day: '2-digit',
             month: '2-digit',
             year: 'numeric'
@@ -117,7 +119,9 @@ export default function VideoDetailPage() {
             <AdminLayout>
                 <div className="text-center py-12">
                     <Film className="w-16 h-16 text-gray-300 dark:text-gray-600 mx-auto mb-4" />
-                    <h2 className="text-2xl font-bold text-gray-800 dark:text-white">Vidéo non trouvée</h2>
+                    <h2 className="text-2xl font-bold text-gray-800 dark:text-white">
+                        {t('videos.detail_page.not_found')}
+                    </h2>
                 </div>
             </AdminLayout>
         );
@@ -136,7 +140,7 @@ export default function VideoDetailPage() {
                     className="flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
                 >
                     <ArrowLeft className="w-5 h-5" />
-                    Retour aux vidéos
+                    {t('videos.detail_page.back_link')}
                 </button>
 
                 {/* En-tête */}
@@ -156,14 +160,14 @@ export default function VideoDetailPage() {
                             <button
                                 onClick={() => setShowEditModal(true)}
                                 className="p-2 hover:bg-purple-100 dark:hover:bg-purple-900/50 rounded-lg text-purple-600 dark:text-purple-400 transition-colors"
-                                title="Modifier"
+                                title={t('videos.actions.view')}
                             >
                                 <Edit className="w-5 h-5" />
                             </button>
                             <button
                                 onClick={handleDelete}
                                 className="p-2 hover:bg-red-100 dark:hover:bg-red-900/50 rounded-lg text-red-600 dark:text-red-400 transition-colors"
-                                title="Supprimer"
+                                title={t('videos.actions.delete')}
                             >
                                 <Trash2 className="w-5 h-5" />
                             </button>
@@ -178,12 +182,12 @@ export default function VideoDetailPage() {
                         </div>
                         <div className="flex items-center gap-2 whitespace-nowrap">
                             <Calendar className="w-4 h-4" />
-                            <span>Ajoutée le {formatDate(video.created_at)}</span>
+                            <span>{t('videos.detail_page.added_at', { date: formatDate(video.created_at) })}</span>
                         </div>
                         {pillar && (
                             <div className="flex items-center gap-2 whitespace-nowrap">
                                 <Film className="w-4 h-4" />
-                                <span>Pilier: {escapeText(untrusted(pillar.name))}</span>
+                                <span>{t('videos.detail_page.pillar_label')} {escapeText(untrusted(pillar.name))}</span>
                             </div>
                         )}
                     </div>
@@ -200,10 +204,10 @@ export default function VideoDetailPage() {
                         onError={(e) => {
                             console.error('❌ Erreur chargement vidéo:', e);
                             console.log('URL tentative:', video.video_url);
-                        }}
-                    >
-                        Votre navigateur ne supporte pas la lecture vidéo.
-                    </video>
+                    }}
+                >
+                    {t('videos.detail_page.video_error')}
+                </video>
                 </div>
 
                 {/* Section Quiz associé */}
@@ -211,7 +215,7 @@ export default function VideoDetailPage() {
                     <div className="flex items-center justify-between mb-4">
                         <h2 className="text-lg font-semibold text-gray-800 dark:text-white flex items-center gap-2">
                             <Award className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
-                            Quiz associé
+                            {t('videos.detail_page.quiz_section.title')}
                         </h2>
                         {!quiz && (
                             <button
@@ -219,7 +223,7 @@ export default function VideoDetailPage() {
                                 className="px-4 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-xl text-sm shadow hover:shadow-md transition-all flex items-center gap-2"
                             >
                                 <Plus className="w-4 h-4" />
-                                Créer un quiz
+                                {t('videos.detail_page.quiz_section.btn_create')}
                             </button>
                         )}
                     </div>
@@ -228,19 +232,19 @@ export default function VideoDetailPage() {
                         <div className="space-y-3">
                             <div className="flex items-center gap-6 text-sm text-gray-600 dark:text-gray-300 flex-wrap">
                                 <span className="px-3 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-full font-medium">
-                                    {quiz.questions?.length || 0} question{(quiz.questions?.length || 0) > 1 ? 's' : ''}
+                                    {t('videos.detail_page.quiz_section.questions_count', { count: quiz.questions?.length || 0 })}
                                 </span>
                                 <span className="flex items-center gap-1">
-                                    Score minimum : <strong>{quiz.passing_score}%</strong>
+                                    {t('videos.detail_page.quiz_section.min_score')} <strong>{quiz.passing_score}%</strong>
                                 </span>
                                 <span className="flex items-center gap-1">
                                     <RefreshCw className="w-4 h-4" />
-                                    Tentatives : <strong>{quiz.max_attempts === -1 ? '∞' : quiz.max_attempts}</strong>
+                                    {t('videos.detail_page.quiz_section.attempts')} <strong>{quiz.max_attempts === -1 ? '∞' : quiz.max_attempts}</strong>
                                 </span>
                                 {quiz.timer_minutes && (
                                     <span className="flex items-center gap-1">
                                         <Clock className="w-4 h-4" />
-                                        {quiz.timer_minutes} min
+                                        {quiz.timer_minutes} {t('videos.detail_page.quiz_section.minutes_unit')}
                                     </span>
                                 )}
                             </div>
@@ -248,11 +252,11 @@ export default function VideoDetailPage() {
                                 onClick={() => setShowQuizModal(true)}
                                 className="text-sm text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 underline"
                             >
-                                Modifier le quiz
+                                {t('videos.detail_page.quiz_section.btn_edit')}
                             </button>
                         </div>
                     ) : (
-                        <p className="text-sm text-gray-500 dark:text-gray-400">Aucun quiz n'est associé à cette vidéo.</p>
+                        <p className="text-sm text-gray-500 dark:text-gray-400">{t('videos.detail_page.quiz_section.empty')}</p>
                     )}
                 </div>
 
@@ -266,7 +270,7 @@ export default function VideoDetailPage() {
                         >
                             <div className="flex justify-between items-center mb-4">
                                 <h2 className="text-xl font-bold dark:text-white">
-                                    {quiz ? 'Modifier le quiz' : 'Créer un quiz'}
+                                    {quiz ? t('videos.modals.form.title_edit') : t('videos.modals.form.title_new')}
                                 </h2>
                                 <button
                                     onClick={() => setShowQuizModal(false)}
@@ -292,7 +296,7 @@ export default function VideoDetailPage() {
                 {showEditModal && (
                     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 dark:bg-black/70 backdrop-blur-sm">
                         <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-                            <h2 className="text-xl font-bold mb-4 dark:text-white">Modifier la vidéo</h2>
+                            <h2 className="text-xl font-bold mb-4 dark:text-white">{t('videos.modals.form.title_edit')}</h2>
                             <VideoForm
                                 video={video}
                                 onSuccess={() => {

@@ -1,5 +1,6 @@
 // src/App.jsx
 import { Routes, Route, Navigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { useAuth } from "./hooks/useAuth";
 import { useUserRole } from "./hooks/useUserRole";
 import LoginPage from "./pages/LoginPage";
@@ -45,6 +46,7 @@ import StudentVideoPage from './pages/student/StudentVideoPage';
 import StudentQuizPage from './pages/student/StudentQuizPage';
 
 function App() {
+  const { t } = useTranslation();
   const { user, loading } = useAuth();
   const { role, loading: roleLoading } = useUserRole();
 
@@ -54,7 +56,7 @@ function App() {
         <div className="text-center">
           <LoadingSpinner size="lg" color="primary" />
           <p className="mt-4 text-gray-600 dark:text-gray-400 animate-pulse">
-            Chargement de votre session...
+            {t('common:loading_session')}
           </p>
         </div>
       </div>
