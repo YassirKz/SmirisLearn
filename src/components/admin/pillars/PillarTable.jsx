@@ -102,12 +102,11 @@ export default function PillarTable({ pillars, onEdit, onDelete, isReadOnly }) {
                                         rotateX: -1, 
                                         scale: 1.005,
                                         z: 10,
-                                        backgroundColor: "rgba(238, 242, 255, 0.8) dark:rgba(55, 65, 81, 0.8)",
                                         boxShadow: "0 10px 30px -10px rgba(79, 70, 229, 0.2)"
                                     }}
                                     style={{ transformStyle: "preserve-3d" }}
                                     onClick={() => handleRowClick(pillar.id)}
-                                    className="transition-colors group cursor-pointer"
+                                    className="transition-colors group cursor-pointer hover:bg-indigo-50/80 dark:hover:bg-gray-700/80"
                                 >
                                     <td className="px-6 py-4">
                                         <div className="flex items-center gap-3">
