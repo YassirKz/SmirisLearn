@@ -10,6 +10,7 @@ import { useAuth } from '../../hooks/useAuth';
 import { useTheme } from '../../hooks/useTheme'; 
 import { supabase } from '../../lib/supabase';
 import { useUserRole } from '../../hooks/useUserRole';
+import Header from './Header';
 
 export default function AdminLayout({ children }) {
     const [sidebarOpen, setSidebarOpen] = useState(() => {
@@ -151,24 +152,6 @@ export default function AdminLayout({ children }) {
                 )}
             </AnimatePresence>
 
-            {/* Mobile Header (Sticky) */}
-            <div className="lg:hidden bg-white/70 dark:bg-gray-900/70 backdrop-blur-xl border-b border-indigo-100 dark:border-gray-800 sticky top-0 z-20 flex items-center justify-between px-4 py-3">
-                <button
-                    onClick={() => setSidebarOpen(true)}
-                    className="p-2.5 bg-gray-50 dark:bg-gray-800 rounded-xl transition-colors text-indigo-600 dark:text-indigo-400"
-                >
-                    <Menu className="w-5 h-5" />
-                </button>
-                <div className="flex gap-2">
-                    <button
-                        onClick={toggleTheme}
-                        className="p-2.5 bg-gray-50 dark:bg-gray-800 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors text-gray-600 dark:text-gray-300"
-                    >
-                        {theme === 'light' ? <Moon className="w-5 h-5" /> : <Sun className="w-5 h-5" />}
-                    </button>
-                </div>
-            </div>
-
             {/* Sidebar */}
             <AnimatePresence mode="wait">
                 {sidebarOpen && (
@@ -284,6 +267,7 @@ export default function AdminLayout({ children }) {
                 transition={{ delay: 0.2 }}
                 className={`transition-all duration-300 ${sidebarOpen ? 'lg:ml-72' : 'ml-0'}`}
             >
+                <Header onToggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
                 <main className="p-4 md:p-8 dark:text-gray-200">
                     {children}
                 </main>
