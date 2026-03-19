@@ -2,8 +2,10 @@ import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Building2, Users, Video, Award, TrendingUp, TrendingDown } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
+import { useTranslation } from 'react-i18next';
 
 export default function StatsCards() {
+    const { t } = useTranslation(['admin', 'common']);
     const [stats, setStats] = useState({
         companies: { current: 0, previous: 0, percentage: 0, progress: 0 },
         users: { current: 0, previous: 0, percentage: 0, progress: 0 },
@@ -84,7 +86,7 @@ export default function StatsCards() {
 
     const cards = [
         { 
-            label: 'Entreprises', 
+            label: t('admin:superAdmin.dashboard.stats.organizations'), 
             data: stats.companies,
             icon: Building2, 
             color: 'from-blue-500 to-blue-600', 
@@ -92,7 +94,7 @@ export default function StatsCards() {
             target: 100
         },
         { 
-            label: 'Utilisateurs', 
+            label: t('admin:superAdmin.dashboard.stats.users'), 
             data: stats.users,
             icon: Users, 
             color: 'from-purple-500 to-purple-600', 
@@ -100,7 +102,7 @@ export default function StatsCards() {
             target: 500
         },
         { 
-            label: 'Vidéos', 
+            label: t('admin:superAdmin.dashboard.stats.videos'), 
             data: stats.videos,
             icon: Video, 
             color: 'from-green-500 to-green-600', 
@@ -108,7 +110,7 @@ export default function StatsCards() {
             target: 200
         },
         { 
-            label: 'Quiz', 
+            label: t('admin:superAdmin.dashboard.stats.quizzes'), 
             data: stats.quizzes,
             icon: Award, 
             color: 'from-orange-500 to-orange-600', 
@@ -145,7 +147,7 @@ export default function StatsCards() {
                                 ) : (
                                     <div>
                                         <p className="text-2xl font-bold text-gray-800 dark:text-white">{card.data.current}</p>
-                                        <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Objectif: {card.target}</p>
+                                        <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">{t('admin:superAdmin.dashboard.stats.target')}: {card.target}</p>
                                     </div>
                                 )}
                             </div>
@@ -160,13 +162,13 @@ export default function StatsCards() {
                                     <TrendIcon size={14} />
                                     <span>{Math.abs(card.data.percentage)}%</span>
                                 </div>
-                                <span className="text-xs text-gray-500 dark:text-gray-400">vs mois dernier</span>
+                                <span className="text-xs text-gray-500 dark:text-gray-400">{t('admin:superAdmin.dashboard.stats.vsLastMonth')}</span>
                             </div>
                         )}
 
                         <div className="mt-4">
                             <div className="flex justify-between text-xs text-gray-500 dark:text-gray-400 mb-1">
-                                <span>Progression</span>
+                                <span>{t('admin:superAdmin.dashboard.stats.progression')}</span>
                                 <span>{Math.round(progressWidth)}%</span>
                             </div>
                             <div className="h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
@@ -182,7 +184,7 @@ export default function StatsCards() {
                         {card.data.progress > 1 && (
                             <div className="mt-2 text-xs text-green-600 dark:text-green-400 font-medium flex items-center gap-1">
                                 <span className="w-2 h-2 bg-green-500 dark:bg-green-400 rounded-full animate-pulse"></span>
-                                Objectif dépassé ! 🎉
+                                {t('admin:superAdmin.dashboard.stats.targetReached')}
                             </div>
                         )}
                     </motion.div>

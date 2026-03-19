@@ -9,8 +9,10 @@ import { useNavigate } from 'react-router-dom';
 import { supabase } from '../../lib/supabase';
 import CreateCompanyModal from './CreateCompanyModal';
 import EditCompanyModal from './EditCompanyModal';
+import { useTranslation } from 'react-i18next';
 
 export default function CompaniesTable() {
+    const { t } = useTranslation(['admin', 'common']);
     const navigate = useNavigate();
     const [companies, setCompanies] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -103,15 +105,15 @@ export default function CompaniesTable() {
 
     const getPlanLabel = (plan) => {
         const labels = {
-            free: 'Gratuit',
-            starter: 'Starter',
-            business: 'Business'
+            free: t('admin:superAdmin.companies.plans.free'),
+            starter: t('admin:superAdmin.companies.plans.starter'),
+            business: t('admin:superAdmin.companies.plans.business')
         };
-        return labels[plan] || 'Gratuit';
+        return labels[plan] || t('admin:superAdmin.companies.plans.free');
     };
 
     const formatDate = (dateString) => {
-        return new Date(dateString).toLocaleDateString('fr-FR', {
+        return new Date(dateString).toLocaleDateString(undefined, {
             day: '2-digit',
             month: '2-digit',
             year: 'numeric'
@@ -127,9 +129,9 @@ export default function CompaniesTable() {
                 <div className="p-0 mb-8 relative z-10">
                     <div className="flex flex-col xl:flex-row xl:items-center xl:justify-between gap-6">
                         <div>
-                            <h2 className="text-xl font-bold text-gray-900 dark:text-white tracking-tight">Entreprises Plateforme</h2>
+                            <h2 className="text-xl font-bold text-gray-900 dark:text-white tracking-tight">{t('admin:superAdmin.companies.title')}</h2>
                             <p className="text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-widest mt-1">
-                                {companies.length} organisations actives au total
+                                {t('admin:superAdmin.companies.count', { count: companies.length })}
                             </p>
                         </div>
 
@@ -139,7 +141,7 @@ export default function CompaniesTable() {
                                 <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500 group-focus-within/search:text-blue-500 dark:group-focus-within/search:text-blue-400 transition-colors" size={18} />
                                 <input
                                     type="text"
-                                    placeholder="Rechercher une entité..."
+                                    placeholder={t('admin:superAdmin.companies.search_placeholder')}
                                     value={searchTerm}
                                     onChange={(e) => {
                                         setSearchTerm(e.target.value);
@@ -169,10 +171,10 @@ export default function CompaniesTable() {
                                 }}
                                 className="px-6 py-3 bg-gray-50 dark:bg-gray-700 border-none rounded-2xl focus:ring-4 focus:ring-blue-100 dark:focus:ring-blue-900/30 focus:bg-white dark:focus:bg-gray-600 font-bold text-xs text-gray-600 dark:text-gray-300 transition-all appearance-none cursor-pointer"
                             >
-                                <option value="all">Filtre par abonnement</option>
-                                <option value="free">Gratuit</option>
-                                <option value="starter">Starter</option>
-                                <option value="business">Business</option>
+                                <option value="all">{t('admin:superAdmin.companies.filter_plan')}</option>
+                                <option value="free">{t('admin:superAdmin.companies.plans.free')}</option>
+                                <option value="starter">{t('admin:superAdmin.companies.plans.starter')}</option>
+                                <option value="business">{t('admin:superAdmin.companies.plans.business')}</option>
                             </select>
 
                             {/* Bouton nouvelle entreprise */}
@@ -183,7 +185,7 @@ export default function CompaniesTable() {
                                 className="px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-700 text-white rounded-2xl font-bold shadow-xl shadow-blue-200 dark:shadow-blue-900/30 whitespace-nowrap text-sm flex items-center gap-2"
                             >
                                 <Building2 size={18} />
-                                Déployer Entreprise
+                                {t('admin:superAdmin.companies.deploy')}
                             </motion.button>
                         </div>
                     </div>
@@ -193,11 +195,11 @@ export default function CompaniesTable() {
                     <table className="w-full">
                         <thead className="bg-transparent border-b border-gray-100 dark:border-gray-700">
                             <tr>
-                                <th className="px-6 py-5 text-left text-[11px] font-black text-gray-400 dark:text-gray-500 uppercase tracking-[0.2em]">Identification</th>
-                                <th className="px-6 py-5 text-left text-[11px] font-black text-gray-400 dark:text-gray-500 uppercase tracking-[0.2em]">Licence</th>
-                                <th className="px-6 py-5 text-left text-[11px] font-black text-gray-400 dark:text-gray-500 uppercase tracking-[0.2em]">Usage</th>
-                                <th className="px-6 py-5 text-left text-[11px] font-black text-gray-400 dark:text-gray-500 uppercase tracking-[0.2em]">Registré le</th>
-                                <th className="px-6 py-5 text-right text-[11px] font-black text-gray-400 dark:text-gray-500 uppercase tracking-[0.2em]">Gestion</th>
+                                <th className="px-6 py-5 text-left text-[11px] font-black text-gray-400 dark:text-gray-500 uppercase tracking-[0.2em]">{t('admin:superAdmin.companies.table.id')}</th>
+                                <th className="px-6 py-5 text-left text-[11px] font-black text-gray-400 dark:text-gray-500 uppercase tracking-[0.2em]">{t('admin:superAdmin.companies.table.license')}</th>
+                                <th className="px-6 py-5 text-left text-[11px] font-black text-gray-400 dark:text-gray-500 uppercase tracking-[0.2em]">{t('admin:superAdmin.companies.table.usage')}</th>
+                                <th className="px-6 py-5 text-left text-[11px] font-black text-gray-400 dark:text-gray-500 uppercase tracking-[0.2em]">{t('admin:superAdmin.companies.table.registered')}</th>
+                                <th className="px-6 py-5 text-right text-[11px] font-black text-gray-400 dark:text-gray-500 uppercase tracking-[0.2em]">{t('admin:superAdmin.companies.table.management')}</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-blue-100 dark:divide-gray-700">
@@ -220,7 +222,7 @@ export default function CompaniesTable() {
                                 <tr>
                                     <td colSpan="5" className="px-6 py-12 text-center text-gray-500 dark:text-gray-400">
                                         <Building2 className="w-12 h-12 mx-auto mb-3 text-gray-300 dark:text-gray-600" />
-                                        <p className="text-gray-600 dark:text-gray-300">Aucune entreprise trouvée</p>
+                                        <p className="text-gray-600 dark:text-gray-300">{t('common:no_results')}</p>
                                         {(searchTerm || selectedPlan !== 'all') && (
                                             <button
                                                 onClick={() => {
@@ -230,7 +232,7 @@ export default function CompaniesTable() {
                                                 }}
                                                 className="mt-2 text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300"
                                             >
-                                                Effacer les filtres
+                                                {t('common:clear_filters')}
                                             </button>
                                         )}
                                     </td>
@@ -276,7 +278,7 @@ export default function CompaniesTable() {
                                                 <span className="text-sm font-bold text-gray-700 dark:text-gray-300">{formatDate(company.created_at)}</span>
                                                 {company.subscription_status === 'trial' && (
                                                     <span className="text-[10px] font-black text-emerald-600 dark:text-emerald-400 uppercase tracking-widest mt-1 animate-pulse">
-                                                        ⏳ Trial Active
+                                                        ⏳ {t('admin:superAdmin.companies.trial_active')}
                                                     </span>
                                                 )}
                                             </div>
@@ -288,7 +290,7 @@ export default function CompaniesTable() {
                                                     whileTap={{ scale: 0.9 }}
                                                     onClick={() => navigate(`/super-admin/companies/${company.id}`)}
                                                     className="p-3 text-blue-600 dark:text-blue-400 rounded-xl transition-colors bg-white dark:bg-gray-800 shadow-sm border border-gray-100 dark:border-gray-700"
-                                                    title="Explorer"
+                                                    title={t('admin:superAdmin.companies.actions.explore')}
                                                 >
                                                     <Eye size={18} />
                                                 </motion.button>
@@ -297,7 +299,7 @@ export default function CompaniesTable() {
                                                     whileTap={{ scale: 0.9 }}
                                                     onClick={() => navigate(`/admin?orgId=${company.id}`)}
                                                     className="p-2 hover:bg-purple-100 dark:hover:bg-purple-900/50 rounded-lg transition-colors text-purple-600 dark:text-purple-400 opacity-0 group-hover:opacity-100"
-                                                    title="Voir Dashboard Admin"
+                                                    title={t('admin:superAdmin.companies.actions.dashboard')}
                                                 >
                                                     <LayoutDashboard size={18} />
                                                 </motion.button>
@@ -315,11 +317,11 @@ export default function CompaniesTable() {
                                                         if (profiles?.email) {
                                                             window.location.href = `mailto:${profiles.email}?subject=Question concernant ${company.name}`;
                                                         } else {
-                                                            alert("Aucun email d'administrateur trouvé.");
+                                                            alert(t('admin:superAdmin.companies.errors.no_admin_email'));
                                                         }
                                                     }}
                                                     className="p-2 hover:bg-green-100 dark:hover:bg-green-900/50 rounded-lg transition-colors text-green-600 dark:text-green-400 opacity-0 group-hover:opacity-100"
-                                                    title="Envoyer un email"
+                                                    title={t('admin:superAdmin.companies.actions.email')}
                                                 >
                                                     <Mail size={18} />
                                                 </motion.button>
@@ -349,11 +351,11 @@ export default function CompaniesTable() {
                                                                     className="w-full px-4 py-2 text-left text-sm text-gray-700 dark:text-gray-300 hover:bg-blue-50 dark:hover:bg-gray-700 hover:text-blue-600 dark:hover:text-blue-400 flex items-center gap-2"
                                                                 >
                                                                     <Edit size={16} />
-                                                                    Modifier
+                                                                    {t('common:edit')}
                                                                 </button>
                                                                 <button 
                                                                     onClick={async () => {
-                                                                        if (window.confirm(`Êtes-vous sûr de vouloir supprimer ${company.name} ?`)) {
+                                                                        if (window.confirm(t('admin:superAdmin.companies.confirm_delete', { name: company.name }))) {
                                                                             const { error } = await supabase
                                                                                 .from('organizations')
                                                                                 .delete()
@@ -362,7 +364,7 @@ export default function CompaniesTable() {
                                                                             if (!error) {
                                                                                 fetchCompanies();
                                                                             } else {
-                                                                                alert("Erreur lors de la suppression: " + error.message);
+                                                                                alert(t('admin:superAdmin.companies.errors.delete_failed', { error: error.message }));
                                                                             }
                                                                         }
                                                                         setShowActions(null);
@@ -370,7 +372,7 @@ export default function CompaniesTable() {
                                                                     className="w-full px-4 py-2 text-left text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/50 flex items-center gap-2"
                                                                 >
                                                                     <Trash2 size={16} />
-                                                                    Supprimer
+                                                                    {t('common:delete')}
                                                                 </button>
                                                             </motion.div>
                                                         )}
@@ -389,7 +391,7 @@ export default function CompaniesTable() {
                 {totalPages > 1 && (
                     <div className="px-6 py-4 border-t border-blue-100 dark:border-gray-700 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                         <p className="text-sm text-gray-600 dark:text-gray-400">
-                            Page {page} sur {totalPages}
+                            {t('admin:superAdmin.companies.pagination', { current: page, total: totalPages })}
                         </p>
                         <div className="flex items-center gap-2">
                             <button

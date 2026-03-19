@@ -564,5 +564,74 @@
       "save": "Speichern",
       "saving": "Wird gespeichert..."
     }
+  },
+  "superAdmin": {
+    "dashboard": {
+      "title": "Kontrollzentrum",
+      "overview": "Plattformübersicht",
+      "refresh": "Daten aktualisieren",
+      "maintenance_on": "Wartungsmodus Aktiv",
+      "maintenance_desc": "Die Plattform befindet sich in der Wartung. Registrierungen sind {{status}}.",
+      "stats": {
+        "orgs": "Zugelassene Unternehmen",
+        "orgs_active": "Aktive Organisationen",
+        "users": "Plattform-Mitglieder",
+        "trials": "{{count}} Testkonten",
+        "videos": "Gehostete Videos",
+        "storage": "{{count}} MB Speicherplatz",
+        "engagement": "Engagement-Score",
+        "completion": "Durchschnittliche Abschlussrate"
+      },
+      "onboarding": "Aktuelles Onboarding",
+      "view_all": "Alle ansehen",
+      "members": "{{count}} Mitglieder",
+      "security_note": "Echtzeit-RPC-Daten • Letzte Aktualisierung: {{time}}"
+    },
+    "companies": {
+      "title": "Unternehmen",
+      "subtitle": "Verwalten Sie alle Kundenorganisationen auf der Plattform",
+      "manage": "Unternehmensverwaltung",
+      "deploy": "Unternehmen bereitstellen",
+      "identification": "Identifizierung",
+      "license": "Lizenz",
+      "usage": "Nutzung",
+      "registered": "Registriert am",
+      "management": "Verwaltung",
+      "explorer": "Erkunden",
+      "admin_dash": "Admin-Dashboard anzeigen",
+      "email_admin": "E-Mail senden",
+      "footer_note": "Unterstützt durch die Smiris Learn Admin Engine"
+    },
+    "users": {
+      "title": "Benutzer",
+      "subtitle": "Verwalten Sie alle Benutzer auf der Plattform",
+      "manage": "Benutzerverwaltung",
+      "stats": {
+        "total": "Gesamtbenutzer",
+        "admins": "Administratoren",
+        "students": "Studenten",
+        "new": "Neu in diesem Monat"
+      },
+      "invite_user": "Benutzer einladen",
+      "role_updated": "Rolle aktualisiert",
+      "user_suspended": "Benutzer suspendiert",
+      "user_reactivated": "Benutzer reaktiviert",
+      "user_deleted": "Benutzer gelöscht",
+      "role_modify": "Rolle ändern",
+      "suspend": "Suspendieren",
+      "unsuspend": "Reaktivieren",
+      "delete_confirm": "Sind Sie sicher, dass Sie {{name}} löschen möchten?",
+      "no_admin_email": "Keine Administrator-E-Mail gefunden."
+    },
+    "limits": {
+      "title": "Limits für {{plan}}-Plan",
+      "users": "Benutzer",
+      "videos": "Videos",
+      "storage": "Speicher",
+      "used": "Verwendet",
+      "created": "Erstellt",
+      "reached_users": "Benutzerlimit erreicht. Bitte upgraden Sie Ihren Plan.",
+      "reached_videos": "Videolimit erreicht. Bitte upgraden Sie Ihren Plan."
+    }
   }
 }

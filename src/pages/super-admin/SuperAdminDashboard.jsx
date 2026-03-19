@@ -10,8 +10,10 @@ import RecentActivity from '../../components/super-admin/RecentActivity';
 import GrowthChart from '../../components/super-admin/GrowthChart';
 import RevenueChart from '../../components/super-admin/RevenueChart';
 import { supabase } from '../../lib/supabase';
+import { useTranslation } from 'react-i18next';
 
 export default function SuperAdminDashboard() {
+    const { t } = useTranslation(['admin', 'common']);
     const [loading, setLoading] = useState(true);
     const [dashboardData, setDashboardData] = useState(null);
     const [error, setError] = useState(null);
@@ -73,7 +75,7 @@ export default function SuperAdminDashboard() {
                     <div className="relative">
                         <div className="w-20 h-20 border-4 border-blue-200 dark:border-blue-800 rounded-full"></div>
                         <div className="absolute top-0 left-0 w-20 h-20 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
-                        <p className="mt-4 text-gray-500 dark:text-gray-400">Chargement du dashboard...</p>
+                        <p className="mt-4 text-gray-500 dark:text-gray-400">{t('admin:admin_dashboard.loading')}</p>
                     </div>
                 </div>
             </MainLayout>
@@ -86,13 +88,13 @@ export default function SuperAdminDashboard() {
                 <div className="bg-red-50 dark:bg-red-900/30 border-l-4 border-red-500 p-4 rounded-lg">
                     <div className="flex items-center gap-3">
                         <AlertCircle className="w-5 h-5 text-red-600 dark:text-red-400" />
-                        <p className="text-sm text-red-700 dark:text-red-300">Erreur de chargement: {error || "Données non disponibles"}</p>
+                        <p className="text-sm text-red-700 dark:text-red-300">{t('admin:admin_dashboard.error_loading', { error: error || "Données non disponibles" })}</p>
                     </div>
                     <button
                         onClick={fetchDashboardData}
                         className="mt-2 text-sm text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 underline"
                     >
-                        Réessayer
+                        {t('admin:admin_dashboard.retry')}
                     </button>
                 </div>
             </MainLayout>
@@ -125,7 +127,7 @@ export default function SuperAdminDashboard() {
                         </div>
                         <p className="text-gray-500 dark:text-gray-400 font-medium flex items-center gap-2">
                             <Clock className="w-4 h-4 text-blue-500 dark:text-blue-400" />
-                            Vue d'ensemble de la plateforme • {lastUpdate.toLocaleTimeString()}
+                            {t('admin:superAdmin.dashboard.overview')} • {lastUpdate.toLocaleTimeString()}
                         </p>
                     </div>
                     
@@ -135,7 +137,7 @@ export default function SuperAdminDashboard() {
                             whileTap={{ scale: 0.95 }}
                             onClick={fetchDashboardData}
                             className="p-3 bg-white dark:bg-gray-800 border-2 border-gray-100 dark:border-gray-700 rounded-2xl hover:border-blue-200 dark:hover:border-blue-700 hover:shadow-lg dark:hover:shadow-gray-900 transition-all text-gray-600 dark:text-gray-300"
-                            title="Rafraîchir les données"
+                            title={t('admin:superAdmin.dashboard.refresh')}
                         >
                             <Zap className="w-5 h-5" />
                         </motion.button>
@@ -147,8 +149,12 @@ export default function SuperAdminDashboard() {
                     <div className="bg-yellow-50 dark:bg-yellow-900/30 border-l-4 border-yellow-500 p-4 rounded-lg flex items-center gap-3">
                         <AlertCircle className="w-5 h-5 text-yellow-600 dark:text-yellow-400" />
                         <div className="flex-1">
-                            <p className="text-sm font-medium text-yellow-800 dark:text-yellow-300">Mode maintenance activé</p>
-                            <p className="text-xs text-yellow-600 dark:text-yellow-400">La plateforme est en maintenance. Les inscriptions sont {system_status.allow_registration ? 'autorisées' : 'désactivées'}.</p>
+                            <p className="text-sm font-medium text-yellow-800 dark:text-yellow-300">{t('admin:superAdmin.dashboard.maintenance_on')}</p>
+                            <p className="text-xs text-yellow-600 dark:text-yellow-400">
+                                {t('admin:superAdmin.dashboard.maintenance_desc', { 
+                                    status: system_status.allow_registration ? t('common:active') : t('common:inactive') 
+                                })}
+                            </p>
                         </div>
                     </div>
                 )}
@@ -158,40 +164,40 @@ export default function SuperAdminDashboard() {
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                         {[
                             { 
-                                label: 'Entreprises Approuvées', 
+                                label: t('admin:superAdmin.dashboard.stats.orgs'), 
                                 value: global_stats.total_organizations, 
                                 growth: dashboardData.growth?.orgs || 0,
                                 icon: Building2, 
                                 color: 'from-blue-600 to-indigo-600',
                                 shadow: 'shadow-blue-200 dark:shadow-blue-900/30',
-                                description: 'Organisations actives'
+                                description: t('admin:superAdmin.dashboard.stats.orgs_active')
                             },
                             { 
-                                label: 'Membres Plateforme', 
+                                label: t('admin:superAdmin.dashboard.stats.users'), 
                                 value: global_stats.total_users, 
                                 growth: dashboardData.growth?.users || 0,
                                 icon: Users, 
                                 color: 'from-purple-600 to-fuchsia-600',
                                 shadow: 'shadow-purple-200 dark:shadow-purple-900/30',
-                                description: `${global_stats.active_trials} comptes en essai`
+                                description: t('admin:superAdmin.dashboard.stats.trials', { count: global_stats.active_trials })
                             },
                             { 
-                                label: 'Vidéos Hébergées', 
+                                label: t('admin:superAdmin.dashboard.stats.videos'), 
                                 value: global_stats.total_videos, 
                                 growth: dashboardData.growth?.videos || 0,
                                 icon: Video, 
                                 color: 'from-emerald-500 to-teal-600',
                                 shadow: 'shadow-emerald-200 dark:shadow-emerald-900/30',
-                                description: `${global_stats.storage_used_mb} Mo de stockage`
+                                description: t('admin:superAdmin.dashboard.stats.storage', { count: global_stats.storage_used_mb })
                             },
                             { 
-                                label: "Score d'Engagement", 
+                                label: t("admin:superAdmin.dashboard.stats.engagement"), 
                                 value: `${global_stats.avg_completion_rate || 0}%`, 
                                 growth: dashboardData.growth?.completion || 0,
                                 icon: Award, 
                                 color: 'from-orange-500 to-rose-500',
                                 shadow: 'shadow-orange-200 dark:shadow-orange-900/30',
-                                description: 'Moyenne de complétion'
+                                description: t('admin:superAdmin.dashboard.stats.completion')
                             }
                         ].map((card, index) => {
                             const isPositive = card.growth >= 0;
@@ -259,9 +265,11 @@ export default function SuperAdminDashboard() {
                         <div className="flex items-center justify-between">
                             <h2 className="text-xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
                                 <Building2 className="w-6 h-6 text-blue-600 dark:text-blue-400" />
-                                Onboarding Récent
+                                {t('admin:superAdmin.dashboard.onboarding')}
                             </h2>
-                            <button className="text-sm font-bold text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300">Voir tout</button>
+                            <button className="text-sm font-bold text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300">
+                                {t('admin:superAdmin.dashboard.view_all')}
+                            </button>
                         </div>
                         
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -291,7 +299,7 @@ export default function SuperAdminDashboard() {
                                             <div className="flex items-center gap-3 mt-2 text-xs font-medium text-gray-500 dark:text-gray-400">
                                                 <span className="flex items-center gap-1">
                                                     <Users className="w-3 h-3" />
-                                                    {org.member_count} membres
+                                                    {t('admin:superAdmin.dashboard.members', { count: org.member_count })}
                                                 </span>
                                                 <span className="w-1 h-1 bg-gray-300 dark:bg-gray-600 rounded-full" />
                                                 <span className="flex items-center gap-1">
@@ -325,7 +333,7 @@ export default function SuperAdminDashboard() {
                     className="text-center text-xs text-gray-400 dark:text-gray-500 flex items-center justify-center gap-1"
                 >
                     <Shield className="w-3 h-3" />
-                    <span>Données temps réel via RPC • Dernière mise à jour: {lastUpdate.toLocaleTimeString()}</span>
+                    <span>{t('admin:superAdmin.dashboard.security_note', { time: lastUpdate.toLocaleTimeString() })}</span>
                 </motion.div>
             </motion.div>
         </MainLayout>

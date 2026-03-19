@@ -564,5 +564,74 @@
       "save": "Sauvegarder",
       "saving": "Sauvegarde..."
     }
+  },
+  "superAdmin": {
+    "dashboard": {
+      "title": "Control Center",
+      "overview": "Vue d'ensemble de la plateforme",
+      "refresh": "Rafraîchir les données",
+      "maintenance_on": "Mode maintenance activé",
+      "maintenance_desc": "La plateforme est en maintenance. Les inscriptions sont {{status}}.",
+      "stats": {
+        "orgs": "Entreprises Approuvées",
+        "orgs_active": "Organisations actives",
+        "users": "Membres Plateforme",
+        "trials": "{{count}} comptes en essai",
+        "videos": "Vidéos Hébergées",
+        "storage": "{{count}} Mo de stockage",
+        "engagement": "Score d'Engagement",
+        "completion": "Moyenne de complétion"
+      },
+      "onboarding": "Onboarding Récent",
+      "view_all": "Voir tout",
+      "members": "{{count}} membres",
+      "security_note": "Données temps réel via RPC • Dernière mise à jour: {{time}}"
+    },
+    "companies": {
+      "title": "Entreprises",
+      "subtitle": "Gérez toutes les entreprises clientes de la plateforme",
+      "manage": "Gestion des entreprises",
+      "deploy": "Déployer Entreprise",
+      "identification": "Identification",
+      "license": "Licence",
+      "usage": "Usage",
+      "registered": "Registré le",
+      "management": "Gestion",
+      "explorer": "Explorer",
+      "admin_dash": "Voir Dashboard Admin",
+      "email_admin": "Envoyer un email",
+      "footer_note": "Propulsé par Smiris Learn Admin Engine"
+    },
+    "users": {
+      "title": "Utilisateurs",
+      "subtitle": "Gérez tous les utilisateurs de la plateforme",
+      "manage": "Gestion des utilisateurs",
+      "stats": {
+        "total": "Total utilisateurs",
+        "admins": "Administrateurs",
+        "students": "Étudiants",
+        "new": "Nouveaux ce mois"
+      },
+      "invite_user": "Inviter un utilisateur",
+      "role_updated": "Rôle mis à jour",
+      "user_suspended": "Utilisateur suspendu",
+      "user_reactivated": "Utilisateur réactivé",
+      "user_deleted": "Utilisateur supprimé",
+      "role_modify": "Modifier le rôle",
+      "suspend": "Suspendre",
+      "unsuspend": "Réactiver",
+      "delete_confirm": "Êtes-vous sûr de vouloir supprimer {{name}} ?",
+      "no_admin_email": "Aucun email d'administrateur trouvé."
+    },
+    "limits": {
+      "title": "Limites du plan {{plan}}",
+      "users": "Utilisateurs",
+      "videos": "Vidéos",
+      "storage": "Stockage",
+      "used": "Utilisés",
+      "created": "Créées",
+      "reached_users": "Limite utilisateurs atteinte. Passez à un plan supérieur.",
+      "reached_videos": "Limite vidéos atteinte. Passez à un plan supérieur."
+    }
   }
 }

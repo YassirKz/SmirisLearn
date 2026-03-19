@@ -564,5 +564,74 @@
       "save": "Save",
       "saving": "Saving..."
     }
+  },
+  "superAdmin": {
+    "dashboard": {
+      "title": "Control Center",
+      "overview": "Platform Overview",
+      "refresh": "Refresh Data",
+      "maintenance_on": "Maintenance Mode Active",
+      "maintenance_desc": "The platform is in maintenance. Registrations are {{status}}.",
+      "stats": {
+        "orgs": "Approved Companies",
+        "orgs_active": "Active Organizations",
+        "users": "Platform Members",
+        "trials": "{{count}} trial accounts",
+        "videos": "Hosted Videos",
+        "storage": "{{count}} MB storage used",
+        "engagement": "Engagement Score",
+        "completion": "Completion Average"
+      },
+      "onboarding": "Recent Onboarding",
+      "view_all": "View All",
+      "members": "{{count}} members",
+      "security_note": "Real-time RPC data • Last update: {{time}}"
+    },
+    "companies": {
+      "title": "Companies",
+      "subtitle": "Manage all customer organizations on the platform",
+      "manage": "Company Management",
+      "deploy": "Deploy Company",
+      "identification": "Identification",
+      "license": "License",
+      "usage": "Usage",
+      "registered": "Registered on",
+      "management": "Management",
+      "explorer": "Explore",
+      "admin_dash": "View Admin Dashboard",
+      "email_admin": "Send Email",
+      "footer_note": "Powered by Smiris Learn Admin Engine"
+    },
+    "users": {
+      "title": "Users",
+      "subtitle": "Manage all users on the platform",
+      "manage": "User Management",
+      "stats": {
+        "total": "Total Users",
+        "admins": "Administrators",
+        "students": "Students",
+        "new": "New this month"
+      },
+      "invite_user": "Invite User",
+      "role_updated": "Role updated",
+      "user_suspended": "User suspended",
+      "user_reactivated": "User reactivated",
+      "user_deleted": "User deleted",
+      "role_modify": "Modify Role",
+      "suspend": "Suspend",
+      "unsuspend": "Reactivate",
+      "delete_confirm": "Are you sure you want to delete {{name}}?",
+      "no_admin_email": "No administrator email found."
+    },
+    "limits": {
+      "title": "Limits for {{plan}} Plan",
+      "users": "Users",
+      "videos": "Videos",
+      "storage": "Storage",
+      "used": "Used",
+      "created": "Created",
+      "reached_users": "User limit reached. Please upgrade your plan.",
+      "reached_videos": "Video limit reached. Please upgrade your plan."
+    }
   }
 }

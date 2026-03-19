@@ -195,7 +195,7 @@ export default function Unauthorized() {
 
         if (!error) {
           setError(null);
-          alert('Demande envoyée ! Un administrateur va examiner votre requête.');
+          alert(t('unauthorized.labels.requestSent'));
         }
       }
     } catch (err) {
@@ -380,7 +380,7 @@ export default function Unauthorized() {
               
               <div className="flex items-center gap-2">
                 <Shield className="w-3 h-3 text-gray-400" />
-                <span className="text-gray-600 dark:text-gray-300">{t('unauthorized.labels.currentRole')} : <span className="font-medium text-gray-800 dark:text-gray-100">{role || t('common:none')}</span></span>
+                <span className="text-gray-600 dark:text-gray-300">{t('unauthorized.labels.currentRole')} : <span className="font-medium text-gray-800 dark:text-gray-100">{role || t('none')}</span></span>
               </div>
 
               {requiredRole && (
@@ -444,7 +444,7 @@ export default function Unauthorized() {
             transition={{ delay: 0.45 }}
             className="mb-6 space-y-2"
           >
-            <p className="text-xs font-medium text-gray-500">Actions suggérées :</p>
+            <p className="text-xs font-medium text-gray-500">{t('unauthorized.labels.suggested_actions')} :</p>
             {suggestedActions.map((action, index) => (
               <motion.button
                 key={index}
@@ -569,7 +569,7 @@ export default function Unauthorized() {
                   >
                     <Mail className="w-4 h-4 text-blue-600" />
                     <div>
-                      <p className="text-sm font-medium text-gray-700 dark:text-gray-200">Email</p>
+                      <p className="text-sm font-medium text-gray-700 dark:text-gray-200">{t('email')}</p>
                       <p className="text-xs text-gray-500 dark:text-gray-400">support@smiris-learn.com</p>
                     </div>
                   </button>
@@ -580,7 +580,7 @@ export default function Unauthorized() {
                   >
                     <Phone className="w-4 h-4 text-green-600" />
                     <div>
-                      <p className="text-sm font-medium text-gray-700 dark:text-gray-200">Téléphone</p>
+                      <p className="text-sm font-medium text-gray-700 dark:text-gray-200">{t('unauthorized.labels.phone')}</p>
                       <p className="text-xs text-gray-500 dark:text-gray-400">+33 1 23 45 67 89</p>
                     </div>
                   </a>

@@ -564,5 +564,74 @@
       "save": "حفظ",
       "saving": "جاري الحفظ..."
     }
+  },
+  "superAdmin": {
+    "dashboard": {
+      "title": "مركز التحكم",
+      "overview": "نظرة عامة على المنصة",
+      "refresh": "تحديث البيانات",
+      "maintenance_on": "وضع الصيانة مفعل",
+      "maintenance_desc": "المنصة في حالة صيانة. التسجيلات {{status}}.",
+      "stats": {
+        "orgs": "الشركات المعتمدة",
+        "orgs_active": "المنظمات النشطة",
+        "users": "أعضاء المنصة",
+        "trials": "{{count}} حسابات تجريبية",
+        "videos": "الفيديوهات المستضافة",
+        "storage": "{{count}} ميجابايت من التخزين",
+        "engagement": "درجة التفاعل",
+        "completion": "متوسط الإكمال"
+      },
+      "onboarding": "المنضمون حديثاً",
+      "view_all": "عرض الكل",
+      "members": "{{count}} أعضاء",
+      "security_note": "بيانات RPC في الوقت الفعلي • آخر تحديث: {{time}}"
+    },
+    "companies": {
+      "title": "الشركات",
+      "subtitle": "إدارة جميع منظمات العملاء على المنصة",
+      "manage": "إدارة الشركات",
+      "deploy": "نشر شركة",
+      "identification": "التعريف",
+      "license": "الترخيص",
+      "usage": "الاستخدام",
+      "registered": "مسجل في",
+      "management": "الإدارة",
+      "explorer": "استكشاف",
+      "admin_dash": "عرض لوحة تحكم الأدمن",
+      "email_admin": "إرسال بريد إلكتروني",
+      "footer_note": "مدعوم بمحرك Smiris Learn Admin Engine"
+    },
+    "users": {
+      "title": "المستخدمون",
+      "subtitle": "إدارة جميع المستخدمين على المنصة",
+      "manage": "إدارة المستخدمين",
+      "stats": {
+        "total": "إجمالي المستخدمين",
+        "admins": "المسؤولون",
+        "students": "الطلاب",
+        "new": "جديد هذا الشهر"
+      },
+      "invite_user": "دعوة مستخدم",
+      "role_updated": "تم تحديث الدور",
+      "user_suspended": "تم تعليق المستخدم",
+      "user_reactivated": "تم إعادة تنشيط المستخدم",
+      "user_deleted": "تم حذف المستخدم",
+      "role_modify": "تعديل الدور",
+      "suspend": "تعليق",
+      "unsuspend": "إعادة تنشيط",
+      "delete_confirm": "هل أنت متأكد أنك تريد حذف {{name}}؟",
+      "no_admin_email": "لم يتم العثور على بريد إلكتروني للمسؤول."
+    },
+    "limits": {
+      "title": "حدود خطة {{plan}}",
+      "users": "المستخدمون",
+      "videos": "الفيديوهات",
+      "storage": "التخزين",
+      "used": "المستخدم",
+      "created": "المنشأة",
+      "reached_users": "تم الوصول إلى حد المستخدمين. يرجى ترقية خطتك.",
+      "reached_videos": "تم الوصول إلى حد الفيديوهات. يرجى ترقية خطتك."
+    }
   }
 }

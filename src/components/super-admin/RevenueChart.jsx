@@ -4,9 +4,11 @@ import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from 'recha
 import { TrendingUp, Calendar, PieChart as PieChartIcon, Clock } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import { useTheme } from '../../hooks/useTheme';
+import { useTranslation } from 'react-i18next';
 
 export default function RevenueChart() {
     const { theme } = useTheme();
+    const { t, i18n } = useTranslation(['admin', 'common']);
     const [data, setData] = useState([]);
     const [stats, setStats] = useState({
         totalCompanies: 0,
@@ -75,10 +77,10 @@ export default function RevenueChart() {
             });
 
             const chartData = [
-                { name: "En période d'essai", value: counts.trial, color: '#10B981', description: 'Starter - 14 jours d\'essai' },
-                { name: 'Gratuit', value: counts.free, color: '#9CA3AF', description: 'Plan Free' },
-                { name: 'Starter (payant)', value: (counts.starter || 0) - counts.trial, color: '#3B82F6', description: '49€/mois' },
-                { name: 'Business', value: counts.business, color: '#8B5CF6', description: '99€/mois' }
+                { name: t('admin:superAdmin.dashboard.charts.revenue.plans.trial.name'), value: counts.trial, color: '#10B981', description: t('admin:superAdmin.dashboard.charts.revenue.plans.trial.desc') },
+                { name: t('admin:superAdmin.dashboard.charts.revenue.plans.free.name'), value: counts.free, color: '#9CA3AF', description: t('admin:superAdmin.dashboard.charts.revenue.plans.free.desc') },
+                { name: t('admin:superAdmin.dashboard.charts.revenue.plans.starter.name'), value: (counts.starter || 0) - counts.trial, color: '#3B82F6', description: t('admin:superAdmin.dashboard.charts.revenue.plans.starter.desc') },
+                { name: t('admin:superAdmin.dashboard.charts.revenue.plans.business.name'), value: counts.business, color: '#8B5CF6', description: t('admin:superAdmin.dashboard.charts.revenue.plans.business.desc') }
             ].filter(item => item.value > 0);
 
             const growth = lastMonthCount > 0 
@@ -112,7 +114,7 @@ export default function RevenueChart() {
         if (data.length === 0) {
             return (
                 <div className="h-64 flex items-center justify-center">
-                    <p className="text-gray-400 dark:text-gray-500">Aucune donnée disponible</p>
+                    <p className="text-gray-400 dark:text-gray-500">{t('common:no_results_found')}</p>
                 </div>
             );
         }
@@ -141,7 +143,7 @@ export default function RevenueChart() {
                         ))}
                     </Pie>
                     <Tooltip
-                        formatter={(value, name, props) => [`${value} entreprises`, props.payload.name]}
+                        formatter={(value, name, props) => [`${value} ${t('admin:superAdmin.dashboard.charts.revenue.companies_unit')}`, props.payload.name]}
                         contentStyle={{
                             backgroundColor: tooltipBg,
                             borderRadius: '12px',
@@ -171,8 +173,8 @@ export default function RevenueChart() {
         >
             <div className="flex items-center justify-between mb-6">
                 <div>
-                    <h2 className="text-xl font-bold text-gray-800 dark:text-white">Analyse des abonnements</h2>
-                    <p className="text-sm text-gray-500 dark:text-gray-400">Répartition des entreprises par statut</p>
+                    <h2 className="text-xl font-bold text-gray-800 dark:text-white">{t('admin:superAdmin.dashboard.charts.revenue.title')}</h2>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">{t('admin:superAdmin.dashboard.charts.revenue.subtitle')}</p>
                 </div>
                 <div className="bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 px-3 py-1.5 rounded-lg text-xs font-medium flex items-center gap-1">
                     <PieChartIcon className="w-3 h-3" />
@@ -196,35 +198,35 @@ export default function RevenueChart() {
 
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
                         <div className="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/30 dark:to-indigo-900/30 rounded-xl p-3">
-                            <p className="text-xs text-blue-600 dark:text-blue-400 font-medium mb-1">Total</p>
+                            <p className="text-xs text-blue-600 dark:text-blue-400 font-medium mb-1">{t('admin:superAdmin.dashboard.charts.revenue.total')}</p>
                             <p className="text-lg font-bold text-blue-800 dark:text-blue-300">{stats.totalCompanies}</p>
-                            <p className="text-xs text-gray-500 dark:text-gray-400">entreprises</p>
+                            <p className="text-xs text-gray-500 dark:text-gray-400">{t('admin:superAdmin.dashboard.charts.revenue.companies_unit')}</p>
                         </div>
                         
                         <div className="bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/30 dark:to-emerald-900/30 rounded-xl p-3">
-                            <p className="text-xs text-green-600 dark:text-green-400 font-medium mb-1">En essai</p>
+                            <p className="text-xs text-green-600 dark:text-green-400 font-medium mb-1">{t('admin:superAdmin.dashboard.charts.revenue.trial')}</p>
                             <p className="text-lg font-bold text-green-800 dark:text-green-300">{stats.trialCompanies}</p>
-                            <p className="text-xs text-gray-500 dark:text-gray-400">Starter (14j)</p>
+                            <p className="text-xs text-gray-500 dark:text-gray-400">{t('admin:superAdmin.dashboard.charts.revenue.plans.trial.descShort')}</p>
                         </div>
 
                         <div className="bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-900/30 dark:to-pink-900/30 rounded-xl p-3">
-                            <p className="text-xs text-purple-600 dark:text-purple-400 font-medium mb-1">Payants</p>
+                            <p className="text-xs text-purple-600 dark:text-purple-400 font-medium mb-1">{t('admin:superAdmin.dashboard.charts.revenue.paid')}</p>
                             <p className="text-lg font-bold text-purple-800 dark:text-purple-300">{stats.activeCompanies}</p>
-                            <p className="text-xs text-gray-500 dark:text-gray-400">Starter/Business</p>
+                            <p className="text-xs text-gray-500 dark:text-gray-400">{t('admin:superAdmin.dashboard.charts.revenue.plans.paidDesc')}</p>
                         </div>
 
                         <div className="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-700 rounded-xl p-3">
-                            <p className="text-xs text-gray-600 dark:text-gray-400 font-medium mb-1">Gratuit</p>
+                            <p className="text-xs text-gray-600 dark:text-gray-400 font-medium mb-1">{t('admin:superAdmin.dashboard.charts.revenue.free')}</p>
                             <p className="text-lg font-bold text-gray-800 dark:text-gray-300">{stats.freeCompanies}</p>
-                            <p className="text-xs text-gray-500 dark:text-gray-400">Plan Free</p>
+                            <p className="text-xs text-gray-500 dark:text-gray-400">{t('admin:superAdmin.dashboard.charts.revenue.plans.free.descShort')}</p>
                         </div>
                     </div>
 
                     <div className="mt-4 p-3 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/30 dark:to-indigo-900/30 rounded-xl border border-blue-100 dark:border-gray-700">
                         <div className="flex items-center justify-between">
-                            <span className="text-sm text-gray-600 dark:text-gray-300">Revenus mensuels potentiels</span>
+                            <span className="text-sm text-gray-600 dark:text-gray-300">{t('admin:superAdmin.dashboard.charts.revenue.potential')}</span>
                             <span className="text-lg font-bold text-blue-600 dark:text-blue-400">
-                                {new Intl.NumberFormat('fr-FR', { 
+                                {new Intl.NumberFormat(i18n.language, { 
                                     style: 'currency', 
                                     currency: 'EUR',
                                     maximumFractionDigits: 0
@@ -232,13 +234,13 @@ export default function RevenueChart() {
                             </span>
                         </div>
                         <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                            💡 Après conversion des essais et intégration Stripe
+                            💡 {t('admin:superAdmin.dashboard.charts.revenue.potential_tip')}
                         </p>
                     </div>
 
                     <div className="mt-4 text-xs text-gray-400 dark:text-gray-500 flex items-center gap-1">
                         <TrendingUp className="w-3 h-3" />
-                        <span>Croissance: {stats.growth > 0 ? '+' : ''}{stats.growth}% vs mois dernier</span>
+                        <span>{t('admin:superAdmin.dashboard.charts.revenue.growth_vs_last_month', { growth: stats.growth > 0 ? `+${stats.growth}` : stats.growth })}</span>
                     </div>
                 </>
             )}
