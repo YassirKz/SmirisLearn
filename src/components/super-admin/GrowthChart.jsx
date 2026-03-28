@@ -21,8 +21,10 @@ export default function GrowthChart() {
     const [chartType, setChartType] = useState('area');
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
-
+    const [isMounted, setIsMounted] = useState(false);
+ 
     useEffect(() => {
+        setIsMounted(true);
         fetchGrowthData();
     }, [period]);
 
@@ -72,51 +74,99 @@ export default function GrowthChart() {
     const tooltipBorder = theme === 'dark' ? '#374151' : '#e5e7eb';
     const textColor = theme === 'dark' ? '#f3f4f6' : '#111827';
 
+    const CustomTooltip = ({ active, payload, label }) => {
+        if (active && payload && payload.length) {
+            return (
+                <div className="bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl border border-white/50 dark:border-white/10 p-4 rounded-2xl shadow-2xl ring-1 ring-black/5">
+                    <p className="text-sm font-bold text-gray-900 dark:text-white mb-2">{label}</p>
+                    <div className="space-y-1.5">
+                        {payload.map((entry, i) => (
+                            <div key={i} className="flex items-center gap-2">
+                                <div className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: entry.color }} />
+                                <span className="text-xs font-semibold text-gray-500 dark:text-gray-400 capitalize">{entry.name}:</span>
+                                <span className="text-xs font-black text-gray-900 dark:text-white">{entry.value}</span>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            );
+        }
+        return null;
+    };
+
     const renderChart = () => {
         if (chartType === 'area') {
             return (
                 <AreaChart 
                     data={data}
-                    margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
+                    margin={{ top: 20, right: 30, left: 0, bottom: 0 }}
                 >
                     <defs>
                         <linearGradient id="colorEntreprises" x1="0" y1="0" x2="0" y2="1">
-                            <stop offset="5%" stopColor="#8b5cf6" stopOpacity={0.8}/>
+                            <stop offset="5%" stopColor="#8b5cf6" stopOpacity={0.3}/>
                             <stop offset="95%" stopColor="#8b5cf6" stopOpacity={0}/>
                         </linearGradient>
                         <linearGradient id="colorUtilisateurs" x1="0" y1="0" x2="0" y2="1">
-                            <stop offset="5%" stopColor="#0ea5e9" stopOpacity={0.8}/>
+                            <stop offset="5%" stopColor="#0ea5e9" stopOpacity={0.3}/>
                             <stop offset="95%" stopColor="#0ea5e9" stopOpacity={0}/>
                         </linearGradient>
                     </defs>
-                    <CartesianGrid strokeDasharray="3 3" stroke={gridColor} />
-                    <XAxis dataKey="month" stroke={axisColor} />
-                    <YAxis stroke={axisColor} />
+                    <CartesianGrid 
+                        strokeDasharray="4 4" 
+                        vertical={false} 
+                        stroke={gridColor} 
+                        strokeOpacity={0.5} 
+                    />
+                    <XAxis 
+                        dataKey="month" 
+                        stroke={axisColor} 
+                        axisLine={false}
+                        tickLine={false}
+                        tick={{ fontSize: 11, fontWeight: 700 }}
+                        dy={10}
+                    />
+                    <YAxis 
+                        stroke={axisColor} 
+                        axisLine={false}
+                        tickLine={false}
+                        tick={{ fontSize: 11, fontWeight: 700 }}
+                    />
                     <Tooltip 
-                        contentStyle={{ 
-                            backgroundColor: tooltipBg, 
-                            borderRadius: '12px', 
-                            border: `1px solid ${tooltipBorder}`,
-                            boxShadow: '0 4px 6px rgba(0,0,0,0.1)',
-                            color: textColor
+                        content={<CustomTooltip />}
+                        cursor={{ stroke: axisColor, strokeWidth: 1, strokeDasharray: '4 4' }}
+                    />
+                    <Legend 
+                        verticalAlign="top" 
+                        align="right"
+                        iconType="circle"
+                        iconSize={8}
+                        wrapperStyle={{ 
+                            paddingBottom: '20px', 
+                            fontSize: '11px', 
+                            fontWeight: 800,
+                            textTransform: 'uppercase',
+                            letterSpacing: '0.05em'
                         }} 
                     />
-                    <Legend wrapperStyle={{ color: textColor }} />
                     <Area 
                         type="monotone" 
                         dataKey="entreprises" 
-                        stroke="#3B82F6" 
+                        stroke="#8b5cf6" 
+                        strokeWidth={3}
                         fillOpacity={1} 
                         fill="url(#colorEntreprises)" 
                         name="Entreprises"
+                        animationDuration={1500}
                     />
                     <Area 
                         type="monotone" 
                         dataKey="utilisateurs" 
                         stroke="#0ea5e9" 
+                        strokeWidth={3}
                         fillOpacity={1} 
                         fill="url(#colorUtilisateurs)" 
                         name="Utilisateurs"
+                        animationDuration={1500}
                     />
                 </AreaChart>
             );
@@ -169,9 +219,11 @@ export default function GrowthChart() {
             ) : (
                 <>
                     <div className="h-80 w-full min-h-[320px] relative">
-                        <ResponsiveContainer width="100%" height="100%" minHeight={320}>
-                            {renderChart()}
-                        </ResponsiveContainer>
+                        {isMounted && (
+                            <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={320} debounce={50}>
+                                {renderChart()}
+                            </ResponsiveContainer>
+                        )}
                     </div>
 
                     <div className="mt-4 grid grid-cols-2 md:grid-cols-4 gap-4">

@@ -295,10 +295,12 @@ export default function SuperAdminDashboard() {
                                             animate={{ 
                                                 width: `${
                                                     card.label === "Engagement" 
-                                                        ? parseInt(card.value) 
+                                                        ? parseFloat(card.value) 
                                                         : card.label === "Vidéos"
-                                                            ? Math.min((global_stats.storage_used_mb / 10240) * 100, 100) // 10GB total limit by default for visual
-                                                            : Math.min((card.value / 100) * 100, 100)
+                                                            ? Math.min((global_stats.storage_used_mb / 10240) * 100, 100)
+                                                            : card.label === "Entreprises"
+                                                                ? Math.min((global_stats.total_organizations / 100) * 100, 100)
+                                                                : Math.min((global_stats.total_users / 1000) * 100, 100)
                                                 }%` 
                                             }}
                                             transition={{ delay: 0.5 + index * 0.1, duration: 1.5, ease: "easeOut" }}
