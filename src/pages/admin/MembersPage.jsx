@@ -3,6 +3,7 @@ import { Users, Sparkles, Shield } from 'lucide-react';
 import AdminLayout from '../../components/layout/AdminLayout';
 import MembersList from '../../components/admin/members/MembersList';
 import { useUserRole } from '../../hooks/useUserRole';
+import { useOwnerOrg } from '../../hooks/useOwnerOrg';
 import { useSearchParams, Navigate } from 'react-router-dom';
 import { untrusted, escapeText } from '../../utils/security';
 
@@ -10,7 +11,9 @@ export default function MembersPage() {
   const { role, isAdminAccess, loading: roleLoading } = useUserRole();
   const [searchParams] = useSearchParams();
   const orgIdFromUrl = searchParams.get('orgId');
+  const { isOwnerOrg, loading: orgLoading } = useOwnerOrg(orgIdFromUrl);
   const isImpersonating = role === 'super_admin' && orgIdFromUrl;
+  const isReadOnly = isImpersonating && !isOwnerOrg;
 
   if (!roleLoading && !isAdminAccess && !isImpersonating) {
     return <Navigate to="/unauthorized" replace />;
@@ -58,7 +61,7 @@ export default function MembersPage() {
               <p className="text-lg text-gray-500 dark:text-gray-400 font-medium max-w-2xl flex flex-wrap items-center gap-2">
                 <Shield className="w-5 h-5 text-gray-400" />
                 Gérez les accès et les profils des membres de votre organisation
-                {isImpersonating && (
+                {isImpersonating && isReadOnly && (
                   <span className="ml-2 text-xs bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 px-3 py-1.5 rounded-xl border border-amber-200/50 dark:border-amber-800/50 font-bold shadow-sm inline-flex items-center">
                     Mode lecture seule - Orga: {escapeText(untrusted(orgIdFromUrl))}
                   </span>
@@ -68,7 +71,7 @@ export default function MembersPage() {
           </div>
         </div>
 
-        <MembersList isReadOnly={!!isImpersonating} orgId={orgIdFromUrl} />
+        <MembersList isReadOnly={isReadOnly} orgId={orgIdFromUrl} />
       </motion.div>
     </AdminLayout>
   );

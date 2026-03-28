@@ -75,16 +75,16 @@ export default function RecentActivity() {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.2 }}
-      className="bg-white dark:bg-gray-800 p-8 rounded-[2.5rem] border border-gray-100 dark:border-gray-700 shadow-xl shadow-gray-200/40 dark:shadow-gray-900/40 h-full overflow-hidden relative"
+      className="bg-white/80 dark:bg-slate-900/60 backdrop-blur-xl p-8 rounded-3xl border border-white/50 dark:border-white/5 shadow-xl h-full overflow-hidden relative"
     >
-      <div className="absolute top-0 right-0 w-32 h-32 bg-primary-50 dark:bg-primary-900/20 opacity-[0.03] rounded-bl-[5rem] -z-0" />
+      <div className="absolute -top-24 -right-24 w-48 h-48 bg-gradient-to-br from-primary-500 to-accent-600 rounded-full opacity-0 dark:opacity-10 blur-3xl pointer-events-none" />
       <div className="flex items-center justify-between mb-8 relative z-10">
         <div>
           <h2 className="text-xl font-bold text-gray-900 dark:text-white tracking-tight">Activité Récente</h2>
           <p className="text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-widest mt-1">DERNIÈRES MISES À JOUR</p>
         </div>
-        <div className="p-2 bg-gray-50 dark:bg-gray-700 rounded-xl">
-          <Clock className="w-5 h-5 text-gray-400 dark:text-gray-500" />
+        <div className="p-2.5 bg-gradient-to-br from-primary-500 to-accent-600 rounded-xl shadow-lg shadow-primary-500/30">
+          <Clock className="w-5 h-5 text-white" />
         </div>
       </div>
 

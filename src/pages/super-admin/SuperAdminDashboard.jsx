@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { 
     Building2, Users, Video, Award, AlertCircle,
-    Shield, TrendingUp, Clock, Zap, Sparkles, Calendar
+    Shield, TrendingUp, Clock, Zap, Sparkles, Calendar, Activity
 } from 'lucide-react';
 import MainLayout from '../../components/layout/MainLayout';
 import CompaniesTable from '../../components/super-admin/CompaniesTable';
@@ -46,13 +46,39 @@ export default function SuperAdminDashboard() {
                 return Math.round(((current - previous) / previous) * 100);
             };
 
+            // ============================================
+            // Calculer la croissance du taux de complétion global
+            // ============================================
+            const { data: students } = await supabase
+                .from('profiles')
+                .select('id')
+                .eq('role', 'student');
+
+            let prevAvgCompletion = 0;
+            if (students && students.length > 0) {
+                const studentIds = students.map(s => s.id);
+                const { data: prevProgress } = await supabase
+                    .from('user_progress')
+                    .select('user_id')
+                    .eq('watched', true)
+                    .in('user_id', studentIds)
+                    .lt('completed_at', lastMonth.toISOString());
+
+                const totalVideos = data.global_stats.total_videos || 1;
+                const prevTotalCompletion = students.reduce((acc, student) => {
+                    const watchedCount = prevProgress?.filter(p => p.user_id === student.id).length || 0;
+                    return acc + (watchedCount / totalVideos * 100);
+                }, 0);
+                prevAvgCompletion = Math.round(prevTotalCompletion / students.length);
+            }
+
             setDashboardData(prev => ({
                 ...prev,
                 growth: {
                     orgs: calculateGrowth(data.global_stats.total_organizations, prevOrgs.count || 0),
                     users: calculateGrowth(data.global_stats.total_users, prevUsers.count || 0),
                     videos: calculateGrowth(data.global_stats.total_videos, prevVideos.count || 0),
-                    completion: 0
+                    completion: calculateGrowth(data.global_stats.avg_completion_rate || 0, prevAvgCompletion)
                 }
             }));
 
@@ -70,10 +96,10 @@ export default function SuperAdminDashboard() {
         return (
             <MainLayout>
                 <div className="min-h-[60vh] flex items-center justify-center">
-                    <div className="relative">
-                        <div className="w-20 h-20 border-4 border-primary-200 dark:border-primary-800 rounded-full"></div>
+                    <div className="relative flex flex-col items-center">
+                        <div className="w-20 h-20 border-4 border-primary-100 dark:border-primary-900 rounded-full"></div>
                         <div className="absolute top-0 left-0 w-20 h-20 border-4 border-primary-600 border-t-transparent rounded-full animate-spin"></div>
-                        <p className="mt-4 text-gray-500 dark:text-gray-400">Chargement de votre dashboard...</p>
+                        <p className="mt-6 text-sm font-bold text-gray-500 dark:text-gray-400">Chargement de votre dashboard...</p>
                     </div>
                 </div>
             </MainLayout>
@@ -109,45 +135,76 @@ export default function SuperAdminDashboard() {
                 className="space-y-8"
                 style={{ perspective: "1200px" }}
             >
-                {/* En-tête Control Center */}
-                <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
-                    <div>
-                        <div className="flex items-center gap-3 mb-1">
-                            <h1 className="text-4xl font-bold text-gray-900 dark:text-white tracking-tight">
-                                Control <span className="text-primary-600 dark:text-primary-400">Center</span>
-                            </h1>
-                            <div className="flex items-center gap-2 px-3 py-1 bg-green-50 dark:bg-green-900/30 border border-green-100 dark:border-green-800 rounded-full h-fit">
-                                <span className="relative flex h-2 w-2">
-                                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                                    <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
-                                </span>
-                            </div>
-                        </div>
-                        <p className="text-gray-500 dark:text-gray-400 font-medium flex items-center gap-2">
-                            <Clock className="w-4 h-4 text-primary-500 dark:text-primary-400" />
-                            Vue d'ensemble de la plateforme • {lastUpdate.toLocaleTimeString()}
-                        </p>
-                    </div>
+                {/* ══════════════════════════════════════════════ */}
+                {/* EN-TÊTE PREMIUM GLASSMORPHISM                  */}
+                {/* ══════════════════════════════════════════════ */}
+                <div className="relative bg-white/80 dark:bg-slate-900/60 backdrop-blur-xl rounded-3xl p-8 sm:p-10 shadow-xl border border-white/50 dark:border-white/5 overflow-hidden">
+                    {/* Background Glows */}
+                    <div className="absolute top-0 right-0 w-64 h-64 bg-primary-500/10 dark:bg-primary-500/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none" />
+                    <div className="absolute bottom-0 left-0 w-64 h-64 bg-accent-500/10 dark:bg-accent-500/20 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2 pointer-events-none" />
                     
-                    <div className="flex items-center gap-3">
+                    <div className="relative z-10 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+                        <div className="flex-1">
+                            <div className="flex items-center gap-3 mb-4">
+                                <motion.div
+                                    initial={{ scale: 0, opacity: 0 }}
+                                    animate={{ scale: 1, opacity: 1 }}
+                                    transition={{ type: "spring", stiffness: 200, damping: 20, delay: 0.1 }}
+                                    className="p-3 bg-gradient-to-br from-primary-500 to-accent-600 rounded-2xl shadow-lg shadow-primary-500/30"
+                                >
+                                    <Shield className="w-8 h-8 text-white" />
+                                </motion.div>
+                                <motion.div
+                                    initial={{ opacity: 0, x: -20 }}
+                                    animate={{ opacity: 1, x: 0 }}
+                                    transition={{ delay: 0.2 }}
+                                    className="px-4 py-1.5 bg-primary-50 dark:bg-primary-900/30 border border-primary-200 dark:border-primary-800/50 rounded-full text-sm font-bold text-primary-700 dark:text-primary-300 shadow-sm flex items-center gap-2 w-fit"
+                                >
+                                    <Sparkles className="w-4 h-4" />
+                                    Super Administration
+                                </motion.div>
+                                {/* Live indicator */}
+                                <div className="flex items-center gap-2 px-3 py-1.5 bg-green-50 dark:bg-green-900/30 border border-green-200 dark:border-green-800/50 rounded-full h-fit">
+                                    <span className="relative flex h-2 w-2">
+                                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                                        <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                                    </span>
+                                    <span className="text-xs font-bold text-green-700 dark:text-green-400">Live</span>
+                                </div>
+                            </div>
+                            
+                            <h1 className="text-4xl sm:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-300 tracking-tight mb-4">
+                                Control Center
+                            </h1>
+                            
+                            <p className="text-lg text-gray-500 dark:text-gray-400 font-medium max-w-2xl flex flex-wrap items-center gap-2">
+                                <Activity className="w-5 h-5 text-primary-500" />
+                                Vue d'ensemble de la plateforme
+                                <span className="mx-2 opacity-50">•</span>
+                                <span className="text-sm">Mis à jour à {lastUpdate.toLocaleTimeString('fr-FR')}</span>
+                            </p>
+                        </div>
+
                         <motion.button
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
                             onClick={fetchDashboardData}
-                            className="p-3 bg-white dark:bg-gray-800 border-2 border-gray-100 dark:border-gray-700 rounded-2xl hover:border-primary-200 dark:hover:border-primary-700 hover:shadow-lg dark:hover:shadow-gray-900 transition-all text-gray-600 dark:text-gray-300"
-                            title="Rafraîchir les données"
+                            className="px-5 py-2.5 bg-white dark:bg-slate-800 border-2 border-primary-100 dark:border-slate-700 rounded-2xl hover:border-primary-300 dark:hover:border-primary-500 transition-all flex items-center justify-center gap-2 text-sm font-semibold text-gray-700 dark:text-gray-200 shadow-sm"
                         >
-                            <Zap className="w-5 h-5" />
+                            <Zap className="w-4 h-4 text-primary-500" />
+                            Rafraîchir
                         </motion.button>
                     </div>
                 </div>
 
                 {/* Alertes système */}
                 {system_status?.maintenance_mode && (
-                    <div className="bg-yellow-50 dark:bg-yellow-900/30 border-l-4 border-yellow-500 p-4 rounded-lg flex items-center gap-3">
-                        <AlertCircle className="w-5 h-5 text-yellow-600 dark:text-yellow-400" />
+                    <div className="bg-yellow-50/80 dark:bg-yellow-900/20 backdrop-blur-sm border border-yellow-200 dark:border-yellow-800/50 p-4 rounded-2xl flex items-center gap-3">
+                        <div className="p-2 bg-yellow-100 dark:bg-yellow-900/30 rounded-xl">
+                            <AlertCircle className="w-5 h-5 text-yellow-600 dark:text-yellow-400" />
+                        </div>
                         <div className="flex-1">
-                            <p className="text-sm font-medium text-yellow-800 dark:text-yellow-300">Mode maintenance activé</p>
+                            <p className="text-sm font-bold text-yellow-800 dark:text-yellow-300">Mode maintenance activé</p>
                             <p className="text-xs text-yellow-600 dark:text-yellow-400">
                                 La plateforme est en maintenance. Les inscriptions sont {system_status.allow_registration ? 'actives' : 'inactives'}.
                             </p>
@@ -155,93 +212,98 @@ export default function SuperAdminDashboard() {
                     </div>
                 )}
 
-                {/* Stats globales */}
+                {/* ══════════════════════════════════════════════ */}
+                {/* CARTES DE STATISTIQUES PREMIUM                 */}
+                {/* ══════════════════════════════════════════════ */}
                 {global_stats && (
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                         {[
                             { 
-                                label: "Entreprises Approuvées", 
+                                label: "Entreprises", 
                                 value: global_stats.total_organizations, 
                                 growth: dashboardData.growth?.orgs || 0,
                                 icon: Building2, 
-                                color: 'from-primary-600 to-accent-600',
-                                shadow: 'shadow-primary-200 dark:shadow-primary-900/30',
+                                color: 'from-blue-500 to-cyan-400',
+                                glow: 'shadow-blue-500/30',
                                 description: "Organisations actives"
                             },
                             { 
-                                label: "Membres Plateforme", 
+                                label: "Membres", 
                                 value: global_stats.total_users, 
                                 growth: dashboardData.growth?.users || 0,
                                 icon: Users, 
-                                color: 'from-accent-600 to-primary-600',
-                                shadow: 'shadow-accent-200 dark:shadow-accent-900/30',
+                                color: 'from-purple-500 to-pink-500',
+                                glow: 'shadow-purple-500/30',
                                 description: `${global_stats.active_trials} comptes en essai`
                             },
                             { 
-                                label: "Vidéos Hébergées", 
+                                label: "Vidéos", 
                                 value: global_stats.total_videos, 
                                 growth: dashboardData.growth?.videos || 0,
                                 icon: Video, 
-                                color: 'from-emerald-500 to-teal-600',
-                                shadow: 'shadow-emerald-200 dark:shadow-emerald-900/30',
+                                color: 'from-orange-500 to-amber-400',
+                                glow: 'shadow-orange-500/30',
                                 description: `${global_stats.storage_used_mb} Mo de stockage`
                             },
                             { 
-                                label: "Score d'Engagement", 
+                                label: "Engagement", 
                                 value: `${global_stats.avg_completion_rate || 0}%`, 
                                 growth: dashboardData.growth?.completion || 0,
                                 icon: Award, 
-                                color: 'from-amber-500 to-accent-600',
-                                shadow: 'shadow-orange-200 dark:shadow-orange-900/30',
+                                color: 'from-emerald-400 to-teal-500',
+                                glow: 'shadow-emerald-500/30',
                                 description: "Moyenne de complétion"
                             }
                         ].map((card, index) => {
                             const isPositive = card.growth >= 0;
-                            const progress = card.label.includes('Score') 
-                                ? parseInt(card.value) 
-                                : Math.min((parseInt(card.value) / 100) * 100, 100);
-
                             return (
                                 <motion.div
                                     key={card.label}
                                     initial={{ opacity: 0, y: 20 }}
                                     animate={{ opacity: 1, y: 0 }}
                                     transition={{ delay: index * 0.1 }}
-                                    whileHover={{ 
-                                        y: -8,
-                                        transition: { duration: 0.2 }
-                                    }}
-                                    className="relative group bg-white dark:bg-gray-800 p-6 rounded-[2.5rem] border border-gray-100 dark:border-gray-700 shadow-xl shadow-gray-200/40 dark:shadow-gray-900/40 overflow-hidden"
+                                    whileHover={{ y: -6, scale: 1.02 }}
+                                    className="bg-white/90 dark:bg-slate-900/80 rounded-3xl p-6 shadow-xl border border-white/50 dark:border-white/5 backdrop-blur-xl relative overflow-hidden group"
                                 >
-                                    <div className={`absolute top-0 right-0 w-32 h-32 bg-gradient-to-br ${card.color} opacity-[0.03] rounded-bl-[5rem] -z-0`} />
+                                    {/* Glow de fond */}
+                                    <div className={`absolute -top-24 -right-24 w-48 h-48 bg-gradient-to-br ${card.color} rounded-full opacity-0 dark:opacity-20 blur-3xl group-hover:opacity-10 dark:group-hover:opacity-30 transition-opacity duration-500 pointer-events-none`} />
                                     
-                                    <div className="relative z-10">
-                                        <div className="flex items-center justify-between mb-6">
-                                            <div className={`p-4 bg-gradient-to-br ${card.color} rounded-2xl shadow-xl ${card.shadow} text-white`}>
-                                                <card.icon className="w-6 h-6" />
+                                    <div className="relative flex items-start justify-between z-10">
+                                        <div className="flex-1">
+                                            <div className="flex items-center gap-2 mb-3">
+                                                <div className={`w-1.5 h-6 rounded-full bg-gradient-to-b ${card.color} opacity-80`} />
+                                                <p className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest">{card.label}</p>
                                             </div>
-                                            <div className={`flex items-center gap-1 px-2 py-1 rounded-lg text-[10px] font-bold ${isPositive ? 'bg-green-50 dark:bg-green-900/30 text-green-600 dark:text-green-400' : 'bg-red-50 dark:bg-red-900/30 text-red-600 dark:text-red-400'}`}>
-                                                {isPositive ? '↑' : '↓'} {Math.abs(card.growth)}%
+                                            <h3 className="text-4xl font-black text-gray-800 dark:text-white tracking-tight leading-none mb-3">
+                                                {card.value}
+                                            </h3>
+                                            <div className="flex items-center gap-2">
+                                                <span className={`px-2 py-0.5 rounded-md text-xs font-bold ${isPositive ? 'bg-green-100 text-green-700 dark:bg-green-500/20 dark:text-green-400' : 'bg-red-100 text-red-700 dark:bg-red-500/20 dark:text-red-400'}`}>
+                                                    {isPositive ? '+' : ''}{card.growth}%
+                                                </span>
+                                                <span className="text-xs font-medium text-gray-400 dark:text-gray-500">vs mois d.</span>
                                             </div>
                                         </div>
-                                        
-                                        <div className="space-y-1">
-                                            <p className="text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-[0.2em]">{card.label}</p>
-                                            <p className="text-4xl font-bold text-gray-900 dark:text-white tracking-tight">{card.value}</p>
-                                            <p className="text-[11px] font-bold text-gray-500 dark:text-gray-400 pt-2 flex items-center gap-1">
-                                                <Zap className="w-3 h-3 text-primary-500 dark:text-primary-400" />
-                                                {card.description}
-                                            </p>
+                                        <div className={`p-3.5 bg-gradient-to-br ${card.color} rounded-2xl shadow-lg ${card.glow} group-hover:rotate-6 transition-transform duration-500 shrink-0`}>
+                                            <card.icon className="w-6 h-6 text-white" />
                                         </div>
-
-                                        <div className="mt-6 h-2 bg-gray-50 dark:bg-gray-700 rounded-full overflow-hidden">
-                                            <motion.div
-                                                initial={{ width: 0 }}
-                                                animate={{ width: `${progress}%` }}
-                                                transition={{ delay: 0.5 + index * 0.1, duration: 1.5, ease: "circOut" }}
-                                                className={`h-full bg-gradient-to-r ${card.color} rounded-full`}
-                                            />
-                                        </div>
+                                    </div>
+                                    
+                                    <div className="mt-5 h-1.5 bg-gray-100 dark:bg-gray-800/50 rounded-full overflow-hidden relative z-10">
+                                        <motion.div
+                                            initial={{ width: 0 }}
+                                            animate={{ 
+                                                width: `${
+                                                    card.label === "Engagement" 
+                                                        ? parseInt(card.value) 
+                                                        : card.label === "Vidéos"
+                                                            ? Math.min((global_stats.storage_used_mb / 10240) * 100, 100) // 10GB total limit by default for visual
+                                                            : Math.min((card.value / 100) * 100, 100)
+                                                }%` 
+                                            }}
+                                            transition={{ delay: 0.5 + index * 0.1, duration: 1.5, ease: "easeOut" }}
+                                            className={`h-full bg-gradient-to-r ${card.color} rounded-full`}
+                                        />
                                     </div>
                                 </motion.div>
                             );
@@ -249,23 +311,29 @@ export default function SuperAdminDashboard() {
                     </div>
                 )}
 
-                {/* Graphiques d'analyse */}
+                {/* ══════════════════════════════════════════════ */}
+                {/* GRAPHIQUES D'ANALYSE                           */}
+                {/* ══════════════════════════════════════════════ */}
                 <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
                     <GrowthChart />
                     <RevenueChart />
                 </div>
 
-                {/* Dernières entreprises */}
+                {/* ══════════════════════════════════════════════ */}
+                {/* ONBOARDING RÉCENT                              */}
+                {/* ══════════════════════════════════════════════ */}
                 {recent_organizations?.length > 0 && (
-                    <section className="space-y-4">
+                    <section className="space-y-6">
                         <div className="flex items-center justify-between">
-                            <h2 className="text-xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
-                                <Building2 className="w-6 h-6 text-primary-600 dark:text-primary-400" />
+                            <h2 className="text-2xl font-bold text-gray-800 dark:text-white flex items-center gap-3">
+                                <div className="p-2.5 bg-primary-100 dark:bg-primary-500/20 rounded-xl text-primary-600 dark:text-primary-400">
+                                    <Building2 className="w-6 h-6" />
+                                </div>
                                 Onboarding Récent
                             </h2>
-                            <button className="text-sm font-bold text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300">
-                                Voir tout
-                            </button>
+                            <span className="text-xs font-bold text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-800 px-3 py-1.5 rounded-full shadow-inner">
+                                {recent_organizations.length} entreprises
+                            </span>
                         </div>
                         
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -276,16 +344,16 @@ export default function SuperAdminDashboard() {
                                     animate={{ opacity: 1, scale: 1 }}
                                     transition={{ delay: index * 0.1 }}
                                     whileHover={{ y: -5 }}
-                                    className="relative group bg-white dark:bg-gray-800 p-6 rounded-[2rem] border border-gray-100 dark:border-gray-700 shadow-xl shadow-gray-100/50 dark:shadow-gray-900/50 overflow-hidden"
+                                    className="relative group bg-white/90 dark:bg-slate-900/80 backdrop-blur-xl p-6 rounded-3xl border border-white/50 dark:border-white/5 shadow-xl overflow-hidden"
                                 >
-                                    <div className="absolute top-0 right-0 w-24 h-24 bg-primary-50 dark:bg-primary-900/20 rounded-bl-[4rem] group-hover:bg-primary-600 transition-colors duration-500 -z-0 opacity-20 group-hover:opacity-10" />
+                                    <div className={`absolute -top-24 -right-24 w-48 h-48 bg-gradient-to-br from-primary-500 to-accent-600 rounded-full opacity-0 dark:opacity-10 blur-3xl group-hover:opacity-10 dark:group-hover:opacity-20 transition-opacity duration-500 pointer-events-none`} />
                                     
                                     <div className="relative z-10 flex flex-col gap-4">
                                         <div className="flex items-center justify-between">
-                                            <div className="w-14 h-14 bg-gradient-to-br from-primary-600 to-accent-700 rounded-2xl flex items-center justify-center text-white text-xl font-bold shadow-lg shadow-primary-200 dark:shadow-primary-900/30">
+                                            <div className="w-14 h-14 bg-gradient-to-br from-primary-600 to-accent-700 rounded-2xl flex items-center justify-center text-white text-xl font-bold shadow-lg shadow-primary-500/30">
                                                 {org.name?.charAt(0).toUpperCase()}
                                             </div>
-                                            <div className="px-3 py-1 bg-primary-50 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 rounded-full text-[10px] font-bold uppercase tracking-widest">
+                                            <div className="px-3 py-1 bg-primary-50 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 rounded-full text-[10px] font-bold uppercase tracking-widest border border-primary-200/50 dark:border-primary-800/50">
                                                 {org.plan}
                                             </div>
                                         </div>
@@ -311,7 +379,9 @@ export default function SuperAdminDashboard() {
                     </section>
                 )}
 
-                {/* Tableau des entreprises et activités */}
+                {/* ══════════════════════════════════════════════ */}
+                {/* TABLEAU + ACTIVITÉS                            */}
+                {/* ══════════════════════════════════════════════ */}
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                     <div className="lg:col-span-2">
                         <CompaniesTable recentData={recent_organizations} />
@@ -326,10 +396,12 @@ export default function SuperAdminDashboard() {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: 0.8 }}
-                    className="text-center text-xs text-gray-400 dark:text-gray-500 flex items-center justify-center gap-1"
+                    className="text-center py-4"
                 >
-                    <Shield className="w-3 h-3" />
-                    <span>Données temps réel via RPC • Dernière mise à jour: {lastUpdate.toLocaleTimeString()}</span>
+                    <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/60 dark:bg-slate-900/40 backdrop-blur-sm rounded-full border border-gray-200 dark:border-gray-800 text-xs text-gray-400 dark:text-gray-500">
+                        <Shield className="w-3.5 h-3.5 text-primary-400" />
+                        <span>Données temps réel via RPC • Dernière mise à jour: {lastUpdate.toLocaleTimeString()}</span>
+                    </div>
                 </motion.div>
             </motion.div>
         </MainLayout>

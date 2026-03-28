@@ -338,54 +338,74 @@ export default function SuperAdminUsers() {
                 animate={{ opacity: 1 }}
                 className="space-y-8"
             >
-                {/* En-tête */}
-                <div className="relative">
-                    <motion.div
-                        initial={{ scale: 0 }}
-                        animate={{ scale: 1 }}
-                        className="absolute -top-4 -right-4 hidden sm:flex"
-                    >
-                        <div className="bg-gradient-to-r from-primary-600 to-accent-600 text-white px-4 py-2 rounded-bl-2xl rounded-tr-2xl text-xs font-bold shadow-lg flex items-center gap-1">
-                            <Users className="w-3 h-3" />
-                            Gestion des utilisateurs
+                {/* En-tête premium glassmorphism */}
+                <div className="relative bg-white/80 dark:bg-slate-900/60 backdrop-blur-xl rounded-3xl p-8 sm:p-10 shadow-xl border border-white/50 dark:border-white/5 overflow-hidden">
+                    <div className="absolute top-0 right-0 w-64 h-64 bg-primary-500/10 dark:bg-primary-500/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none" />
+                    <div className="absolute bottom-0 left-0 w-64 h-64 bg-accent-500/10 dark:bg-accent-500/20 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2 pointer-events-none" />
+                    
+                    <div className="relative z-10 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+                        <div className="flex-1">
+                            <div className="flex items-center gap-3 mb-4">
+                                <motion.div
+                                    initial={{ scale: 0, opacity: 0 }}
+                                    animate={{ scale: 1, opacity: 1 }}
+                                    transition={{ type: "spring", stiffness: 200, damping: 20, delay: 0.1 }}
+                                    className="p-3 bg-gradient-to-br from-primary-500 to-accent-600 rounded-2xl shadow-lg shadow-primary-500/30"
+                                >
+                                    <Users className="w-8 h-8 text-white" />
+                                </motion.div>
+                                <motion.div
+                                    initial={{ opacity: 0, x: -20 }}
+                                    animate={{ opacity: 1, x: 0 }}
+                                    transition={{ delay: 0.2 }}
+                                    className="px-4 py-1.5 bg-primary-50 dark:bg-primary-900/30 border border-primary-200 dark:border-primary-800/50 rounded-full text-sm font-bold text-primary-700 dark:text-primary-300 shadow-sm flex items-center gap-2 w-fit"
+                                >
+                                    <Sparkles className="w-4 h-4" />
+                                    Gestion des Utilisateurs
+                                </motion.div>
+                            </div>
+                            
+                            <h1 className="text-4xl sm:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-300 tracking-tight mb-4">
+                                Utilisateurs
+                            </h1>
+                            
+                            <p className="text-lg text-gray-500 dark:text-gray-400 font-medium max-w-2xl flex flex-wrap items-center gap-2">
+                                <Shield className="w-5 h-5 text-gray-400" />
+                                Gérez tous les utilisateurs de la plateforme
+                            </p>
                         </div>
-                    </motion.div>
-
-                    <div>
-                        <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-800 dark:text-white flex items-center gap-2">
-                            <Users className="w-8 h-8 text-primary-600 dark:text-primary-400" />
-                            Utilisateurs
-                        </h1>
-                        <p className="text-gray-500 dark:text-gray-400 mt-1">
-                            Gérez tous les utilisateurs de la plateforme
-                        </p>
                     </div>
                 </div>
 
                 {/* Cartes de statistiques */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 {[
-                    { label: 'Total utilisateurs', value: stats.total, icon: Users, color: 'from-primary-500 to-primary-600', bg: 'bg-primary-50 dark:bg-primary-900/30' },
-                    { label: 'Administrateurs', value: stats.admins, icon: UserCog, color: 'from-accent-500 to-accent-600', bg: 'bg-accent-50 dark:bg-accent-900/30' },
-                    { label: 'Étudiants', value: stats.students, icon: UserCheck, color: 'from-green-500 to-green-600', bg: 'bg-green-50 dark:bg-green-900/30' },
-                    { label: 'Nouveaux ce mois', value: stats.newThisMonth, icon: Zap, color: 'from-primary-400 to-primary-500', bg: 'bg-primary-50/50 dark:bg-primary-900/20' }
+                    { label: 'Total utilisateurs', value: stats.total, icon: Users, color: 'from-blue-500 to-cyan-400', glow: 'shadow-blue-500/30' },
+                    { label: 'Administrateurs', value: stats.admins, icon: UserCog, color: 'from-purple-500 to-pink-500', glow: 'shadow-purple-500/30' },
+                    { label: 'Étudiants', value: stats.students, icon: UserCheck, color: 'from-emerald-400 to-teal-500', glow: 'shadow-emerald-500/30' },
+                    { label: 'Nouveaux ce mois', value: stats.newThisMonth, icon: Zap, color: 'from-orange-500 to-amber-400', glow: 'shadow-orange-500/30' }
                 ].map((card, index) => (
                     <motion.div
                         key={card.label}
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: index * 0.1 }}
-                        whileHover={{ y: -5 }}
-                        className={`${card.bg} rounded-2xl p-6 shadow-lg border border-white/50 dark:border-gray-700 backdrop-blur-sm relative overflow-hidden group`}
+                        whileHover={{ y: -6, scale: 1.02 }}
+                        className="bg-white/90 dark:bg-slate-900/80 rounded-3xl p-6 shadow-xl border border-white/50 dark:border-white/5 backdrop-blur-xl relative overflow-hidden group"
                     >
-                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 dark:via-gray-700/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
+                        <div className={`absolute -top-24 -right-24 w-48 h-48 bg-gradient-to-br ${card.color} rounded-full opacity-0 dark:opacity-20 blur-3xl group-hover:opacity-10 dark:group-hover:opacity-30 transition-opacity duration-500 pointer-events-none`} />
                         
-                        <div className="relative flex items-start justify-between">
-                            <div>
-                                <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">{card.label}</p>
-                                <p className="text-3xl font-bold text-gray-800 dark:text-white">{card.value}</p>
+                        <div className="relative flex items-start justify-between z-10">
+                            <div className="flex-1">
+                                <div className="flex items-center gap-2 mb-3">
+                                    <div className={`w-1.5 h-6 rounded-full bg-gradient-to-b ${card.color} opacity-80`} />
+                                    <p className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest">{card.label}</p>
+                                </div>
+                                <h3 className="text-4xl font-black text-gray-800 dark:text-white tracking-tight leading-none">
+                                    {card.value}
+                                </h3>
                             </div>
-                            <div className={`p-3 bg-gradient-to-br ${card.color} rounded-xl shadow-lg group-hover:scale-110 transition-transform`}>
+                            <div className={`p-3.5 bg-gradient-to-br ${card.color} rounded-2xl shadow-lg ${card.glow} group-hover:rotate-6 transition-transform duration-500 shrink-0`}>
                                 <card.icon className="w-6 h-6 text-white" />
                             </div>
                         </div>
@@ -398,7 +418,7 @@ export default function SuperAdminUsers() {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.2 }}
-                    className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-2xl p-6 shadow-xl border border-primary-100 dark:border-gray-700"
+                    className="bg-white/80 dark:bg-slate-900/60 backdrop-blur-xl rounded-3xl p-6 shadow-xl border border-white/50 dark:border-white/5 relative overflow-hidden"
                 >
                     <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
                         <div className="flex items-center gap-2">
@@ -517,11 +537,11 @@ export default function SuperAdminUsers() {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.3 }}
-                    className="bg-white/90 backdrop-blur-sm dark:bg-gray-800/90 dark:border-gray-700 dark:text-white dark:placeholder:text-gray-400 rounded-2xl shadow-xl border border-primary-100 overflow-hidden"
+                    className="bg-white/80 dark:bg-slate-900/60 backdrop-blur-xl rounded-3xl shadow-xl border border-white/50 dark:border-white/5 overflow-hidden"
                 >
                     <div className="overflow-x-auto">
                         <table className="w-full min-w-[640px]">
-                            <thead className="bg-gradient-to-r from-primary-50 to-accent-50 dark:from-gray-800 dark:to-gray-800">
+                            <thead className="bg-gradient-to-r from-primary-50/80 to-accent-50/80 dark:from-slate-800/80 dark:to-slate-800/80 backdrop-blur-sm">
                                 <tr>
                                     <th className="px-6 py-4 text-left text-xs font-medium text-gray-600 dark:text-gray-400 uppercase tracking-wider">Utilisateur</th>
                                     <th className="px-6 py-4 text-left text-xs font-medium text-gray-600 dark:text-gray-400 uppercase tracking-wider">Email</th>
@@ -653,25 +673,25 @@ export default function SuperAdminUsers() {
                                                                         initial={{ opacity: 0, scale: 0.95, y: -10 }}
                                                                         animate={{ opacity: 1, scale: 1, y: 0 }}
                                                                         exit={{ opacity: 0, scale: 0.95, y: -10 }}
-                                                                        className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-xl border border-gray-100 py-1 z-10"
+                                                                        className="absolute right-0 mt-2 w-48 bg-white/95 dark:bg-slate-800/95 backdrop-blur-xl rounded-2xl shadow-2xl border border-white/50 dark:border-white/10 py-1.5 z-10"
                                                                     >
                                                                         <button
                                                                             onClick={() => handleUserAction(user, 'edit')}
-                                                                            className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-primary-50 hover:text-primary-600 flex items-center gap-2"
+                                                                            className="w-full px-4 py-2 text-left text-sm text-gray-700 dark:text-gray-300 hover:bg-primary-50 dark:hover:bg-primary-900/30 hover:text-primary-600 dark:hover:text-primary-400 flex items-center gap-2 transition-colors"
                                                                         >
                                                                             <Edit className="w-4 h-4" />
                                                                             Modifier le rôle
                                                                         </button>
                                                                         <button
                                                                             onClick={() => handleUserAction(user, 'suspend')}
-                                                                            className="w-full px-4 py-2 text-left text-sm text-orange-600 hover:bg-orange-50 flex items-center gap-2"
+                                                                            className="w-full px-4 py-2 text-left text-sm text-orange-600 dark:text-orange-400 hover:bg-orange-50 dark:hover:bg-orange-900/20 flex items-center gap-2 transition-colors"
                                                                         >
                                                                             <UserX className="w-4 h-4" />
                                                                             Suspendre
                                                                         </button>
                                                                         <button
                                                                             onClick={() => handleUserAction(user, 'delete')}
-                                                                            className="w-full px-4 py-2 text-left text-sm text-red-600 hover:bg-red-50 flex items-center gap-2"
+                                                                            className="w-full px-4 py-2 text-left text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 flex items-center gap-2 transition-colors"
                                                                         >
                                                                             <Trash2 className="w-4 h-4" />
                                                                             Supprimer
@@ -692,15 +712,15 @@ export default function SuperAdminUsers() {
 
                     {/* Pagination */}
                     {totalPages > 1 && (
-                        <div className="px-6 py-4 border-t border-gray-100 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                            <p className="text-sm text-gray-600">
+                        <div className="px-6 py-4 border-t border-gray-100 dark:border-gray-800 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                            <p className="text-sm text-gray-600 dark:text-gray-400">
                                 Affichage de {((page - 1) * itemsPerPage) + 1} à {Math.min(page * itemsPerPage, totalCount)} sur {totalCount} utilisateurs
                             </p>
                             <div className="flex items-center gap-2">
                                 <button
                                     onClick={() => setPage(p => Math.max(1, p - 1))}
                                     disabled={page === 1}
-                                    className="p-2 border border-gray-200 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                                    className="p-2 border border-gray-200 dark:border-gray-700 rounded-xl hover:bg-gray-50 dark:hover:bg-slate-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                                 >
                                     <ChevronLeft className="w-5 h-5" />
                                 </button>
@@ -722,10 +742,10 @@ export default function SuperAdminUsers() {
                                             <button
                                                 key={i}
                                                 onClick={() => setPage(pageNum)}
-                                                className={`w-10 h-10 rounded-lg transition-colors ${
+                                                className={`w-10 h-10 rounded-xl font-semibold transition-all ${
                                                     page === pageNum
-                                                        ? 'bg-gradient-to-r from-primary-600 to-accent-600 text-white'
-                                                        : 'hover:bg-primary-50 text-gray-600'
+                                                        ? 'bg-gradient-to-r from-primary-600 to-accent-600 text-white shadow-lg shadow-primary-500/30'
+                                                        : 'hover:bg-primary-50 dark:hover:bg-slate-800 text-gray-600 dark:text-gray-400'
                                                 }`}
                                             >
                                                 {pageNum}
@@ -737,7 +757,7 @@ export default function SuperAdminUsers() {
                                 <button
                                     onClick={() => setPage(p => Math.min(totalPages, p + 1))}
                                     disabled={page === totalPages}
-                                    className="p-2 border border-gray-200 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                                    className="p-2 border border-gray-200 dark:border-gray-700 rounded-xl hover:bg-gray-50 dark:hover:bg-slate-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                                 >
                                     <ChevronRight className="w-5 h-5" />
                                 </button>
@@ -751,10 +771,12 @@ export default function SuperAdminUsers() {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: 0.5 }}
-                    className="text-center text-xs text-gray-400 flex items-center justify-center gap-1"
+                    className="text-center py-4"
                 >
-                    <Shield className="w-3 h-3" />
-                    <span>Données protégées par RLS • Actions journalisées</span>
+                    <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/60 dark:bg-slate-900/40 backdrop-blur-sm rounded-full border border-gray-200 dark:border-gray-800 text-xs text-gray-400 dark:text-gray-500">
+                        <Shield className="w-3.5 h-3.5 text-primary-400" />
+                        <span>Données protégées par RLS • Actions journalisées</span>
+                    </div>
                 </motion.div>
             </motion.div>
 
@@ -772,39 +794,39 @@ export default function SuperAdminUsers() {
                             initial={{ scale: 0.9, y: 20 }}
                             animate={{ scale: 1, y: 0 }}
                             exit={{ scale: 0.9, y: 20 }}
-                            className="bg-white rounded-2xl p-6 max-w-md w-full"
+                            className="bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl rounded-3xl p-6 max-w-md w-full border border-white/50 dark:border-white/10 shadow-2xl"
                             onClick={(e) => e.stopPropagation()}
                         >
-                            <h3 className="text-lg font-bold text-gray-800 mb-4">Inviter un utilisateur</h3>
+                            <h3 className="text-lg font-bold text-gray-800 dark:text-white mb-4">Inviter un utilisateur</h3>
                             <form onSubmit={handleInvite} className="space-y-4">
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Email</label>
                                     <input
                                         type="email"
                                         required
                                         value={inviteEmail}
                                         onChange={(e) => setInviteEmail(e.target.value)}
-                                        className="w-full px-4 py-2 border border-gray-200 rounded-xl focus:border-primary-400 focus:ring-4 focus:ring-primary-100 outline-none"
+                                        className="w-full px-4 py-2 border border-gray-200 dark:border-gray-700 rounded-xl focus:border-primary-400 dark:focus:border-primary-500 focus:ring-4 focus:ring-primary-100 dark:focus:ring-primary-900/30 outline-none dark:bg-slate-800 dark:text-white transition-all"
                                         placeholder="email@exemple.com"
                                     />
                                 </div>
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">Rôle</label>
+                                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Rôle</label>
                                     <select
                                         value={inviteRole}
                                         onChange={(e) => setInviteRole(e.target.value)}
-                                        className="w-full px-4 py-2 border border-gray-200 rounded-xl focus:border-primary-400 focus:ring-4 focus:ring-primary-100 outline-none"
+                                        className="w-full px-4 py-2 border border-gray-200 dark:border-gray-700 rounded-xl focus:border-primary-400 dark:focus:border-primary-500 focus:ring-4 focus:ring-primary-100 dark:focus:ring-primary-900/30 outline-none dark:bg-slate-800 dark:text-white transition-all"
                                     >
                                         <option value="student">Étudiant</option>
                                         <option value="org_admin">Admin</option>
                                     </select>
                                 </div>
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">Organisation</label>
+                                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Organisation</label>
                                     <select
                                         value={inviteOrg}
                                         onChange={(e) => setInviteOrg(e.target.value)}
-                                        className="w-full px-4 py-2 border border-gray-200 rounded-xl focus:border-primary-400 focus:ring-4 focus:ring-primary-100 outline-none"
+                                        className="w-full px-4 py-2 border border-gray-200 dark:border-gray-700 rounded-xl focus:border-primary-400 dark:focus:border-primary-500 focus:ring-4 focus:ring-primary-100 dark:focus:ring-primary-900/30 outline-none dark:bg-slate-800 dark:text-white transition-all"
                                         required
                                     >
                                         <option value="">Sélectionner une organisation</option>
@@ -819,14 +841,14 @@ export default function SuperAdminUsers() {
                                     <button
                                         type="button"
                                         onClick={() => setShowInviteModal(false)}
-                                        className="flex-1 px-4 py-2 border border-gray-200 rounded-xl text-gray-700 hover:bg-gray-50 transition-colors"
+                                        className="flex-1 px-4 py-2.5 border-2 border-gray-200 dark:border-gray-700 rounded-xl text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-slate-800 transition-colors font-medium"
                                     >
                                         Annuler
                                     </button>
                                     <button
                                         type="submit"
                                         disabled={inviting}
-                                        className="flex-1 px-4 py-2 bg-primary-600 text-white rounded-xl shadow-lg hover:bg-primary-700 transition-colors disabled:opacity-50"
+                                        className="flex-1 px-4 py-2.5 bg-gradient-to-r from-primary-600 to-accent-600 text-white rounded-xl shadow-lg hover:shadow-xl transition-all disabled:opacity-50 font-medium"
                                     >
                                         {inviting ? 'Envoi...' : 'Inviter'}
                                     </button>

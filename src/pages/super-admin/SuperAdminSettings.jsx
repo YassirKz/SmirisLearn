@@ -383,27 +383,42 @@ export default function SuperAdminSettings() {
                 animate={{ opacity: 1 }}
                 className="space-y-8"
             >
-                {/* En-tête */}
-                <div className="relative">
-                    <motion.div
-                        initial={{ scale: 0 }}
-                        animate={{ scale: 1 }}
-                        className="absolute -top-4 -right-4"
-                    >
-                        <div className="bg-gradient-to-r from-primary-600 to-accent-600 text-white px-4 py-2 rounded-bl-2xl rounded-tr-2xl text-xs font-bold shadow-lg flex items-center gap-1">
-                            <Sparkles className="w-3 h-3" />
-                            Administration
+                {/* En-tête premium glassmorphism */}
+                <div className="relative bg-white/80 dark:bg-slate-900/60 backdrop-blur-xl rounded-3xl p-8 sm:p-10 shadow-xl border border-white/50 dark:border-white/5 overflow-hidden">
+                    <div className="absolute top-0 right-0 w-64 h-64 bg-primary-500/10 dark:bg-primary-500/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none" />
+                    <div className="absolute bottom-0 left-0 w-64 h-64 bg-accent-500/10 dark:bg-accent-500/20 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2 pointer-events-none" />
+                    
+                    <div className="relative z-10 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+                        <div className="flex-1">
+                            <div className="flex items-center gap-3 mb-4">
+                                <motion.div
+                                    initial={{ scale: 0, opacity: 0 }}
+                                    animate={{ scale: 1, opacity: 1 }}
+                                    transition={{ type: "spring", stiffness: 200, damping: 20, delay: 0.1 }}
+                                    className="p-3 bg-gradient-to-br from-primary-500 to-accent-600 rounded-2xl shadow-lg shadow-primary-500/30"
+                                >
+                                    <Settings className="w-8 h-8 text-white" />
+                                </motion.div>
+                                <motion.div
+                                    initial={{ opacity: 0, x: -20 }}
+                                    animate={{ opacity: 1, x: 0 }}
+                                    transition={{ delay: 0.2 }}
+                                    className="px-4 py-1.5 bg-primary-50 dark:bg-primary-900/30 border border-primary-200 dark:border-primary-800/50 rounded-full text-sm font-bold text-primary-700 dark:text-primary-300 shadow-sm flex items-center gap-2 w-fit"
+                                >
+                                    <Sparkles className="w-4 h-4" />
+                                    Administration
+                                </motion.div>
+                            </div>
+                            
+                            <h1 className="text-4xl sm:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-300 tracking-tight mb-4">
+                                Paramètres
+                            </h1>
+                            
+                            <p className="text-lg text-gray-500 dark:text-gray-400 font-medium max-w-2xl flex flex-wrap items-center gap-2">
+                                <Shield className="w-5 h-5 text-gray-400" />
+                                Gérez votre profil et la configuration de la plateforme
+                            </p>
                         </div>
-                    </motion.div>
-
-                    <div>
-                        <h1 className="text-3xl font-bold text-gray-800 dark:text-white flex items-center gap-2">
-                            <Settings className="w-8 h-8 text-primary-600 dark:text-primary-400" />
-                            Paramètres
-                        </h1>
-                        <p className="text-gray-500 dark:text-gray-400 mt-1">
-                            Gérez votre profil et la configuration de la plateforme
-                        </p>
                     </div>
                 </div>
 
@@ -414,7 +429,7 @@ export default function SuperAdminSettings() {
                             initial={{ opacity: 0, y: -10 }}
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0 }}
-                            className="p-4 bg-green-50 dark:bg-green-900/30 border border-green-200 dark:border-green-800 rounded-xl flex items-center gap-3"
+                            className="p-4 bg-green-50/80 dark:bg-green-900/20 backdrop-blur-sm border border-green-200 dark:border-green-800/50 rounded-2xl flex items-center gap-3 shadow-sm"
                         >
                             <CheckCircle className="w-5 h-5 text-green-600 dark:text-green-400" />
                             <p className="text-sm text-green-700 dark:text-green-300 flex-1">{success}</p>
@@ -429,7 +444,7 @@ export default function SuperAdminSettings() {
                             initial={{ opacity: 0, y: -10 }}
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0 }}
-                            className="p-4 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 rounded-xl flex items-center gap-3"
+                            className="p-4 bg-red-50/80 dark:bg-red-900/20 backdrop-blur-sm border border-red-200 dark:border-red-800/50 rounded-2xl flex items-center gap-3 shadow-sm"
                         >
                             <AlertCircle className="w-5 h-5 text-red-600 dark:text-red-400" />
                             <p className="text-sm text-red-700 dark:text-red-300 flex-1">{error}</p>
@@ -449,10 +464,12 @@ export default function SuperAdminSettings() {
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.1 }}
-                            className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-2xl p-6 shadow-xl border border-primary-100 dark:border-gray-700"
+                            className="bg-white/80 dark:bg-slate-900/60 backdrop-blur-xl rounded-3xl p-8 shadow-2xl border border-white/50 dark:border-white/5 relative overflow-hidden group"
                         >
-                            <h2 className="text-lg font-semibold text-gray-800 dark:text-white mb-4 flex items-center gap-2">
-                                <User className="w-5 h-5 text-primary-600 dark:text-primary-400" />
+                            <h2 className="text-xl font-bold text-gray-800 dark:text-white mb-6 flex items-center gap-3">
+                                <div className="p-2.5 bg-primary-50 dark:bg-primary-900/30 rounded-xl">
+                                    <User className="w-6 h-6 text-primary-600 dark:text-primary-400" />
+                                </div>
                                 Mon profil
                             </h2>
 
@@ -467,7 +484,7 @@ export default function SuperAdminSettings() {
                                     className="dark:text-white dark:bg-gray-900 dark:border-gray-700 dark:focus:border-primary-500 dark:focus:bg-gray-900 dark:focus:text-white dark:placeholder-gray-400 dark:focus:placeholder-gray-500 dark:focus:ring-primary-500 dark:focus:ring-offset-primary-500 dark:focus:ring-offset-gray-900 dark:focus:ring-offset-2 dark:focus:ring-offset-gray-900"
                                 />
 
-                                <div className="bg-gray-50 dark:bg-gray-900 p-4 rounded-xl">
+                                <div className="bg-gray-50/80 dark:bg-slate-800/50 p-5 rounded-2xl border border-gray-100 dark:border-gray-700/50">
                                     <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">Email</p>
                                     <p className="text-lg font-medium text-gray-800 dark:text-white flex items-center gap-2">
                                         <Mail className="w-4 h-4 text-primary-600 dark:text-primary-400" />
@@ -478,13 +495,16 @@ export default function SuperAdminSettings() {
                                     </p>
                                 </div>
 
-                                <button
+                                <motion.button
+                                    whileHover={{ scale: 1.02, y: -1 }}
+                                    whileTap={{ scale: 0.98 }}
                                     onClick={handleSaveProfile}
                                     disabled={saving}
-                                    className="px-4 py-2 bg-gradient-to-r from-primary-600 to-accent-600 text-white rounded-lg hover:shadow-lg transition-all"
+                                    className="px-6 py-3 bg-gradient-to-r from-primary-600 to-accent-600 text-white rounded-2xl shadow-lg shadow-primary-500/20 hover:shadow-xl transition-all font-medium flex items-center gap-2 disabled:opacity-50"
                                 >
+                                    <Save className="w-4 h-4" />
                                     Mettre à jour le profil
-                                </button>
+                                </motion.button>
                             </div>
                         </motion.div>
 
@@ -493,10 +513,12 @@ export default function SuperAdminSettings() {
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.2 }}
-                            className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-2xl p-6 shadow-xl border border-primary-100 dark:border-gray-700"
+                            className="bg-white/80 dark:bg-slate-900/60 backdrop-blur-xl rounded-3xl p-8 shadow-2xl border border-white/50 dark:border-white/5 relative overflow-hidden group"
                         >
-                            <h2 className="text-lg font-semibold text-gray-800 dark:text-white mb-4 flex items-center gap-2">
-                                <Key className="w-5 h-5 text-primary-600 dark:text-primary-400" />
+                            <h2 className="text-xl font-bold text-gray-800 dark:text-white mb-6 flex items-center gap-3">
+                                <div className="p-2.5 bg-primary-50 dark:bg-primary-900/30 rounded-xl">
+                                    <Key className="w-6 h-6 text-primary-600 dark:text-primary-400" />
+                                </div>
                                 Changer le mot de passe
                             </h2>
 
@@ -587,17 +609,20 @@ export default function SuperAdminSettings() {
                                     )}
                                 </div>
 
-                                <button
+                                <motion.button
+                                    whileHover={isPasswordValid ? { scale: 1.02, y: -1 } : {}}
+                                    whileTap={isPasswordValid ? { scale: 0.98 } : {}}
                                     onClick={handleChangePassword}
                                     disabled={!isPasswordValid || saving}
-                                    className={`px-4 py-2 rounded-lg font-medium transition-all ${
+                                    className={`px-6 py-3 rounded-2xl font-medium transition-all flex items-center gap-2 ${
                                         isPasswordValid && !saving
-                                            ? 'bg-gradient-to-r from-primary-600 to-accent-600 text-white hover:shadow-lg'
+                                            ? 'bg-gradient-to-r from-primary-600 to-accent-600 text-white shadow-lg shadow-primary-500/20 hover:shadow-xl'
                                             : 'bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400 cursor-not-allowed'
                                     }`}
                                 >
+                                    <Key className="w-4 h-4" />
                                     Changer le mot de passe
-                                </button>
+                                </motion.button>
                             </div>
                         </motion.div>
 
@@ -606,10 +631,12 @@ export default function SuperAdminSettings() {
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.3 }}
-                            className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-2xl p-6 shadow-xl border border-primary-100 dark:border-gray-700"
+                            className="bg-white/80 dark:bg-slate-900/60 backdrop-blur-xl rounded-3xl p-8 shadow-2xl border border-white/50 dark:border-white/5 relative overflow-hidden group"
                         >
-                            <h2 className="text-lg font-semibold text-gray-800 dark:text-white mb-4 flex items-center gap-2">
-                                <Bell className="w-5 h-5 text-primary-600 dark:text-primary-400" />
+                            <h2 className="text-xl font-bold text-gray-800 dark:text-white mb-6 flex items-center gap-3">
+                                <div className="p-2.5 bg-primary-50 dark:bg-primary-900/30 rounded-xl">
+                                    <Bell className="w-6 h-6 text-primary-600 dark:text-primary-400" />
+                                </div>
                                 Préférences
                             </h2>
 
@@ -622,7 +649,7 @@ export default function SuperAdminSettings() {
                                         { key: 'newCompanyAlert', label: 'Nouvelle entreprise créée' },
                                         { key: 'newUserAlert', label: 'Nouvel utilisateur inscrit' }
                                     ].map(item => (
-                                        <label key={item.key} className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-900 rounded-xl cursor-pointer hover:bg-primary-50 dark:hover:bg-primary-900/30 transition-colors">
+                                        <label key={item.key} className="flex items-center justify-between p-4 bg-gray-50/80 dark:bg-slate-800/50 rounded-2xl cursor-pointer hover:bg-primary-50 dark:hover:bg-primary-900/30 transition-all border border-transparent hover:border-primary-100 dark:hover:border-primary-800/50">
                                             <span className="text-sm text-gray-700 dark:text-gray-300">{item.label}</span>
                                             <div className="relative">
                                                 <input
@@ -631,11 +658,11 @@ export default function SuperAdminSettings() {
                                                     onChange={(e) => setPreferences({...preferences, [item.key]: e.target.checked})}
                                                     className="sr-only"
                                                 />
-                                                <div className={`w-12 h-6 rounded-full transition-colors ${
-                                                    preferences[item.key] ? 'bg-primary-600' : 'bg-gray-300 dark:bg-gray-600'
+                                                <div className={`w-14 h-7 rounded-full transition-all shadow-inner ${
+                                                    preferences[item.key] ? 'bg-gradient-to-r from-primary-500 to-accent-600' : 'bg-gray-300 dark:bg-gray-600'
                                                 }`}>
-                                                    <div className={`w-5 h-5 bg-white dark:bg-gray-200 rounded-full shadow transform transition-transform ${
-                                                        preferences[item.key] ? 'translate-x-6' : 'translate-x-1'
+                                                    <div className={`w-6 h-6 bg-white rounded-full shadow-md transform transition-all mt-0.5 ${
+                                                        preferences[item.key] ? 'translate-x-7' : 'translate-x-0.5'
                                                     }`} />
                                                 </div>
                                             </div>
@@ -697,12 +724,15 @@ export default function SuperAdminSettings() {
                                 </div>
                             </div>
 
-                            <button
+                            <motion.button
+                                whileHover={{ scale: 1.02, y: -1 }}
+                                whileTap={{ scale: 0.98 }}
                                 onClick={handleSavePreferences}
-                                className="mt-4 px-4 py-2 bg-gradient-to-r from-primary-600 to-accent-600 text-white rounded-lg hover:shadow-lg transition-all"
+                                className="mt-6 px-6 py-3 bg-gradient-to-r from-primary-600 to-accent-600 text-white rounded-2xl shadow-lg shadow-primary-500/20 hover:shadow-xl transition-all font-medium flex items-center gap-2"
                             >
+                                <Save className="w-4 h-4" />
                                 Sauvegarder les préférences
-                            </button>
+                            </motion.button>
                         </motion.div>
 
                         {/* CONFIGURATION PLATEFORME */}
@@ -710,10 +740,12 @@ export default function SuperAdminSettings() {
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.4 }}
-                            className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-2xl p-6 shadow-xl border border-primary-100 dark:border-gray-700"
+                            className="bg-white/80 dark:bg-slate-900/60 backdrop-blur-xl rounded-3xl p-8 shadow-2xl border border-white/50 dark:border-white/5 relative overflow-hidden group"
                         >
-                            <h2 className="text-lg font-semibold text-gray-800 dark:text-white mb-4 flex items-center gap-2">
-                                <Server className="w-5 h-5 text-primary-600 dark:text-primary-400" />
+                            <h2 className="text-xl font-bold text-gray-800 dark:text-white mb-6 flex items-center gap-3">
+                                <div className="p-2.5 bg-primary-50 dark:bg-primary-900/30 rounded-xl">
+                                    <Server className="w-6 h-6 text-primary-600 dark:text-primary-400" />
+                                </div>
                                 Configuration plateforme
                             </h2>
 
@@ -751,7 +783,7 @@ export default function SuperAdminSettings() {
 
                             {/* Toggles */}
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-                                <label className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-900 rounded-xl cursor-pointer hover:bg-primary-50 dark:hover:bg-primary-900/30 transition-colors">
+                                <label className="flex items-center justify-between p-4 bg-gray-50/80 dark:bg-slate-800/50 rounded-2xl cursor-pointer hover:bg-primary-50 dark:hover:bg-primary-900/30 transition-all border border-transparent hover:border-primary-100 dark:hover:border-primary-800/50">
                                     <div>
                                         <p className="font-medium text-gray-700 dark:text-gray-300">Autoriser les inscriptions</p>
                                         <p className="text-xs text-gray-500 dark:text-gray-400">Les nouveaux utilisateurs peuvent s'inscrire</p>
@@ -803,7 +835,7 @@ export default function SuperAdminSettings() {
                                 </label>
                                 <div className="flex flex-wrap gap-2">
                                     {['mp4', 'webm', 'mov', 'avi', 'mkv'].map(format => (
-                                        <label key={format} className="flex items-center gap-2 p-2 bg-gray-50 dark:bg-gray-900 rounded-lg cursor-pointer hover:bg-primary-50 dark:hover:bg-primary-900/30 transition-colors">
+                                        <label key={format} className="flex items-center gap-2 px-3 py-2.5 bg-gray-50/80 dark:bg-slate-800/50 rounded-xl cursor-pointer hover:bg-primary-50 dark:hover:bg-primary-900/30 transition-all border border-transparent hover:border-primary-100 dark:hover:border-primary-800/50">
                                             <input
                                                 type="checkbox"
                                                 checked={platformConfig.allowed_video_formats?.includes(format)}
@@ -822,7 +854,7 @@ export default function SuperAdminSettings() {
                             </div>
 
                             {/* API */}
-                            <div className="mt-6 p-4 bg-gradient-to-r from-primary-50 to-accent-50 dark:from-primary-900/30 dark:to-accent-900/30 rounded-xl border border-primary-100 dark:border-primary-800">
+                            <div className="mt-6 p-5 bg-gradient-to-r from-primary-50/80 to-accent-50/80 dark:from-primary-900/20 dark:to-accent-900/20 backdrop-blur-sm rounded-2xl border border-primary-100 dark:border-primary-800/50">
                                 <label className="flex items-center justify-between cursor-pointer">
                                     <div>
                                         <p className="font-medium text-gray-700 dark:text-gray-300">Activer l'API</p>
@@ -891,35 +923,36 @@ export default function SuperAdminSettings() {
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.5 }}
-                            className="bg-gradient-to-br from-primary-600 to-accent-600 rounded-2xl p-6 shadow-xl text-white"
+                            className="bg-gradient-to-br from-primary-600 to-accent-600 rounded-3xl p-6 shadow-xl shadow-primary-500/20 text-white relative overflow-hidden"
                         >
-                            <div className="flex items-center gap-2 mb-4">
-                                <Activity className="w-5 h-5" />
-                                <h3 className="font-semibold">Statut de la plateforme</h3>
+                            <div className="absolute -top-20 -right-20 w-40 h-40 bg-white/10 rounded-full blur-2xl pointer-events-none" />
+                            <div className="relative z-10 flex items-center gap-2 mb-5">
+                                <div className="p-2 bg-white/20 rounded-xl">
+                                    <Activity className="w-5 h-5" />
+                                </div>
+                                <h3 className="font-bold text-lg">Statut de la plateforme</h3>
                             </div>
                             
-                            <div className="space-y-3">
-                                <div className="flex justify-between text-sm">
-                                    <span className="opacity-80">Entreprises</span>
-                                    <span className="font-bold">{platformStats.companies}</span>
-                                </div>
-                                <div className="flex justify-between text-sm">
-                                    <span className="opacity-80">Utilisateurs</span>
-                                    <span className="font-bold">{platformStats.users}</span>
-                                </div>
-                                <div className="flex justify-between text-sm">
-                                    <span className="opacity-80">Vidéos</span>
-                                    <span className="font-bold">{platformStats.videos}</span>
-                                </div>
-                                <div className="flex justify-between text-sm">
-                                    <span className="opacity-80">Stockage utilisé</span>
-                                    <span className="font-bold">{formatStorage(platformStats.storageUsed)}</span>
-                                </div>
+                            <div className="relative z-10 space-y-3">
+                                {[
+                                    { label: 'Entreprises', value: platformStats.companies },
+                                    { label: 'Utilisateurs', value: platformStats.users },
+                                    { label: 'Vidéos', value: platformStats.videos },
+                                    { label: 'Stockage utilisé', value: formatStorage(platformStats.storageUsed) }
+                                ].map((stat, i) => (
+                                    <div key={stat.label} className="flex justify-between items-center text-sm p-2.5 bg-white/10 rounded-xl">
+                                        <span className="opacity-90 font-medium">{stat.label}</span>
+                                        <span className="font-black text-lg">{stat.value}</span>
+                                    </div>
+                                ))}
                             </div>
 
-                            <div className="mt-4 pt-4 border-t border-white/20">
-                                <div className="flex items-center gap-2 text-sm">
-                                    <Zap className="w-4 h-4" />
+                            <div className="relative z-10 mt-5 pt-4 border-t border-white/20">
+                                <div className="flex items-center gap-2 text-sm font-medium">
+                                    <span className="relative flex h-2.5 w-2.5">
+                                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-300 opacity-75"></span>
+                                        <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-green-400"></span>
+                                    </span>
                                     <span>Tout est opérationnel</span>
                                 </div>
                             </div>
@@ -930,14 +963,14 @@ export default function SuperAdminSettings() {
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.6 }}
-                            className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-2xl p-6 shadow-xl border border-primary-100 dark:border-gray-700"
+                            className="bg-white/80 dark:bg-slate-900/60 backdrop-blur-xl rounded-3xl p-6 shadow-xl border border-white/50 dark:border-white/5"
                         >
-                            <h3 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-4">Actions rapides</h3>
+                            <h3 className="text-sm font-bold text-gray-700 dark:text-gray-300 mb-4 uppercase tracking-widest">Actions rapides</h3>
                             <div className="space-y-2">
                                 <button
                                     onClick={handleRefreshStats}
                                     disabled={refreshing || exporting}
-                                    className="w-full px-4 py-2 bg-primary-50 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 rounded-lg hover:bg-primary-100 dark:hover:bg-primary-800/50 disabled:opacity-50 transition-colors text-sm flex items-center gap-2"
+                                    className="w-full px-4 py-3 bg-primary-50 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 rounded-2xl hover:bg-primary-100 dark:hover:bg-primary-800/50 disabled:opacity-50 transition-all text-sm font-medium flex items-center gap-2 border border-primary-100 dark:border-primary-800/30 hover:shadow-sm"
                                 >
                                     <RefreshCw className={`w-4 h-4 ${refreshing ? 'animate-spin' : ''}`} />
                                     <span>{refreshing ? 'Mise à jour...' : 'Rafraîchir les stats'}</span>
@@ -945,7 +978,7 @@ export default function SuperAdminSettings() {
                                 <button
                                     onClick={handleExportData}
                                     disabled={refreshing || exporting}
-                                    className="w-full px-4 py-2 bg-gray-50 dark:bg-gray-900 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 disabled:opacity-50 transition-colors text-sm flex items-center gap-2"
+                                    className="w-full px-4 py-3 bg-gray-50 dark:bg-slate-800/50 text-gray-700 dark:text-gray-300 rounded-2xl hover:bg-gray-100 dark:hover:bg-slate-700/50 disabled:opacity-50 transition-all text-sm font-medium flex items-center gap-2 border border-gray-100 dark:border-gray-700/30 hover:shadow-sm"
                                 >
                                     {exporting ? (
                                         <RefreshCw className="w-4 h-4 animate-spin" />
@@ -964,10 +997,12 @@ export default function SuperAdminSettings() {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: 0.7 }}
-                    className="text-center text-xs text-gray-400 dark:text-gray-500 flex items-center justify-center gap-1"
+                    className="text-center py-4"
                 >
-                    <Shield className="w-3 h-3" />
-                    <span>Paramètres protégés • Connexion sécurisée • Actions journalisées</span>
+                    <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/60 dark:bg-slate-900/40 backdrop-blur-sm rounded-full border border-gray-200 dark:border-gray-800 text-xs text-gray-400 dark:text-gray-500">
+                        <Shield className="w-3.5 h-3.5 text-primary-400" />
+                        <span>Paramètres protégés • Connexion sécurisée • Actions journalisées</span>
+                    </div>
                 </motion.div>
             </motion.div>
         </MainLayout>

@@ -120,8 +120,8 @@ export default function CompaniesTable() {
 
     return (
         <>
-            <div className="bg-white dark:bg-gray-800 p-8 rounded-[2.5rem] border border-gray-100 dark:border-gray-700 shadow-xl shadow-gray-200/40 dark:shadow-gray-900/40 overflow-hidden relative">
-                <div className="absolute top-0 right-0 w-32 h-32 bg-primary-50 dark:bg-primary-900/20 opacity-[0.03] rounded-bl-[5rem] -z-0" />
+            <div className="bg-white/80 dark:bg-slate-900/60 backdrop-blur-xl p-8 rounded-3xl border border-white/50 dark:border-white/5 shadow-xl overflow-hidden relative">
+                <div className="absolute -top-24 -right-24 w-48 h-48 bg-gradient-to-br from-primary-500 to-accent-600 rounded-full opacity-0 dark:opacity-10 blur-3xl pointer-events-none" />
                 
                 {/* En-tête */}
                 <div className="p-0 mb-8 relative z-10">
@@ -338,7 +338,7 @@ export default function CompaniesTable() {
                                                                 initial={{ opacity: 0, scale: 0.95, y: -10 }}
                                                                 animate={{ opacity: 1, scale: 1, y: 0 }}
                                                                 exit={{ opacity: 0, scale: 0.95, y: -10 }}
-                                                                className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-100 dark:border-gray-700 py-1 z-10"
+                                                                className="absolute right-0 mt-2 w-48 bg-white/95 dark:bg-slate-800/95 backdrop-blur-xl rounded-2xl shadow-2xl border border-white/50 dark:border-white/10 py-1.5 z-10"
                                                             >
                                                                 <button 
                                                                     onClick={() => {
@@ -346,7 +346,7 @@ export default function CompaniesTable() {
                                                                         setIsEditModalOpen(true);
                                                                         setShowActions(null);
                                                                     }}
-                                                                    className="w-full px-4 py-2 text-left text-sm text-gray-700 dark:text-gray-300 hover:bg-primary-50 dark:hover:bg-gray-700 hover:text-primary-600 dark:hover:text-primary-400 flex items-center gap-2"
+                                                                    className="w-full px-4 py-2.5 text-left text-sm text-gray-700 dark:text-gray-300 hover:bg-primary-50 dark:hover:bg-primary-900/30 hover:text-primary-600 dark:hover:text-primary-400 flex items-center gap-2 transition-colors"
                                                                 >
                                                                     <Edit size={16} />
                                                                     Modifier
@@ -367,7 +367,7 @@ export default function CompaniesTable() {
                                                                         }
                                                                         setShowActions(null);
                                                                     }}
-                                                                    className="w-full px-4 py-2 text-left text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/50 flex items-center gap-2"
+                                                                    className="w-full px-4 py-2.5 text-left text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 flex items-center gap-2 transition-colors"
                                                                 >
                                                                     <Trash2 size={16} />
                                                                     Supprimer
@@ -387,7 +387,7 @@ export default function CompaniesTable() {
 
                 {/* Pagination */}
                 {totalPages > 1 && (
-                    <div className="px-6 py-4 border-t border-primary-100/50 dark:border-gray-700 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                    <div className="px-6 py-4 border-t border-gray-100 dark:border-gray-800 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                         <p className="text-sm text-gray-600 dark:text-gray-400">
                             Page {page} sur {totalPages}
                         </p>
@@ -395,7 +395,7 @@ export default function CompaniesTable() {
                             <button
                                 onClick={() => setPage(p => Math.max(1, p - 1))}
                                 disabled={page === 1}
-                                className="p-2 border border-primary-200 dark:border-gray-700 rounded-lg hover:bg-primary-50 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                                className="p-2 border border-gray-200 dark:border-gray-700 rounded-xl hover:bg-gray-50 dark:hover:bg-slate-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                             >
                                 <ChevronLeft size={20} className="text-gray-600 dark:text-gray-400" />
                             </button>
@@ -423,10 +423,10 @@ export default function CompaniesTable() {
                                         <button
                                             key={i}
                                             onClick={() => setPage(pageNum)}
-                                            className={`w-10 h-10 rounded-lg transition-colors ${
+                                            className={`w-10 h-10 rounded-xl font-semibold transition-all ${
                                                 page === pageNum
-                                                    ? 'bg-gradient-to-r from-primary-600 to-primary-800 text-white'
-                                                    : 'hover:bg-primary-50 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-400'
+                                                    ? 'bg-gradient-to-r from-primary-600 to-accent-600 text-white shadow-lg shadow-primary-500/30'
+                                                    : 'hover:bg-primary-50 dark:hover:bg-slate-800 text-gray-600 dark:text-gray-400'
                                             }`}
                                         >
                                             {pageNum}
@@ -438,7 +438,7 @@ export default function CompaniesTable() {
                             <button
                                 onClick={() => setPage(p => Math.min(totalPages, p + 1))}
                                 disabled={page === totalPages}
-                                className="p-2 border border-primary-200 dark:border-gray-700 rounded-lg hover:bg-primary-50 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                                className="p-2 border border-gray-200 dark:border-gray-700 rounded-xl hover:bg-gray-50 dark:hover:bg-slate-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                             >
                                 <ChevronRight size={20} className="text-gray-600 dark:text-gray-400" />
                             </button>

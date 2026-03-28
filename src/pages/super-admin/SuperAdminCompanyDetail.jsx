@@ -10,6 +10,10 @@ import {
     Eye, Trash2, Zap, LayoutDashboard,
     Gauge, AlertTriangle, HardDrive
 } from 'lucide-react';
+import { 
+    AreaChart, Area, XAxis, YAxis, CartesianGrid, 
+    Tooltip, ResponsiveContainer, BarChart, Bar 
+} from 'recharts';
 import MainLayout from '../../components/layout/MainLayout';
 import { supabase } from '../../lib/supabase';
 import { useAuth } from '../../hooks/useAuth';
@@ -35,6 +39,7 @@ export default function SuperAdminCompanyDetail() {
         quizzes: { current: 0, previous: 0, growth: 0 },
         completion: { current: 0, previous: 0, growth: 0 }
     });
+    const [chartData, setChartData] = useState([]);
     const [recentVideos, setRecentVideos] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
     const [filterRole, setFilterRole] = useState('all');
@@ -216,6 +221,46 @@ export default function SuperAdminCompanyDetail() {
             }
 
             // ============================================
+            // 7.5. Calculer le taux de complétion d'il y a un mois (pour la croissance)
+            // ============================================
+            let prevAvgCompletion = 0;
+            if (profiles && profiles.length > 0) {
+                const userIds = profiles.map(p => p.id);
+                const { data: prevProgressData } = await supabase
+                    .from('user_progress')
+                    .select('user_id, watched')
+                    .in('user_id', userIds)
+                    .lt('completed_at', lastMonth.toISOString());
+
+                const prevTotalCompletion = profiles.reduce((acc, profile) => {
+                    const userProgress = prevProgressData?.filter(p => p.user_id === profile.id) || [];
+                    const watchedCount = userProgress.filter(p => p.watched).length || 0;
+                    return acc + (watchedCount / totalVideos * 100);
+                }, 0);
+                prevAvgCompletion = Math.round(prevTotalCompletion / profiles.length);
+            }
+
+            // ============================================
+            // 7.6. Préparer les données du graphique (Évolution des membres sur 30j)
+            // ============================================
+            const last30Days = Array.from({ length: 30 }, (_, i) => {
+                const d = new Date();
+                d.setDate(d.getDate() - (29 - i));
+                const dateKey = d.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit' });
+                const dateISO = d.toISOString().split('T')[0];
+                
+                // Compter les membres inscrits ce jour-là
+                const newMembers = usersData?.filter(u => u.created_at.startsWith(dateISO)).length || 0;
+                
+                return {
+                    name: dateKey,
+                    membres: newMembers,
+                    date: dateISO
+                };
+            });
+            setChartData(last30Days);
+
+            // ============================================
             // 8. Calculer les pourcentages de croissance
             // ============================================
             const calculateGrowth = (current, previous) => {
@@ -241,8 +286,8 @@ export default function SuperAdminCompanyDetail() {
                 },
                 completion: {
                     current: avgCompletion,
-                    previous: 0,
-                    growth: 0
+                    previous: prevAvgCompletion,
+                    growth: calculateGrowth(avgCompletion, prevAvgCompletion)
                 }
             });
 
@@ -521,7 +566,22 @@ export default function SuperAdminCompanyDetail() {
                     ].map((card, index) => {
                         const isPositive = card.data.growth >= 0;
                         const value = card.label === 'Score moyen' ? `${card.data.current}%` : card.data.current;
-                        const progress = card.label === 'Score moyen' ? card.data.current : Math.min((card.data.current / 50) * 100, 100);
+                        
+                        const getProgress = () => {
+                            if (card.label === 'Score moyen') return card.data.current;
+                            if (card.label === 'Membres') {
+                                const limit = limits?.limits?.users;
+                                if (limit === -1) return 100;
+                                return Math.min((card.data.current / (limit || 10)) * 100, 100);
+                            }
+                            if (card.label === 'Vidéos') {
+                                const limit = limits?.limits?.videos;
+                                if (limit === -1) return 100;
+                                return Math.min((card.data.current / (limit || 10)) * 100, 100);
+                            }
+                            return Math.min((card.data.current / 50) * 100, 100);
+                        };
+                        const progress = getProgress();
                         return (
                             <motion.div
                                 key={card.label}
@@ -581,8 +641,48 @@ export default function SuperAdminCompanyDetail() {
                                 30 derniers jours
                             </span>
                         </div>
-                        <div className="h-64 flex items-center justify-center bg-gradient-to-br from-primary-50 to-accent-50 dark:from-gray-700 dark:to-gray-600 rounded-xl">
-                            <p className="text-gray-400 dark:text-gray-500">Graphique à venir</p>
+                        <div className="h-64 mt-4">
+                            <ResponsiveContainer width="100%" height="100%">
+                                <AreaChart data={chartData}>
+                                    <defs>
+                                        <linearGradient id="colorMembres" x1="0" y1="0" x2="0" y2="1">
+                                            <stop offset="5%" stopColor="#8b5cf6" stopOpacity={0.3}/>
+                                            <stop offset="95%" stopColor="#8b5cf6" stopOpacity={0}/>
+                                        </linearGradient>
+                                    </defs>
+                                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" opacity={0.1} />
+                                    <XAxis 
+                                        dataKey="name" 
+                                        axisLine={false} 
+                                        tickLine={false} 
+                                        tick={{ fill: '#94a3b8', fontSize: 10 }}
+                                        interval={4}
+                                    />
+                                    <YAxis 
+                                        axisLine={false} 
+                                        tickLine={false} 
+                                        tick={{ fill: '#94a3b8', fontSize: 10 }}
+                                    />
+                                    <Tooltip 
+                                        contentStyle={{ 
+                                            backgroundColor: '#1e293b', 
+                                            borderRadius: '12px', 
+                                            border: 'none', 
+                                            boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
+                                            color: '#fff'
+                                        }}
+                                        itemStyle={{ color: '#fff' }}
+                                    />
+                                    <Area 
+                                        type="monotone" 
+                                        dataKey="membres" 
+                                        stroke="#8b5cf6" 
+                                        strokeWidth={3}
+                                        fillOpacity={1} 
+                                        fill="url(#colorMembres)" 
+                                    />
+                                </AreaChart>
+                            </ResponsiveContainer>
                         </div>
                     </motion.div>
 
@@ -689,16 +789,16 @@ export default function SuperAdminCompanyDetail() {
                                 </div>
                                 <div className="flex justify-between text-sm mb-1">
                                     <span className="text-gray-500 dark:text-gray-400">Utilisé</span>
-                                    <span className={limits.storage_percent_used < 80 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}>
-                                        {limits.storage_percent_used}%
+                                    <span className={((limits.current_usage.storage_mb / (Math.max(limits.limits?.storage || 1, 1) * 1024)) * 100) < 80 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}>
+                                        {((limits.current_usage.storage_mb / (Math.max(limits.limits?.storage || 1, 1) * 1024)) * 100).toFixed(1)}%
                                     </span>
                                 </div>
                                 <div className="h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
                                     <div
                                         className={`h-full rounded-full transition-all duration-500 ${
-                                            limits.storage_percent_used > 80 ? 'bg-red-600' : 'bg-green-600'
+                                            ((limits.current_usage.storage_mb / (Math.max(limits.limits?.storage || 1, 1) * 1024)) * 100) > 80 ? 'bg-red-600' : 'bg-green-600'
                                         }`}
-                                        style={{ width: `${Math.min(limits.storage_percent_used, 100)}%` }}
+                                        style={{ width: `${Math.min(((limits.current_usage.storage_mb / (Math.max(limits.limits?.storage || 1, 1) * 1024)) * 100), 100)}%` }}
                                     />
                                 </div>
                                 <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">

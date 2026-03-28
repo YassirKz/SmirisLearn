@@ -6,6 +6,7 @@ import QuizList from '../../components/admin/quizzes/QuizList';
 import QuizCreator from '../../components/admin/quizzes/QuizCreator';
 import { useUserRole } from '../../hooks/useUserRole';
 import { useAuth } from '../../hooks/useAuth';
+import { useOwnerOrg } from '../../hooks/useOwnerOrg';
 import { useSearchParams, Navigate } from 'react-router-dom';
 import { untrusted, escapeText } from '../../utils/security';
 import { useToast } from '../../components/ui/Toast';
@@ -16,7 +17,9 @@ export default function QuizPage() {
     const { role, isAdminAccess, loading: roleLoading } = useUserRole();
     const [searchParams] = useSearchParams();
     const orgIdFromUrl = searchParams.get('orgId');
+    const { isOwnerOrg, loading: orgLoading } = useOwnerOrg(orgIdFromUrl);
     const isImpersonating = role === 'super_admin' && orgIdFromUrl;
+    const isReadOnly = isImpersonating && !isOwnerOrg;
     const { success, error: showError } = useToast();
 
     const [showCreateModal, setShowCreateModal] = useState(false);
@@ -106,7 +109,7 @@ export default function QuizPage() {
                             <p className="text-lg text-gray-500 dark:text-gray-400 font-medium max-w-2xl flex flex-wrap items-center gap-2">
                                 <Shield className="w-5 h-5 text-gray-400" />
                                 Créez et gérez des évaluations pour vos étudiants
-                                {isImpersonating && (
+                                {isImpersonating && isReadOnly && (
                                     <span className="ml-2 text-xs bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 px-3 py-1.5 rounded-xl border border-amber-200/50 dark:border-amber-800/50 font-bold shadow-sm inline-flex items-center">
                                         Mode lecture seule - Orga: {escapeText(untrusted(orgIdFromUrl))}
                                     </span>
@@ -118,7 +121,7 @@ export default function QuizPage() {
 
                 {/* Liste des quiz */}
                 <QuizList
-                    isReadOnly={!!isImpersonating}
+                    isReadOnly={isReadOnly}
                     orgId={orgIdFromUrl}
                     refreshTrigger={refreshKey}
                     onEdit={handleEdit}

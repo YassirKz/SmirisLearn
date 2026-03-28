@@ -5,6 +5,7 @@ import AdminLayout from '../../components/layout/AdminLayout';
 import VideoList from '../../components/admin/videos/VideoList';
 import { useUserRole } from '../../hooks/useUserRole';
 import { useAuth } from '../../hooks/useAuth';
+import { useOwnerOrg } from '../../hooks/useOwnerOrg';
 import { useSearchParams, Navigate } from 'react-router-dom';
 import { untrusted, escapeText } from '../../utils/security';
 export default function VideosPage() {
@@ -12,7 +13,9 @@ export default function VideosPage() {
     const { role, isAdminAccess, loading: roleLoading } = useUserRole();
     const [searchParams] = useSearchParams();
     const orgIdFromUrl = searchParams.get('orgId');
+    const { isOwnerOrg, loading: orgLoading } = useOwnerOrg(orgIdFromUrl);
     const isImpersonating = role === 'super_admin' && orgIdFromUrl;
+    const isReadOnly = isImpersonating && !isOwnerOrg;
 
     if (!roleLoading && !isAdminAccess && !isImpersonating) {
         return <Navigate to="/unauthorized" replace />;
@@ -44,7 +47,7 @@ export default function VideosPage() {
                             <p className="text-gray-500 dark:text-gray-400 mt-2 flex items-center gap-2 font-medium">
                                 <Shield className="w-4 h-4 text-primary-500" />
                                 Gérez vos contenus de formation vidéo
-                                {isImpersonating && (
+                                {isImpersonating && isReadOnly && (
                                     <span className="text-xs bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 px-2 py-1 rounded-full ml-2">
                                         Mode lecture seule - Organisation : {escapeText(untrusted(orgIdFromUrl))}
                                     </span>
@@ -56,7 +59,7 @@ export default function VideosPage() {
 
                 {/* Liste des vidéos */}
                 <VideoList 
-                    isReadOnly={isImpersonating}
+                    isReadOnly={isReadOnly}
                     orgId={orgIdFromUrl}
                 />
             </motion.div>

@@ -15,6 +15,7 @@ import { useUserRole } from '../../hooks/useUserRole';
 import { useTheme } from '../../hooks/useTheme';
 import { useStripe } from '../../hooks/useStripe';
 import { useToast } from '../../hooks/useToast';
+import { useOwnerOrg } from '../../hooks/useOwnerOrg';
 import { untrusted, escapeText } from '../../utils/security';
 import SanitizedInput from '../../components/ui/SanitizedInput';
 export default function AdminSettings() {
@@ -23,7 +24,8 @@ export default function AdminSettings() {
     const { theme, setTheme } = useTheme(); 
     const [searchParams] = useSearchParams();
     const orgIdFromUrl = searchParams.get('orgId');
-    const isReadOnly = role === 'super_admin' && orgIdFromUrl;
+    const { isOwnerOrg, loading: orgLoading } = useOwnerOrg(orgIdFromUrl);
+    const isReadOnly = (role === 'super_admin' && orgIdFromUrl) && !isOwnerOrg;
 
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);

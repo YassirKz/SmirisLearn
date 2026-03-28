@@ -10,6 +10,7 @@ import { useAuth } from '../../hooks/useAuth';
 import { useTheme } from '../../hooks/useTheme'; 
 import { supabase } from '../../lib/supabase';
 import { useUserRole } from '../../hooks/useUserRole';
+import { useOwnerOrg } from '../../hooks/useOwnerOrg';
 import Header from './Header';
 
 export default function AdminLayout({ children }) {
@@ -39,7 +40,9 @@ export default function AdminLayout({ children }) {
     const [searchParams] = useSearchParams();
     const orgId = searchParams.get('orgId');
     const { isAdminAccess, loading, role } = useUserRole(); 
+    const { isOwnerOrg, loading: orgLoading } = useOwnerOrg(orgId);
     const isImpersonating = role === 'super_admin' && orgId;
+    const isReadOnly = isImpersonating && !isOwnerOrg;
 
     // Sécurité : vérification du rôle
     useEffect(() => {
@@ -128,7 +131,7 @@ export default function AdminLayout({ children }) {
     return (
         <div className="min-h-screen bg-gradient-to-br from-slate-50 via-primary-50 to-primary-100 dark:from-slate-950 dark:via-gray-900 dark:to-slate-950">
             {/* Banner Impersonation */}
-            {isImpersonating && (
+            {isImpersonating && isReadOnly && (
                 <div className="bg-amber-500 text-white p-2 text-center text-sm font-bold flex items-center justify-center gap-4 sticky top-0 z-[60]">
                     <Shield className="w-4 h-4" />
                     <span>Mode Lecture Seule - Vous visualisez l'entreprise {companyName}</span>
