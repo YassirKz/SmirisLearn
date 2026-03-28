@@ -381,6 +381,7 @@ export default function GroupsList({ isReadOnly = false, orgId: propOrgId }) {
       <AnimatePresence>
         {showForm && (
           <GroupForm
+            key="group-form"
             isOpen={showForm}
             onClose={handleFormClose}
             onSuccess={handleFormSuccess}
@@ -391,6 +392,7 @@ export default function GroupsList({ isReadOnly = false, orgId: propOrgId }) {
 
         {showMembers && (
           <GroupMembers
+            key={`group-members-${showMembers.id || 'new'}`}
             isOpen={!!showMembers}
             onClose={() => setShowMembers(null)}
             group={showMembers}
@@ -401,6 +403,7 @@ export default function GroupsList({ isReadOnly = false, orgId: propOrgId }) {
 
         {showPillarAccess && (
           <GroupPillarAccess
+            key={`group-pillar-access-${showPillarAccess.id || 'new'}`}
             isOpen={!!showPillarAccess}
             onClose={() => setShowPillarAccess(null)}
             group={showPillarAccess}

@@ -55,7 +55,6 @@ export function useUserRole() {
             data: { role: data.role }
           })
         }
-
       } catch (err) {
         console.error('❌ Erreur récupération rôle:', err)
         setRole('student')

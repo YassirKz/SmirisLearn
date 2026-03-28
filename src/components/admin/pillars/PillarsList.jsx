@@ -382,6 +382,7 @@ export default function PillarsList({ isReadOnly = false, orgId: propOrgId }) {
                 <PillarSkeleton viewMode={viewMode} />
             ) : filteredPillars.length === 0 ? (
                 <motion.div
+                    key="no-pillars-message"
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     className="bg-white/90 dark:bg-slate-900/80 backdrop-blur-xl rounded-3xl p-12 shadow-xl border border-white/50 dark:border-white/5 text-center relative overflow-hidden"
@@ -419,7 +420,7 @@ export default function PillarsList({ isReadOnly = false, orgId: propOrgId }) {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {filteredPillars.map((pillar, index) => (
                         <PillarCard
-                            key={pillar.id}
+                            key={`pillar-card-${pillar.id || 'none'}-${index}`}
                             pillar={pillar}
                             index={index}
                             onEdit={handleEdit}
@@ -448,4 +449,4 @@ export default function PillarsList({ isReadOnly = false, orgId: propOrgId }) {
             />
         </div>
     );
-}
+}

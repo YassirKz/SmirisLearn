@@ -98,7 +98,7 @@ export default function VideoCard({ video, index, onEdit, onDelete, isReadOnly, 
                         {video.quizzes?.length > 0 && (
                             <span className="px-2.5 py-1 rounded-xl text-[10px] font-bold uppercase tracking-wider bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 border border-amber-200 dark:border-amber-800/50 flex items-center gap-1 shadow-sm">
                                 <Award className="w-3 h-3 text-amber-600 dark:text-amber-400" />
-                                Quiz
+                                {video.quizzes.length} {video.quizzes.length > 1 ? 'Quizz' : 'Quiz'}
                             </span>
                         )}
                     </div>
@@ -203,7 +203,7 @@ export default function VideoCard({ video, index, onEdit, onDelete, isReadOnly, 
                         {video.quizzes?.length > 0 && (
                             <span className="px-2.5 py-1.5 rounded-xl text-[10px] font-bold uppercase tracking-wider bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 border border-amber-200 dark:border-amber-800/50 flex items-center gap-1.5 shadow-sm">
                                 <Award className="w-3 h-3 text-amber-600 dark:text-amber-400" />
-                                Quiz
+                                {video.quizzes.length} {video.quizzes.length > 1 ? 'Quizz' : 'Quiz'}
                             </span>
                         )}
                     </div>

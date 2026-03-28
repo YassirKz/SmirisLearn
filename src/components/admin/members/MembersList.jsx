@@ -324,6 +324,7 @@ export default function MembersList({ isReadOnly = false, orgId: propOrgId }) {
         {showInviteForm && !isReadOnly && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 dark:bg-black/70 backdrop-blur-sm" onClick={() => setShowInviteForm(false)}>
             <motion.div
+              key="invite-member-modal"
               initial={{ scale: 0.95, opacity: 0, y: 20 }}
               animate={{ scale: 1, opacity: 1, y: 0 }}
               exit={{ scale: 0.95, opacity: 0, y: 20 }}

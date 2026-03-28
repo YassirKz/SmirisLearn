@@ -126,6 +126,7 @@ export default function GroupPillarAccess({ isOpen, onClose, group, orgId, onUpd
     <AnimatePresence>
       {isOpen && (
         <motion.div
+          key="group-pillar-access-backdrop"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -133,6 +134,7 @@ export default function GroupPillarAccess({ isOpen, onClose, group, orgId, onUpd
           onClick={(e) => e.target === e.currentTarget && onClose()}
         >
           <motion.div
+            key="group-pillar-access-modal"
             initial={{ scale: 0.9, y: 20, opacity: 0 }}
             animate={{ scale: 1, y: 0, opacity: 1 }}
             exit={{ scale: 0.9, y: 20, opacity: 0 }}
@@ -175,7 +177,7 @@ export default function GroupPillarAccess({ isOpen, onClose, group, orgId, onUpd
                         const colorClass = getColorClass(pillar.color);
                         return (
                           <label
-                            key={pillar.id || idx}
+                            key={`pillar-access-${pillar.id || 'none'}-${idx}`}
                             className={`flex items-center gap-3 p-3 rounded-xl border-2 cursor-pointer transition-all ${
                               isSelected
                                 ? 'border-primary-300 dark:border-primary-600 bg-primary-50 dark:bg-primary-900/30'

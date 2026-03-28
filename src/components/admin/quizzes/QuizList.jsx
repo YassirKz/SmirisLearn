@@ -7,12 +7,14 @@ import {
     BarChart3, ChevronLeft, ChevronRight, Target,
     History as HistoryIcon
 } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { supabase } from '../../../lib/supabase';
 import { useAuth } from '../../../hooks/useAuth';
 import { useToast } from '../../ui/Toast';
 import { untrusted, escapeText } from '../../../utils/security';
 
 export default function QuizList({ isReadOnly = false, orgId: propOrgId, onEdit, onDelete, onDuplicate, onCreate, onViewStats, refreshTrigger = 0 }) {
+    const navigate = useNavigate();
     const { user } = useAuth();
     const { success, error: showError } = useToast();
     const showErrorRef = useRef(showError);
@@ -187,12 +189,35 @@ export default function QuizList({ isReadOnly = false, orgId: propOrgId, onEdit,
         return result;
     }, [allQuizzes, filters]);
 
+    // Grouping by video
+    const groupedQuizzes = useMemo(() => {
+        const groups = {};
+        filteredQuizzes.forEach(quiz => {
+            const videoId = quiz.video_id || 'none';
+            if (!groups[videoId]) {
+                groups[videoId] = {
+                    video: quiz.video,
+                    quizzes: [],
+                    totalQuestions: 0,
+                    latestCreated: quiz.created_at,
+                    videoId: videoId
+                };
+            }
+            groups[videoId].quizzes.push(quiz);
+            groups[videoId].totalQuestions += quiz.questions?.length || 0;
+            if (new Date(quiz.created_at) > new Date(groups[videoId].latestCreated)) {
+                groups[videoId].latestCreated = quiz.created_at;
+            }
+        });
+        return Object.values(groups);
+    }, [filteredQuizzes]);
+
     // Pagination locale
-    const totalPages = Math.ceil(filteredQuizzes.length / itemsPerPage);
-    const paginatedQuizzes = useMemo(() => {
+    const totalPages = Math.ceil(groupedQuizzes.length / itemsPerPage);
+    const paginatedGroups = useMemo(() => {
         const start = (page - 1) * itemsPerPage;
-        return filteredQuizzes.slice(start, start + itemsPerPage);
-    }, [filteredQuizzes, page]);
+        return groupedQuizzes.slice(start, start + itemsPerPage);
+    }, [groupedQuizzes, page]);
 
     const handleRefresh = () => {
         setLocalRefreshKey(k => k + 1);
@@ -341,9 +366,9 @@ export default function QuizList({ isReadOnly = false, orgId: propOrgId, onEdit,
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-gray-100/50 dark:divide-gray-800/50">
-                                {paginatedQuizzes.map((quiz, idx) => (
+                                {paginatedGroups.map((group, idx) => (
                                     <motion.tr
-                                        key={quiz.id || `quiz-${idx}`}
+                                        key={`quiz-group-${group.videoId || 'none'}-${idx}`}
                                         initial={{ opacity: 0, y: 10 }}
                                         animate={{ opacity: 1, y: 0 }}
                                         transition={{ delay: idx * 0.05 }}
@@ -356,88 +381,62 @@ export default function QuizList({ isReadOnly = false, orgId: propOrgId, onEdit,
                                                 </div>
                                                 <div>
                                                     <div className="font-bold text-gray-800 dark:text-gray-200 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
-                                                        {escapeText(untrusted(getVideoTitle(quiz)))}
+                                                        {escapeText(untrusted(group.video?.title || 'Vidéo inconnue'))}
                                                     </div>
                                                     <div className="text-xs font-medium text-gray-500 dark:text-gray-400 mt-1">
-                                                        {escapeText(untrusted(getPillarName(quiz)))}
+                                                        {escapeText(untrusted(group.video?.pillar?.name || 'Pilier inconnu'))}
                                                     </div>
                                                 </div>
                                             </div>
                                         </td>
                                         <td className="px-6 py-4 text-center">
-                                            <span className="inline-flex items-center justify-center px-3 py-1.5 bg-primary-50 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 rounded-xl text-xs font-bold border border-primary-200/50 dark:border-primary-800/50 shadow-sm">
-                                                {quiz.questions?.length || 0} QS
-                                            </span>
-                                        </td>
-                                        <td className="px-6 py-4">
-                                            <div className="flex flex-col items-center gap-1.5">
-                                                <div className="flex items-center gap-2">
-                                                    <span className="text-[10px] font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500 w-8 text-right">Score</span>
-                                                    <span className="inline-flex items-center px-2 py-0.5 rounded-lg bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-400 text-xs font-bold shadow-sm border border-green-200/50 dark:border-green-800/50 w-12 justify-center">
-                                                        {quiz.passing_score}%
-                                                    </span>
-                                                </div>
-                                                <div className="flex items-center gap-2">
-                                                    <span className="text-[10px] font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500 w-8 text-right">Essais</span>
-                                                    <span className="inline-flex items-center px-2 py-0.5 rounded-lg bg-accent-50 dark:bg-accent-900/20 text-accent-700 dark:text-accent-400 text-xs font-bold shadow-sm border border-accent-200/50 dark:border-accent-800/50 w-12 justify-center">
-                                                        {quiz.max_attempts === -1 ? '∞' : quiz.max_attempts}
-                                                    </span>
-                                                </div>
-                                                {quiz.timer_minutes && (
-                                                    <div className="flex items-center gap-2">
-                                                        <span className="text-[10px] font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500 w-8 text-right">Temps</span>
-                                                        <span className="inline-flex items-center px-2 py-0.5 rounded-lg bg-gray-100 dark:bg-slate-800 text-gray-700 dark:text-gray-300 text-xs font-bold shadow-sm border border-gray-200/50 dark:border-gray-700/50 w-16 justify-center">
-                                                            <Clock className="w-3 h-3 mr-1 opacity-70" /> {quiz.timer_minutes}'
-                                                        </span>
-                                                    </div>
-                                                )}
+                                            <div className="flex flex-col items-center gap-1">
+                                                <span className="inline-flex items-center justify-center px-3 py-1.5 bg-primary-50 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 rounded-xl text-xs font-bold border border-primary-200/50 dark:border-primary-800/50 shadow-sm">
+                                                    {group.totalQuestions} QS
+                                                </span>
+                                                <span className="text-[10px] font-bold text-amber-600 dark:text-amber-400 uppercase tracking-tighter">
+                                                    {group.quizzes.length} {group.quizzes.length > 1 ? 'Quiz associés' : 'Quiz associé'}
+                                                </span>
                                             </div>
                                         </td>
+                                        <td className="px-6 py-4">
+                                            {group.quizzes.length === 1 ? (
+                                                <div className="flex flex-col items-center gap-1.5">
+                                                    <div className="flex items-center gap-2">
+                                                        <span className="text-[10px] font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500 w-8 text-right">Score</span>
+                                                        <span className="inline-flex items-center px-2 py-0.5 rounded-lg bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-400 text-xs font-bold shadow-sm border border-green-200/50 dark:border-green-800/50 w-12 justify-center">
+                                                            {group.quizzes[0].passing_score}%
+                                                        </span>
+                                                    </div>
+                                                    <div className="flex items-center gap-2">
+                                                        <span className="text-[10px] font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500 w-8 text-right">Essais</span>
+                                                        <span className="inline-flex items-center px-2 py-0.5 rounded-lg bg-accent-50 dark:bg-accent-900/20 text-accent-700 dark:text-accent-400 text-xs font-bold shadow-sm border border-accent-200/50 dark:border-accent-800/50 w-12 justify-center">
+                                                            {group.quizzes[0].max_attempts === -1 ? '∞' : group.quizzes[0].max_attempts}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            ) : (
+                                                <div className="text-center">
+                                                    <span className="text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-widest italic">
+                                                        Configurations multiples
+                                                    </span>
+                                                </div>
+                                            )}
+                                        </td>
                                         <td className="px-6 py-4 text-sm font-medium text-gray-500 dark:text-gray-400">
-                                            {formatDate(quiz.created_at)}
+                                            {formatDate(group.latestCreated)}
                                         </td>
                                         <td className="px-6 py-4 text-right">
-                                            <div className="flex items-center justify-end gap-2 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
+                                            <div className="flex items-center justify-end gap-2">
                                                 <motion.button
-                                                    whileHover={{ scale: 1.1 }}
-                                                    whileTap={{ scale: 0.9 }}
-                                                    onClick={() => onViewStats?.(quiz)}
-                                                    className="p-2.5 bg-gray-50 dark:bg-slate-800 hover:bg-primary-100 dark:hover:bg-primary-900/50 border border-gray-200 dark:border-gray-700 hover:border-primary-200 dark:hover:border-primary-800/50 rounded-xl transition-all text-primary-600 dark:text-primary-400 shadow-sm"
-                                                    title="Statistiques"
+                                                    whileHover={{ scale: 1.05 }}
+                                                    whileTap={{ scale: 0.95 }}
+                                                    onClick={() => navigate(`/admin/videos/${group.videoId}`)}
+                                                    className="flex items-center gap-2 px-4 py-2 bg-primary-50 dark:bg-primary-900/20 text-primary-600 dark:text-primary-400 text-xs font-bold rounded-xl border border-primary-200/50 dark:border-primary-800/50 hover:bg-primary-100 dark:hover:bg-primary-900/40 transition-all shadow-sm"
                                                 >
-                                                    <BarChart3 className="w-4 h-4" />
+                                                    <Eye className="w-3.5 h-3.5" />
+                                                    Gérer
                                                 </motion.button>
-                                                {!isReadOnly && (
-                                                    <>
-                                                        <motion.button
-                                                            whileHover={{ scale: 1.1 }}
-                                                            whileTap={{ scale: 0.9 }}
-                                                            onClick={() => onEdit(quiz)}
-                                                            className="p-2.5 bg-gray-50 dark:bg-slate-800 hover:bg-accent-100 dark:hover:bg-accent-900/50 border border-gray-200 dark:border-gray-700 hover:border-accent-200 dark:hover:border-accent-800/50 rounded-xl transition-all text-accent-600 dark:text-accent-400 shadow-sm"
-                                                            title="Modifier"
-                                                        >
-                                                            <Edit className="w-4 h-4" />
-                                                        </motion.button>
-                                                        <motion.button
-                                                            whileHover={{ scale: 1.1 }}
-                                                            whileTap={{ scale: 0.9 }}
-                                                            onClick={() => onDuplicate?.(quiz)}
-                                                            className="p-2.5 bg-gray-50 dark:bg-slate-800 hover:bg-gray-200 dark:hover:bg-gray-700 border border-gray-200 dark:border-gray-700 rounded-xl transition-all text-gray-600 dark:text-gray-300 shadow-sm"
-                                                            title="Dupliquer"
-                                                        >
-                                                            <Copy className="w-4 h-4" />
-                                                        </motion.button>
-                                                        <motion.button
-                                                            whileHover={{ scale: 1.1 }}
-                                                            whileTap={{ scale: 0.9 }}
-                                                            onClick={() => onDelete(quiz)}
-                                                            className="p-2.5 bg-gray-50 dark:bg-slate-800 hover:bg-red-100 dark:hover:bg-red-900/50 border border-gray-200 dark:border-gray-700 hover:border-red-200 dark:hover:border-red-800/50 rounded-xl transition-all text-red-600 dark:text-red-400 shadow-sm"
-                                                            title="Supprimer"
-                                                        >
-                                                            <Trash2 className="w-4 h-4" />
-                                                        </motion.button>
-                                                    </>
-                                                )}
                                             </div>
                                         </td>
                                     </motion.tr>

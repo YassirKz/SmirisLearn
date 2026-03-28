@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import {
     Save, X, Sparkles, AlertCircle,
-    CheckCircle, Clock, Film
+    CheckCircle, Clock, Film, RefreshCw
 } from 'lucide-react';
 import { supabase } from '../../../lib/supabase';
 import { useAuth } from '../../../hooks/useAuth';
@@ -33,6 +33,9 @@ export default function VideoForm({
         sequence_order: video?.sequence_order || 0,
         thumbnail_url: video?.thumbnail_url || ''
     });
+    const [availableQuizzes, setAvailableQuizzes] = useState([]);
+    const [associatedQuizId, setAssociatedQuizId] = useState('');
+    const [loadingQuizzes, setLoadingQuizzes] = useState(false);
     const [touched, setTouched] = useState({});
     const [errors, setErrors] = useState({});
 
@@ -55,10 +58,41 @@ export default function VideoForm({
                     .eq('organization_id', orgId)
                     .order('name');
                 setPillars(data || []);
+                
+                // Fetch quizzes for this org
+                setLoadingQuizzes(true);
+                try {
+                    const pillarIds = (data || []).map(p => p.id);
+                    if (pillarIds.length > 0) {
+                        const { data: videoRows } = await supabase
+                            .from('videos')
+                            .select('id')
+                            .in('pillar_id', pillarIds);
+                        
+                        const videoIds = (videoRows || []).map(v => v.id);
+                        if (videoIds.length > 0) {
+                            const { data: quizzesData } = await supabase
+                                .from('quizzes')
+                                .select('id, video_id, video:videos(title)')
+                                .in('video_id', videoIds);
+                            setAvailableQuizzes(quizzesData || []);
+                            
+                            // Check if current video has an associated quiz
+                            if (video?.id) {
+                                const currentQuiz = quizzesData?.find(q => q.video_id === video.id);
+                                if (currentQuiz) setAssociatedQuizId(currentQuiz.id);
+                            }
+                        }
+                    }
+                } catch (err) {
+                    console.error('Error fetching quizzes:', err);
+                } finally {
+                    setLoadingQuizzes(false);
+                }
             }
         };
         fetchPillars();
-    }, [user, propOrgId]);
+    }, [user, propOrgId, video?.id]);
 
     // Auto-remplir la durée si détectée par le VideoUploader
     useEffect(() => {
@@ -137,6 +171,31 @@ export default function VideoForm({
             }
 
             if (result.error) throw result.error;
+            const updatedVideoId = result.data[0].id;
+
+            // Handle Quiz Association
+            if (associatedQuizId) {
+                // Remove old association if any (though currently enforced 1:1 by UI)
+                await supabase
+                    .from('quizzes')
+                    .update({ video_id: null })
+                    .eq('video_id', updatedVideoId)
+                    .neq('id', associatedQuizId);
+
+                // Add new association
+                const { error: quizErr } = await supabase
+                    .from('quizzes')
+                    .update({ video_id: updatedVideoId })
+                    .eq('id', associatedQuizId);
+                
+                if (quizErr) throw quizErr;
+            } else if (video?.id) {
+                // If quiz was unselected, clear it
+                await supabase
+                    .from('quizzes')
+                    .update({ video_id: null })
+                    .eq('video_id', video.id);
+            }
 
             success(video ? 'Vidéo modifiée' : 'Vidéo créée');
             onSuccess?.();
@@ -297,7 +356,29 @@ export default function VideoForm({
                 </div>
             </div>
 
-            {/* Durée (optionnelle) */}
+            {/* Quiz associé */}
+            <div className="space-y-2">
+                <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300">
+                    Quiz associé
+                    <span className="text-gray-400 dark:text-gray-500 text-xs ml-2">(optionnel)</span>
+                </label>
+                <select
+                    value={associatedQuizId}
+                    onChange={(e) => setAssociatedQuizId(e.target.value)}
+                    disabled={loadingQuizzes}
+                    className="w-full px-4 py-3 bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 rounded-xl focus:border-primary-400 dark:focus:border-primary-500 focus:ring-4 focus:ring-primary-100 dark:focus:ring-primary-900/30 outline-none transition-all dark:text-white"
+                >
+                    <option value="">Aucun quiz</option>
+                    {availableQuizzes.map(q => (
+                        <option key={q.id} value={q.id}>
+                            Quiz de : {q.video?.title || 'Inconnue'} {q.id === associatedQuizId ? '(Actuel)' : ''}
+                        </option>
+                    ))}
+                </select>
+                <p className="text-xs text-gray-500 dark:text-gray-400">
+                    {loadingQuizzes ? 'Chargement des quiz...' : 'Vous pouvez lier un quiz existant à cette vidéo.'}
+                </p>
+            </div>
             <div className="space-y-2">
                 <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300">
                     Durée (secondes)

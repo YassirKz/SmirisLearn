@@ -346,6 +346,7 @@ export default function VideoList({ isReadOnly = false, orgId: propOrgId }) {
             <AnimatePresence>
                 {showUploader && (
                     <motion.div
+                        key="uploader-backdrop"
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
@@ -353,6 +354,7 @@ export default function VideoList({ isReadOnly = false, orgId: propOrgId }) {
                         onClick={() => setShowUploader(false)}
                     >
                         <motion.div
+                            key="uploader-modal"
                             initial={{ scale: 0.95, opacity: 0, y: 20 }}
                             animate={{ scale: 1, opacity: 1, y: 0 }}
                             className="bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl rounded-3xl max-w-2xl w-full shadow-2xl border border-white/50 dark:border-white/10 ring-1 ring-black/5 relative overflow-hidden"
@@ -402,6 +404,7 @@ export default function VideoList({ isReadOnly = false, orgId: propOrgId }) {
             <AnimatePresence>
                 {showRecorder && (
                     <motion.div
+                        key="recorder-backdrop"
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
@@ -409,6 +412,7 @@ export default function VideoList({ isReadOnly = false, orgId: propOrgId }) {
                         onClick={() => setShowRecorder(false)}
                     >
                         <motion.div
+                            key="recorder-modal"
                             initial={{ scale: 0.95, opacity: 0, y: 20 }}
                             animate={{ scale: 1, opacity: 1, y: 0 }}
                             className="bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl rounded-3xl max-w-2xl w-full shadow-2xl border border-white/50 dark:border-white/10 ring-1 ring-black/5 relative overflow-hidden"
@@ -461,6 +465,7 @@ export default function VideoList({ isReadOnly = false, orgId: propOrgId }) {
             <AnimatePresence>
                 {showForm && (
                     <motion.div
+                        key="video-form-backdrop"
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
@@ -472,6 +477,7 @@ export default function VideoList({ isReadOnly = false, orgId: propOrgId }) {
                         }}
                     >
                         <motion.div
+                            key="video-form-modal"
                             initial={{ scale: 0.95, opacity: 0, y: 20 }}
                             animate={{ scale: 1, opacity: 1, y: 0 }}
                             className="bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl rounded-3xl max-w-2xl w-full shadow-2xl border border-white/50 dark:border-white/10 ring-1 ring-black/5 relative overflow-hidden max-h-[90vh] overflow-y-auto"
@@ -532,6 +538,7 @@ export default function VideoList({ isReadOnly = false, orgId: propOrgId }) {
                 <PillarSkeleton viewMode={viewMode} />
             ) : filteredVideos.length === 0 ? (
                 <motion.div
+                    key="no-videos-message"
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     className="bg-white/90 dark:bg-slate-900/80 backdrop-blur-xl rounded-3xl p-12 shadow-xl border border-white/50 dark:border-white/5 text-center relative overflow-hidden"
@@ -574,7 +581,7 @@ export default function VideoList({ isReadOnly = false, orgId: propOrgId }) {
                             <tbody className="divide-y divide-gray-100/80 dark:divide-gray-800/80">
                                 {filteredVideos.map((video, index) => (
                                     <VideoCard
-                                        key={video.id}
+                                        key={`video-row-${video.id || 'none'}-${index}`}
                                         video={video}
                                         index={index}
                                         onEdit={handleEdit}
@@ -591,7 +598,7 @@ export default function VideoList({ isReadOnly = false, orgId: propOrgId }) {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {filteredVideos.map((video, index) => (
                         <VideoCard
-                            key={video.id}
+                            key={`video-card-${video.id || 'none'}-${index}`}
                             video={video}
                             index={index}
                             onEdit={handleEdit}

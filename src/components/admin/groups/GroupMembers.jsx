@@ -230,6 +230,7 @@ export default function GroupMembers({ isOpen, onClose, group, orgId, onUpdate }
     <AnimatePresence>
       {isOpen && (
         <motion.div
+          key="group-members-backdrop"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -237,6 +238,7 @@ export default function GroupMembers({ isOpen, onClose, group, orgId, onUpdate }
           onClick={(e) => e.target === e.currentTarget && onClose()}
         >
           <motion.div
+            key="group-members-modal"
             initial={{ scale: 0.9, y: 20, opacity: 0 }}
             animate={{ scale: 1, y: 0, opacity: 1 }}
             exit={{ scale: 0.9, y: 20, opacity: 0 }}
@@ -287,6 +289,7 @@ export default function GroupMembers({ isOpen, onClose, group, orgId, onUpdate }
                     <AnimatePresence>
                       {showAddDropdown && searchTerm.length > 0 && (
                         <motion.div
+                          key="student-search-dropdown"
                           initial={{ opacity: 0, y: -10 }}
                           animate={{ opacity: 1, y: 0 }}
                           exit={{ opacity: 0, y: -10 }}
@@ -295,7 +298,7 @@ export default function GroupMembers({ isOpen, onClose, group, orgId, onUpdate }
                           {filteredAvailable.length > 0 ? (
                             filteredAvailable.map((student, idx) => (
                               <button
-                                key={student.id || idx}
+                                key={`student-avail-${student.id || 'none'}-${idx}`}
                                 onClick={() => {
                                   setSelectedStudent(student);
                                   setSearchTerm('');
@@ -364,7 +367,7 @@ export default function GroupMembers({ isOpen, onClose, group, orgId, onUpdate }
               ) : (
                 <div className="space-y-3">
                   {members.map((member, idx) => (
-                    <div key={member.id || idx} className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700/50 rounded-xl">
+                    <div key={`member-row-${member.id || 'none'}-${idx}`} className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700/50 rounded-xl">
                       <div className="min-w-0">
                         <p className="font-medium text-gray-800 dark:text-gray-200 truncate">
                           {escapeText(untrusted(member.profiles?.full_name || 'Nom non renseigné'))}
