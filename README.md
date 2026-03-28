@@ -118,4 +118,4 @@ Smiris Learn uses a **Shared Database with Row-Level Security (RLS)**:
 Distribué sous la licence MIT. Voir `LICENSE` pour plus d'informations.
 
 ---
-*Built with ❤️ by the Smiris Learn [ Yassir kezzi (10*1) ] Team.*
+*Built with ❤️ by the Smiris Learn [ Yassir kezzi (100%) ] Team.*
