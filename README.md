@@ -1,160 +1,121 @@
 # 🎓 Smiris Learn
 
-Multi-tenant SaaS platform for corporate online training. Video hosting, interactive quizzes, and customizable pillars.
+> **The Premium Multi-tenant SaaS Platform for Corporate Training**
 
-![Version](https://img.shields.io/badge/version-1.0.0-blue)
+Smiris Learn is a next-generation Learning Management System (LMS) designed for modern businesses. It combines a **premium glassmorphism aesthetic** with powerful multi-tenant capabilities, allowing organizations to host internal videos, create interactive assessments, and manage their learning pillars with unparalleled ease.
+
+![Version](https://img.shields.io/badge/version-1.1.0-blue)
 ![React](https://img.shields.io/badge/React-18.2-61DAFB)
 ![Tailwind](https://img.shields.io/badge/Tailwind-3.4-06B6D4)
 ![Supabase](https://img.shields.io/badge/Supabase-2.39-3ECF8E)
-![Status](https://img.shields.io/badge/status-development-yellow)
+![Design](https://img.shields.io/badge/Design-Premium--Glassmorphism-purple)
 
 ---
 
-## 📋 Table of Contents
-- [Concept](#-concept)
-- [Features](#-features)
-- [Architecture](#-architecture)
-- [Tech Stack](#-tech-stack)
-- [Database Structure](#-database-structure)
-- [Security](#-security)
-- [Installation](#-installation)
-- [Configuration](#-configuration)
-- [API](#-api)
-- [Deployment](#-deployment)
-- [Roadmap](#-roadmap)
-- [Team](#-team)
-- [License](#-license)
+## 💎 Design Philosophy: Modern & Premium
+
+Smiris Learn isn't just another LMS. It's built with a **visual-first approach**:
+*   **Glassmorphism Engine**: Semi-transparent containers with nested `backdrop-blur` and subtle border glows.
+*   **Dynamic Motion**: Fluid transitions and micro-interactions powered by `Framer Motion`.
+*   **Responsive Excellence**: A seamless experience across mobile, tablet, and desktop.
+*   **Dark Mode Native**: Deeply integrated dark theme for reduced eye strain during long learning sessions.
 
 ---
 
-## 🎯 Concept
+## ✨ Key Features
 
-**Smiris Learn** is a SaaS (Software as a Service) platform that enables companies to create their own online training academy. Unlike traditional solutions that charge per user, Smiris Learn offers a pricing model based on video volume, better suited for SMEs.
+### 👑 Super Administration
+*   **Global Command Center**: Real-time overview of organization health and platform revenue.
+*   **Tenant Management**: Full lifecycle control over client organizations (onboarding, suspension, plan upgrades).
+*   **Dynamic Subscription Tiers**: Automated Stripe integration for Free, Starter, and Business plans.
 
-### Problem Solved
-- ❌ Existing solutions too expensive (per-user pricing)
-- ❌ Traditional LMS platforms complex to use
-- ❌ Each company has its own vocabulary and categories
-- ❌ No simple solution for hosting internal videos with assessment
+### 🏢 Organization Portal (Admin)
+*   **Customizable Pillars**: Define your own learning categories (e.g., *Product Knowledge*, *Security Compliance*, *Customer Success*).
+*   **Unified Action Toolbar**: Standardized action buttons and filters for a consistent management experience.
+*   **Advanced Video Library**: Rich video hosting with custom thumbnails and deep pillar integration.
+*   **Interactive Quiz Builder**: Intuitive interface to create assessments with passing scores and timer controls.
+*   **Member & Group Management**: Organize learners into logical groups with targeted pillar access.
 
-### Our Solution
-- ✅ Volume-based pricing (not per user) → more economical
-- ✅ Modern, intuitive interface (Netflix-like for training)
-- ✅ Customizable categories called **"Pillars"**
-- ✅ Videos + quizzes to validate learning
-- ✅ Complete data isolation (each company has its private space)
-
----
-
-## ✨ Features
-
-### 👑 Super Admin (Owner)
-- **Global Dashboard**: Overview of all companies
-- **Company Management**: Create, suspend, modify
-- **Statistics**: Storage used, user count, revenue
-- **Subscriptions**: Plan management (Free/Starter/Business)
-
-### 🏢 Company Admin (Client)
-- **Customizable Pillars**: Create dynamic categories (e.g., Studium, Ausbildung, Onboarding, Security, Sales...)
-- **Video Management**: Upload, organize by pillar, thumbnails
-- **Interactive Quizzes**: Create multiple-choice questionnaires
-- **Members**: Individual or bulk invitations (CSV)
-- **Statistics**: Employee progress tracking, quiz scores
-
-### 🎓 Student (Learner)
-- **Personalized Home**: View company pillars
-- **Video Player**: Modern interface with progress tracking
-- **Quizzes**: Answer questions after watching
-- **Progress**: Personal tracking of watched videos and scores
+### 🎓 Learner Experience (Student)
+*   **Netflix-style Discovery**: Browse learning content through an immersive, card-based interface.
+*   **Immersive Video Player**: Distraction-free playback with automatic progress tracking.
+*   **Challenge & Growth**: Interactive quizzes at the end of modules to validate knowledge.
+*   **Progress Dashboard**: Personal dashboard showing completion rates and academic achievements.
 
 ---
 
-## 🏗️ Architecture
+## 🏗️ Technical Architecture
 
-### User Levels
-┌─────────────────┐
-│ SUPER ADMIN │ → Owner: global management
-├─────────────────┤
-│ COMPANY ADMIN │ → Client: manages their space
-├─────────────────┤
-│ STUDENT │ → Learner: views training content
-└─────────────────┘
+### Multi-Tenancy Design
+Smiris Learn uses a **Shared Database with Row-Level Security (RLS)**:
+*   **Isolation**: Every row is pinned to an `organization_id`. Supabase RLS policies ensure strict data segregation.
+*   **Scalability**: Grow from 1 to 10,000 tenants without infrastructure changes.
+*   **Performance**: Optimized PostgreSQL queries ensures fast loading even with deep nested data structures.
 
-### Multi-tenant Principle
-Company A Company B
-┌─────────────────┐ ┌─────────────────┐
-│ Pillars: │ │ Pillars: │
-│ - Studium │ │ - Security │
-│ - Ausbildung │ │ - Sales │
-│ - Onboarding │ │ - Management │
-└─────────────────┘ └─────────────────┘
-⇓ RLS isolation ⇓ RLS isolation
-┌─────────────────────────────────────────────────┐
-│ Unique Database │
-│ (each row has an organization_id) │
-└─────────────────────────────────────────────────┘
-
-## 🛠️ Tech Stack
-
-| Technology | Version | Usage |
-|-------------|---------|-------|
-| **React** | 18.x | Frontend (Pure JavaScript, no TypeScript) |
-| **Vite** | 4.x | Build tool (ultra-fast) |
-| **Tailwind CSS** | 3.x | Modern styling with animations |
-| **Framer Motion** | 10.x | Advanced animations |
-| **React Router DOM** | 6.x | Navigation |
-| **Supabase** | 2.x | Complete backend (Auth, PostgreSQL, Storage) |
-| **Lucide React** | - | Modern icons |
+### Tech Stack
+| Tier | Technology | Rationale |
+|---|---|---|
+| **Frontend** | React 18 & Vite | Lightning-fast development and optimized production bundles. |
+| **Styling** | Tailwind CSS | Utility-first styling for consistent design tokens. |
+| **Animations** | Framer Motion | High-performance declarative animations. |
+| **Backend** | Supabase | Real-time database, Auth, and binary Storage. |
+| **Payments** | Stripe | Industry-standard subscription handling. |
+| **Icons** | Lucide React | Minimalist and consistent iconography. |
 
 ---
 
-## 📊 Database Structure
+## 🚀 Getting Started
 
-### Main Tables
+### Prerequisites
+*   Node.js (v18 or higher)
+*   NPM or Yarn
+*   A Supabase project
+*   A Stripe account (optional for local testing)
 
--- 1. organizations (client companies)
--- Stores information for each subscribed company
-id UUID PRIMARY KEY
-name TEXT NOT NULL
-slug TEXT UNIQUE
-plan_type TEXT DEFAULT 'free'
+### Installation
+1.  **Clone the repository**
+    ```bash
+    git clone https://github.com/your-repo/smiris-learn.git
+    cd smiris-learn
+    ```
 
--- 2. profiles (users)
--- Linked to auth.users, contains roles and associations
-id UUID REFERENCES auth.users
-organization_id UUID REFERENCES organizations
-email TEXT NOT NULL
-role ENUM ('super_admin', 'org_admin', 'student')
+2.  **Install dependencies**
+    ```bash
+    npm install
+    ```
 
--- 3. invitations
--- Manages invitations with 24h expiration
-email TEXT NOT NULL
-organization_id UUID REFERENCES organizations
-token TEXT UNIQUE
-expires_at TIMESTAMP
+3.  **Configure Environment Variables**
+    Create a `.env` file in the root directory:
+    ```env
+    VITE_SUPABASE_URL=your_supabase_url
+    VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+    VITE_STRIPE_STARTER_PRICE_ID=your_stripe_price_id
+    ```
 
--- 4. pillars (dynamic categories)
--- Customizable categories per company
-organization_id UUID REFERENCES organizations
-name TEXT NOT NULL
-icon TEXT DEFAULT '📁'
-color TEXT DEFAULT '#3b82f6'
+4.  **Start the development server**
+    ```bash
+    npm run dev
+    ```
 
--- 5. videos
--- Training videos linked to a pillar
-pillar_id UUID REFERENCES pillars
-title TEXT NOT NULL
-video_url TEXT NOT NULL
+---
 
--- 6. quizzes
--- JSON format quizzes linked to a video
-video_id UUID REFERENCES videos
-questions JSONB NOT NULL
-passing_score INTEGER DEFAULT 70
+## 🛡️ Security
+*   **Data Sanitization**: All user-provided content is sanitized using custom `untrusted` and `escapeText` utilities.
+*   **Auth Gates**: Secure routing using `useAuth` and `useUserRole` hooks.
+*   **Database Security**: 100% policy-covered tables with strict PostgreSQL Row-Level Security.
 
--- 7. user_progress
--- Student progress tracking
-user_id UUID REFERENCES auth.users
-video_id UUID REFERENCES videos
-watched BOOLEAN DEFAULT FALSE
-quiz_score INTEGER
+---
+
+## 🛣️ Roadmap
+- [ ] Mobile App (React Native/Expo)
+- [ ] Gamification Engine (Badges & XP)
+- [ ] Peer-to-peer Learning Community
+- [ ] AI-powered Learning Recommendations (Generative AI)
+
+---
+
+## 📜 License
+Distribué sous la licence MIT. Voir `LICENSE` pour plus d'informations.
+
+---
+*Built with ❤️ by the Smiris Learn [ Yassir kezzi (10*1) ] Team.*
