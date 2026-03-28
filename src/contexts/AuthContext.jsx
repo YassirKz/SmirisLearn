@@ -106,19 +106,19 @@ export function AuthProvider({ children }) {
     try {
       setError(null);
 
-      // 1. Rate limiting
+      //  Rate limiting
       if (!checkActionLimit("SIGNUP", email)) {
         return { error: { message: "Rate limit exceeded" } };
       }
 
-      // 2. Validation email simple
+      //  Validation email simple
       const emailStr = String(email).trim().toLowerCase();
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!emailRegex.test(emailStr)) {
         throw new Error("Email invalide");
       }
 
-      // 3. Validation password (OWASP)
+      //  Validation password (OWASP)
       if (!password || password.length < 8) {
         throw new Error("Le mot de passe doit contenir au moins 8 caractères");
       }
@@ -135,7 +135,7 @@ export function AuthProvider({ children }) {
 
       const fullName = metadata.data?.full_name || metadata.full_name || "";
 
-      // 4. Tentative d'inscription - LE TRIGGER SQL VA CRÉER LE PROFIL AUTOMATIQUEMENT
+      // inscription - LE TRIGGER SQL CREER LE PROFIL AUTOMATIQUEMENT
       const { data, error } = await supabase.auth.signUp({
         email: emailStr,
         password,
@@ -153,7 +153,7 @@ export function AuthProvider({ children }) {
         throw error;
       }
 
-      // ✅ PLUS D'INSERTION MANUELLE - Le trigger SQL s'en charge !
+      //  PLUS D'INSERTION MANUELLE - Le trigger SQL s'en charge !
 
       return { data, error: null };
     } catch (error) {

@@ -32,7 +32,7 @@ export default function CreatePillarModal({ isOpen, onClose, onSuccess, orgId: p
         name: '',
         description: '',
         icon: '📚',
-        color: 'blue'
+        color: 'primary'
     });
     const [touched, setTouched] = useState({});
     const [previewMode, setPreviewMode] = useState(false);

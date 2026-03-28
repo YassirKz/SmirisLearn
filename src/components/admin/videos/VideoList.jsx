@@ -292,16 +292,14 @@ export default function VideoList({ isReadOnly = false, orgId: propOrgId }) {
                                     className="flex-1 sm:flex-none px-4 py-2 bg-gradient-to-r from-primary-600 to-accent-600 text-white rounded-xl font-medium shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-2 whitespace-nowrap"
                                 >
                                     <Plus className="w-4 h-4" />
-                                    <span className="hidden xs:inline">Ajouter une vidéo</span>
-                                    <Plus className="w-4 h-4 xs:hidden" />
+                                    <span className="hidden sm:inline">Ajouter une vidéo</span>
                                 </button>
                                 <button
                                     onClick={handleOpenRecorder}
                                     className="flex-1 sm:flex-none px-4 py-2 bg-gray-900 text-white rounded-xl font-medium shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-2 whitespace-nowrap"
                                 >
                                     <Monitor className="w-4 h-4" />
-                                    <span className="hidden xs:inline">Enregistrer l'écran</span>
-                                    <Monitor className="w-4 h-4 xs:hidden" />
+                                    <span className="hidden sm:inline">Enregistrer l'écran</span>
                                 </button>
                             </div>
                         )}

@@ -2,21 +2,33 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { Search, X, Filter, ArrowUpDown } from 'lucide-react';
 import { useState, useRef, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { untrusted, escapeText } from '../../../utils/security';
 
 export default function VideoFilters({ filters, onChange, pillars }) {
     const [showFilters, setShowFilters] = useState(false);
     const filterRef = useRef(null);
+    const [menuPosition, setMenuPosition] = useState({ top: 0, left: 0 });
 
     useEffect(() => {
         const handleClickOutside = (event) => {
-            if (filterRef.current && !filterRef.current.contains(event.target)) {
+            if (filterRef.current && !filterRef.current.contains(event.target) && !event.target.closest('.video-filter-portal')) {
                 setShowFilters(false);
             }
         };
         document.addEventListener('mousedown', handleClickOutside);
         return () => document.removeEventListener('mousedown', handleClickOutside);
     }, []);
+
+    useEffect(() => {
+        if (showFilters && filterRef.current) {
+            const rect = filterRef.current.getBoundingClientRect();
+            setMenuPosition({
+                top: rect.bottom + window.scrollY + 8,
+                left: rect.right - 256,
+            });
+        }
+    }, [showFilters]);
 
     const handleSearchChange = (e) => {
         const value = escapeText(untrusted(e.target.value));
@@ -99,18 +111,23 @@ export default function VideoFilters({ filters, onChange, pillars }) {
                 </motion.button>
             </div>
 
-            {/* Panneau de filtres */}
-            <AnimatePresence>
-                {showFilters && (
-                    <motion.div
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: 10 }}
-                        className="absolute top-full right-0 mt-2 w-64 bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-100 dark:border-gray-700 p-4 z-50"
-                    >
-                        <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">
-                            Trier par
-                        </h3>
+            {/* Panneau de filtres via Portal */}
+            {showFilters && createPortal(
+                <motion.div
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    style={{
+                        position: 'absolute',
+                        top: menuPosition.top,
+                        left: menuPosition.left,
+                        zIndex: 999999,
+                    }}
+                    className="video-filter-portal w-64 bg-white dark:bg-gray-800 rounded-xl shadow-2xl border border-gray-100 dark:border-gray-700 p-4"
+                >
+                    <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">
+                        Trier par
+                    </h3>
                         
                         <div className="space-y-2">
                             {[
@@ -153,9 +170,9 @@ export default function VideoFilters({ filters, onChange, pillars }) {
                                 Réinitialiser les filtres
                             </button>
                         </div>
-                    </motion.div>
-                )}
-            </AnimatePresence>
+                </motion.div>,
+                document.body
+            )}
         </div>
     );
 }

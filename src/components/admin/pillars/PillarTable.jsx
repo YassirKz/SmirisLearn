@@ -90,21 +90,13 @@ export default function PillarTable({ pillars, onEdit, onDelete, isReadOnly }) {
                             return (
                                 <motion.tr
                                     key={pillar.id || `pillar-${index}`}
-                                    initial={{ opacity: 0, y: 10, rotateX: -2 }}
-                                    animate={{ opacity: 1, y: 0, rotateX: 0 }}
+                                    initial={{ opacity: 0, y: 10 }}
+                                    animate={{ opacity: 1, y: 0 }}
                                     transition={{ 
                                         delay: index * 0.05,
                                         type: "spring",
                                         stiffness: 100
                                     }}
-                                    whileHover={{ 
-                                        rotateY: 1, 
-                                        rotateX: -1, 
-                                        scale: 1.005,
-                                        z: 10,
-                                        boxShadow: "0 10px 30px -10px rgba(var(--primary-rgb), 0.2)"
-                                    }}
-                                    style={{ transformStyle: "preserve-3d" }}
                                     onClick={() => handleRowClick(pillar.id)}
                                     className="transition-colors group cursor-pointer hover:bg-primary-50/80 dark:hover:bg-gray-700/80"
                                 >
