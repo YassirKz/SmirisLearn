@@ -823,6 +823,7 @@ export default function LandingPage() {
                 <Sparkles className="w-8 h-8 text-white animate-pulse" />
               </motion.div>
 
+              {/* Badge confiance commenté
               <motion.div
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
@@ -842,6 +843,7 @@ export default function LandingPage() {
                   nous font confiance
                 </span>
               </motion.div>
+              */}
 
               <motion.h1
                 initial={{ opacity: 0, y: 30 }}
@@ -904,6 +906,7 @@ export default function LandingPage() {
             </div>
           </div>
 
+          {/* Stats grid commenté
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -929,6 +932,7 @@ export default function LandingPage() {
               </div>
             ))}
           </motion.div>
+          */}
 
           <motion.div
             initial={{ opacity: 0 }}
