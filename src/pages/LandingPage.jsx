@@ -748,7 +748,7 @@ export default function LandingPage() {
                   }}
                   className="block w-full text-left px-4 py-3 rounded-xl text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
                 >
-                  Se connecter
+                  Se connecterrrrrr
                 </button>
               </div>
             </motion.div>
