@@ -10,6 +10,7 @@ import {
   CheckCircle,
 } from "lucide-react";
 import { useAuth } from "../../hooks/useAuth";
+import Logo from "../ui/Logo";
 
 export default function LoginForm() {
   const [isLogin, setIsLogin] = useState(true);
@@ -96,13 +97,9 @@ export default function LoginForm() {
       </div>
 
       {/* Logo */}
-      <div className="text-center mb-8">
-        <div className="w-20 h-20 bg-gradient-to-br from-primary-500 to-primary-700 rounded-2xl mx-auto mb-4 flex items-center justify-center shadow-lg shadow-primary-200 dark:shadow-primary-900/30 animate-bounce-slow">
-          <span className="text-3xl font-bold text-white">S</span>
-        </div>
-
-        <h1 className="text-3xl font-bold text-gray-800 dark:text-white mb-2">Smiris Learn</h1>
-        <p className="text-gray-500 dark:text-gray-400 text-sm">
+      <div className="flex flex-col items-center mb-8">
+        <Logo size="xl" withText={true} className="flex-col items-center gap-4 text-center" />
+        <p className="text-gray-500 dark:text-gray-400 text-sm mt-2">
           {isLogin ? "Heureux de vous revoir !" : "Rejoignez l'aventure"}
         </p>
       </div>

@@ -353,16 +353,82 @@ export default function CompaniesTable() {
                                                                 </button>
                                                                 <button 
                                                                     onClick={async () => {
-                                                                        if (window.confirm(`Supprimer définitivement l'entreprise ${company.name} ?`)) {
-                                                                            const { error } = await supabase
-                                                                                .from('organizations')
-                                                                                .delete()
-                                                                                .eq('id', company.id);
-                                                                            
-                                                                            if (!error) {
-                                                                                fetchCompanies();
-                                                                            } else {
-                                                                                alert(`Erreur lors de la suppression: ${error.message}`);
+                                                                        if (window.confirm(`Supprimer définitivement l'entreprise ${company.name} ? Cette action supprimera également tous les piliers, groupes et détachera les membres.`)) {
+                                                                            setLoading(true);
+                                                                            try {
+                                                                                // 1. Détacher les profils un par un pour éviter les erreurs RLS sur les mises à jour en masse
+                                                                                const { data: profilesToDetach, error: fetchProfilesError } = await supabase
+                                                                                    .from('profiles')
+                                                                                    .select('id')
+                                                                                    .eq('organization_id', company.id);
+                                                                                
+                                                                                if (fetchProfilesError) throw fetchProfilesError;
+
+                                                                                if (profilesToDetach && profilesToDetach.length > 0) {
+                                                                                    for (const profile of profilesToDetach) {
+                                                                                        const { error: detachError } = await supabase
+                                                                                            .from('profiles')
+                                                                                            .update({ organization_id: null, role: 'student' })
+                                                                                            .eq('id', profile.id);
+                                                                                        
+                                                                                        if (detachError) {
+                                                                                            console.error(`Erreur détachement profil ${profile.id}:`, detachError);
+                                                                                            // On continue quand même pour les autres, ou on throw ?
+                                                                                            // On throw pour être sûr de ne pas laisser d'incohérences
+                                                                                            throw detachError;
+                                                                                        }
+                                                                                    }
+                                                                                }
+
+                                                                                // 2. Supprimer les piliers
+                                                                                // Note: On pourrait aussi supprimer les video_progress ici si nécessaire
+                                                                                await supabase
+                                                                                    .from('pillars')
+                                                                                    .delete()
+                                                                                    .eq('organization_id', company.id);
+
+                                                                                // 3. Nettoyer les groupes et leurs membres
+                                                                                const { data: groupsToDelete } = await supabase
+                                                                                    .from('groups')
+                                                                                    .select('id')
+                                                                                    .eq('organization_id', company.id);
+                                                                                
+                                                                                if (groupsToDelete && groupsToDelete.length > 0) {
+                                                                                    const groupIds = groupsToDelete.map(g => g.id);
+                                                                                    // Supprimer les membres des groupes d'abord
+                                                                                    await supabase
+                                                                                        .from('group_members')
+                                                                                        .delete()
+                                                                                        .in('group_id', groupIds);
+                                                                                    
+                                                                                    // Puis supprimer les groupes
+                                                                                    await supabase
+                                                                                        .from('groups')
+                                                                                        .delete()
+                                                                                        .in('id', groupIds);
+                                                                                }
+
+                                                                                // 4. Supprimer les invitations
+                                                                                await supabase
+                                                                                    .from('member_invitations')
+                                                                                    .delete()
+                                                                                    .eq('organization_id', company.id);
+
+                                                                                // 5. Supprimer l'organisation finale
+                                                                                const { error } = await supabase
+                                                                                    .from('organizations')
+                                                                                    .delete()
+                                                                                    .eq('id', company.id);
+                                                                                
+                                                                                if (!error) {
+                                                                                    fetchCompanies();
+                                                                                } else {
+                                                                                    throw error;
+                                                                                }
+                                                                            } catch (err) {
+                                                                                alert(`Erreur lors de la suppression: ${err.message}. Assurez-vous d'avoir supprimé les vidéos et quiz associés manuellement si nécessaire.`);
+                                                                            } finally {
+                                                                                setLoading(false);
                                                                             }
                                                                         }
                                                                         setShowActions(null);

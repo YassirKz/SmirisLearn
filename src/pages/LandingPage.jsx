@@ -1,3 +1,5 @@
+import Logo from "../components/ui/Logo";
+
 // src/pages/LandingPage.jsx
 import { useEffect, useRef, useState } from "react";
 import {
@@ -619,15 +621,8 @@ export default function LandingPage() {
       >
         <div className="w-full px-4 sm:px-8 lg:px-12 xl:px-20">
           <div className="flex items-center justify-between h-20">
-            <div className="flex items-center gap-2">
-              <div className="w-9 h-9 sm:w-10 sm:h-10 bg-gradient-to-br from-primary-600 to-primary-800 rounded-xl flex items-center justify-center shadow-lg shrink-0">
-                <span className="text-lg sm:text-xl font-bold text-white">
-                  S
-                </span>
-              </div>
-              <span className="font-bold text-gray-800 dark:text-white text-lg sm:text-xl tracking-tight hidden min-[380px]:block">
-                Smiris Learn
-              </span>
+            <div className="flex items-center">
+              <Logo size="md" />
             </div>
 
             <nav className="hidden lg:flex items-center gap-1 xl:gap-2 px-1.5 py-1.5 bg-gray-100 dark:bg-white/5 rounded-2xl border border-gray-200 dark:border-white/5">
@@ -748,7 +743,7 @@ export default function LandingPage() {
                   }}
                   className="block w-full text-left px-4 py-3 rounded-xl text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
                 >
-                  Se connecterrrrrr
+                  Se connecter
                 </button>
               </div>
             </motion.div>
@@ -818,9 +813,9 @@ export default function LandingPage() {
                 initial={{ scale: 0, rotate: -10 }}
                 animate={{ scale: 1, rotate: 0 }}
                 transition={{ duration: 0.8, type: "spring" }}
-                className="w-16 h-16 mb-8 bg-gradient-to-br from-primary-600 to-primary-800 rounded-2xl flex items-center justify-center shadow-[0_10px_40px_-10px_rgba(139,92,246,0.5)] mx-auto lg:mx-0 group hover:rotate-12 transition-transform duration-500"
+                className="mb-8 flex justify-center lg:justify-start"
               >
-                <Sparkles className="w-8 h-8 text-white animate-pulse" />
+                <Logo size="xl" withText={false} className="group hover:rotate-12 transition-transform duration-500" />
               </motion.div>
 
               {/* Badge confiance commenté
@@ -1943,13 +1938,8 @@ export default function LandingPage() {
         <div className="max-w-7xl mx-auto px-4">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-10">
             <div>
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-10 h-10 bg-gradient-to-br from-primary-600 to-primary-800 rounded-xl flex items-center justify-center shadow-lg">
-                  <span className="text-lg font-bold text-white">S</span>
-                </div>
-                <span className="font-bold text-gray-800 dark:text-white text-lg">
-                  Smiris Learn
-                </span>
+              <div className="flex items-center mb-4">
+                <Logo size="md" />
               </div>
               <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed mb-4">
                 La plateforme de formation SaaS pour les entreprises modernes.

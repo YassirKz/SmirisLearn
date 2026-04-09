@@ -15,6 +15,7 @@ import {
 import { useAuth } from '../../hooks/useAuth'
 import { useUserRole } from '../../hooks/useUserRole'
 import { useTheme } from '../../hooks/useTheme'
+import Logo from '../ui/Logo'
 
 export default function Sidebar({ onClose }) {    
     const { signOut } = useAuth()
@@ -57,9 +58,7 @@ export default function Sidebar({ onClose }) {
             {/* Logo */}
             <div className="p-6 border-b border-primary-100 dark:border-gray-800">
                 <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 bg-gradient-to-br from-primary-600 to-primary-800 rounded-xl flex items-center justify-center shadow-lg">
-                        <span className="text-xl font-bold text-white">S</span>
-                    </div>
+                    <Logo size="md" withText={false} />
                     <div>
                         <h2 className="font-bold text-gray-800 dark:text-gray-200">Smiris Learn</h2>
                         <p className="text-xs text-gray-500 dark:text-gray-400">

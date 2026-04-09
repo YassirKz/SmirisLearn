@@ -203,23 +203,42 @@ export default function MembersList({ isReadOnly = false, orgId: propOrgId }) {
   };
 
   const handleRemove = async (member) => {
+    // Un super_admin peut retirer n'importe qui (sauf lui-même)
+    // Un admin normal ne peut retirer que des étudiants
+    const isSuperAdmin = user?.role === 'super_admin';
+    const isAdmin = user?.role === 'org_admin';
+
     if (member.id === user.id) {
-      showError("Vous ne pouvez pas vous retirer vous-même de l'entreprise");
+      showError("Vous ne pouvez pas vous retirer vous-même");
       return;
     }
+
+    if (!isSuperAdmin && member.role === 'org_admin') {
+      showError("Vous n'avez pas les droits pour retirer un autre administrateur");
+      return;
+    }
+
     if (!confirm(`Êtes-vous sûr de vouloir retirer ${member.full_name || member.email} de l'entreprise ?`)) return;
 
     setDeletingId(member.id);
     try {
+      // Pour une suppression propre, on pourrait aussi supprimer ses progrès (cascade ou manuel)
+      // Mais ici on se contente de le "détacher" de l'organisation
       const { error } = await supabase
         .from('profiles')
-        .update({ organization_id: null, role: 'student' })
+        .update({ 
+          organization_id: null, 
+          role: 'student' // On le remet en simple étudiant système
+        })
         .eq('id', member.id);
+
       if (error) throw error;
+      
       setMembers(prev => prev.filter(m => m.id !== member.id));
-      success("Membre retiré de l'entreprise avec succès");
+      success("Membre retiré avec succès");
     } catch (err) {
-      showError(err.message);
+      console.error("Error removing member:", err);
+      showError(`Erreur: ${err.message}`);
     } finally {
       setDeletingId(null);
     }
@@ -532,8 +551,8 @@ export default function MembersList({ isReadOnly = false, orgId: propOrgId }) {
                               )}
                             </motion.button>
  
-                            {/* Supprimer (uniquement étudiants) */}
-                            {member.role === 'student' && (
+                            {/* Supprimer (étudiants pour les admins, tout le monde pour super_admin) */}
+                            {(member.role === 'student' || user?.role === 'super_admin') && (
                               <motion.button
                                 whileHover={{ scale: 1.1 }}
                                 whileTap={{ scale: 0.9 }}

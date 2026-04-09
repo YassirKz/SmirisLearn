@@ -12,6 +12,7 @@ import { supabase } from '../../lib/supabase';
 import { useUserRole } from '../../hooks/useUserRole';
 import { useOwnerOrg } from '../../hooks/useOwnerOrg';
 import Header from './Header';
+import Logo from '../ui/Logo';
 
 export default function AdminLayout({ children }) {
     const location = useLocation();
@@ -145,9 +146,7 @@ export default function AdminLayout({ children }) {
                                 <div className="absolute -top-10 -right-10 w-20 h-20 bg-gradient-to-br from-primary-400 to-primary-600 rounded-full opacity-20 blur-2xl" />
                                 
                                 <div className="relative flex items-center gap-4">
-                                    <div className="w-12 h-12 bg-gradient-to-br from-primary-600 to-primary-800 rounded-xl flex items-center justify-center shadow-lg shadow-primary-200 dark:shadow-primary-900/30">
-                                        <span className="text-2xl font-bold text-white">S</span>
-                                    </div>
+                                    <Logo size="lg" withText={false} />
                                     <div className="flex-1">
                                         <h2 className="font-bold text-gray-800 dark:text-gray-200 text-lg">Smiris Learn</h2>
                                         <p className="text-xs text-primary-600 dark:text-primary-400 flex items-center gap-1">

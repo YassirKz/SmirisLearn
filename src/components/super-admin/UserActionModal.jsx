@@ -41,6 +41,20 @@ export default function UserActionModal({ isOpen, onClose, user, action, onSucce
 
                 if (updateError) throw updateError;
             } else if (action === 'delete') {
+                // Nettoyage des données dépendantes pour éviter les erreurs de clés étrangères
+                // 1. Supprimer les progrès
+                await supabase
+                    .from('user_progress')
+                    .delete()
+                    .eq('user_id', user.id);
+
+                // 2. Supprimer les appartenances aux groupes
+                await supabase
+                    .from('group_members')
+                    .delete()
+                    .eq('user_id', user.id);
+
+                // 3. Supprimer le profil final
                 const { error: deleteError } = await supabase
                     .from('profiles')
                     .delete()
