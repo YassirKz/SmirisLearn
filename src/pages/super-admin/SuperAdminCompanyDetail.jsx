@@ -659,8 +659,8 @@ export default function SuperAdminCompanyDetail() {
                                 <AreaChart data={chartData}>
                                     <defs>
                                         <linearGradient id="colorMembres" x1="0" y1="0" x2="0" y2="1">
-                                            <stop offset="5%" stopColor="#8b5cf6" stopOpacity={0.3}/>
-                                            <stop offset="95%" stopColor="#8b5cf6" stopOpacity={0}/>
+                                            <stop offset="5%" stopColor="#0ea5e9" stopOpacity={0.3}/>
+                                            <stop offset="95%" stopColor="#0ea5e9" stopOpacity={0}/>
                                         </linearGradient>
                                     </defs>
                                     <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" opacity={0.1} />
@@ -689,7 +689,7 @@ export default function SuperAdminCompanyDetail() {
                                     <Area 
                                         type="monotone" 
                                         dataKey="membres" 
-                                        stroke="#8b5cf6" 
+                                        stroke="#0ea5e9" 
                                         strokeWidth={3}
                                         fillOpacity={1} 
                                         fill="url(#colorMembres)" 

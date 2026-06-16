@@ -2,6 +2,7 @@ import React, { createContext, useState, useEffect, useCallback, useRef } from "
 // eslint-disable-next-line no-unused-vars
 import { motion, AnimatePresence } from "framer-motion";
 import { supabase } from "../lib/supabase";
+import logger from "../lib/logger";
 // eslint-disable-next-line no-unused-vars
 import { checkRateLimit, untrusted, validateEmail } from "../utils/security";
 import LoadingSpinner from "../components/ui/LoadingSpinner";
@@ -118,12 +119,12 @@ export function AuthProvider({ children }) {
               localStorage.removeItem("impersonatedUserId");
             }
           } catch (e) {
-            console.error("Erreur chargement impersonation:", e);
+            logger.error("Erreur chargement impersonation:", e);
             localStorage.removeItem("impersonatedUserId");
           }
         }
       } catch (error) {
-        console.error("Erreur session:", error);
+        logger.error("Erreur session:", error);
         setError("Erreur de connexion au serveur");
       } finally {
         setLoading(false);
@@ -186,7 +187,7 @@ export function AuthProvider({ children }) {
       if (error) throw error;
       return { data, error: null };
     } catch (error) {
-      console.error("Erreur dans signUp:", error);
+      logger.error("Erreur dans signUp:", error);
       setError(error.message);
       return { data: null, error };
     } finally {
@@ -300,7 +301,7 @@ export function AuthProvider({ children }) {
         window.location.href = data.role === "org_admin" ? "/admin" : "/student";
       }
     } catch (e) {
-      console.error(e);
+      logger.error(e);
       alert("Erreur lors de l'impersonation");
     } finally {
       setLoading(false);

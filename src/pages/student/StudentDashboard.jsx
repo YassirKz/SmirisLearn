@@ -406,7 +406,7 @@ export default function StudentDashboard() {
 
   const COLORS = [
     "#4f46e5",
-    "#8b5cf6",
+    "#0ea5e9",
     "#ec4899",
     "#10b981",
     "#f59e0b",
@@ -506,7 +506,7 @@ export default function StudentDashboard() {
                   <defs>
                     <linearGradient id="progressGradient" x1="0%" y1="0%" x2="100%" y2="0%">
                       <stop offset="0%" stopColor="#4f46e5" />
-                      <stop offset="100%" stopColor="#8b5cf6" />
+                      <stop offset="100%" stopColor="#0ea5e9" />
                     </linearGradient>
                   </defs>
                 </svg>

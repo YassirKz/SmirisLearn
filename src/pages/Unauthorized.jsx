@@ -90,7 +90,7 @@ export default function Unauthorized() {
 
   // Récupérer les paramètres de l'erreur depuis l'URL ou le state
   const errorType = location.state?.errorType || 'default';
-  const from = location.state?.from || location.search?.get('from') || '/';
+  const from = location.state?.from || new URLSearchParams(location.search).get('from') || '/';
   const requiredRole = location.state?.requiredRole || null;
   const config = ERROR_CONFIG[errorType] || ERROR_CONFIG.default;
   const Icon = config.icon;

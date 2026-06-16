@@ -108,7 +108,7 @@ export default function RevenueChart() {
         {
           name: "Starter",
           value: (counts.starter || 0) - counts.trial,
-          color: "#8b5cf6",
+          color: "#0ea5e9",
           description: "Plan Starter à 49€/mois",
         },
         {

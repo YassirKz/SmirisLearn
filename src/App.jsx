@@ -4,6 +4,7 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import { useAuth } from "./hooks/useAuth";
 import { useUserRole } from "./hooks/useUserRole";
 import LoadingSpinner from "./components/ui/LoadingSpinner";
+import ErrorBoundary from "./components/ui/ErrorBoundary";
 
 // Non-lazy (needed before routing)
 import ProtectedRoute from "./components/auth/ProtectedRoute";
@@ -65,8 +66,9 @@ function App() {
         <LoadingSpinner size="lg" color="primary" />
       </div>
     }>
-    <ImpersonationBanner />
-    <Routes>
+      <ErrorBoundary>
+        <ImpersonationBanner />
+        <Routes>
       {/* ============================================
           ROUTES PUBLIQUES
       ============================================ */}
@@ -263,6 +265,7 @@ function App() {
       {/* 404 - Redirection vers l'accueil */}
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
+    </ErrorBoundary>
     </Suspense>
   );
 }

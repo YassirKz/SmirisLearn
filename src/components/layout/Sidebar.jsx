@@ -51,7 +51,7 @@ export default function Sidebar({ onClose }) {
 
     return (
         <motion.aside 
-            className="h-full w-64 bg-white/60 dark:bg-slate-900/60 backdrop-blur-2xl border-r border-white/50 dark:border-white/5 shadow-[0_0_60px_-15px_rgba(139,92,246,0.15)] dark:shadow-[0_0_60px_-15px_rgba(139,92,246,0.1)] flex flex-col relative overflow-hidden"
+            className="h-full w-64 bg-white/60 dark:bg-slate-900/60 backdrop-blur-2xl border-r border-white/50 dark:border-white/5 shadow-[0_0_60px_-15px_rgba(14,165,233,0.15)] dark:shadow-[0_0_60px_-15px_rgba(14,165,233,0.1)] flex flex-col relative overflow-hidden"
             initial={{ x: -20 }}
             animate={{ x: 0 }}
         >

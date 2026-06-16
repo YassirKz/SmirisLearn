@@ -88,6 +88,14 @@ export default function AcceptInvitePage() {
                     return;
                 }
 
+                // Vérifier si l'admin existe déjà
+                const { data: adminProfile } = await supabase
+                    .from('profiles')
+                    .select('id, email')
+                    .eq('email', companyInv.admin_email)
+                    .maybeSingle();
+                setExistingUser(adminProfile);
+
                 setInvitation(companyInv);
                 setInvitationType('company');
                 setLoading(false);
@@ -137,35 +145,46 @@ export default function AcceptInvitePage() {
         try {
             if (invitationType === 'company') {
                 // === INVITATION ENTREPRISE ===
-                const { data: authData, error: authError } = await supabase.auth.signUp({
-                    email: invitation.admin_email,
-                    password: formData.password,
-                    options: {
-                        data: {
-                            full_name: invitation.admin_name
+                let userId;
+
+                if (existingUser) {
+                    // L'utilisateur existe déjà : on le connecte
+                    const { data: authData, error: signInError } = await supabase.auth.signInWithPassword({
+                        email: invitation.admin_email,
+                        password: formData.password
+                    });
+                    if (signInError) throw signInError;
+                    userId = authData.user.id;
+                } else {
+                    // Nouvel utilisateur : on crée le compte
+                    const { data: authData, error: authError } = await supabase.auth.signUp({
+                        email: invitation.admin_email,
+                        password: formData.password,
+                        options: {
+                            data: {
+                                full_name: invitation.admin_name
+                            }
                         }
-                    }
-                });
+                    });
 
-                if (authError) throw authError;
+                    if (authError) throw authError;
+                    if (!authData.user) throw new Error("Erreur à la création du compte");
+                    
+                    userId = authData.user.id;
 
-                if (!authData.user) {
-                    throw new Error("Erreur à la création du compte");
+                    // CONNEXION IMMÉDIATE
+                    const { error: signInError } = await supabase.auth.signInWithPassword({
+                        email: invitation.admin_email,
+                        password: formData.password
+                    });
+                    if (signInError) throw signInError;
                 }
-
-                // CONNEXION IMMÉDIATE (pour que l'utilisateur soit authentifié)
-                const { error: signInError } = await supabase.auth.signInWithPassword({
-                    email: invitation.admin_email,
-                    password: formData.password
-                });
-
-                if (signInError) throw signInError;
 
                 // Appeler la fonction sécurisée pour créer l'organisation
                 const { error: rpcError } = await supabase
                     .rpc('accept_invitation_and_create_org', {
                         p_org_name: invitation.name,
-                        p_admin_id: authData.user.id,
+                        p_admin_id: userId,
                         p_admin_name: invitation.admin_name,
                         p_token: token
                     });
@@ -330,7 +349,7 @@ export default function AcceptInvitePage() {
 
                 {/* Formulaire */}
                 <form onSubmit={handleSubmit} className="space-y-5">
-                    {invitationType === 'member' && existingUser && (
+                    {existingUser && (
                         <p className="text-sm text-indigo-600 dark:text-indigo-400 text-center">
                             Entrez votre mot de passe pour accepter l'invitation et lier ce compte.
                         </p>

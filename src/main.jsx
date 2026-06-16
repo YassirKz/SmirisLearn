@@ -7,6 +7,7 @@ import App from "./App";
 import "./index.css";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import { ToastProvider } from "./contexts/ToastContext";
+import { ErrorProvider } from "./contexts/ErrorContext";
 import { onCLS, onFCP, onLCP, onTTFB } from "web-vitals";
 
 import { HelmetProvider } from "react-helmet-async";
@@ -49,7 +50,9 @@ ReactDOM.createRoot(document.getElementById("root")).render(
           <UserRoleProvider>
             <ThemeProvider>
               <ToastProvider>
-                <App />
+                <ErrorProvider>
+                  <App />
+                </ErrorProvider>
               </ToastProvider>
             </ThemeProvider>
           </UserRoleProvider>

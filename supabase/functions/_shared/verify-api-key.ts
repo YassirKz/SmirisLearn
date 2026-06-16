@@ -8,14 +8,24 @@ const corsHeaders = {
   "Access-Control-Allow-Methods": "GET, POST, PATCH, DELETE, OPTIONS",
 };
 
+function createApiError(message: string, status = 400, requestId?: string) {
+  const error = new Error(message);
+  (error as any).status = status;
+  if (requestId) {
+    (error as any).requestId = requestId;
+  }
+  return error;
+}
+
 /**
  * Vérifie la clé API fournie dans l'en-tête X-API-Key.
  * Retourne les informations de la clé si valide, sinon lance une erreur.
  */
 export async function verifyApiKey(req: Request) {
+  const requestId = crypto.randomUUID();
   const apiKey = req.headers.get("x-api-key");
   if (!apiKey) {
-    throw new Error("Missing X-API-Key header");
+    throw createApiError("Missing X-API-Key header", 401, requestId);
   }
 
   // Créer un client Supabase avec la Service Role Key (contourne RLS)
@@ -33,7 +43,7 @@ export async function verifyApiKey(req: Request) {
     .single();
 
   if (settingsError || !settings?.api_enabled) {
-    throw new Error("API is disabled");
+    throw createApiError("API is disabled", 503, requestId);
   }
 
   // 2. Hasher la clé fournie (SHA-256) pour la comparer au hash stocké
@@ -52,12 +62,12 @@ export async function verifyApiKey(req: Request) {
     .maybeSingle();
 
   if (keyError || !keyData) {
-    throw new Error("Invalid or inactive API key");
+    throw createApiError("Invalid or inactive API key", 401, requestId);
   }
 
   // 4. Vérifier l'expiration
   if (keyData.expires_at && new Date(keyData.expires_at) < new Date()) {
-    throw new Error("API key expired");
+    throw createApiError("API key expired", 401, requestId);
   }
 
   // 5. Rate limiting
@@ -71,11 +81,11 @@ export async function verifyApiKey(req: Request) {
     .eq("api_key_id", keyData.id)
     .gte("created_at", oneHourAgo.toISOString());
 
-  if (countError) throw countError;
+  if (countError) throw createApiError(countError.message || 'Unable to compute rate limit', 500, requestId);
 
   const limit = keyData.rate_limit || settings.api_rate_limit || 1000;
   if (count && count >= limit) {
-    throw new Error(`Rate limit exceeded (${limit} requests/hour)`);
+    throw createApiError(`Rate limit exceeded (${limit} requests/hour)`, 429, requestId);
   }
 
   return { keyData, supabase, settings };

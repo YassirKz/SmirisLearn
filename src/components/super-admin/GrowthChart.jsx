@@ -103,12 +103,12 @@ export default function GrowthChart() {
                 >
                     <defs>
                         <linearGradient id="colorEntreprises" x1="0" y1="0" x2="0" y2="1">
-                            <stop offset="5%" stopColor="#8b5cf6" stopOpacity={0.3}/>
-                            <stop offset="95%" stopColor="#8b5cf6" stopOpacity={0}/>
-                        </linearGradient>
-                        <linearGradient id="colorUtilisateurs" x1="0" y1="0" x2="0" y2="1">
                             <stop offset="5%" stopColor="#0ea5e9" stopOpacity={0.3}/>
                             <stop offset="95%" stopColor="#0ea5e9" stopOpacity={0}/>
+                        </linearGradient>
+                        <linearGradient id="colorUtilisateurs" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="5%" stopColor="#8b5cf6" stopOpacity={0.3}/>
+                            <stop offset="95%" stopColor="#8b5cf6" stopOpacity={0}/>
                         </linearGradient>
                     </defs>
                     <CartesianGrid 
@@ -151,7 +151,7 @@ export default function GrowthChart() {
                     <Area 
                         type="monotone" 
                         dataKey="entreprises" 
-                        stroke="#8b5cf6" 
+                        stroke="#0ea5e9" 
                         strokeWidth={3}
                         fillOpacity={1} 
                         fill="url(#colorEntreprises)" 
@@ -161,7 +161,7 @@ export default function GrowthChart() {
                     <Area 
                         type="monotone" 
                         dataKey="utilisateurs" 
-                        stroke="#0ea5e9" 
+                        stroke="#8b5cf6" 
                         strokeWidth={3}
                         fillOpacity={1} 
                         fill="url(#colorUtilisateurs)" 

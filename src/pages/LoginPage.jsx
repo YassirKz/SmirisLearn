@@ -9,7 +9,7 @@ const generateParticles = () => {
     id: i,
     x: Math.random() * window.innerWidth,
     y: Math.random() * window.innerHeight,
-    color: i % 3 === 0 ? "#8B5CF6" : i % 3 === 1 ? "#a78bfa" : "#06b6d4",
+    color: i % 3 === 0 ? "#0ea5e9" : i % 3 === 1 ? "#38bdf8" : "#06b6d4",
     duration: Math.random() * 10 + 8,
     offsetX: Math.random() * 80 - 40,
   }));

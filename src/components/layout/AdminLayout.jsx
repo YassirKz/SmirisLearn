@@ -140,7 +140,7 @@ export default function AdminLayout({ children }) {
                         transition={{ type: "spring", stiffness: 300, damping: 30 }}
                         className="fixed top-0 left-0 h-full z-40"
                     >
-                        <aside className="h-full w-72 bg-white/60 dark:bg-slate-900/60 backdrop-blur-2xl border-r border-white/50 dark:border-white/5 shadow-[0_0_60px_-15px_rgba(139,92,246,0.15)] dark:shadow-[0_0_60px_-15px_rgba(139,92,246,0.1)] flex flex-col relative overflow-hidden">
+                        <aside className="h-full w-72 bg-white/60 dark:bg-slate-900/60 backdrop-blur-2xl border-r border-white/50 dark:border-white/5 shadow-[0_0_60px_-15px_rgba(14,165,233,0.15)] dark:shadow-[0_0_60px_-15px_rgba(14,165,233,0.1)] flex flex-col relative overflow-hidden">
                             {/* Decorative orbs */}
                             <div className="absolute -top-20 -left-20 w-40 h-40 bg-primary-400/20 dark:bg-primary-500/10 rounded-full blur-3xl pointer-events-none" />
                             <div className="absolute -bottom-20 -right-20 w-40 h-40 bg-accent-400/15 dark:bg-accent-500/10 rounded-full blur-3xl pointer-events-none" />

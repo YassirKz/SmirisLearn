@@ -799,7 +799,7 @@ export default function LandingPage() {
         />
 
         {/* Layered Cinematic Overlays */}
-        <div className="absolute inset-0 z-0 bg-[radial-gradient(circle_at_50%_50%,rgba(139,92,246,0.15),transparent_60%)]" />
+        <div className="absolute inset-0 z-0 bg-[radial-gradient(circle_at_50%_50%,rgba(14,165,233,0.15),transparent_60%)]" />
         <div className="absolute inset-0 z-0 bg-gradient-to-b from-slate-950 via-transparent to-slate-950" />
         <div className="absolute inset-0 z-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent opacity-90" />
 
@@ -875,7 +875,7 @@ export default function LandingPage() {
                       setSelectedPlan("free");
                       setShowSignupModal(true);
                     }}
-                    className="px-6 sm:px-10 py-4 sm:py-5 bg-gradient-to-r from-primary-600 to-primary-800 text-white rounded-2xl text-lg sm:text-xl font-bold shadow-[0_20px_50px_-15px_rgba(139,92,246,0.5)] hover:shadow-[0_25px_60px_-15px_rgba(139,92,246,0.6)] hover:scale-105 active:scale-95 transition-all flex items-center gap-3 group relative overflow-hidden"
+                    className="px-6 sm:px-10 py-4 sm:py-5 bg-gradient-to-r from-primary-600 to-primary-800 text-white rounded-2xl text-lg sm:text-xl font-bold shadow-[0_20px_50px_-15px_rgba(14,165,233,0.5)] hover:shadow-[0_25px_60px_-15px_rgba(14,165,233,0.6)] hover:scale-105 active:scale-95 transition-all flex items-center gap-3 group relative overflow-hidden"
                   >
                     <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
                     <span className="relative">Commencer gratuitement</span>

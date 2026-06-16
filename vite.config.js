@@ -3,7 +3,7 @@ import react from '@vitejs/plugin-react'
 import { visualizer } from 'rollup-plugin-visualizer';
 import { VitePWA } from 'vite-plugin-pwa';
 
-export default defineConfig({
+export default defineConfig(({ mode }) => ({
   plugins: [
     react(),
     visualizer({ open: false, filename: 'stats.html' }),
@@ -31,7 +31,7 @@ export default defineConfig({
     postcss: './postcss.config.js',
   },
   build: {
-    sourcemap: false,
+    sourcemap: mode === 'development' ? true : 'hidden',
     minify: 'terser',
     rollupOptions: {
       output: {
@@ -53,4 +53,4 @@ export default defineConfig({
     }
   }
 
-})
+}))
