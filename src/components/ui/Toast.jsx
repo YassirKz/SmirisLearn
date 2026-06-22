@@ -1,27 +1,34 @@
 import { useEffect, useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { 
-  CheckCircle, XCircle, AlertCircle, Info, X,
-  Bell, Shield, Zap, Sparkles 
+import {
+  CheckCircle,
+  XCircle,
+  AlertCircle,
+  Info,
+  X,
+  Bell,
+  Shield,
+  Zap,
+  Sparkles,
 } from "lucide-react";
 
 // Configuration des positions
 const POSITIONS = {
-  'top-right': 'top-4 right-4',
-  'top-left': 'top-4 left-4',
-  'top-center': 'top-4 left-1/2 -translate-x-1/2',
-  'bottom-right': 'bottom-4 right-4',
-  'bottom-left': 'bottom-4 left-4',
-  'bottom-center': 'bottom-4 left-1/2 -translate-x-1/2'
+  "top-right": "top-4 right-4",
+  "top-left": "top-4 left-4",
+  "top-center": "top-4 left-1/2 -translate-x-1/2",
+  "bottom-right": "bottom-4 right-4",
+  "bottom-left": "bottom-4 left-4",
+  "bottom-center": "bottom-4 left-1/2 -translate-x-1/2",
 };
 
 // Animation variants
 const toastVariants = {
   initial: (position) => ({
     opacity: 0,
-    x: position.includes('right') ? 50 : position.includes('left') ? -50 : 0,
-    y: position.includes('top') ? -20 : 20,
-    scale: 0.8
+    x: position.includes("right") ? 50 : position.includes("left") ? -50 : 0,
+    y: position.includes("top") ? -20 : 20,
+    scale: 0.8,
   }),
   animate: {
     opacity: 1,
@@ -36,8 +43,8 @@ const toastVariants = {
   },
   exit: (position) => ({
     opacity: 0,
-    x: position.includes('right') ? 50 : position.includes('left') ? -50 : 0,
-    y: position.includes('top') ? -20 : 20,
+    x: position.includes("right") ? 50 : position.includes("left") ? -50 : 0,
+    y: position.includes("top") ? -20 : 20,
     scale: 0.5,
     transition: { duration: 0.2 },
   }),
@@ -47,59 +54,59 @@ const toastVariants = {
 const TYPES = {
   success: {
     icon: CheckCircle,
-    bg: 'bg-gradient-to-r from-emerald-500 to-green-500',
-    border: 'border-emerald-200',
-    text: 'text-white',
-    progress: 'bg-white/30',
-    glow: 'shadow-emerald-500/20'
+    bg: "bg-gradient-to-r from-emerald-500 to-green-500",
+    border: "border-emerald-200",
+    text: "text-white",
+    progress: "bg-white/30",
+    glow: "shadow-emerald-500/20",
   },
   error: {
     icon: XCircle,
-    bg: 'bg-gradient-to-r from-red-500 to-accent-600',
-    border: 'border-red-200',
-    text: 'text-white',
-    progress: 'bg-white/30',
-    glow: 'shadow-red-500/20'
+    bg: "bg-gradient-to-r from-red-500 to-accent-600",
+    border: "border-red-200",
+    text: "text-white",
+    progress: "bg-white/30",
+    glow: "shadow-red-500/20",
   },
   warning: {
     icon: AlertCircle,
-    bg: 'bg-gradient-to-r from-orange-500 to-amber-500',
-    border: 'border-orange-200',
-    text: 'text-white',
-    progress: 'bg-white/30',
-    glow: 'shadow-orange-500/20'
+    bg: "bg-gradient-to-r from-orange-500 to-amber-500",
+    border: "border-orange-200",
+    text: "text-white",
+    progress: "bg-white/30",
+    glow: "shadow-orange-500/20",
   },
   info: {
     icon: Info,
-    bg: 'bg-gradient-to-r from-primary-500 to-accent-600',
-    border: 'border-primary-200',
-    text: 'text-white',
-    progress: 'bg-white/30',
-    glow: 'shadow-primary-500/20'
+    bg: "bg-gradient-to-r from-primary-500 to-accent-600",
+    border: "border-primary-200",
+    text: "text-white",
+    progress: "bg-white/30",
+    glow: "shadow-primary-500/20",
   },
   security: {
     icon: Shield,
-    bg: 'bg-gradient-to-r from-primary-600 to-accent-500',
-    border: 'border-primary-200',
-    text: 'text-white',
-    progress: 'bg-white/30',
-    glow: 'shadow-primary-500/20'
-  }
+    bg: "bg-gradient-to-r from-primary-600 to-accent-500",
+    border: "border-primary-200",
+    text: "text-white",
+    progress: "bg-white/30",
+    glow: "shadow-primary-500/20",
+  },
 };
 
 /**
  * Composant Toast individuel
  */
-function Toast({ 
-  message, 
-  type = "info", 
-  duration = 4000, 
+function Toast({
+  message,
+  type = "info",
+  duration = 4000,
   onClose,
-  position = 'bottom-right',
+  position = "bottom-right",
   showProgress = true,
   action,
   onAction,
-  actionLabel
+  actionLabel,
 }) {
   useEffect(() => {
     if (duration > 0) {
@@ -141,7 +148,7 @@ function Toast({
         className="relative z-10"
       >
         <Icon className="w-6 h-6 text-white drop-shadow-lg" />
-        {type === 'security' && (
+        {type === "security" && (
           <motion.div
             animate={{ scale: [1, 1.2, 1] }}
             transition={{ duration: 2, repeat: Infinity }}
@@ -155,7 +162,7 @@ function Toast({
         <p className={`text-sm font-medium ${config.text} drop-shadow`}>
           {message}
         </p>
-        
+
         {/* Sous-message optionnel */}
         {action && (
           <button
@@ -165,7 +172,7 @@ function Toast({
             }}
             className="mt-1 text-xs text-white/80 hover:text-white underline underline-offset-2 transition-colors"
           >
-            {actionLabel || 'En savoir plus'}
+            {actionLabel || "En savoir plus"}
           </button>
         )}
       </div>
@@ -199,9 +206,15 @@ function Toast({
 /**
  * Container pour gérer plusieurs toasts
  */
-export function ToastContainer({ toasts, removeToast, position = 'bottom-right' }) {
+export function ToastContainer({
+  toasts,
+  removeToast,
+  position = "bottom-right",
+}) {
   return (
-    <div className={`fixed ${POSITIONS[position]} z-[9999] space-y-3 max-w-md w-full pointer-events-none`}>
+    <div
+      className={`fixed ${POSITIONS[position]} z-[9999] space-y-3 max-w-md w-full pointer-events-none`}
+    >
       <AnimatePresence mode="popLayout">
         {toasts.map((toast) => (
           <div key={toast.id} className="pointer-events-auto">
@@ -223,38 +236,44 @@ export function ToastContainer({ toasts, removeToast, position = 'bottom-right' 
 export function useToast() {
   const [toasts, setToasts] = useState([]);
 
-  const addToast = useCallback(({ 
-    message, 
-    type = 'info', 
-    duration = 4000,
-    action,
-    actionLabel,
-    position
-  }) => {
-    const id = Date.now().toString(36) + Math.random().toString(36).substr(2);
-    
-    setToasts(prev => [...prev, { 
-      id, 
-      message, 
-      type, 
-      duration,
+  const addToast = useCallback(
+    ({
+      message,
+      type = "info",
+      duration = 4000,
       action,
       actionLabel,
-      position
-    }]);
+      position,
+    }) => {
+      const id = Date.now().toString(36) + Math.random().toString(36).substr(2);
 
-    // Auto-retrait si durée > 0
-    if (duration > 0) {
-      setTimeout(() => {
-        removeToast(id);
-      }, duration);
-    }
+      setToasts((prev) => [
+        ...prev,
+        {
+          id,
+          message,
+          type,
+          duration,
+          action,
+          actionLabel,
+          position,
+        },
+      ]);
 
-    return id;
-  }, []);
+      // Auto-retrait si durée > 0
+      if (duration > 0) {
+        setTimeout(() => {
+          removeToast(id);
+        }, duration);
+      }
+
+      return id;
+    },
+    [],
+  );
 
   const removeToast = useCallback((id) => {
-    setToasts(prev => prev.filter(t => t.id !== id));
+    setToasts((prev) => prev.filter((t) => t.id !== id));
   }, []);
 
   const clearToasts = useCallback(() => {
@@ -262,20 +281,33 @@ export function useToast() {
   }, []);
 
   // Méthodes raccourcies mémoïsées pour éviter les boucles de rendu
-  const success = useCallback((message, options = {}) => 
-    addToast({ message, type: 'success', ...options }), [addToast]);
+  const success = useCallback(
+    (message, options = {}) =>
+      addToast({ message, type: "success", ...options }),
+    [addToast],
+  );
 
-  const error = useCallback((message, options = {}) => 
-    addToast({ message, type: 'error', ...options }), [addToast]);
+  const error = useCallback(
+    (message, options = {}) => addToast({ message, type: "error", ...options }),
+    [addToast],
+  );
 
-  const warning = useCallback((message, options = {}) => 
-    addToast({ message, type: 'warning', ...options }), [addToast]);
+  const warning = useCallback(
+    (message, options = {}) =>
+      addToast({ message, type: "warning", ...options }),
+    [addToast],
+  );
 
-  const info = useCallback((message, options = {}) => 
-    addToast({ message, type: 'info', ...options }), [addToast]);
+  const info = useCallback(
+    (message, options = {}) => addToast({ message, type: "info", ...options }),
+    [addToast],
+  );
 
-  const security = useCallback((message, options = {}) => 
-    addToast({ message, type: 'security', ...options }), [addToast]);
+  const security = useCallback(
+    (message, options = {}) =>
+      addToast({ message, type: "security", ...options }),
+    [addToast],
+  );
 
   return {
     toasts,
@@ -286,7 +318,7 @@ export function useToast() {
     error,
     warning,
     info,
-    security
+    security,
   };
 }
 

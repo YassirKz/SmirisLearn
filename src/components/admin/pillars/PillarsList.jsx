@@ -275,15 +275,15 @@ export default function PillarsList({ isReadOnly = false, orgId: propOrgId }) {
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="bg-white/60 dark:bg-slate-900/60 backdrop-blur-2xl rounded-3xl p-6 shadow-lg border border-white/50 dark:border-white/5 overflow-hidden relative"
+                className="bg-white/80 dark:bg-slate-900/40 backdrop-blur-sm rounded-3xl p-6 shadow-lg border border-secondary-200 dark:border-secondary-200/20 overflow-hidden relative"
             >
                 {/* Glow de fond */}
-                <div className="absolute top-0 right-0 w-64 h-64 bg-primary-500/5 dark:bg-primary-500/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none" />
+                <div className="absolute top-0 right-0 w-64 h-64 bg-primary-600 dark:bg-primary-500/5 dark:bg-primary-600 dark:bg-primary-500/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none" />
 
                 <div className="relative z-10 flex flex-col xl:flex-row xl:items-center xl:justify-between gap-6">
                     <div className="flex flex-wrap items-center gap-6">
-                        <div className="flex items-center gap-3 bg-white/50 dark:bg-white/5 px-4 h-11 rounded-2xl border border-white/50 dark:border-white/5 shadow-sm">
-                            <div className="w-2.5 h-2.5 bg-primary-500 rounded-full animate-pulse shadow-[0_0_10px_rgba(59,130,246,0.5)]" />
+                        <div className="flex items-center gap-3 bg-white/50 dark:bg-slate-900/20 px-4 h-11 rounded-2xl border border-secondary-200 dark:border-secondary-200/20 shadow-sm">
+                            <div className="w-2.5 h-2.5 bg-primary-600 dark:bg-primary-500 rounded-full animate-pulse shadow-[0_0_10px_rgba(59,130,246,0.5)]" />
                             <span className="text-sm font-bold text-gray-700 dark:text-gray-200 uppercase tracking-wide">
                                 {stats.total} Piliers
                             </span>
@@ -307,12 +307,12 @@ export default function PillarsList({ isReadOnly = false, orgId: propOrgId }) {
                             <PillarFilters filters={filters} onChange={handleFilterChange} />
                         </div>
 
-                        <div className="flex bg-white/50 dark:bg-white/5 p-1.5 rounded-xl shadow-sm border border-white/50 dark:border-white/5 h-11 items-center">
+                        <div className="flex bg-white/50 dark:bg-slate-900/20 p-1.5 rounded-xl shadow-sm border border-secondary-200 dark:border-secondary-200/20 h-11 items-center">
                             <button
                                 onClick={() => handleViewChange('table')}
                                 className={`p-2 rounded-lg transition-all ${
                                     viewMode === 'table'
-                                        ? 'bg-white/80 dark:bg-white/10 text-primary-600 dark:text-primary-400 shadow-sm'
+                                        ? 'bg-white/80 dark:bg-white/10 text-primary-500 dark:text-primary-500 shadow-sm'
                                         : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'
                                 }`}
                                 title="Vue Tableau"
@@ -323,7 +323,7 @@ export default function PillarsList({ isReadOnly = false, orgId: propOrgId }) {
                                 onClick={() => handleViewChange('cards')}
                                 className={`p-2 rounded-lg transition-all ${
                                     viewMode === 'cards'
-                                        ? 'bg-white/80 dark:bg-white/10 text-primary-600 dark:text-primary-400 shadow-sm'
+                                        ? 'bg-white/80 dark:bg-white/10 text-primary-500 dark:text-primary-500 shadow-sm'
                                         : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'
                                 }`}
                                 title="Vue Cartes"
@@ -336,7 +336,7 @@ export default function PillarsList({ isReadOnly = false, orgId: propOrgId }) {
                             whileHover={{ rotate: 180 }}
                             transition={{ duration: 0.3 }}
                             onClick={handleRefresh}
-                            className="w-11 h-11 flex items-center justify-center bg-white/50 dark:bg-white/5 border border-white/50 dark:border-white/5 hover:border-primary-300 dark:hover:border-primary-500 rounded-xl shadow-sm transition-all"
+                            className="w-11 h-11 flex items-center justify-center bg-white/50 dark:bg-slate-900/20 border border-secondary-200 dark:border-secondary-200/20 hover:border-secondary-200 dark:hover:border-secondary-200 rounded-xl shadow-sm transition-all"
                             title="Actualiser"
                             disabled={refreshing || loading}
                         >
@@ -348,9 +348,9 @@ export default function PillarsList({ isReadOnly = false, orgId: propOrgId }) {
                                 whileHover={{ scale: 1.05 }}
                                 whileTap={{ scale: 0.95 }}
                                 onClick={() => setShowCreateModal(true)}
-                                className="group px-6 h-11 bg-gradient-to-r from-primary-600 to-accent-600 hover:from-primary-500 hover:to-accent-500 text-white rounded-xl shadow-lg shadow-primary-500/25 hover:shadow-xl hover:shadow-primary-500/40 transition-all flex items-center justify-center gap-3 font-bold border border-white/10 shrink-0 w-full sm:w-auto"
+                                className="group px-6 h-11 bg-primary-600 dark:bg-primary-500 hover:from-primary-500 hover:to-accent-500 text-white rounded-xl shadow-lg shadow-primary-500/25 hover:shadow-xl hover:shadow-primary-500/40 transition-all flex items-center justify-center gap-3 font-bold border border-secondary-200/30 shrink-0 w-full sm:w-auto"
                             >
-                                <div className="p-1 bg-white/20 rounded-lg group-hover:bg-white/30 transition-colors">
+                                <div className="p-1 bg-white/20 rounded-lg group-hover:bg-slate-900/30 transition-colors">
                                     <Plus className="w-4 h-4" />
                                 </div>
                                 Nouveau
@@ -367,10 +367,10 @@ export default function PillarsList({ isReadOnly = false, orgId: propOrgId }) {
                     key="no-pillars-message"
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="bg-white/60 dark:bg-slate-900/60 backdrop-blur-2xl rounded-3xl p-12 shadow-lg border border-white/50 dark:border-white/5 text-center relative overflow-hidden"
+                    className="bg-white/80 dark:bg-slate-900/40 backdrop-blur-sm rounded-3xl p-12 shadow-lg border border-secondary-200 dark:border-secondary-200/20 text-center relative overflow-hidden"
                 >
-                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-primary-500/10 rounded-full blur-3xl pointer-events-none" />
-                    <div className="relative z-10 w-24 h-24 bg-gradient-to-br from-primary-100 to-primary-50 dark:from-primary-900/40 dark:to-primary-800/20 rounded-3xl mx-auto mb-6 flex items-center justify-center shadow-inner border border-white/50 dark:border-gray-700 transform rotate-3">
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-primary-600 dark:bg-primary-500/10 rounded-full blur-3xl pointer-events-none" />
+                    <div className="relative z-10 w-24 h-24 bg-gradient-to-br from-primary-100 to-primary-50 dark:from-primary-900/40 dark:to-primary-800/20 rounded-3xl mx-auto mb-6 flex items-center justify-center shadow-inner border border-secondary-200 dark:border-secondary-200/20 transform rotate-3">
                         <BookOpen className="w-12 h-12 text-primary-500 drop-shadow-md" />
                     </div>
                     <h3 className="text-2xl font-extrabold text-gray-800 dark:text-white mb-2 tracking-tight">

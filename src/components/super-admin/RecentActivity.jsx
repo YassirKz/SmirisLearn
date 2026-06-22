@@ -37,16 +37,16 @@ export default function RecentActivity() {
         ...(orgs?.map(o => ({
           type: 'org',
           icon: Building2,
-          color: 'text-primary-600 dark:text-primary-400',
-          bg: 'bg-primary-100 dark:bg-primary-900/30',
+          color: 'text-primary-500 dark:text-primary-500',
+          bg: 'bg-accent-500 text-secondary-900 dark:bg-primary-900/30',
           title: `Nouvelle entreprise: ${o.name}`,
           time: o.created_at
         })) || []),
         ...(users?.map(u => ({
           type: 'user',
           icon: UserPlus,
-          color: 'text-accent-600 dark:text-accent-400',
-          bg: 'bg-accent-100 dark:bg-accent-900/30',
+          color: 'text-primary-500 dark:text-accent-400',
+          bg: 'bg-accent-500 text-secondary-900 dark:bg-accent-900/30',
           title: `Nouvel utilisateur: ${u.full_name}`,
           time: u.created_at
         })) || []),
@@ -75,15 +75,15 @@ export default function RecentActivity() {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.2 }}
-      className="bg-white/60 dark:bg-slate-900/60 backdrop-blur-2xl p-8 rounded-3xl border border-white/50 dark:border-white/5 shadow-lg h-full overflow-hidden relative"
+      className="bg-white/80 dark:bg-slate-900/40 backdrop-blur-sm p-8 rounded-3xl border border-secondary-200 dark:border-secondary-200/20 shadow-lg h-full overflow-hidden relative"
     >
-      <div className="absolute -top-24 -right-24 w-48 h-48 bg-gradient-to-br from-primary-500 to-accent-600 rounded-full opacity-0 dark:opacity-10 blur-3xl pointer-events-none" />
+      <div className="absolute -top-24 -right-24 w-48 h-48 bg-primary-600 dark:bg-primary-500 rounded-full opacity-0 dark:opacity-10 blur-3xl pointer-events-none" />
       <div className="flex items-center justify-between mb-8 relative z-10">
         <div>
           <h2 className="text-xl font-bold text-gray-900 dark:text-white tracking-tight">Activité Récente</h2>
           <p className="text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-widest mt-1">DERNIÈRES MISES À JOUR</p>
         </div>
-        <div className="p-2.5 bg-gradient-to-br from-primary-500 to-accent-600 rounded-xl shadow-lg shadow-primary-500/30">
+        <div className="p-2.5 bg-primary-600 dark:bg-primary-500 rounded-xl shadow-lg shadow-sm">
           <Clock className="w-5 h-5 text-white" />
         </div>
       </div>
@@ -92,10 +92,10 @@ export default function RecentActivity() {
         <div className="space-y-4">
           {[1, 2, 3].map(i => (
             <div key={i} className="flex items-center gap-3 animate-pulse">
-              <div className="w-12 h-12 bg-white/40 dark:bg-white/5 rounded-xl"></div>
+              <div className="w-12 h-12 bg-white/40 dark:bg-slate-900/20 rounded-xl"></div>
               <div className="flex-1">
-                <div className="h-4 bg-white/40 dark:bg-white/5 rounded-lg w-3/4 mb-2"></div>
-                <div className="h-3 bg-white/40 dark:bg-white/5 rounded-lg w-1/4"></div>
+                <div className="h-4 bg-white/40 dark:bg-slate-900/20 rounded-lg w-3/4 mb-2"></div>
+                <div className="h-3 bg-white/40 dark:bg-slate-900/20 rounded-lg w-1/4"></div>
               </div>
             </div>
           ))}
@@ -115,9 +115,9 @@ export default function RecentActivity() {
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: index * 0.1 }}
-                className="flex items-center gap-4 p-4 rounded-2xl hover:bg-white/50 dark:hover:bg-white/5 transition-all group relative border border-transparent hover:border-white/50 dark:hover:border-white/5"
+                className="flex items-center gap-4 p-4 rounded-2xl hover:bg-white/50 dark:hover:bg-white/5 transition-all group relative border border-transparent hover:border-secondary-200 dark:hover:border-secondary-200/20"
               >
-                <div className={`w-12 h-12 ${activity.bg} rounded-xl flex items-center justify-center shadow-sm border border-white/50 dark:border-white/5 group-hover:scale-110 transition-transform`}>
+                <div className={`w-12 h-12 ${activity.bg} rounded-xl flex items-center justify-center shadow-sm border border-secondary-200 dark:border-secondary-200/20 group-hover:scale-110 transition-transform`}>
                   <Icon className={`w-6 h-6 ${activity.color}`} />
                 </div>
                 <div className="flex-1 min-w-0">

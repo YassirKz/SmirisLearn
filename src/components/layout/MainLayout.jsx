@@ -29,7 +29,7 @@ export default function MainLayout({ children }) {
     if (!user) return <Navigate to="/login" replace />
 
     return (
-        <div className="min-h-screen bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-primary-50/50 via-white to-accent-50/30 dark:from-slate-950 dark:via-gray-900 dark:to-slate-950">
+        <div className="min-h-screen bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-secondary-100 via-white to-secondary-100 dark:from-slate-950 dark:via-gray-900 dark:to-slate-950">
             {/* Overlay mobile */}
             <AnimatePresence mode="wait">
                 {sidebarOpen && (

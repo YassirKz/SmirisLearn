@@ -245,7 +245,7 @@ export default function AdminStats() {
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: index * 0.1 }}
-                            className="bg-white rounded-xl p-4 shadow-sm border border-gray-100"
+                            className="bg-white rounded-xl p-4 shadow-sm border border-secondary-200"
                         >
                             <div className="flex items-center justify-between">
                                 <div>
@@ -270,10 +270,10 @@ export default function AdminStats() {
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="bg-gradient-to-r from-primary-50 to-accent-50 rounded-xl p-4 border border-primary-100"
+                    className="bg-gradient-to-r from-primary-50 to-accent-50 rounded-xl p-4 border border-secondary-200"
                 >
                     <div className="flex items-center gap-2 mb-2">
-                        <Shield className="w-4 h-4 text-primary-600" />
+                        <Shield className="w-4 h-4 text-primary-500" />
                         <h3 className="font-medium text-gray-800">Informations entreprise</h3>
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-4 gap-4 text-sm">

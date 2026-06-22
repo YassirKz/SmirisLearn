@@ -110,12 +110,12 @@ export default function GroupPillarAccess({ isOpen, onClose, group, orgId, onUpd
 
   const getColorClass = (color) => {
     const colors = {
-      blue: 'bg-primary-100 text-primary-700 border-primary-200 dark:bg-primary-900/30 dark:text-primary-300 dark:border-primary-800',
-      purple: 'bg-accent-100 text-accent-700 border-accent-200 dark:bg-accent-900/30 dark:text-accent-300 dark:border-accent-800',
+      blue: 'bg-accent-500 text-secondary-900 text-secondary-900 border-secondary-200 dark:bg-primary-900/30 dark:text-primary-300 dark:border-primary-800',
+      purple: 'bg-accent-500 text-secondary-900 text-accent-700 border-accent-200 dark:bg-accent-900/30 dark:text-accent-300 dark:border-accent-800',
       green: 'bg-emerald-100 text-emerald-700 border-emerald-200 dark:bg-emerald-900/30 dark:text-emerald-300 dark:border-emerald-800',
       red: 'bg-rose-100 text-rose-700 border-rose-200 dark:bg-rose-900/30 dark:text-rose-300 dark:border-rose-800',
       yellow: 'bg-amber-100 text-amber-700 border-amber-200 dark:bg-amber-900/30 dark:text-amber-300 dark:border-amber-800',
-      indigo: 'bg-primary-100 text-primary-700 border-primary-200 dark:bg-primary-900/30 dark:text-primary-300 dark:border-primary-800',
+      indigo: 'bg-accent-500 text-secondary-900 text-secondary-900 border-secondary-200 dark:bg-primary-900/30 dark:text-primary-300 dark:border-primary-800',
       pink: 'bg-pink-100 text-pink-700 border-pink-200 dark:bg-pink-900/30 dark:text-pink-300 dark:border-pink-800',
       orange: 'bg-orange-100 text-orange-700 border-orange-200 dark:bg-orange-900/30 dark:text-orange-300 dark:border-orange-800'
     };
@@ -138,11 +138,11 @@ export default function GroupPillarAccess({ isOpen, onClose, group, orgId, onUpd
             initial={{ scale: 0.9, y: 20, opacity: 0 }}
             animate={{ scale: 1, y: 0, opacity: 1 }}
             exit={{ scale: 0.9, y: 20, opacity: 0 }}
-            className="bg-white/95 dark:bg-slate-900/95 backdrop-blur-2xl rounded-3xl shadow-2xl border border-white/50 dark:border-white/10 w-full max-w-md overflow-hidden relative"
+            className="bg-white/95 dark:bg-slate-900/95 backdrop-blur-2xl rounded-3xl shadow-2xl border border-secondary-200 dark:border-secondary-200/30 w-full max-w-md overflow-hidden relative"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Background Glows */}
-            <div className="absolute top-0 right-0 w-64 h-64 bg-primary-500/10 dark:bg-primary-500/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none" />
+            <div className="absolute top-0 right-0 w-64 h-64 bg-primary-600 dark:bg-primary-500/10 dark:bg-primary-600 dark:bg-primary-500/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none" />
 
             <div className="p-8 relative z-10">
               <div className="flex items-center justify-between mb-8">
@@ -150,7 +150,7 @@ export default function GroupPillarAccess({ isOpen, onClose, group, orgId, onUpd
                   <h2 className="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-300">
                     Accès piliers
                   </h2>
-                  <p className="text-sm font-medium text-primary-600 dark:text-primary-400 mt-1">
+                  <p className="text-sm font-medium text-primary-500 dark:text-primary-500 mt-1">
                     {escapeText(untrusted(group.name))}
                   </p>
                 </div>
@@ -180,20 +180,20 @@ export default function GroupPillarAccess({ isOpen, onClose, group, orgId, onUpd
                             key={`pillar-access-${pillar.id || 'none'}-${idx}`}
                             className={`flex items-center gap-3 p-3 rounded-xl border-2 cursor-pointer transition-all ${
                               isSelected
-                                ? 'border-primary-300 dark:border-primary-600 bg-primary-50 dark:bg-primary-900/30'
-                                : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600'
+                                ? 'border-secondary-200 dark:border-secondary-200 bg-secondary-50 dark:bg-primary-900/30'
+                                : 'border-secondary-200 dark:border-secondary-200/20 hover:border-gray-300 dark:hover:border-gray-600'
                             }`}
                           >
                             <input
                               type="checkbox"
                               checked={isSelected}
                               onChange={() => togglePillar(pillar.id)}
-                              className="w-5 h-5 rounded text-primary-600 dark:text-primary-400"
+                              className="w-5 h-5 rounded text-primary-500 dark:text-primary-500"
                             />
                             <span className={`px-3 py-1 rounded-full text-sm font-medium ${colorClass}`}>
                               {escapeText(untrusted(pillar.name))}
                             </span>
-                            {isSelected && <Check className="w-4 h-4 text-primary-600 dark:text-primary-400 ml-auto" />}
+                            {isSelected && <Check className="w-4 h-4 text-primary-500 dark:text-primary-500 ml-auto" />}
                           </label>
                         );
                       })
@@ -203,14 +203,14 @@ export default function GroupPillarAccess({ isOpen, onClose, group, orgId, onUpd
                   <div className="flex gap-3 mt-6">
                     <button
                       onClick={onClose}
-                      className="flex-1 px-4 py-2 border border-gray-200 dark:border-gray-700 rounded-xl text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                      className="flex-1 px-4 py-2 border border-secondary-200 dark:border-secondary-200/20 rounded-xl text-gray-700 dark:text-gray-300 hover:bg-secondary-50 dark:hover:bg-gray-700 transition-colors"
                     >
                       Annuler
                     </button>
                     <button
                       onClick={handleSave}
                       disabled={saving}
-                      className="flex-1 px-4 py-2 bg-gradient-to-r from-primary-600 to-accent-600 text-white rounded-xl font-medium shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-2 disabled:opacity-50"
+                      className="flex-1 px-4 py-2 bg-primary-600 dark:bg-primary-500 text-white rounded-xl font-medium shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-2 disabled:opacity-50"
                     >
                       {saving ? (
                         <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />

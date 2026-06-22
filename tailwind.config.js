@@ -8,49 +8,58 @@ export default {
   theme: {
     extend: {
       colors: {
+        // ═══ Smiris Learn Custom Palette ═══
+        // Built from: deep_twilight → bright_teal_blue → turquoise_surf → frosted_blue → light_cyan
         primary: {
-          50: '#f0f9ff',
-          100: '#e0f2fe',
-          200: '#bae6fd',
-          300: '#7dd3fc',
-          400: '#38bdf8',
-          500: '#0ea5e9', // Sky Blue
-          600: '#0284c7',
-          700: '#0369a1',
-          800: '#075985',
-          900: '#0c4a6e',
-          950: '#082f49',
+          50:  '#e6f4fa',   // lightest tint of bright_teal_blue
+          100: '#b3dff0',   // lighter
+          200: '#80cae6',   // light
+          300: '#4db5dc',   // medium-light
+          400: '#26a5d5',   // slightly lighter than base
+          500: '#0077b6',   // bright_teal_blue — Action, confiance
+          600: '#006aa3',   // darker
+          700: '#005a8c',   // deep
+          800: '#004a75',   // deeper
+          900: '#03045e',   // deep_twilight — Autorité, structure
+          950: '#020340',   // darkest
         },
         secondary: {
-          50: '#f8fafc',
-          100: '#f1f5f9',
-          200: '#e2e8f0',
-          300: '#cbd5e1',
-          400: '#94a3b8',
-          500: '#64748b',
-          600: '#475569',
-          700: '#334155',
-          800: '#1e293b',
-          900: '#0f172a',
-          950: '#020617', // Midnight
+          50:  '#caf0f8',   // light_cyan — Toile, aération
+          100: '#b8ecf6',   // slightly deeper
+          200: '#90e0ef',   // frosted_blue — Espace, profondeur
+          300: '#6dd5e8',   // between frosted & turquoise
+          400: '#33c6e0',   // approaching turquoise
+          500: '#00b4d8',   // turquoise_surf — Énergie, progression
+          600: '#009dbe',   // darker turquoise
+          700: '#0086a3',   // deep turquoise
+          800: '#006f88',   // deeper
+          900: '#04364d',   // very dark teal
+          950: '#022535',   // darkest
         },
         accent: {
-          400: '#a78bfa', // Electric Violet
-          500: '#8b5cf6',
-          600: '#7c3aed',
+          50:  '#e0f7fa',
+          100: '#b2ebf2',
+          200: '#80deea',
+          300: '#4dd0e1',
+          400: '#26c6da',
+          500: '#00b4d8',   // turquoise_surf — for accent highlights
+          600: '#00a0c2',
+          700: '#008dad',
+          800: '#007a97',
+          900: '#005a6e',
         },
         surface: {
-          50: '#ffffff',
-          100: '#fcfcfd',
-          200: '#f4f4f5',
-          800: '#111827',
-          900: '#030712',
-          950: '#020617',
+          50:  '#ffffff',
+          100: '#f8fbfd',
+          200: '#f0f7fa',
+          800: '#0a1929',   // dark surface based on deep_twilight
+          900: '#061224',   // darker
+          950: '#03091a',   // darkest
         },
         glass: {
-          light: 'rgba(255, 255, 255, 0.7)',
-          medium: 'rgba(255, 255, 255, 0.5)',
-          dark: 'rgba(255, 255, 255, 0.1)',
+          light:  'rgba(202, 240, 248, 0.3)',  // light_cyan tinted
+          medium: 'rgba(144, 224, 239, 0.2)',  // frosted_blue tinted
+          dark:   'rgba(0, 119, 182, 0.1)',    // bright_teal_blue tinted
         },
       },
       fontFamily: {
@@ -183,7 +192,7 @@ export default {
         },
         cardHover: {
           '0%': { transform: 'scale(1)', boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.1)' },
-          '100%': { transform: 'scale(1.05)', boxShadow: '0 20px 40px -10px rgba(14, 165, 233, 0.3)' },
+          '100%': { transform: 'scale(1.05)', boxShadow: '0 20px 40px -10px rgba(0, 119, 182, 0.3)' },
         },
         cardEnter: {
           '0%': { opacity: '0', transform: 'scale(0.8) translateY(20px)' },
@@ -198,8 +207,8 @@ export default {
           '100%': { opacity: '0', transform: 'scale(0.7)' },
         },
         buttonPulse: {
-          '0%, 100%': { boxShadow: '0 0 0 0 rgba(14, 165, 233, 0.4)' },
-          '50%': { boxShadow: '0 0 0 10px rgba(14, 165, 233, 0)' },
+          '0%, 100%': { boxShadow: '0 0 0 0 rgba(0, 119, 182, 0.4)' },
+          '50%': { boxShadow: '0 0 0 10px rgba(0, 119, 182, 0)' },
         },
         buttonShake: {
           '0%, 100%': { transform: 'translateX(0)' },

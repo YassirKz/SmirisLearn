@@ -108,13 +108,13 @@ export default function RevenueChart() {
         {
           name: "Starter",
           value: (counts.starter || 0) - counts.trial,
-          color: "#0ea5e9",
+          color: "#0077b6",
           description: "Plan Starter à 49€/mois",
         },
         {
           name: "Business",
           value: counts.business,
-          color: "#0ea5e9",
+          color: "#0077b6",
           description: "Plan Business à 99€/mois",
         },
       ].filter((item) => item.value > 0);
@@ -154,14 +154,14 @@ export default function RevenueChart() {
     if (active && payload && payload.length) {
       const data = payload[0].payload;
       return (
-        <div className="bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl border border-white/50 dark:border-white/10 p-4 rounded-2xl shadow-2xl ring-1 ring-black/5">
+        <div className="bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl border border-secondary-200 dark:border-secondary-200/30 p-4 rounded-2xl shadow-2xl ring-1 ring-black/5">
           <p className="text-sm font-black text-gray-900 dark:text-white mb-1">
             {data.name}
           </p>
           <p className="text-xs font-bold text-gray-500 dark:text-gray-400 mb-2">
             {data.description}
           </p>
-          <div className="flex items-center justify-between gap-4 pt-2 border-t border-gray-100 dark:border-gray-800">
+          <div className="flex items-center justify-between gap-4 pt-2 border-t border-secondary-200 dark:border-secondary-200/20">
             <span className="text-xs font-bold text-gray-500 dark:text-gray-400">
               Entreprises:
             </span>
@@ -196,7 +196,7 @@ export default function RevenueChart() {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.1 }}
-      className="bg-white/60 dark:bg-slate-900/60 backdrop-blur-2xl rounded-3xl p-6 shadow-lg border border-white/50 dark:border-white/5 relative overflow-hidden"
+      className="bg-white/80 dark:bg-slate-900/40 backdrop-blur-sm rounded-3xl p-6 shadow-lg border border-secondary-200 dark:border-secondary-200/20 relative overflow-hidden"
     >
       <div className="flex items-center justify-between mb-6">
         <div>
@@ -207,19 +207,19 @@ export default function RevenueChart() {
             Analyse des abonnements par catégorie
           </p>
         </div>
-        <div className="p-2.5 bg-primary-100/80 dark:bg-primary-900/20 text-primary-600 dark:text-primary-400 rounded-xl">
+        <div className="p-2.5 bg-accent-500 text-secondary-900/80 dark:bg-primary-900/20 text-primary-500 dark:text-primary-500 rounded-xl">
           <PieChartIcon className="w-3 h-3" />
         </div>
       </div>
 
       {loading ? (
         <div className="space-y-4">
-          <div className="h-48 bg-white/40 dark:bg-white/5 rounded-2xl animate-pulse border border-white/30 dark:border-white/5"></div>
+          <div className="h-48 bg-white/40 dark:bg-slate-900/20 rounded-2xl animate-pulse border border-secondary-200 dark:border-secondary-200/20"></div>
           <div className="grid grid-cols-3 gap-4">
             {[1, 2, 3].map((i) => (
               <div
                 key={i}
-                className="h-16 bg-white/40 dark:bg-white/5 rounded-2xl animate-pulse border border-white/30 dark:border-white/5"
+                className="h-16 bg-white/40 dark:bg-slate-900/20 rounded-2xl animate-pulse border border-secondary-200 dark:border-secondary-200/20"
               ></div>
             ))}
           </div>
@@ -231,11 +231,11 @@ export default function RevenueChart() {
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
-            <div className="bg-primary-50/80 dark:bg-primary-900/20 rounded-2xl p-3.5 border border-primary-200/30 dark:border-primary-800/20">
-              <p className="text-xs text-primary-600 dark:text-primary-400 font-medium mb-1">
+            <div className="bg-secondary-50/80 dark:bg-primary-900/20 rounded-2xl p-3.5 border border-secondary-200/30 dark:border-primary-800/20">
+              <p className="text-xs text-primary-500 dark:text-primary-500 font-medium mb-1">
                 Total
               </p>
-              <p className="text-lg font-bold text-primary-800 dark:text-primary-300">
+              <p className="text-lg font-bold text-secondary-900 dark:text-primary-300">
                 {stats.totalCompanies}
               </p>
               <p className="text-xs text-gray-500 dark:text-gray-400">
@@ -256,7 +256,7 @@ export default function RevenueChart() {
             </div>
 
             <div className="bg-accent-50/80 dark:bg-accent-900/20 rounded-2xl p-3.5 border border-accent-200/30 dark:border-accent-800/20">
-              <p className="text-xs text-accent-600 dark:text-accent-400 font-medium mb-1">
+              <p className="text-xs text-primary-500 dark:text-accent-400 font-medium mb-1">
                 Payants
               </p>
               <p className="text-lg font-bold text-accent-800 dark:text-accent-300">
@@ -267,7 +267,7 @@ export default function RevenueChart() {
               </p>
             </div>
 
-            <div className="bg-white/40 dark:bg-white/5 rounded-2xl p-3.5 border border-white/50 dark:border-white/5">
+            <div className="bg-white/40 dark:bg-slate-900/20 rounded-2xl p-3.5 border border-secondary-200 dark:border-secondary-200/20">
               <p className="text-xs text-gray-600 dark:text-gray-400 font-medium mb-1">
                 Gratuits
               </p>
@@ -280,12 +280,12 @@ export default function RevenueChart() {
             </div>
           </div>
 
-          <div className="mt-4 p-4 bg-primary-50/60 dark:bg-primary-900/15 rounded-2xl border border-primary-200/30 dark:border-primary-800/20">
+          <div className="mt-4 p-4 bg-secondary-50/60 dark:bg-primary-900/15 rounded-2xl border border-secondary-200/30 dark:border-primary-800/20">
             <div className="flex items-center justify-between">
               <span className="text-sm text-gray-600 dark:text-gray-300">
                 Revenu mensuel potentiel :
               </span>
-              <span className="text-lg font-bold text-primary-600 dark:text-primary-400">
+              <span className="text-lg font-bold text-primary-500 dark:text-primary-500">
                 {new Intl.NumberFormat("fr-FR", {
                   style: "currency",
                   currency: "EUR",

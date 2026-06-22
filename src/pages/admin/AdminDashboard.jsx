@@ -93,8 +93,8 @@ export default function AdminDashboard() {
       <AdminLayout>
         <div className="min-h-[60vh] flex flex-col items-center justify-center">
           <div className="relative">
-            <div className="w-20 h-20 border-4 border-primary-100/50 dark:border-gray-700 rounded-full"></div>
-            <div className="absolute top-0 left-0 w-20 h-20 border-4 border-primary-600 dark:border-primary-400 border-t-transparent rounded-full animate-spin"></div>
+            <div className="w-20 h-20 border-4 border-secondary-200/50 dark:border-secondary-200/20 rounded-full"></div>
+            <div className="absolute top-0 left-0 w-20 h-20 border-4 border-secondary-200 dark:border-primary-400 border-t-transparent rounded-full animate-spin"></div>
           </div>
           <p className="mt-6 text-sm font-medium text-gray-500 dark:text-gray-400 animate-pulse">
             Chargement...
@@ -107,7 +107,7 @@ export default function AdminDashboard() {
   if (error || !dashboardData) {
     return (
       <AdminLayout>
-        <div className="bg-white/60 dark:bg-slate-900/60 backdrop-blur-2xl border border-red-200/50 dark:border-red-800/30 p-6 rounded-3xl shadow-lg">
+        <div className="bg-white/80 dark:bg-slate-900/40 backdrop-blur-sm border border-red-200/50 dark:border-red-800/30 p-6 rounded-3xl shadow-lg">
           <div className="flex items-center gap-4">
             <div className="p-3 bg-red-100/80 dark:bg-red-900/20 rounded-2xl">
               <AlertCircle className="w-6 h-6 text-red-500" />
@@ -189,7 +189,7 @@ export default function AdminDashboard() {
               <motion.div
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
-                className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 text-xs font-bold uppercase tracking-widest mb-4"
+                className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-accent-500 text-secondary-900 dark:bg-primary-900/30 text-secondary-900 dark:text-primary-300 text-xs font-bold uppercase tracking-widest mb-4"
               >
                 <Sparkles className="w-3.5 h-3.5" />
                 {organization?.plan_type === "starter"
@@ -215,7 +215,7 @@ export default function AdminDashboard() {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={fetchDashboardData}
-              className="px-5 py-2.5 bg-white/50 dark:bg-white/5 backdrop-blur-md border border-white/50 dark:border-white/5 rounded-2xl hover:bg-white/80 dark:hover:bg-white/10 transition-all flex items-center justify-center gap-2 text-sm font-semibold text-gray-700 dark:text-gray-200 shadow-sm hover:shadow-md"
+              className="px-5 py-2.5 bg-white/50 dark:bg-slate-900/20 backdrop-blur-md border border-secondary-200 dark:border-secondary-200/20 rounded-2xl hover:bg-white/80 dark:hover:bg-white/10 transition-all flex items-center justify-center gap-2 text-sm font-semibold text-gray-700 dark:text-gray-200 shadow-sm hover:shadow-md"
             >
               <svg
                 className="w-4 h-4"
@@ -246,7 +246,7 @@ export default function AdminDashboard() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
                 whileHover={{ y: -6, scale: 1.02 }}
-                className="bg-white/60 dark:bg-slate-900/60 rounded-3xl p-6 shadow-lg border border-white/50 dark:border-white/5 backdrop-blur-2xl relative overflow-hidden group"
+                className="bg-white/60 dark:bg-slate-900/60 rounded-3xl p-6 shadow-lg border border-secondary-200 dark:border-secondary-200/20 backdrop-blur-2xl relative overflow-hidden group"
               >
                 {/* Glow de fond */}
                 <div
@@ -285,7 +285,7 @@ export default function AdminDashboard() {
                   </div>
                 </div>
 
-                <div className="mt-5 h-1.5 bg-white/40 dark:bg-white/5 rounded-full overflow-hidden relative z-10 border border-white/30 dark:border-white/5">
+                <div className="mt-5 h-1.5 bg-white/40 dark:bg-slate-900/20 rounded-full overflow-hidden relative z-10 border border-secondary-200 dark:border-secondary-200/20">
                   <motion.div
                     initial={{ width: 0 }}
                     animate={{
@@ -311,18 +311,18 @@ export default function AdminDashboard() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
-            className="lg:col-span-2 bg-white/60 dark:bg-slate-900/60 backdrop-blur-2xl rounded-3xl p-6 md:p-8 shadow-lg border border-white/50 dark:border-white/5 overflow-hidden relative"
+            className="lg:col-span-2 bg-white/80 dark:bg-slate-900/40 backdrop-blur-sm rounded-3xl p-6 md:p-8 shadow-lg border border-secondary-200 dark:border-secondary-200/20 overflow-hidden relative"
           >
-            <div className="absolute top-0 right-0 w-64 h-64 bg-primary-500/5 dark:bg-primary-500/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none" />
+            <div className="absolute top-0 right-0 w-64 h-64 bg-primary-600 dark:bg-primary-500/5 dark:bg-primary-600 dark:bg-primary-500/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none" />
 
             <div className="relative z-10 flex items-center justify-between mb-8">
               <h2 className="text-2xl font-bold text-gray-800 dark:text-white flex items-center gap-3">
-                <div className="p-2.5 bg-primary-100 dark:bg-primary-500/20 rounded-xl text-primary-600 dark:text-primary-400">
+                <div className="p-2.5 bg-accent-500 text-secondary-900 dark:bg-primary-600 dark:bg-primary-500/20 rounded-xl text-primary-500 dark:text-primary-500">
                   <Activity className="w-6 h-6" />
                 </div>
                 Activités récentes
               </h2>
-              <span className="text-xs font-bold text-gray-500 dark:text-gray-400 bg-white/50 dark:bg-white/5 backdrop-blur-sm px-3 py-1.5 rounded-full border border-white/50 dark:border-white/5">
+              <span className="text-xs font-bold text-gray-500 dark:text-gray-400 bg-white/50 dark:bg-slate-900/20 backdrop-blur-sm px-3 py-1.5 rounded-full border border-secondary-200 dark:border-secondary-200/20">
                 {recent_activities?.length || 0} activités
               </span>
             </div>
@@ -336,7 +336,7 @@ export default function AdminDashboard() {
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: 0.4 + index * 0.1 }}
                     whileHover={{ x: 5 }}
-                    className="flex items-center gap-4 p-4 bg-white/40 dark:bg-white/5 rounded-2xl hover:bg-white/70 dark:hover:bg-white/10 border border-white/30 dark:border-white/5 hover:border-white/50 dark:hover:border-white/10 shadow-sm hover:shadow-md transition-all group"
+                    className="flex items-center gap-4 p-4 bg-white/40 dark:bg-slate-900/20 rounded-2xl hover:bg-white/70 dark:hover:bg-white/10 border border-secondary-200 dark:border-secondary-200/20 hover:border-secondary-200 dark:hover:border-secondary-200/30 shadow-sm hover:shadow-md transition-all group"
                   >
                     <div className="w-12 h-12 bg-gradient-to-br from-primary-500 to-primary-700 rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 group-hover:rotate-3 transition-transform">
                       <UserPlus className="w-5 h-5 text-white" />
@@ -346,7 +346,7 @@ export default function AdminDashboard() {
                         {activity.description}
                       </p>
                       <div className="flex items-center gap-2 text-xs font-medium text-gray-500 dark:text-gray-400 mt-1">
-                        <Clock className="w-3.5 h-3.5 text-primary-400" />
+                        <Clock className="w-3.5 h-3.5 text-primary-500" />
                         <span>
                           {new Date(activity.timestamp).toLocaleDateString(
                             "fr-FR",
@@ -379,18 +379,18 @@ export default function AdminDashboard() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4 }}
-            className="bg-white/60 dark:bg-slate-900/60 backdrop-blur-2xl rounded-3xl p-6 md:p-8 shadow-lg border border-white/50 dark:border-white/5 overflow-hidden relative"
+            className="bg-white/80 dark:bg-slate-900/40 backdrop-blur-sm rounded-3xl p-6 md:p-8 shadow-lg border border-secondary-200 dark:border-secondary-200/20 overflow-hidden relative"
           >
             <div className="absolute -bottom-32 -left-32 w-64 h-64 bg-accent-500/10 dark:bg-accent-500/20 rounded-full blur-3xl pointer-events-none" />
 
             <div className="relative z-10 flex items-center justify-between mb-8">
               <h2 className="text-xl font-bold text-gray-800 dark:text-white flex items-center gap-3">
-                <div className="p-2.5 bg-accent-100 dark:bg-accent-500/20 rounded-xl text-accent-600 dark:text-accent-400">
+                <div className="p-2.5 bg-accent-500 text-secondary-900 dark:bg-accent-500/20 rounded-xl text-primary-500 dark:text-accent-400">
                   <TrendingUp className="w-5 h-5" />
                 </div>
                 Progressions
               </h2>
-              <span className="text-xs font-bold text-gray-500 dark:text-gray-400 bg-white/50 dark:bg-white/5 backdrop-blur-sm px-3 py-1.5 rounded-full border border-white/50 dark:border-white/5">
+              <span className="text-xs font-bold text-gray-500 dark:text-gray-400 bg-white/50 dark:bg-slate-900/20 backdrop-blur-sm px-3 py-1.5 rounded-full border border-secondary-200 dark:border-secondary-200/20">
                 Top {top_students?.length || 0}
               </span>
             </div>
@@ -403,7 +403,7 @@ export default function AdminDashboard() {
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: 0.5 + index * 0.1 }}
-                    className="space-y-3 p-4 bg-white/40 dark:bg-white/5 rounded-2xl hover:bg-white/70 dark:hover:bg-white/10 transition-all border border-white/30 dark:border-white/5 hover:border-white/50 dark:hover:border-white/10"
+                    className="space-y-3 p-4 bg-white/40 dark:bg-slate-900/20 rounded-2xl hover:bg-white/70 dark:hover:bg-white/10 transition-all border border-secondary-200 dark:border-secondary-200/20 hover:border-secondary-200 dark:hover:border-secondary-200/30"
                   >
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-3">
@@ -418,7 +418,7 @@ export default function AdminDashboard() {
                         {student.completion}%
                       </span>
                     </div>
-                    <div className="h-2.5 bg-white/40 dark:bg-white/5 rounded-full overflow-hidden border border-white/30 dark:border-white/5">
+                    <div className="h-2.5 bg-white/40 dark:bg-slate-900/20 rounded-full overflow-hidden border border-secondary-200 dark:border-secondary-200/20">
                       <motion.div
                         initial={{ width: 0 }}
                         animate={{ width: `${student.completion}%` }}
@@ -444,7 +444,7 @@ export default function AdminDashboard() {
             )}
 
             {/* Info sécurisée */}
-            <div className="mt-8 p-3 bg-primary-50/50 dark:bg-primary-900/10 rounded-2xl border border-primary-200/30 dark:border-primary-800/20 relative z-10">
+            <div className="mt-8 p-3 bg-secondary-50/50 dark:bg-primary-900/10 rounded-2xl border border-secondary-200/30 dark:border-primary-800/20 relative z-10">
               <p className="text-xs font-medium text-gray-600 dark:text-gray-400 flex items-center justify-center gap-2">
                 <Shield className="w-4 h-4 text-primary-500" />
                 Mise à jour des données en temps réel

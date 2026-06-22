@@ -88,7 +88,7 @@ export default function StatsCards() {
             data: stats.companies,
             icon: Building2, 
             gradient: 'from-primary-500 to-primary-600',
-            shadowColor: 'shadow-primary-500/30',
+            shadowColor: 'shadow-sm',
             target: 100
         },
         { 
@@ -133,7 +133,7 @@ export default function StatsCards() {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: index * 0.1, type: "spring", stiffness: 200, damping: 20 }}
                         whileHover={{ y: -4, scale: 1.01 }}
-                        className="bg-white/60 dark:bg-slate-900/60 backdrop-blur-2xl rounded-3xl p-6 shadow-lg border border-white/50 dark:border-white/5 relative overflow-hidden group"
+                        className="bg-white/80 dark:bg-slate-900/40 backdrop-blur-sm rounded-3xl p-6 shadow-lg border border-secondary-200 dark:border-secondary-200/20 relative overflow-hidden group"
                     >
                         {/* Hover shine effect */}
                         <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 dark:via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 pointer-events-none" />
@@ -157,7 +157,7 @@ export default function StatsCards() {
 
                         {!loading && (
                             <div className="mt-5 flex items-center gap-2 relative z-10">
-                                <div className={`flex items-center gap-1 px-2.5 py-1 rounded-xl text-xs font-semibold ${trendBg} ${trendColor} border border-white/30 dark:border-white/5`}>
+                                <div className={`flex items-center gap-1 px-2.5 py-1 rounded-xl text-xs font-semibold ${trendBg} ${trendColor} border border-secondary-200 dark:border-secondary-200/20`}>
                                     <TrendIcon size={13} />
                                     <span>{Math.abs(card.data.percentage)}%</span>
                                 </div>
@@ -170,7 +170,7 @@ export default function StatsCards() {
                                 <span>Progression</span>
                                 <span>{Math.round(progressWidth)}%</span>
                             </div>
-                            <div className="h-2 bg-white/40 dark:bg-white/5 rounded-full overflow-hidden border border-white/30 dark:border-white/5">
+                            <div className="h-2 bg-white/40 dark:bg-slate-900/20 rounded-full overflow-hidden border border-secondary-200 dark:border-secondary-200/20">
                                 <motion.div
                                     initial={{ width: 0 }}
                                     animate={{ width: loading ? 0 : `${progressWidth}%` }}

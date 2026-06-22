@@ -110,8 +110,8 @@ export default function StudentLearningPage() {
             transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
            className="relative"
         >
-          <div className="w-20 h-20 border-4 border-primary-100/50 dark:border-gray-700 rounded-full shadow-2xl"></div>
-          <div className="absolute top-0 left-0 w-20 h-20 border-4 border-primary-600 dark:border-primary-400 border-t-transparent rounded-full"></div>
+          <div className="w-20 h-20 border-4 border-secondary-200/50 dark:border-secondary-200/20 rounded-full shadow-2xl"></div>
+          <div className="absolute top-0 left-0 w-20 h-20 border-4 border-secondary-200 dark:border-primary-400 border-t-transparent rounded-full"></div>
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
              <Sparkles className="w-6 h-6 text-primary-500 animate-pulse delay-300" />
           </div>
@@ -120,7 +120,7 @@ export default function StudentLearningPage() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.5 }}
-          className="mt-6 text-primary-900 dark:text-primary-300 font-medium tracking-wide animate-pulse"
+          className="mt-6 text-secondary-900 dark:text-primary-300 font-medium tracking-wide animate-pulse"
         >
           Chargement des modules...
         </motion.p>
@@ -137,13 +137,13 @@ export default function StudentLearningPage() {
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           whileHover={{ x: -5 }}
-          className="inline-flex items-center gap-2 px-4 py-2 bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm rounded-xl text-primary-600 dark:text-primary-400 font-bold hover:bg-white/80 dark:hover:bg-gray-800/80 hover:shadow-md transition-all group border border-white/60 dark:border-gray-700"
+          className="inline-flex items-center gap-2 px-4 py-2 bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm rounded-xl text-primary-500 dark:text-primary-500 font-bold hover:bg-white/80 dark:hover:bg-gray-800/80 hover:shadow-md transition-all group border border-white/60 dark:border-secondary-200/20"
         >
           <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
           Tableau de bord
         </motion.button>
         {/* En-tête avec badge */}
-        <div className="relative bg-white/40 dark:bg-gray-800/40 backdrop-blur-xl p-8 rounded-[2rem] border border-white/60 dark:border-gray-700/50 shadow-xl overflow-hidden">
+        <div className="relative bg-white/40 dark:bg-gray-800/40 backdrop-blur-xl p-8 rounded-[2rem] border border-white/60 dark:border-secondary-200/20/50 shadow-xl overflow-hidden">
           <div className="absolute -right-10 -top-10 w-40 h-40 bg-primary-200/40 dark:bg-primary-900/40 rounded-full blur-3xl pointer-events-none"></div>
           <div className="relative z-10 flex flex-col md:flex-row gap-6 md:items-center justify-between">
             <div>
@@ -151,7 +151,7 @@ export default function StudentLearningPage() {
                 <Sparkles className="w-3.5 h-3.5" /> MODULES
               </div>
               <h1 className="text-3xl sm:text-4xl font-black text-gray-900 dark:text-white flex items-center gap-3 tracking-tight">
-                <div className="p-3 bg-gradient-to-br from-primary-100 to-primary-200 dark:from-primary-900 dark:to-primary-800 rounded-2xl shadow-inner text-primary-600 dark:text-primary-400">
+                <div className="p-3 bg-gradient-to-br from-primary-100 to-primary-200 dark:from-primary-900 dark:to-primary-800 rounded-2xl shadow-inner text-primary-500 dark:text-primary-500">
                   <BookOpen className="w-8 h-8" />
                 </div>
                 Parcours d'apprentissage
@@ -165,7 +165,7 @@ export default function StudentLearningPage() {
         </div>
 
         {pillars.length === 0 ? (
-          <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl p-8 sm:p-12 shadow-xl border border-primary-100 dark:border-gray-700 text-center">
+          <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl p-8 sm:p-12 shadow-xl border border-secondary-200 dark:border-secondary-200/20 text-center">
             <BookOpen className="w-12 h-12 sm:w-16 sm:h-16 text-gray-300 dark:text-gray-600 mx-auto mb-4" />
             <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-2">Aucun module disponible</h3>
             <p className="text-sm text-gray-500 dark:text-gray-400">Vous n'avez pas encore accès aux modules d'apprentissage.</p>
@@ -185,14 +185,14 @@ export default function StudentLearningPage() {
                   boxShadow: "0 50px 100px -20px rgba(99, 102, 241, 0.25)"
                 }}
                 style={{ transformStyle: "preserve-3d" }}
-                className="bg-white/60 dark:bg-gray-800/60 backdrop-blur-2xl rounded-[2.5rem] p-6 sm:p-10 shadow-2xl border border-white/60 dark:border-gray-700/50 relative overflow-hidden group"
+                className="bg-white/60 dark:bg-gray-800/60 backdrop-blur-2xl rounded-[2.5rem] p-6 sm:p-10 shadow-2xl border border-white/60 dark:border-secondary-200/20/50 relative overflow-hidden group"
               >
                 {/* Effet de shine */}
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 dark:via-gray-700/30 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 pointer-events-none" />
 
                 {/* En-tête du pilier */}
-                <div className="flex flex-col sm:flex-row sm:items-center gap-6 mb-8 border-b border-gray-100 dark:border-gray-700/50 pb-6" style={{ transform: "translateZ(40px)" }}>
-                  <div className="w-20 h-20 bg-gradient-to-br from-primary-500 to-primary-700 rounded-[1.5rem] flex items-center justify-center text-4xl shadow-xl shadow-primary-500/30 group-hover:scale-105 group-hover:rotate-6 transition-all shrink-0">
+                <div className="flex flex-col sm:flex-row sm:items-center gap-6 mb-8 border-b border-secondary-200 dark:border-secondary-200/20/50 pb-6" style={{ transform: "translateZ(40px)" }}>
+                  <div className="w-20 h-20 bg-gradient-to-br from-primary-500 to-primary-700 rounded-[1.5rem] flex items-center justify-center text-4xl shadow-xl shadow-sm group-hover:scale-105 group-hover:rotate-6 transition-all shrink-0">
                     {pillar.icon || '📚'}
                   </div>
                   <div>
@@ -219,8 +219,8 @@ export default function StudentLearningPage() {
                       }}
                       className={`relative flex flex-col justify-between p-5 rounded-[1.5rem] transition-all duration-300 border backdrop-blur-md ${
                         video.canAccess
-                          ? 'bg-white/80 dark:bg-gray-800/80 border-white dark:border-gray-700 shadow-lg hover:shadow-primary-500/20'
-                          : 'bg-gray-100/50 dark:bg-gray-900/50 border-gray-200/50 dark:border-gray-800/50 shadow-inner overflow-hidden'
+                          ? 'bg-white/80 dark:bg-gray-800/80 border-white dark:border-secondary-200/20 shadow-lg hover:shadow-primary-500/20'
+                          : 'bg-gray-100/50 dark:bg-gray-900/50 border-secondary-200/50 dark:border-secondary-200/20/50 shadow-inner overflow-hidden'
                       }`}
                       onMouseEnter={() => setHoveredVideo(video.id)}
                       onMouseLeave={() => setHoveredVideo(null)}
@@ -230,7 +230,7 @@ export default function StudentLearningPage() {
                       )}
                       <div className="flex items-start gap-4 mb-4 relative z-20">
                         <div className={`w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 shadow-inner group-hover:rotate-12 transition-all duration-300 ${
-                          video.canAccess ? 'bg-gradient-to-br from-primary-100 to-primary-200 dark:from-primary-900/80 dark:to-primary-800/80 text-primary-600 dark:text-primary-300' : 'bg-gray-200 dark:bg-gray-800 text-gray-400 dark:text-gray-500'
+                          video.canAccess ? 'bg-gradient-to-br from-primary-100 to-primary-200 dark:from-primary-900/80 dark:to-primary-800/80 text-primary-500 dark:text-primary-300' : 'bg-gray-200 dark:bg-gray-800 text-gray-400 dark:text-gray-500'
                         }`}>
                           {video.canAccess ? <PlayCircle className="w-6 h-6" /> : <Lock className="w-6 h-6" />}
                         </div>
@@ -238,7 +238,7 @@ export default function StudentLearningPage() {
                           <p className={`font-bold leading-tight line-clamp-2 ${video.canAccess ? 'text-gray-900 dark:text-white' : 'text-gray-500 dark:text-gray-400'}`}>
                             {escapeText(untrusted(video.title))}
                           </p>
-                          <div className={`flex items-center gap-1.5 text-xs mt-2 font-bold uppercase tracking-wider ${video.canAccess ? 'text-primary-500 dark:text-primary-400' : 'text-gray-400 dark:text-gray-500'}`}>
+                          <div className={`flex items-center gap-1.5 text-xs mt-2 font-bold uppercase tracking-wider ${video.canAccess ? 'text-primary-500 dark:text-primary-500' : 'text-gray-400 dark:text-gray-500'}`}>
                             <Clock className="w-3.5 h-3.5" />
                             <span>{formatDuration(video.duration)}</span>
                           </div>
@@ -249,13 +249,13 @@ export default function StudentLearningPage() {
                       {video.canAccess ? (
                         <Link
                           to={`/student/video/${video.id}`}
-                          className="flex items-center justify-center w-full py-3 bg-gray-900 hover:bg-black dark:bg-primary-600 dark:hover:bg-primary-500 text-white rounded-xl text-sm font-black transition-all shadow-[0_4px_14px_0_rgb(0,0,0,0.2)] dark:shadow-primary-500/30 hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0"
+                          className="flex items-center justify-center w-full py-3 bg-gray-900 hover:bg-black dark:bg-primary-600 dark:bg-primary-500 dark:hover:bg-secondary-200 text-white rounded-xl text-sm font-black transition-all shadow-[0_4px_14px_0_rgb(0,0,0,0.2)] dark:shadow-sm hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0"
                         >
                           Lancer la vidéo
                         </Link>
                       ) : (
                         <div className="relative w-full">
-                          <div className="flex items-center justify-center w-full py-3 bg-gray-200/50 dark:bg-gray-800/80 text-gray-400 dark:text-gray-500 rounded-xl text-sm font-black cursor-not-allowed border border-gray-200 dark:border-gray-700/50">
+                          <div className="flex items-center justify-center w-full py-3 bg-gray-200/50 dark:bg-gray-800/80 text-gray-400 dark:text-gray-500 rounded-xl text-sm font-black cursor-not-allowed border border-secondary-200 dark:border-secondary-200/20/50">
                             Bloqué
                           </div>
 

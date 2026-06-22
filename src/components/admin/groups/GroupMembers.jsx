@@ -242,20 +242,20 @@ export default function GroupMembers({ isOpen, onClose, group, orgId, onUpdate }
             initial={{ scale: 0.9, y: 20, opacity: 0 }}
             animate={{ scale: 1, y: 0, opacity: 1 }}
             exit={{ scale: 0.9, y: 20, opacity: 0 }}
-            className="bg-white/95 dark:bg-slate-900/95 backdrop-blur-2xl rounded-3xl shadow-2xl border border-white/50 dark:border-white/10 w-full max-w-2xl overflow-hidden max-h-[90vh] flex flex-col relative"
+            className="bg-white/95 dark:bg-slate-900/95 backdrop-blur-2xl rounded-3xl shadow-2xl border border-secondary-200 dark:border-secondary-200/30 w-full max-w-2xl overflow-hidden max-h-[90vh] flex flex-col relative"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Background Glows */}
-            <div className="absolute top-0 right-0 w-64 h-64 bg-primary-500/10 dark:bg-primary-500/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none" />
+            <div className="absolute top-0 right-0 w-64 h-64 bg-primary-600 dark:bg-primary-500/10 dark:bg-primary-600 dark:bg-primary-500/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none" />
 
             {/* Header */}
-            <div className="p-8 relative z-10 border-b border-gray-100 dark:border-gray-800/50 flex-shrink-0">
+            <div className="p-8 relative z-10 border-b border-secondary-200 dark:border-secondary-200/20/50 flex-shrink-0">
               <div className="flex items-center justify-between">
                 <div>
                   <h2 className="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-300">
                     Membres du groupe
                   </h2>
-                  <p className="text-sm font-medium text-primary-600 dark:text-primary-400 mt-1">
+                  <p className="text-sm font-medium text-primary-500 dark:text-primary-500 mt-1">
                     {escapeText(untrusted(group.name))}
                   </p>
                 </div>
@@ -284,7 +284,7 @@ export default function GroupMembers({ isOpen, onClose, group, orgId, onUpdate }
                         setShowAddDropdown(true);
                       }}
                       onFocus={() => setShowAddDropdown(true)}
-                      className="w-full pl-10 pr-4 py-2.5 border-2 border-gray-200 dark:border-gray-700 rounded-xl focus:border-primary-400 dark:focus:border-primary-500 focus:ring-4 focus:ring-primary-100 dark:focus:ring-primary-900/30 outline-none transition-all text-sm dark:bg-gray-900 dark:text-white"
+                      className="w-full pl-10 pr-4 py-2.5 border-2 border-secondary-200 dark:border-secondary-200/20 rounded-xl focus:border-primary-500 dark:focus:border-secondary-200 focus:ring-4 focus:ring-primary-500/20 dark:focus:ring-primary-900/30 outline-none transition-all text-sm dark:bg-gray-900 dark:text-white"
                     />
                     <AnimatePresence>
                       {showAddDropdown && searchTerm.length > 0 && (
@@ -293,7 +293,7 @@ export default function GroupMembers({ isOpen, onClose, group, orgId, onUpdate }
                           initial={{ opacity: 0, y: -10 }}
                           animate={{ opacity: 1, y: 0 }}
                           exit={{ opacity: 0, y: -10 }}
-                          className="absolute z-10 mt-1 w-full bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-100 dark:border-gray-700 max-h-60 overflow-y-auto"
+                          className="absolute z-10 mt-1 w-full bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-secondary-200 dark:border-secondary-200/20 max-h-60 overflow-y-auto"
                         >
                           {filteredAvailable.length > 0 ? (
                             filteredAvailable.map((student, idx) => (
@@ -304,7 +304,7 @@ export default function GroupMembers({ isOpen, onClose, group, orgId, onUpdate }
                                   setSearchTerm('');
                                   setShowAddDropdown(false);
                                 }}
-                                className="w-full px-4 py-3 text-left hover:bg-primary-50 dark:hover:bg-gray-700 transition-colors flex items-center justify-between"
+                                className="w-full px-4 py-3 text-left hover:bg-secondary-200 dark:hover:bg-gray-700 transition-colors flex items-center justify-between"
                               >
                                 <div>
                                   <p className="font-medium text-gray-800 dark:text-gray-200">
@@ -312,7 +312,7 @@ export default function GroupMembers({ isOpen, onClose, group, orgId, onUpdate }
                                   </p>
                                   <p className="text-xs text-gray-500 dark:text-gray-400">{student.email}</p>
                                 </div>
-                                <Plus className="w-4 h-4 text-primary-600 dark:text-primary-400" />
+                                <Plus className="w-4 h-4 text-primary-500 dark:text-primary-500" />
                               </button>
                             ))
                           ) : (
@@ -327,12 +327,12 @@ export default function GroupMembers({ isOpen, onClose, group, orgId, onUpdate }
                   <button
                     onClick={handleAddMember}
                     disabled={adding}
-                    className="px-4 py-2.5 bg-primary-600 text-white rounded-xl font-medium hover:bg-primary-700 transition-colors disabled:opacity-50 flex items-center gap-2"
+                    className="px-4 py-2.5 bg-primary-600 dark:bg-primary-500 text-white rounded-xl font-medium hover:bg-primary-600 dark:hover:bg-primary-600 transition-colors disabled:opacity-50 flex items-center gap-2"
                   >
                     {adding ? <Loader2 className="w-4 h-4 animate-spin" /> : <Plus className="w-4 h-4" />}
                     Ajouter
                   </button>
-                  <label className="px-4 py-2.5 border-2 border-gray-200 dark:border-gray-700 rounded-xl text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors cursor-pointer flex items-center justify-center">
+                  <label className="px-4 py-2.5 border-2 border-secondary-200 dark:border-secondary-200/20 rounded-xl text-gray-600 dark:text-gray-300 hover:bg-secondary-50 dark:hover:bg-gray-700 transition-colors cursor-pointer flex items-center justify-center">
                     <Upload className="w-4 h-4" />
                     <input
                       type="file"
@@ -343,12 +343,12 @@ export default function GroupMembers({ isOpen, onClose, group, orgId, onUpdate }
                   </label>
                 </div>
                 {selectedStudent && (
-                  <div className="mt-2 p-2 bg-primary-50 dark:bg-primary-900/30 rounded-xl flex items-center justify-between">
-                    <span className="text-sm text-primary-800 dark:text-primary-300 font-medium">
+                  <div className="mt-2 p-2 bg-secondary-50 dark:bg-primary-900/30 rounded-xl flex items-center justify-between">
+                    <span className="text-sm text-secondary-900 dark:text-primary-300 font-medium">
                       Sélectionné: {selectedStudent.full_name || selectedStudent.email}
                     </span>
-                    <button onClick={() => setSelectedStudent(null)} className="p-1 hover:bg-primary-100 dark:hover:bg-primary-800 rounded">
-                      <X className="w-4 h-4 text-primary-600 dark:text-primary-400" />
+                    <button onClick={() => setSelectedStudent(null)} className="p-1 hover:bg-secondary-200 dark:hover:bg-primary-600 dark:bg-primary-500 rounded">
+                      <X className="w-4 h-4 text-primary-500 dark:text-primary-500" />
                     </button>
                   </div>
                 )}
@@ -367,7 +367,7 @@ export default function GroupMembers({ isOpen, onClose, group, orgId, onUpdate }
               ) : (
                 <div className="space-y-3">
                   {members.map((member, idx) => (
-                    <div key={`member-row-${member.id || 'none'}-${idx}`} className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700/50 rounded-xl">
+                    <div key={`member-row-${member.id || 'none'}-${idx}`} className="flex items-center justify-between p-3 bg-secondary-50 dark:bg-gray-700/50 rounded-xl">
                       <div className="min-w-0">
                         <p className="font-medium text-gray-800 dark:text-gray-200 truncate">
                           {escapeText(untrusted(member.profiles?.full_name || 'Nom non renseigné'))}

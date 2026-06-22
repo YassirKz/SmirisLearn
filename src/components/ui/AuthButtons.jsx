@@ -1,11 +1,17 @@
-import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { useAuth } from '../../hooks/useAuth';
-import { 
-  Chrome, Mail, Shield, Zap, Sparkles, 
-  AlertCircle, CheckCircle, Loader2 
-} from 'lucide-react';
-import { useToast } from '../ui/Toast';
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { useAuth } from "../../hooks/useAuth";
+import {
+  Chrome,
+  Mail,
+  Shield,
+  Zap,
+  Sparkles,
+  AlertCircle,
+  CheckCircle,
+  Loader2,
+} from "lucide-react";
+import { useToast } from "../ui/Toast";
 
 export default function AuthButtons() {
   const { signInWithGoogle } = useAuth();
@@ -16,30 +22,29 @@ export default function AuthButtons() {
   const handleGoogleSignIn = async () => {
     try {
       setLoading(true);
-      
+
       // Animation de sécurité
       setShowSecurity(true);
-      
+
       const { data, error } = await signInWithGoogle();
-      
+
       if (error) {
         throw error;
       }
 
       // La redirection est gérée par Supabase
       // On montre juste un message de succès avant redirection
-      success('Redirection vers Google...', {
+      success("Redirection vers Google...", {
         duration: 2000,
-        icon: Chrome
+        icon: Chrome,
       });
-
     } catch (error) {
-      console.error('Erreur connexion Google:', error);
-      
-      showError(error.message || 'Erreur lors de la connexion avec Google', {
+      console.error("Erreur connexion Google:", error);
+
+      showError(error.message || "Erreur lors de la connexion avec Google", {
         duration: 5000,
         action: () => window.location.reload(),
-        actionLabel: 'Réessayer'
+        actionLabel: "Réessayer",
       });
     } finally {
       setLoading(false);
@@ -62,7 +67,7 @@ export default function AuthButtons() {
       >
         {/* Effet de shine */}
         <motion.div
-          animate={loading ? { x: ['-100%', '100%'] } : {}}
+          animate={loading ? { x: ["-100%", "100%"] } : {}}
           transition={{ duration: 1.5, repeat: Infinity }}
           className="absolute inset-0 bg-gradient-to-r from-transparent via-primary-200/30 to-transparent"
         />
@@ -87,7 +92,7 @@ export default function AuthButtons() {
           </motion.div>
 
           <span className="text-gray-700 font-semibold group-hover:text-gray-900 transition-colors">
-            {loading ? 'Connexion en cours...' : 'Continuer avec Google'}
+            {loading ? "Connexion en cours..." : "Continuer avec Google"}
           </span>
 
           {/* Badge de sécurité animé */}
@@ -173,7 +178,9 @@ export default function AuthButtons() {
           className="inline-flex items-center gap-1 px-3 py-1 bg-primary-50 rounded-full cursor-help"
         >
           <Sparkles className="w-3 h-3 text-primary-500" />
-          <span className="text-xs text-primary-600">Connexion 2FA disponible</span>
+          <span className="text-xs text-primary-600">
+            Connexion 2FA disponible
+          </span>
         </motion.div>
       </motion.div>
     </div>

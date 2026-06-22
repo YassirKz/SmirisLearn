@@ -1,5 +1,5 @@
-import { motion, AnimatePresence } from 'framer-motion';
-import { X, AlertTriangle, Info, AlertCircle } from 'lucide-react';
+import { motion, AnimatePresence } from "framer-motion";
+import { X, AlertTriangle, Info, AlertCircle } from "lucide-react";
 
 export default function ConfirmationModal({
   isOpen,
@@ -7,29 +7,29 @@ export default function ConfirmationModal({
   onConfirm,
   title,
   message,
-  confirmText = 'Confirmer',
-  cancelText = 'Annuler',
-  type = 'danger'
+  confirmText = "Confirmer",
+  cancelText = "Annuler",
+  type = "danger",
 }) {
   const config = {
     danger: {
-      btn: 'bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 shadow-red-500/25 hover:shadow-red-500/40',
+      btn: "bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 shadow-red-500/25 hover:shadow-red-500/40",
       icon: <AlertCircle className="w-7 h-7 text-red-500" />,
-      iconBg: 'bg-red-100 dark:bg-red-900/20',
-      bar: 'from-red-400 to-red-500',
+      iconBg: "bg-red-100 dark:bg-red-900/20",
+      bar: "from-red-400 to-red-500",
     },
     warning: {
-      btn: 'bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 shadow-amber-500/25 hover:shadow-amber-500/40',
+      btn: "bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 shadow-amber-500/25 hover:shadow-amber-500/40",
       icon: <AlertTriangle className="w-7 h-7 text-amber-500" />,
-      iconBg: 'bg-amber-100 dark:bg-amber-900/20',
-      bar: 'from-amber-400 to-amber-500',
+      iconBg: "bg-amber-100 dark:bg-amber-900/20",
+      bar: "from-amber-400 to-amber-500",
     },
     info: {
-      btn: 'bg-gradient-to-r from-primary-600 to-primary-700 hover:from-primary-700 hover:to-primary-800 shadow-primary-500/25 hover:shadow-primary-500/40',
+      btn: "bg-gradient-to-r from-primary-600 to-primary-700 hover:from-primary-700 hover:to-primary-800 shadow-primary-500/25 hover:shadow-primary-500/40",
       icon: <Info className="w-7 h-7 text-primary-500" />,
-      iconBg: 'bg-primary-100 dark:bg-primary-900/20',
-      bar: 'from-primary-400 to-primary-500',
-    }
+      iconBg: "bg-primary-100 dark:bg-primary-900/20",
+      bar: "from-primary-400 to-primary-500",
+    },
   };
 
   const { btn, icon, iconBg, bar } = config[type] || config.info;
@@ -61,10 +61,17 @@ export default function ConfirmationModal({
                   {icon}
                 </div>
                 <div className="flex-1 pt-1">
-                  <h3 className="text-xl font-bold text-gray-900 dark:text-white tracking-tight">{title}</h3>
-                  <p className="text-gray-500 dark:text-gray-400 mt-2 leading-relaxed text-[15px]">{message}</p>
+                  <h3 className="text-xl font-bold text-gray-900 dark:text-white tracking-tight">
+                    {title}
+                  </h3>
+                  <p className="text-gray-500 dark:text-gray-400 mt-2 leading-relaxed text-[15px]">
+                    {message}
+                  </p>
                 </div>
-                <button onClick={onClose} className="p-2 hover:bg-white/50 dark:hover:bg-white/5 rounded-xl transition-colors shrink-0">
+                <button
+                  onClick={onClose}
+                  className="p-2 hover:bg-white/50 dark:hover:bg-white/5 rounded-xl transition-colors shrink-0"
+                >
                   <X className="w-5 h-5 text-gray-400 dark:text-gray-500" />
                 </button>
               </div>

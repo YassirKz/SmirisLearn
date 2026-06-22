@@ -33,12 +33,12 @@ const ROLE_CONFIG = {
   org_admin: {
     label: "Administrateur",
     icon: Shield,
-    color: 'bg-accent-100 text-accent-700 border-accent-200 dark:bg-accent-900/30 dark:text-accent-300 dark:border-accent-800'
+    color: 'bg-accent-500 text-secondary-900 text-accent-700 border-accent-200 dark:bg-accent-900/30 dark:text-accent-300 dark:border-accent-800'
   },
   student: {
     label: "Étudiant",
     icon: GraduationCap,
-    color: 'bg-primary-100 text-primary-700 border-primary-200 dark:bg-primary-900/30 dark:text-primary-300 dark:border-primary-800'
+    color: 'bg-accent-500 text-secondary-900 text-secondary-900 border-secondary-200 dark:bg-primary-900/30 dark:text-primary-300 dark:border-primary-800'
   },
   super_admin: {
     label: "Super Admin",
@@ -299,11 +299,11 @@ export default function MembersList({ isReadOnly = false, orgId: propOrgId }) {
   return (
     <div className="space-y-6">
       {/* Barre d'outils */}
-      <div className="bg-white/60 dark:bg-slate-900/60 backdrop-blur-2xl rounded-3xl p-5 shadow-lg border border-white/50 dark:border-white/5 relative z-30">
+      <div className="bg-white/80 dark:bg-slate-900/40 backdrop-blur-sm rounded-3xl p-5 shadow-lg border border-secondary-200 dark:border-secondary-200/20 relative z-30">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-5">
           <div className="flex items-center gap-3 px-2 h-11">
-            <div className="p-2 bg-primary-50 dark:bg-primary-900/30 rounded-xl">
-              <Users className="w-5 h-5 text-primary-600 dark:text-primary-400" />
+            <div className="p-2 bg-secondary-50 dark:bg-primary-900/30 rounded-xl">
+              <Users className="w-5 h-5 text-primary-500 dark:text-primary-500" />
             </div>
             <h2 className="text-lg font-bold text-gray-800 dark:text-gray-200">Membres</h2>
           </div>
@@ -316,7 +316,7 @@ export default function MembersList({ isReadOnly = false, orgId: propOrgId }) {
                 placeholder="Nom, email..."
                 value={search}
                 onChange={e => setSearch(e.target.value)}
-                className="w-full pl-11 pr-4 h-11 bg-white/50 dark:bg-white/5 border border-white/50 dark:border-white/5 rounded-xl focus:border-primary-400 dark:focus:border-primary-500 focus:ring-4 focus:ring-primary-100 dark:focus:ring-primary-900/30 dark:text-white transition-all font-medium placeholder:text-gray-400 shadow-sm backdrop-blur-md"
+                className="w-full pl-11 pr-4 h-11 bg-white/50 dark:bg-slate-900/20 border border-secondary-200 dark:border-secondary-200/20 rounded-xl focus:border-primary-500 dark:focus:border-secondary-200 focus:ring-4 focus:ring-primary-500/20 dark:focus:ring-primary-900/30 dark:text-white transition-all font-medium placeholder:text-gray-400 shadow-sm backdrop-blur-md"
               />
             </div>
 
@@ -324,7 +324,7 @@ export default function MembersList({ isReadOnly = false, orgId: propOrgId }) {
               <Filter className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500 w-5 h-5 group-focus-within:text-primary-500 transition-colors z-10" />
               <button
                 onClick={() => setIsGroupFilterOpen(!isGroupFilterOpen)}
-                className="w-full pl-11 pr-4 h-11 bg-white/50 dark:bg-white/5 border border-white/50 dark:border-white/5 rounded-xl focus:border-primary-400 dark:focus:border-primary-500 focus:ring-4 focus:ring-primary-100 dark:focus:ring-primary-900/30 dark:text-white transition-all font-medium flex items-center justify-between gap-2 shadow-sm backdrop-blur-md"
+                className="w-full pl-11 pr-4 h-11 bg-white/50 dark:bg-slate-900/20 border border-secondary-200 dark:border-secondary-200/20 rounded-xl focus:border-primary-500 dark:focus:border-secondary-200 focus:ring-4 focus:ring-primary-500/20 dark:focus:ring-primary-900/30 dark:text-white transition-all font-medium flex items-center justify-between gap-2 shadow-sm backdrop-blur-md"
               >
                 <span className="truncate">
                     {selectedGroup === 'all' 
@@ -340,7 +340,7 @@ export default function MembersList({ isReadOnly = false, orgId: propOrgId }) {
                     initial={{ opacity: 0, y: -10, scale: 0.95 }}
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, y: -10, scale: 0.95 }}
-                    className="absolute left-0 mt-2 w-full bg-white/80 dark:bg-slate-900/80 backdrop-blur-2xl rounded-2xl shadow-xl border border-white/50 dark:border-white/5 py-2 z-50 overflow-hidden"
+                    className="absolute left-0 mt-2 w-full bg-white/80 dark:bg-slate-900/40 backdrop-blur-2xl rounded-2xl shadow-xl border border-secondary-200 dark:border-secondary-200/20 py-2 z-50 overflow-hidden"
                   >
                     <button
                         onClick={() => {
@@ -349,7 +349,7 @@ export default function MembersList({ isReadOnly = false, orgId: propOrgId }) {
                         }}
                         className={`w-full px-4 py-2.5 text-left text-sm transition-colors
                             ${selectedGroup === 'all' 
-                                ? 'bg-primary-500/10 text-primary-600 dark:text-primary-400 font-bold' 
+                                ? 'bg-primary-600 dark:bg-primary-500/10 text-primary-500 dark:text-primary-500 font-bold' 
                                 : 'text-gray-600 dark:text-gray-400 hover:bg-white/50 dark:hover:bg-white/10'
                             }`}
                     >
@@ -364,7 +364,7 @@ export default function MembersList({ isReadOnly = false, orgId: propOrgId }) {
                         }}
                         className={`w-full px-4 py-2.5 text-left text-sm transition-colors
                             ${selectedGroup === g.id 
-                                ? 'bg-primary-500/10 text-primary-600 dark:text-primary-400 font-bold' 
+                                ? 'bg-primary-600 dark:bg-primary-500/10 text-primary-500 dark:text-primary-500 font-bold' 
                                 : 'text-gray-600 dark:text-gray-400 hover:bg-white/50 dark:hover:bg-white/10'
                             }`}
                       >
@@ -380,7 +380,7 @@ export default function MembersList({ isReadOnly = false, orgId: propOrgId }) {
               whileHover={{ rotate: 180 }}
               transition={{ duration: 0.3 }}
               onClick={fetchMembers}
-              className="w-11 h-11 flex items-center justify-center bg-white/50 dark:bg-white/5 border border-white/50 dark:border-white/5 hover:border-primary-300 dark:hover:border-primary-500 rounded-xl shadow-sm transition-all shrink-0"
+              className="w-11 h-11 flex items-center justify-center bg-white/50 dark:bg-slate-900/20 border border-secondary-200 dark:border-secondary-200/20 hover:border-secondary-200 dark:hover:border-secondary-200 rounded-xl shadow-sm transition-all shrink-0"
               title="Actualiser"
               disabled={loading}
             >
@@ -392,9 +392,9 @@ export default function MembersList({ isReadOnly = false, orgId: propOrgId }) {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => setShowInviteForm(!showInviteForm)}
-                className="group px-6 h-11 bg-gradient-to-r from-primary-600 to-accent-600 hover:from-primary-500 hover:to-accent-500 text-white rounded-xl shadow-lg shadow-primary-500/25 hover:shadow-xl hover:shadow-primary-500/40 transition-all flex items-center justify-center gap-3 font-bold border border-white/10 shrink-0 w-full sm:w-auto"
+                className="group px-6 h-11 bg-primary-600 dark:bg-primary-500 hover:from-primary-500 hover:to-accent-500 text-white rounded-xl shadow-lg shadow-primary-500/25 hover:shadow-xl hover:shadow-primary-500/40 transition-all flex items-center justify-center gap-3 font-bold border border-secondary-200/30 shrink-0 w-full sm:w-auto"
               >
-                <div className="p-1 bg-white/20 rounded-lg group-hover:bg-white/30 transition-colors">
+                <div className="p-1 bg-white/20 rounded-lg group-hover:bg-slate-900/30 transition-colors">
                   <Plus className="w-4 h-4" />
                 </div>
                 Nouveau
@@ -414,7 +414,7 @@ export default function MembersList({ isReadOnly = false, orgId: propOrgId }) {
               animate={{ scale: 1, opacity: 1, y: 0 }}
               exit={{ scale: 0.95, opacity: 0, y: 20 }}
               onClick={e => e.stopPropagation()}
-              className="bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl rounded-3xl max-w-md w-full shadow-2xl border border-white/50 dark:border-white/10 ring-1 ring-black/5 relative overflow-hidden"
+              className="bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl rounded-3xl max-w-md w-full shadow-2xl border border-secondary-200 dark:border-secondary-200/30 ring-1 ring-black/5 relative overflow-hidden"
             >
               {/* En-tête avec dégradé premium (Style Piliers) */}
               <div className="relative px-8 pt-8 pb-6 bg-gradient-to-br from-primary-600 to-accent-600 text-white">
@@ -451,7 +451,7 @@ export default function MembersList({ isReadOnly = false, orgId: propOrgId }) {
                         value={inviteEmail}
                         onChange={e => setInviteEmail(e.target.value)}
                         placeholder="exemple@email.com"
-                        className="w-full pl-12 pr-4 py-3 bg-gray-50 dark:bg-slate-800/50 border-2 border-gray-100 dark:border-gray-700 rounded-xl focus:border-primary-400 dark:focus:border-primary-500 outline-none transition-all dark:text-white"
+                        className="w-full pl-12 pr-4 py-3 bg-secondary-50 dark:bg-slate-800/50 border-2 border-secondary-200 dark:border-secondary-200/20 rounded-xl focus:border-primary-500 dark:focus:border-secondary-200 outline-none transition-all dark:text-white"
                       />
                     </div>
                   </div>
@@ -462,7 +462,7 @@ export default function MembersList({ isReadOnly = false, orgId: propOrgId }) {
                       <button
                         type="button"
                         onClick={() => setIsInviteRoleOpen(!isInviteRoleOpen)}
-                        className="w-full px-4 py-3 bg-gray-50 dark:bg-slate-800/50 border-2 border-gray-100 dark:border-gray-700 rounded-xl focus:border-primary-400 dark:focus:border-primary-500 outline-none transition-all dark:text-white flex items-center justify-between gap-2 shadow-sm"
+                        className="w-full px-4 py-3 bg-secondary-50 dark:bg-slate-800/50 border-2 border-secondary-200 dark:border-secondary-200/20 rounded-xl focus:border-primary-500 dark:focus:border-secondary-200 outline-none transition-all dark:text-white flex items-center justify-between gap-2 shadow-sm"
                       >
                         <span>{inviteRole === 'student' ? 'Étudiant' : 'Administrateur'}</span>
                         <ChevronDown size={14} className={`transition-transform duration-200 ${isInviteRoleOpen ? 'rotate-180' : ''}`} />
@@ -474,7 +474,7 @@ export default function MembersList({ isReadOnly = false, orgId: propOrgId }) {
                             initial={{ opacity: 0, y: -10, scale: 0.95 }}
                             animate={{ opacity: 1, y: 0, scale: 1 }}
                             exit={{ opacity: 0, y: -10, scale: 0.95 }}
-                            className="absolute left-0 mt-2 w-full bg-white dark:bg-slate-900 rounded-2xl shadow-xl border border-gray-100 dark:border-gray-800 py-2 z-50 overflow-hidden"
+                            className="absolute left-0 mt-2 w-full bg-white dark:bg-slate-900/40 rounded-2xl shadow-xl border border-secondary-200 dark:border-secondary-200/20 py-2 z-50 overflow-hidden"
                           >
                             <button
                               type="button"
@@ -484,8 +484,8 @@ export default function MembersList({ isReadOnly = false, orgId: propOrgId }) {
                               }}
                               className={`w-full px-4 py-2.5 text-left text-sm transition-colors
                                 ${inviteRole === 'student' 
-                                  ? 'bg-primary-500/10 text-primary-600 dark:text-primary-400 font-bold' 
-                                  : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-white/10'
+                                  ? 'bg-primary-600 dark:bg-primary-500/10 text-primary-500 dark:text-primary-500 font-bold' 
+                                  : 'text-gray-600 dark:text-gray-400 hover:bg-secondary-50 dark:hover:bg-white/10'
                                 }`}
                             >
                               Étudiant
@@ -498,8 +498,8 @@ export default function MembersList({ isReadOnly = false, orgId: propOrgId }) {
                               }}
                               className={`w-full px-4 py-2.5 text-left text-sm transition-colors
                                 ${inviteRole === 'org_admin' 
-                                  ? 'bg-primary-500/10 text-primary-600 dark:text-primary-400 font-bold' 
-                                  : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-white/10'
+                                  ? 'bg-primary-600 dark:bg-primary-500/10 text-primary-500 dark:text-primary-500 font-bold' 
+                                  : 'text-gray-600 dark:text-gray-400 hover:bg-secondary-50 dark:hover:bg-white/10'
                                 }`}
                             >
                               Administrateur
@@ -523,7 +523,7 @@ export default function MembersList({ isReadOnly = false, orgId: propOrgId }) {
                       whileTap={{ scale: 0.98 }}
                       type="submit"
                       disabled={inviting}
-                      className="flex-1 items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-primary-600 to-accent-600 text-white rounded-xl font-bold shadow-lg shadow-primary-500/25 hover:shadow-xl hover:shadow-primary-500/40 transition-all disabled:opacity-50 flex"
+                      className="flex-1 items-center justify-center gap-2 px-6 py-3 bg-primary-600 dark:bg-primary-500 text-white rounded-xl font-bold shadow-lg shadow-primary-500/25 hover:shadow-xl hover:shadow-primary-500/40 transition-all disabled:opacity-50 flex"
                     >
                       {inviting ? <Loader2 className="w-5 h-5 animate-spin" /> : <Check className="w-5 h-5" />}
                       Envoyer
@@ -540,10 +540,10 @@ export default function MembersList({ isReadOnly = false, orgId: propOrgId }) {
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
         {[
           { label: "Total membres", value: stats.total, color: 'text-gray-800 dark:text-white', bg: 'bg-white/60 dark:bg-slate-900/60', glow: 'from-gray-400/20 to-transparent' },
-          { label: "Étudiants", value: stats.students, color: 'text-primary-600 dark:text-primary-400', bg: 'bg-primary-50/60 dark:bg-primary-900/30', glow: 'from-primary-500/20 to-transparent' },
-          { label: "Administrateurs", value: stats.admins, color: 'text-accent-600 dark:text-accent-400', bg: 'bg-accent-50/60 dark:bg-accent-900/30', glow: 'from-accent-500/20 to-transparent' },
+          { label: "Étudiants", value: stats.students, color: 'text-primary-500 dark:text-primary-500', bg: 'bg-secondary-50/60 dark:bg-primary-900/30', glow: 'from-primary-500/20 to-transparent' },
+          { label: "Administrateurs", value: stats.admins, color: 'text-primary-500 dark:text-accent-400', bg: 'bg-accent-50/60 dark:bg-accent-900/30', glow: 'from-accent-500/20 to-transparent' },
         ].map((stat, idx) => (
-          <div key={idx} className={`relative backdrop-blur-2xl border border-white/50 dark:border-white/5 rounded-3xl p-6 overflow-hidden shadow-lg ${stat.bg}`}>
+          <div key={idx} className={`relative backdrop-blur-2xl border border-secondary-200 dark:border-secondary-200/20 rounded-3xl p-6 overflow-hidden shadow-lg ${stat.bg}`}>
             <div className={`absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl ${stat.glow} rounded-full blur-2xl -translate-y-1/2 translate-x-1/2 pointer-events-none`} />
             <p className={`text-4xl font-black ${stat.color} mb-1 relative z-10`}>{stat.value}</p>
             <p className="text-sm font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider relative z-10">{stat.label}</p>
@@ -554,11 +554,11 @@ export default function MembersList({ isReadOnly = false, orgId: propOrgId }) {
       {/* Tableau des membres */}
       {loading ? (
         <div className="flex items-center justify-center py-16">
-          <Loader2 className="w-8 h-8 animate-spin text-primary-600 dark:text-primary-400" />
+          <Loader2 className="w-8 h-8 animate-spin text-primary-500 dark:text-primary-500" />
         </div>
       ) : members.length === 0 ? (
-        <div className="text-center py-16 bg-white/40 dark:bg-slate-900/40 rounded-3xl border border-white/50 dark:border-white/5 backdrop-blur-md shadow-sm">
-          <div className="w-20 h-20 bg-white/50 dark:bg-white/5 rounded-full flex items-center justify-center mx-auto mb-4 shadow-inner border border-white/50 dark:border-white/5">
+        <div className="text-center py-16 bg-white/40 dark:bg-slate-900/40 rounded-3xl border border-secondary-200 dark:border-secondary-200/20 backdrop-blur-md shadow-sm">
+          <div className="w-20 h-20 bg-white/50 dark:bg-slate-900/20 rounded-full flex items-center justify-center mx-auto mb-4 shadow-inner border border-secondary-200 dark:border-secondary-200/20">
             <Users className="w-10 h-10 text-gray-300 dark:text-gray-600" />
           </div>
           <h3 className="text-lg font-bold text-gray-800 dark:text-gray-200 mb-2">
@@ -569,10 +569,10 @@ export default function MembersList({ isReadOnly = false, orgId: propOrgId }) {
           </p>
         </div>
       ) : (
-        <div className="bg-white/60 dark:bg-slate-900/60 backdrop-blur-2xl rounded-3xl shadow-lg border border-white/50 dark:border-white/5 overflow-hidden transition-all duration-300">
+        <div className="bg-white/80 dark:bg-slate-900/40 backdrop-blur-sm rounded-3xl shadow-lg border border-secondary-200 dark:border-secondary-200/20 overflow-hidden transition-all duration-300">
           <div className="overflow-x-auto">
             <table className="w-full min-w-[800px]">
-              <thead className="bg-white/40 dark:bg-slate-800/40 backdrop-blur-md border-b border-white/50 dark:border-white/5">
+              <thead className="bg-white/40 dark:bg-slate-800/40 backdrop-blur-md border-b border-secondary-200 dark:border-secondary-200/20">
                 <tr>
                   <th className="px-6 py-5 text-left text-xs font-black text-gray-500 dark:text-gray-400 uppercase tracking-widest whitespace-nowrap">Membre</th>
                   <th className="px-6 py-5 text-left text-xs font-black text-gray-500 dark:text-gray-400 uppercase tracking-widest whitespace-nowrap">Rôle</th>
@@ -593,18 +593,18 @@ export default function MembersList({ isReadOnly = false, orgId: propOrgId }) {
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: i * 0.02 }}
-                      className="hover:bg-white/40 dark:hover:bg-white/5 transition-all duration-300 group/row cursor-default border-b border-transparent hover:border-white/50 dark:hover:border-white/10"
+                      className="hover:bg-white/40 dark:hover:bg-white/5 transition-all duration-300 group/row cursor-default border-b border-transparent hover:border-secondary-200 dark:hover:border-secondary-200/30"
                     >
                       <td className="px-6 py-4">
                         <div className="flex items-center gap-4">
-                          <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-primary-500 to-accent-600 flex items-center justify-center font-bold text-white text-lg shrink-0 shadow-md group-hover/row:scale-105 transition-transform">
+                          <div className="w-12 h-12 rounded-2xl bg-primary-600 dark:bg-primary-500 flex items-center justify-center font-bold text-white text-lg shrink-0 shadow-md group-hover/row:scale-105 transition-transform">
                             {initials}
                           </div>
                           <div className="min-w-0">
-                            <p className="font-bold text-gray-800 dark:text-gray-200 text-sm truncate group-hover/row:text-primary-600 dark:group-hover/row:text-primary-400 transition-colors">
+                            <p className="font-bold text-gray-800 dark:text-gray-200 text-sm truncate group-hover/row:text-primary-500 dark:group-hover/row:text-primary-500 transition-colors">
                               {escapeText(untrusted(member.full_name || "Chargement..."))}
                               {member.id === user.id && (
-                                <span className="ml-2 text-xs font-bold text-primary-500 dark:text-primary-400 bg-primary-50 dark:bg-primary-900/30 px-2 py-0.5 rounded-md">(Vous)</span>
+                                <span className="ml-2 text-xs font-bold text-primary-500 dark:text-primary-500 bg-secondary-50 dark:bg-primary-900/30 px-2 py-0.5 rounded-md">(Vous)</span>
                               )}
                             </p>
                             <p className="text-xs font-medium text-gray-500 dark:text-gray-400 truncate mt-0.5">{member.email}</p>
@@ -620,16 +620,16 @@ export default function MembersList({ isReadOnly = false, orgId: propOrgId }) {
                       <td className="px-6 py-4 hidden lg:table-cell">
                           <div className="flex flex-wrap gap-1.5 max-w-xs">
                             {member.groups.length === 0 ? (
-                              <span className="text-xs font-medium text-gray-400 dark:text-gray-500 bg-white/50 dark:bg-white/5 px-2 py-1 rounded-lg">Aucun groupe</span>
+                              <span className="text-xs font-medium text-gray-400 dark:text-gray-500 bg-white/50 dark:bg-slate-900/20 px-2 py-1 rounded-lg">Aucun groupe</span>
                             ) : (
                               member.groups.slice(0, 3).map((g, idx) => (
-                                <span key={g.id || `m-g-${idx}`} className="inline-block px-2.5 py-1 bg-white/50 dark:bg-white/5 text-gray-700 dark:text-gray-300 border border-white/50 dark:border-white/5 rounded-lg text-xs font-medium shadow-sm">
+                                <span key={g.id || `m-g-${idx}`} className="inline-block px-2.5 py-1 bg-white/50 dark:bg-slate-900/20 text-gray-700 dark:text-gray-300 border border-secondary-200 dark:border-secondary-200/20 rounded-lg text-xs font-medium shadow-sm">
                                   {escapeText(untrusted(g.name))}
                                 </span>
                               ))
                             )}
                           {member.groups.length > 3 && (
-                            <span className="inline-flex items-center px-2 py-1 bg-primary-50 dark:bg-primary-900/30 text-primary-600 dark:text-primary-400 rounded-lg text-xs font-bold border border-primary-200/50 dark:border-primary-800/50">
+                            <span className="inline-flex items-center px-2 py-1 bg-secondary-50 dark:bg-primary-900/30 text-primary-500 dark:text-primary-500 rounded-lg text-xs font-bold border border-secondary-200/50 dark:border-primary-800/50">
                               +{member.groups.length - 3}
                             </span>
                           )}
@@ -650,12 +650,12 @@ export default function MembersList({ isReadOnly = false, orgId: propOrgId }) {
                               onClick={() => handleChangeRole(member)}
                               disabled={updatingId === member.id || member.id === user.id}
                               title={member.role === 'student' ? "Promouvoir administrateur" : "Rétrograder étudiant"}
-                              className="p-2.5 bg-white/50 dark:bg-white/5 hover:bg-accent-100 dark:hover:bg-accent-900/50 border border-gray-200 dark:border-gray-700/50 hover:border-accent-200 dark:hover:border-accent-800/50 rounded-xl transition-all disabled:opacity-50 shadow-sm"
+                              className="p-2.5 bg-white/50 dark:bg-slate-900/20 hover:bg-accent-500 text-secondary-900 dark:hover:bg-accent-900/50 border border-secondary-200 dark:border-secondary-200/20/50 hover:border-accent-200 dark:hover:border-accent-800/50 rounded-xl transition-all disabled:opacity-50 shadow-sm"
                             >
                               {updatingId === member.id ? (
-                                <Loader2 className="w-4 h-4 animate-spin text-accent-500 dark:text-accent-400" />
+                                <Loader2 className="w-4 h-4 animate-spin text-primary-500 dark:text-accent-400" />
                               ) : (
-                                <Shield className="w-4 h-4 text-accent-600 dark:text-accent-400" />
+                                <Shield className="w-4 h-4 text-primary-500 dark:text-accent-400" />
                               )}
                             </motion.button>
 
@@ -666,7 +666,7 @@ export default function MembersList({ isReadOnly = false, orgId: propOrgId }) {
                                 whileTap={{ scale: 0.9 }}
                                 onClick={() => startImpersonation(member.id)}
                                 title="Voir comme l'utilisateur"
-                                className="p-2.5 bg-white/50 dark:bg-white/5 hover:bg-blue-100 dark:hover:bg-blue-900/50 border border-gray-200 dark:border-gray-700/50 hover:border-blue-200 dark:hover:border-blue-800/50 rounded-xl transition-all shadow-sm"
+                                className="p-2.5 bg-white/50 dark:bg-slate-900/20 hover:bg-blue-100 dark:hover:bg-blue-900/50 border border-secondary-200 dark:border-secondary-200/20/50 hover:border-blue-200 dark:hover:border-blue-800/50 rounded-xl transition-all shadow-sm"
                               >
                                 <Eye className="w-4 h-4 text-blue-600 dark:text-blue-400" />
                               </motion.button>
@@ -680,7 +680,7 @@ export default function MembersList({ isReadOnly = false, orgId: propOrgId }) {
                                 onClick={() => handleRemove(member)}
                                 disabled={deletingId === member.id || member.id === user.id}
                                 title="Retirer de l'entreprise"
-                                className="p-2.5 bg-white/50 dark:bg-white/5 hover:bg-red-100 dark:hover:bg-red-900/50 border border-gray-200 dark:border-gray-700/50 hover:border-red-200 dark:hover:border-red-800/50 rounded-xl transition-all disabled:opacity-50 shadow-sm"
+                                className="p-2.5 bg-white/50 dark:bg-slate-900/20 hover:bg-red-100 dark:hover:bg-red-900/50 border border-secondary-200 dark:border-secondary-200/20/50 hover:border-red-200 dark:hover:border-red-800/50 rounded-xl transition-all disabled:opacity-50 shadow-sm"
                               >
                                 {deletingId === member.id ? (
                                   <Loader2 className="w-4 h-4 animate-spin text-red-500 dark:text-red-400" />

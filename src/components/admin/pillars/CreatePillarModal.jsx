@@ -14,7 +14,7 @@ const ICONS = ['📚', '🎓', '💻', '📊', '🎯', '⚡', '🌟', '🔥', '�
 
 // Couleurs disponibles
 const COLORS = [
-    { name: 'primary', class: 'bg-primary-500', gradient: 'from-primary-600 to-primary-800' },
+    { name: 'primary', class: 'bg-primary-600 dark:bg-primary-500', gradient: 'from-primary-600 to-primary-800' },
     { name: 'accent', class: 'bg-accent-500', gradient: 'from-accent-600 to-indigo-600' },
     { name: 'purple', class: 'bg-purple-500', gradient: 'from-purple-500 to-pink-600' },
     { name: 'green', class: 'bg-green-500', gradient: 'from-green-500 to-emerald-600' },
@@ -122,14 +122,14 @@ export default function CreatePillarModal({ isOpen, onClose, onSuccess, orgId: p
                             exit={{ opacity: 0, scale: 0.9, y: 40 }}
                             className="relative inline-block w-full max-w-2xl my-8 text-left align-middle"
                         >
-                            <div className="relative bg-white/90 dark:bg-gray-900/90 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/20 dark:border-gray-800 overflow-hidden">
+                            <div className="relative bg-white/90 dark:bg-gray-900/90 backdrop-blur-xl rounded-3xl shadow-2xl border border-secondary-200/50 dark:border-secondary-200/20 overflow-hidden">
                                 {/* Éléments décoratifs */}
                                 <div className="absolute -top-20 -right-20 w-40 h-40 bg-gradient-to-br from-primary-400 to-accent-400 rounded-full opacity-20 blur-3xl" />
                                 <div className="absolute -bottom-20 -left-20 w-40 h-40 bg-gradient-to-br from-pink-400 to-orange-400 rounded-full opacity-20 blur-3xl" />
 
                                 {/* Badge premium */}
                                 <div className="absolute top-4 right-4 z-10">
-                                    <div className="bg-gradient-to-r from-primary-600 to-accent-600 text-white px-3 py-1 rounded-full text-xs font-medium flex items-center gap-1 shadow-lg">
+                                    <div className="bg-primary-600 dark:bg-primary-500 text-white px-3 py-1 rounded-full text-xs font-medium flex items-center gap-1 shadow-lg">
                                         <Sparkles className="w-3 h-3" />
                                         Nouveau pilier
                                     </div>
@@ -159,7 +159,7 @@ export default function CreatePillarModal({ isOpen, onClose, onSuccess, orgId: p
 
                                     <button
                                         onClick={() => setPreviewMode(!previewMode)}
-                                        className="absolute bottom-6 right-8 flex items-center gap-2 px-3 py-1.5 bg-white/20 rounded-lg hover:bg-white/30 transition-all text-sm"
+                                        className="absolute bottom-6 right-8 flex items-center gap-2 px-3 py-1.5 bg-white/20 rounded-lg hover:bg-slate-900/30 transition-all text-sm"
                                     >
                                         <Eye className="w-4 h-4" />
                                         {previewMode ? "Mode Édition" : "Aperçu"}
@@ -200,7 +200,7 @@ export default function CreatePillarModal({ isOpen, onClose, onSuccess, orgId: p
                                             required
                                             error={touched.name ? errors.name : ''}
                                             placeholder="Ex: Management, Communication, Vente..."
-                                            className="w-full px-4 py-3 bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 rounded-xl focus:border-primary-400 dark:focus:border-primary-500 focus:ring-4 focus:ring-primary-100 dark:focus:ring-primary-900/30 outline-none transition-all resize-none dark:text-white"
+                                            className="w-full px-4 py-3 bg-white dark:bg-gray-800 border-2 border-secondary-200 dark:border-secondary-200/20 rounded-xl focus:border-primary-500 dark:focus:border-secondary-200 focus:ring-4 focus:ring-primary-500/20 dark:focus:ring-primary-900/30 outline-none transition-all resize-none dark:text-white"
                                         />
 
                                         <div className="space-y-2">
@@ -213,7 +213,7 @@ export default function CreatePillarModal({ isOpen, onClose, onSuccess, orgId: p
                                                 onChange={(e) => handleChange('description', e.target.value)}
                                                 onBlur={() => setTouched({ ...touched, description: true })}
                                                 rows={3}
-                                                className="w-full px-4 py-3 bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 rounded-xl focus:border-primary-400 dark:focus:border-primary-500 focus:ring-4 focus:ring-primary-100 dark:focus:ring-primary-900/30 outline-none transition-all resize-none dark:text-white"
+                                                className="w-full px-4 py-3 bg-white dark:bg-gray-800 border-2 border-secondary-200 dark:border-secondary-200/20 rounded-xl focus:border-primary-500 dark:focus:border-secondary-200 focus:ring-4 focus:ring-primary-500/20 dark:focus:ring-primary-900/30 outline-none transition-all resize-none dark:text-white"
                                                 placeholder="Décrivez brièvement ce que contient ce pilier..."
                                             />
                                             <div className="flex justify-end">
@@ -237,7 +237,7 @@ export default function CreatePillarModal({ isOpen, onClose, onSuccess, orgId: p
                                                         className={`p-3 text-2xl rounded-xl border-2 transition-all ${
                                                             formData.icon === icon
                                                                 ? `border-${formData.color}-500 bg-${formData.color}-50 dark:bg-${formData.color}-900/30`
-                                                                : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600'
+                                                                : 'border-secondary-200 dark:border-secondary-200/20 hover:border-gray-300 dark:hover:border-gray-600'
                                                         }`}
                                                     >
                                                         {icon}

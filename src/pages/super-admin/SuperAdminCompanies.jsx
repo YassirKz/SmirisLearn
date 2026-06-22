@@ -12,9 +12,9 @@ export default function SuperAdminCompanies() {
                 className="space-y-8"
             >
                 {/* En-tête premium glassmorphism */}
-                <div className="relative bg-white/80 dark:bg-slate-900/60 backdrop-blur-xl rounded-3xl p-8 sm:p-10 shadow-xl border border-white/50 dark:border-white/5 overflow-hidden">
+                <div className="relative bg-white/80 dark:bg-slate-900/60 backdrop-blur-xl rounded-3xl p-8 sm:p-10 shadow-xl border border-secondary-200 dark:border-secondary-200/20 overflow-hidden">
                     {/* Background Glows */}
-                    <div className="absolute top-0 right-0 w-64 h-64 bg-primary-500/10 dark:bg-primary-500/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none" />
+                    <div className="absolute top-0 right-0 w-64 h-64 bg-primary-600 dark:bg-primary-500/10 dark:bg-primary-600 dark:bg-primary-500/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none" />
                     <div className="absolute bottom-0 left-0 w-64 h-64 bg-accent-500/10 dark:bg-accent-500/20 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2 pointer-events-none" />
                     
                     <div className="relative z-10 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
@@ -24,7 +24,7 @@ export default function SuperAdminCompanies() {
                                     initial={{ scale: 0, opacity: 0 }}
                                     animate={{ scale: 1, opacity: 1 }}
                                     transition={{ type: "spring", stiffness: 200, damping: 20, delay: 0.1 }}
-                                    className="p-3 bg-gradient-to-br from-primary-500 to-accent-600 rounded-2xl shadow-lg shadow-primary-500/30"
+                                    className="p-3 bg-primary-600 dark:bg-primary-500 rounded-2xl shadow-lg shadow-sm"
                                 >
                                     <Building2 className="w-8 h-8 text-white" />
                                 </motion.div>
@@ -32,7 +32,7 @@ export default function SuperAdminCompanies() {
                                     initial={{ opacity: 0, x: -20 }}
                                     animate={{ opacity: 1, x: 0 }}
                                     transition={{ delay: 0.2 }}
-                                    className="px-4 py-1.5 bg-primary-50 dark:bg-primary-900/30 border border-primary-200 dark:border-primary-800/50 rounded-full text-sm font-bold text-primary-700 dark:text-primary-300 shadow-sm flex items-center gap-2 w-fit"
+                                    className="px-4 py-1.5 bg-secondary-50 dark:bg-primary-900/30 border border-secondary-200 dark:border-primary-800/50 rounded-full text-sm font-bold text-secondary-900 dark:text-primary-300 shadow-sm flex items-center gap-2 w-fit"
                                 >
                                     <Sparkles className="w-4 h-4" />
                                     Gestion des Entreprises
@@ -61,8 +61,8 @@ export default function SuperAdminCompanies() {
                     transition={{ delay: 0.5 }}
                     className="text-center py-4"
                 >
-                    <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/60 dark:bg-slate-900/40 backdrop-blur-sm rounded-full border border-gray-200 dark:border-gray-800 text-xs text-gray-400 dark:text-gray-500">
-                        <Sparkles className="w-3.5 h-3.5 text-primary-400" />
+                    <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/60 dark:bg-slate-900/40 backdrop-blur-sm rounded-full border border-secondary-200 dark:border-secondary-200/20 text-xs text-gray-400 dark:text-gray-500">
+                        <Sparkles className="w-3.5 h-3.5 text-primary-500" />
                         <span>Propulsé par Smiris Learn Admin Engine</span>
                     </div>
                 </motion.div>

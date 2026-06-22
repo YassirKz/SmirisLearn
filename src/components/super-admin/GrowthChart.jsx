@@ -77,7 +77,7 @@ export default function GrowthChart() {
     const CustomTooltip = ({ active, payload, label }) => {
         if (active && payload && payload.length) {
             return (
-                <div className="bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl border border-white/50 dark:border-white/10 p-4 rounded-2xl shadow-2xl ring-1 ring-black/5">
+                <div className="bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl border border-secondary-200 dark:border-secondary-200/30 p-4 rounded-2xl shadow-2xl ring-1 ring-black/5">
                     <p className="text-sm font-bold text-gray-900 dark:text-white mb-2">{label}</p>
                     <div className="space-y-1.5">
                         {payload.map((entry, i) => (
@@ -103,12 +103,12 @@ export default function GrowthChart() {
                 >
                     <defs>
                         <linearGradient id="colorEntreprises" x1="0" y1="0" x2="0" y2="1">
-                            <stop offset="5%" stopColor="#0ea5e9" stopOpacity={0.3}/>
-                            <stop offset="95%" stopColor="#0ea5e9" stopOpacity={0}/>
+                            <stop offset="5%" stopColor="#0077b6" stopOpacity={0.3}/>
+                            <stop offset="95%" stopColor="#0077b6" stopOpacity={0}/>
                         </linearGradient>
                         <linearGradient id="colorUtilisateurs" x1="0" y1="0" x2="0" y2="1">
-                            <stop offset="5%" stopColor="#8b5cf6" stopOpacity={0.3}/>
-                            <stop offset="95%" stopColor="#8b5cf6" stopOpacity={0}/>
+                            <stop offset="5%" stopColor="#00b4d8" stopOpacity={0.3}/>
+                            <stop offset="95%" stopColor="#00b4d8" stopOpacity={0}/>
                         </linearGradient>
                     </defs>
                     <CartesianGrid 
@@ -151,7 +151,7 @@ export default function GrowthChart() {
                     <Area 
                         type="monotone" 
                         dataKey="entreprises" 
-                        stroke="#0ea5e9" 
+                        stroke="#0077b6" 
                         strokeWidth={3}
                         fillOpacity={1} 
                         fill="url(#colorEntreprises)" 
@@ -161,7 +161,7 @@ export default function GrowthChart() {
                     <Area 
                         type="monotone" 
                         dataKey="utilisateurs" 
-                        stroke="#8b5cf6" 
+                        stroke="#00b4d8" 
                         strokeWidth={3}
                         fillOpacity={1} 
                         fill="url(#colorUtilisateurs)" 
@@ -178,7 +178,7 @@ export default function GrowthChart() {
         <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-white/60 dark:bg-slate-900/60 backdrop-blur-2xl rounded-3xl p-6 shadow-lg border border-white/50 dark:border-white/5 relative overflow-hidden"
+            className="bg-white/80 dark:bg-slate-900/40 backdrop-blur-sm rounded-3xl p-6 shadow-lg border border-secondary-200 dark:border-secondary-200/20 relative overflow-hidden"
         >
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
                 <div>
@@ -186,7 +186,7 @@ export default function GrowthChart() {
                     <p className="text-sm text-gray-500 dark:text-gray-400">Évolution des entreprises et utilisateurs</p>
                 </div>
                 <div className="flex items-center gap-2">
-                    <div className="flex bg-white/40 dark:bg-white/5 rounded-xl p-1 border border-white/50 dark:border-white/5">
+                    <div className="flex bg-white/40 dark:bg-slate-900/20 rounded-xl p-1 border border-secondary-200 dark:border-secondary-200/20">
                         {[
                             { value: '1m', label: '1M' },
                             { value: '3m', label: '3M' },
@@ -198,7 +198,7 @@ export default function GrowthChart() {
                                 onClick={() => setPeriod(p.value)}
                                 className={`px-3 py-1.5 text-sm font-semibold rounded-xl transition-all ${
                                     period === p.value
-                                        ? 'bg-white/80 dark:bg-white/10 text-primary-600 dark:text-primary-400 shadow-sm border border-white/50 dark:border-white/10'
+                                        ? 'bg-white/80 dark:bg-white/10 text-primary-500 dark:text-primary-500 shadow-sm border border-secondary-200 dark:border-secondary-200/30'
                                         : 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
                                 }`}
                             >
@@ -212,8 +212,8 @@ export default function GrowthChart() {
             {loading ? (
                 <div className="h-80 flex items-center justify-center">
                     <div className="relative">
-                        <div className="w-16 h-16 border-4 border-primary-200/50 dark:border-primary-800/30 rounded-full"></div>
-                        <div className="absolute top-0 left-0 w-16 h-16 border-4 border-primary-600 dark:border-primary-400 border-t-transparent rounded-full animate-spin"></div>
+                        <div className="w-16 h-16 border-4 border-secondary-200/50 dark:border-primary-800/30 rounded-full"></div>
+                        <div className="absolute top-0 left-0 w-16 h-16 border-4 border-secondary-200 dark:border-primary-400 border-t-transparent rounded-full animate-spin"></div>
                     </div>
                 </div>
             ) : (
@@ -227,14 +227,14 @@ export default function GrowthChart() {
                     </div>
 
                     <div className="mt-4 grid grid-cols-2 md:grid-cols-4 gap-4">
-                        <div className="bg-primary-50/80 dark:bg-primary-900/20 rounded-2xl p-3.5 border border-primary-200/30 dark:border-primary-800/20">
+                        <div className="bg-secondary-50/80 dark:bg-primary-900/20 rounded-2xl p-3.5 border border-secondary-200/30 dark:border-primary-800/20">
                             <p className="text-xs text-blue-600 dark:text-blue-400 font-medium">Total Entreprises</p>
                             <p className="text-2xl font-bold text-blue-800 dark:text-blue-300">
                                 {data.reduce((acc, item) => acc + item.entreprises, 0)}
                             </p>
                         </div>
                         <div className="bg-accent-50/80 dark:bg-accent-900/20 rounded-2xl p-3.5 border border-accent-200/30 dark:border-accent-800/20">
-                            <p className="text-xs text-accent-600 dark:text-accent-400 font-medium">Total Utilisateurs</p>
+                            <p className="text-xs text-primary-500 dark:text-accent-400 font-medium">Total Utilisateurs</p>
                             <p className="text-2xl font-bold text-accent-800 dark:text-accent-300">
                                 {data.reduce((acc, item) => acc + item.utilisateurs, 0)}
                             </p>

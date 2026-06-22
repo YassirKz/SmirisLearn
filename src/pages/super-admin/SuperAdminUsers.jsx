@@ -180,13 +180,13 @@ export default function SuperAdminUsers() {
     const getRoleBadge = (role) => {
         const roles = {
             super_admin: {
-                bg: 'bg-gradient-to-r from-red-500 to-accent-600',
+                bg: 'bg-gradient-to-r from-red-600 to-primary-500',
                 text: 'text-white',
                 label: 'Super Admin',
                 icon: Shield
             },
             org_admin: {
-                bg: 'bg-gradient-to-r from-primary-500 to-accent-500',
+                bg: 'bg-primary-600 dark:bg-primary-500',
                 text: 'text-white',
                 label: 'Admin',
                 icon: UserCog
@@ -357,8 +357,8 @@ export default function SuperAdminUsers() {
                 className="space-y-8"
             >
                 {/* En-tête premium glassmorphism */}
-                <div className="relative bg-white/60 dark:bg-slate-900/60 backdrop-blur-2xl rounded-3xl p-8 sm:p-10 shadow-lg border border-white/50 dark:border-white/5 overflow-hidden">
-                    <div className="absolute top-0 right-0 w-64 h-64 bg-primary-500/10 dark:bg-primary-500/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none" />
+                <div className="relative bg-white/80 dark:bg-slate-900/40 backdrop-blur-sm rounded-3xl p-8 sm:p-10 shadow-lg border border-secondary-200 dark:border-secondary-200/20 overflow-hidden">
+                    <div className="absolute top-0 right-0 w-64 h-64 bg-primary-600 dark:bg-primary-500/10 dark:bg-primary-600 dark:bg-primary-500/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none" />
                     <div className="absolute bottom-0 left-0 w-64 h-64 bg-accent-500/10 dark:bg-accent-500/20 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2 pointer-events-none" />
                     
                     <div className="relative z-10 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
@@ -368,7 +368,7 @@ export default function SuperAdminUsers() {
                                     initial={{ scale: 0, opacity: 0 }}
                                     animate={{ scale: 1, opacity: 1 }}
                                     transition={{ type: "spring", stiffness: 200, damping: 20, delay: 0.1 }}
-                                    className="p-3 bg-gradient-to-br from-primary-500 to-accent-600 rounded-2xl shadow-lg shadow-primary-500/30"
+                                    className="p-3 bg-primary-600 dark:bg-primary-500 rounded-2xl shadow-lg shadow-sm"
                                 >
                                     <Users className="w-8 h-8 text-white" />
                                 </motion.div>
@@ -376,7 +376,7 @@ export default function SuperAdminUsers() {
                                     initial={{ opacity: 0, x: -20 }}
                                     animate={{ opacity: 1, x: 0 }}
                                     transition={{ delay: 0.2 }}
-                                    className="px-4 py-1.5 bg-primary-50 dark:bg-primary-900/30 border border-primary-200 dark:border-primary-800/50 rounded-full text-sm font-bold text-primary-700 dark:text-primary-300 shadow-sm flex items-center gap-2 w-fit"
+                                    className="px-4 py-1.5 bg-secondary-50 dark:bg-primary-900/30 border border-secondary-200 dark:border-primary-800/50 rounded-full text-sm font-bold text-secondary-900 dark:text-primary-300 shadow-sm flex items-center gap-2 w-fit"
                                 >
                                     <Sparkles className="w-4 h-4" />
                                     Gestion des Utilisateurs
@@ -409,7 +409,7 @@ export default function SuperAdminUsers() {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: index * 0.1 }}
                         whileHover={{ y: -6, scale: 1.02 }}
-                        className="bg-white/60 dark:bg-slate-900/60 rounded-3xl p-6 shadow-lg border border-white/50 dark:border-white/5 backdrop-blur-2xl relative overflow-hidden group"
+                        className="bg-white/60 dark:bg-slate-900/60 rounded-3xl p-6 shadow-lg border border-secondary-200 dark:border-secondary-200/20 backdrop-blur-2xl relative overflow-hidden group"
                     >
                         <div className={`absolute -top-24 -right-24 w-48 h-48 bg-gradient-to-br ${card.color} rounded-full opacity-0 dark:opacity-20 blur-3xl group-hover:opacity-10 dark:group-hover:opacity-30 transition-opacity duration-500 pointer-events-none`} />
                         
@@ -436,16 +436,16 @@ export default function SuperAdminUsers() {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.2 }}
-                    className="bg-white/60 dark:bg-slate-900/60 backdrop-blur-2xl rounded-3xl p-6 shadow-lg border border-white/50 dark:border-white/5 relative z-30"
+                    className="bg-white/80 dark:bg-slate-900/40 backdrop-blur-sm rounded-3xl p-6 shadow-lg border border-secondary-200 dark:border-secondary-200/20 relative z-30"
                 >
                     <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
                         <div className="flex items-center gap-2">
-                            <Filter className="w-5 h-5 text-primary-600" />
+                            <Filter className="w-5 h-5 text-primary-500" />
                             <h2 className="text-lg font-semibold text-gray-800 dark:text-white">Filtres</h2>
                             {(searchTerm || selectedOrg !== 'all' || selectedRole !== 'all') && (
                                 <button
                                     onClick={resetFilters}
-                                    className="text-xs text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 flex items-center gap-1"
+                                    className="text-xs text-primary-500 dark:text-primary-500 hover:text-primary-600 dark:hover:text-primary-300 flex items-center gap-1"
                                 >
                                     <X className="w-3 h-3" />
                                     Réinitialiser
@@ -453,9 +453,9 @@ export default function SuperAdminUsers() {
                             )}
                         </div>
 
-                        <div className="flex flex-col sm:flex-row dark:bg-gray-800/90 dark:border-gray-700 dark:text-white dark:placeholder:text-gray-400 gap-3 flex-1 lg:justify-end">
+                        <div className="flex flex-col sm:flex-row dark:bg-gray-800/90 dark:border-secondary-200/20 dark:text-white dark:placeholder:text-gray-400 gap-3 flex-1 lg:justify-end">
                             {/* Barre de recherche */}
-                            <div className="relative flex-1 max-w-md dark:bg-gray-800/90 dark:border-gray-700 dark:text-white dark:placeholder:text-gray-400">
+                            <div className="relative flex-1 max-w-md dark:bg-gray-800/90 dark:border-secondary-200/20 dark:text-white dark:placeholder:text-gray-400">
                                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-400 w-4 h-4" />
                                 <input
                                     type="text"
@@ -465,7 +465,7 @@ export default function SuperAdminUsers() {
                                         setSearchTerm(e.target.value);
                                         setPage(1);
                                     }}
-                                    className="w-full pl-9 pr-4 py-2 bg-white/40 dark:bg-white/5 border border-white/50 dark:border-white/5 dark:text-white dark:placeholder:text-gray-400 rounded-2xl focus:outline-none focus:border-primary-400 focus:ring-4 focus:ring-primary-100 transition-all font-medium text-sm shadow-sm"
+                                    className="w-full pl-9 pr-4 py-2 bg-white/40 dark:bg-slate-900/20 border border-secondary-200 dark:border-secondary-200/20 dark:text-white dark:placeholder:text-gray-400 rounded-2xl focus:outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/20 transition-all font-medium text-sm shadow-sm"
                                 />
                                 {searchTerm && (
                                     <button
@@ -481,7 +481,7 @@ export default function SuperAdminUsers() {
                             <div className="relative" ref={orgFilterRef}>
                                 <button
                                     onClick={() => setIsOrgFilterOpen(!isOrgFilterOpen)}
-                                    className="px-4 py-2.5 bg-white/40 dark:bg-white/5 border border-white/50 dark:border-white/5 dark:text-white rounded-2xl focus:outline-none focus:ring-4 focus:ring-primary-100/50 w-full sm:w-auto sm:min-w-[200px] font-medium text-sm shadow-sm flex items-center justify-between gap-2 transition-all"
+                                    className="px-4 py-2.5 bg-white/40 dark:bg-slate-900/20 border border-secondary-200 dark:border-secondary-200/20 dark:text-white rounded-2xl focus:outline-none focus:ring-4 focus:ring-primary-500/20 w-full sm:w-auto sm:min-w-[200px] font-medium text-sm shadow-sm flex items-center justify-between gap-2 transition-all"
                                 >
                                     <span className="truncate">
                                         {selectedOrg === 'all' 
@@ -497,7 +497,7 @@ export default function SuperAdminUsers() {
                                             initial={{ opacity: 0, y: -10, scale: 0.95 }}
                                             animate={{ opacity: 1, y: 0, scale: 1 }}
                                             exit={{ opacity: 0, y: -10, scale: 0.95 }}
-                                            className="absolute left-0 mt-2 w-64 bg-white/80 dark:bg-slate-900/80 backdrop-blur-2xl rounded-2xl shadow-xl border border-white/50 dark:border-white/5 py-2 z-50"
+                                            className="absolute left-0 mt-2 w-64 bg-white/80 dark:bg-slate-900/40 backdrop-blur-2xl rounded-2xl shadow-xl border border-secondary-200 dark:border-secondary-200/20 py-2 z-50"
                                         >
                                             <button
                                                 onClick={() => {
@@ -507,7 +507,7 @@ export default function SuperAdminUsers() {
                                                 }}
                                                 className={`w-full px-4 py-2.5 text-left text-sm transition-colors
                                                     ${selectedOrg === 'all' 
-                                                        ? 'bg-primary-500/10 text-primary-600 dark:text-primary-400 font-bold' 
+                                                        ? 'bg-primary-600 dark:bg-primary-500/10 text-primary-500 dark:text-primary-500 font-bold' 
                                                         : 'text-gray-600 dark:text-gray-400 hover:bg-white/50 dark:hover:bg-white/10'
                                                     }`}
                                             >
@@ -523,7 +523,7 @@ export default function SuperAdminUsers() {
                                                     }}
                                                     className={`w-full px-4 py-2.5 text-left text-sm transition-colors
                                                         ${selectedOrg === org.id 
-                                                            ? 'bg-primary-500/10 text-primary-600 dark:text-primary-400 font-bold' 
+                                                            ? 'bg-primary-600 dark:bg-primary-500/10 text-primary-500 dark:text-primary-500 font-bold' 
                                                             : 'text-gray-600 dark:text-gray-400 hover:bg-white/50 dark:hover:bg-white/10'
                                                         }`}
                                                 >
@@ -539,7 +539,7 @@ export default function SuperAdminUsers() {
                             <div className="relative" ref={roleFilterRef}>
                                 <button
                                     onClick={() => setIsRoleFilterOpen(!isRoleFilterOpen)}
-                                    className="px-4 py-2.5 bg-white/40 dark:bg-white/5 border border-white/50 dark:border-white/5 dark:text-white rounded-2xl focus:outline-none focus:ring-4 focus:ring-primary-100/50 w-full sm:w-auto sm:min-w-[150px] font-medium text-sm shadow-sm flex items-center justify-between gap-2 transition-all"
+                                    className="px-4 py-2.5 bg-white/40 dark:bg-slate-900/20 border border-secondary-200 dark:border-secondary-200/20 dark:text-white rounded-2xl focus:outline-none focus:ring-4 focus:ring-primary-500/20 w-full sm:w-auto sm:min-w-[150px] font-medium text-sm shadow-sm flex items-center justify-between gap-2 transition-all"
                                 >
                                     <span>
                                         {selectedRole === 'all' ? 'Tous les rôles' : getRoleBadge(selectedRole).label}
@@ -553,7 +553,7 @@ export default function SuperAdminUsers() {
                                             initial={{ opacity: 0, y: -10, scale: 0.95 }}
                                             animate={{ opacity: 1, y: 0, scale: 1 }}
                                             exit={{ opacity: 0, y: -10, scale: 0.95 }}
-                                            className="absolute left-0 mt-2 w-48 bg-white/80 dark:bg-slate-900/80 backdrop-blur-2xl rounded-2xl shadow-xl border border-white/50 dark:border-white/5 py-2 z-50"
+                                            className="absolute left-0 mt-2 w-48 bg-white/80 dark:bg-slate-900/40 backdrop-blur-2xl rounded-2xl shadow-xl border border-secondary-200 dark:border-secondary-200/20 py-2 z-50"
                                         >
                                             {[
                                                 { value: 'all', label: 'Tous les rôles' },
@@ -570,7 +570,7 @@ export default function SuperAdminUsers() {
                                                     }}
                                                     className={`w-full px-4 py-2.5 text-left text-sm transition-colors
                                                         ${selectedRole === role.value 
-                                                            ? 'bg-primary-500/10 text-primary-600 dark:text-primary-400 font-bold' 
+                                                            ? 'bg-primary-600 dark:bg-primary-500/10 text-primary-500 dark:text-primary-500 font-bold' 
                                                             : 'text-gray-600 dark:text-gray-400 hover:bg-white/50 dark:hover:bg-white/10'
                                                         }`}
                                                 >
@@ -587,7 +587,7 @@ export default function SuperAdminUsers() {
                                 whileHover={{ rotate: 180 }}
                                 transition={{ duration: 0.3 }}
                                 onClick={fetchUsers}
-                                className="p-2.5 border border-white/50 dark:border-white/5 bg-white/40 dark:bg-white/5 dark:text-white rounded-2xl hover:bg-white/60 dark:hover:bg-white/10 transition-colors shadow-sm"
+                                className="p-2.5 border border-secondary-200 dark:border-secondary-200/20 bg-white/40 dark:bg-slate-900/20 dark:text-white rounded-2xl hover:bg-white/60 dark:hover:bg-white/10 transition-colors shadow-sm"
                                 title="Rafraîchir"
                             >
                                 <RefreshCw className="w-5 h-5 text-gray-600" />
@@ -599,7 +599,7 @@ export default function SuperAdminUsers() {
                                 whileTap={{ scale: 0.98 }}
                                 onClick={handleExportUsers}
                                 disabled={exporting}
-                                className="px-4 py-2.5 bg-gradient-to-r from-primary-600 to-accent-600 text-white rounded-2xl shadow-lg shadow-primary-500/25 hover:shadow-xl transition-all flex items-center gap-2 disabled:opacity-50 font-bold text-sm"
+                                className="px-4 py-2.5 bg-primary-600 dark:bg-primary-500 text-white rounded-2xl shadow-lg shadow-primary-500/25 hover:shadow-xl transition-all flex items-center gap-2 disabled:opacity-50 font-bold text-sm"
                             >
                                 {exporting ? (
                                     <RefreshCw className="w-4 h-4 animate-spin" />
@@ -614,7 +614,7 @@ export default function SuperAdminUsers() {
                                 whileHover={{ scale: 1.02 }}
                                 whileTap={{ scale: 0.98 }}
                                 onClick={() => setShowInviteModal(true)}
-                                className="px-4 py-2.5 bg-gradient-to-r from-primary-600 to-accent-600 text-white rounded-2xl shadow-lg shadow-primary-500/25 hover:shadow-xl transition-all flex items-center gap-2 font-bold text-sm"
+                                className="px-4 py-2.5 bg-primary-600 dark:bg-primary-500 text-white rounded-2xl shadow-lg shadow-primary-500/25 hover:shadow-xl transition-all flex items-center gap-2 font-bold text-sm"
                             >
                                 <UserPlus className="w-4 h-4" />
                                 <span className="hidden sm:inline">Inviter</span>
@@ -628,11 +628,11 @@ export default function SuperAdminUsers() {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.3 }}
-                    className="bg-white/60 dark:bg-slate-900/60 backdrop-blur-2xl rounded-3xl shadow-lg border border-white/50 dark:border-white/5 overflow-hidden"
+                    className="bg-white/80 dark:bg-slate-900/40 backdrop-blur-sm rounded-3xl shadow-lg border border-secondary-200 dark:border-secondary-200/20 overflow-hidden"
                 >
                     <div className="overflow-x-auto">
                         <table className="w-full min-w-[640px]">
-                            <thead className="bg-transparent border-b border-gray-100 dark:border-gray-700">
+                            <thead className="bg-transparent border-b border-secondary-200 dark:border-secondary-200/20">
                                 <tr>
                                     <th className="px-6 py-4 text-left text-xs font-medium text-gray-600 dark:text-gray-400 uppercase tracking-wider">Utilisateur</th>
                                     <th className="px-6 py-4 text-left text-xs font-medium text-gray-600 dark:text-gray-400 uppercase tracking-wider">Email</th>
@@ -649,15 +649,15 @@ export default function SuperAdminUsers() {
                                         <tr key={i}>
                                             <td className="px-6 py-4">
                                                 <div className="flex items-center gap-3">
-                                                    <div className="w-8 h-8 bg-white/50 dark:bg-white/5 rounded-full border border-white/30 dark:border-white/5 animate-pulse"></div>
-                                                    <div className="h-4 bg-white/50 dark:bg-white/5 rounded w-32 border border-white/30 dark:border-white/5 animate-pulse"></div>
+                                                    <div className="w-8 h-8 bg-white/50 dark:bg-slate-900/20 rounded-full border border-secondary-200 dark:border-secondary-200/20 animate-pulse"></div>
+                                                    <div className="h-4 bg-white/50 dark:bg-slate-900/20 rounded w-32 border border-secondary-200 dark:border-secondary-200/20 animate-pulse"></div>
                                                 </div>
                                             </td>
-                                            <td className="px-6 py-4"><div className="h-4 bg-white/50 dark:bg-white/5 rounded w-40 border border-white/30 dark:border-white/5 animate-pulse"></div></td>
-                                            <td className="px-6 py-4"><div className="h-4 bg-white/50 dark:bg-white/5 rounded w-32 border border-white/30 dark:border-white/5 animate-pulse"></div></td>
-                                            <td className="px-6 py-4"><div className="h-6 bg-white/50 dark:bg-white/5 rounded-full w-20 border border-white/30 dark:border-white/5 animate-pulse"></div></td>
-                                            <td className="px-6 py-4"><div className="h-4 bg-white/50 dark:bg-white/5 rounded w-24 border border-white/30 dark:border-white/5 animate-pulse"></div></td>
-                                            <td className="px-6 py-4"><div className="h-4 bg-white/50 dark:bg-white/5 rounded w-12 ml-auto border border-white/30 dark:border-white/5 animate-pulse"></div></td>
+                                            <td className="px-6 py-4"><div className="h-4 bg-white/50 dark:bg-slate-900/20 rounded w-40 border border-secondary-200 dark:border-secondary-200/20 animate-pulse"></div></td>
+                                            <td className="px-6 py-4"><div className="h-4 bg-white/50 dark:bg-slate-900/20 rounded w-32 border border-secondary-200 dark:border-secondary-200/20 animate-pulse"></div></td>
+                                            <td className="px-6 py-4"><div className="h-6 bg-white/50 dark:bg-slate-900/20 rounded-full w-20 border border-secondary-200 dark:border-secondary-200/20 animate-pulse"></div></td>
+                                            <td className="px-6 py-4"><div className="h-4 bg-white/50 dark:bg-slate-900/20 rounded w-24 border border-secondary-200 dark:border-secondary-200/20 animate-pulse"></div></td>
+                                            <td className="px-6 py-4"><div className="h-4 bg-white/50 dark:bg-slate-900/20 rounded w-12 ml-auto border border-secondary-200 dark:border-secondary-200/20 animate-pulse"></div></td>
                                         </tr>
                                     ))
                                 ) : users.length === 0 ? (
@@ -673,7 +673,7 @@ export default function SuperAdminUsers() {
                                             {(searchTerm || selectedOrg !== 'all' || selectedRole !== 'all') && (
                                             <button
                                                     onClick={resetFilters}
-                                                    className="text-primary-600 hover:text-primary-700 font-medium"
+                                                    className="text-primary-500 hover:text-primary-600 font-medium"
                                                 >
                                                     Effacer les filtres
                                                 </button>
@@ -695,7 +695,7 @@ export default function SuperAdminUsers() {
                                             >
                                                 <td className="px-6 py-4">
                                                     <div className="flex items-center gap-3">
-                                                        <div className="w-8 h-8 bg-gradient-to-br from-primary-500 to-accent-600 rounded-full flex items-center justify-center text-white font-bold text-sm shadow-sm group-hover:scale-110 transition-transform">
+                                                        <div className="w-8 h-8 bg-primary-600 dark:bg-primary-500 rounded-full flex items-center justify-center text-white font-bold text-sm shadow-sm group-hover:scale-110 transition-transform">
                                                             {user.full_name?.charAt(0).toUpperCase() || user.email?.charAt(0).toUpperCase()}
                                                         </div>
                                                         <span className="font-medium text-gray-800 dark:text-gray-200">
@@ -735,7 +735,7 @@ export default function SuperAdminUsers() {
                                                             whileHover={{ scale: 1.1 }}
                                                             whileTap={{ scale: 0.9 }}
                                                             onClick={() => handleUserAction(user, 'view')}
-                                                            className="p-2 hover:bg-white/60 dark:hover:bg-white/5 rounded-xl transition-colors text-primary-600 dark:text-primary-400 opacity-0 group-hover:opacity-100 border border-transparent hover:border-white/50 dark:hover:border-white/5"
+                                                            className="p-2 hover:bg-white/60 dark:hover:bg-white/5 rounded-xl transition-colors text-primary-500 dark:text-primary-500 opacity-0 group-hover:opacity-100 border border-transparent hover:border-secondary-200 dark:hover:border-secondary-200/20"
                                                             title="Voir détails"
                                                         >
                                                             <Eye className="w-4 h-4" />
@@ -744,7 +744,7 @@ export default function SuperAdminUsers() {
                                                             whileHover={{ scale: 1.1 }}
                                                             whileTap={{ scale: 0.9 }}
                                                             onClick={() => handleUserAction(user, 'edit')}
-                                                            className="p-2 hover:bg-white/60 dark:hover:bg-white/5 rounded-xl transition-colors text-primary-600 dark:text-primary-400 opacity-0 group-hover:opacity-100 border border-transparent hover:border-white/50 dark:hover:border-white/5"
+                                                            className="p-2 hover:bg-white/60 dark:hover:bg-white/5 rounded-xl transition-colors text-primary-500 dark:text-primary-500 opacity-0 group-hover:opacity-100 border border-transparent hover:border-secondary-200 dark:hover:border-secondary-200/20"
                                                             title="Modifier"
                                                         >
                                                             <Edit className="w-4 h-4" />
@@ -754,7 +754,7 @@ export default function SuperAdminUsers() {
                                                                 whileHover={{ scale: 1.1 }}
                                                                 whileTap={{ scale: 0.9 }}
                                                                 onClick={() => setShowActions(showActions === user.id ? null : user.id)}
-                                                                className="p-2 hover:bg-white/60 dark:hover:bg-white/5 rounded-xl transition-colors border border-transparent hover:border-white/50 dark:hover:border-white/5"
+                                                                className="p-2 hover:bg-white/60 dark:hover:bg-white/5 rounded-xl transition-colors border border-transparent hover:border-secondary-200 dark:hover:border-secondary-200/20"
                                                             >
                                                                 <MoreVertical className="w-4 h-4 text-gray-500" />
                                                             </motion.button>
@@ -764,11 +764,11 @@ export default function SuperAdminUsers() {
                                                                         initial={{ opacity: 0, scale: 0.95, y: -10 }}
                                                                         animate={{ opacity: 1, scale: 1, y: 0 }}
                                                                         exit={{ opacity: 0, scale: 0.95, y: -10 }}
-                                                                        className="absolute right-0 mt-2 w-48 bg-white/60 dark:bg-slate-900/60 backdrop-blur-2xl rounded-2xl shadow-lg border border-white/50 dark:border-white/5 py-1.5 z-10"
+                                                                        className="absolute right-0 mt-2 w-48 bg-white/80 dark:bg-slate-900/40 backdrop-blur-sm rounded-2xl shadow-lg border border-secondary-200 dark:border-secondary-200/20 py-1.5 z-10"
                                                                     >
                                                                         <button
                                                                             onClick={() => handleUserAction(user, 'edit')}
-                                                                            className="w-full px-4 py-2 text-left text-sm text-gray-700 dark:text-gray-300 hover:bg-white/50 dark:hover:bg-white/10 hover:text-primary-600 dark:hover:text-primary-400 flex items-center gap-2 transition-colors"
+                                                                            className="w-full px-4 py-2 text-left text-sm text-gray-700 dark:text-gray-300 hover:bg-white/50 dark:hover:bg-white/10 hover:text-primary-600 dark:hover:text-primary-500 flex items-center gap-2 transition-colors"
                                                                         >
                                                                             <Edit className="w-4 h-4" />
                                                                             Modifier le rôle
@@ -810,7 +810,7 @@ export default function SuperAdminUsers() {
 
                     {/* Pagination */}
                     {totalPages > 1 && (
-                        <div className="px-6 py-4 border-t border-white/40 dark:border-white/5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                        <div className="px-6 py-4 border-t border-white/40 dark:border-secondary-200/20 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                             <p className="text-sm text-gray-600 dark:text-gray-400">
                                 Affichage de {((page - 1) * itemsPerPage) + 1} à {Math.min(page * itemsPerPage, totalCount)} sur {totalCount} utilisateurs
                             </p>
@@ -818,7 +818,7 @@ export default function SuperAdminUsers() {
                                 <button
                                     onClick={() => setPage(p => Math.max(1, p - 1))}
                                     disabled={page === 1}
-                                    className="p-2 border border-white/50 dark:border-white/5 rounded-xl hover:bg-white/50 dark:hover:bg-white/5 bg-white/40 dark:bg-transparent disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                                    className="p-2 border border-secondary-200 dark:border-secondary-200/20 rounded-xl hover:bg-white/50 dark:hover:bg-white/5 bg-white/40 dark:bg-transparent disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                                 >
                                     <ChevronLeft className="w-5 h-5" />
                                 </button>
@@ -842,8 +842,8 @@ export default function SuperAdminUsers() {
                                                 onClick={() => setPage(pageNum)}
                                                 className={`w-10 h-10 rounded-xl font-semibold transition-all ${
                                                     page === pageNum
-                                                        ? 'bg-gradient-to-r from-primary-600 to-accent-600 text-white shadow-lg shadow-primary-500/30'
-                                                        : 'hover:bg-white/50 dark:hover:bg-white/5 bg-white/40 dark:bg-transparent border border-white/50 dark:border-white/5 text-gray-600 dark:text-gray-400'
+                                                        ? 'bg-primary-600 dark:bg-primary-500 text-white shadow-lg shadow-sm'
+                                                        : 'hover:bg-white/50 dark:hover:bg-white/5 bg-white/40 dark:bg-transparent border border-secondary-200 dark:border-secondary-200/20 text-gray-600 dark:text-gray-400'
                                                 }`}
                                             >
                                                 {pageNum}
@@ -855,7 +855,7 @@ export default function SuperAdminUsers() {
                                 <button
                                     onClick={() => setPage(p => Math.min(totalPages, p + 1))}
                                     disabled={page === totalPages}
-                                    className="p-2 border border-white/50 dark:border-white/5 rounded-xl hover:bg-white/50 dark:hover:bg-white/5 bg-white/40 dark:bg-transparent disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                                    className="p-2 border border-secondary-200 dark:border-secondary-200/20 rounded-xl hover:bg-white/50 dark:hover:bg-white/5 bg-white/40 dark:bg-transparent disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                                 >
                                     <ChevronRight className="w-5 h-5" />
                                 </button>
@@ -871,8 +871,8 @@ export default function SuperAdminUsers() {
                     transition={{ delay: 0.5 }}
                     className="text-center py-4"
                 >
-                    <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/60 dark:bg-slate-900/40 backdrop-blur-sm rounded-full border border-gray-200 dark:border-gray-800 text-xs text-gray-400 dark:text-gray-500">
-                        <Shield className="w-3.5 h-3.5 text-primary-400" />
+                    <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/60 dark:bg-slate-900/40 backdrop-blur-sm rounded-full border border-secondary-200 dark:border-secondary-200/20 text-xs text-gray-400 dark:text-gray-500">
+                        <Shield className="w-3.5 h-3.5 text-primary-500" />
                         <span>Données protégées par RLS • Actions journalisées</span>
                     </div>
                 </motion.div>
@@ -892,7 +892,7 @@ export default function SuperAdminUsers() {
                             initial={{ scale: 0.9, y: 20 }}
                             animate={{ scale: 1, y: 0 }}
                             exit={{ scale: 0.9, y: 20 }}
-                            className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-2xl rounded-3xl p-6 max-w-md w-full border border-white/50 dark:border-white/10 shadow-2xl"
+                            className="bg-white/80 dark:bg-slate-900/40 backdrop-blur-2xl rounded-3xl p-6 max-w-md w-full border border-secondary-200 dark:border-secondary-200/30 shadow-2xl"
                             onClick={(e) => e.stopPropagation()}
                         >
                             <h3 className="text-lg font-bold text-gray-800 dark:text-white mb-4">Inviter un utilisateur</h3>
@@ -904,7 +904,7 @@ export default function SuperAdminUsers() {
                                         required
                                         value={inviteEmail}
                                         onChange={(e) => setInviteEmail(e.target.value)}
-                                        className="w-full px-4 py-2 border border-white/50 dark:border-white/10 rounded-xl focus:border-primary-400 focus:ring-4 focus:ring-primary-100/50 bg-white/50 dark:bg-slate-800/50 dark:text-white transition-all shadow-sm"
+                                        className="w-full px-4 py-2 border border-secondary-200 dark:border-secondary-200/30 rounded-xl focus:border-primary-500 focus:ring-4 focus:ring-primary-500/20 bg-white/50 dark:bg-slate-800/50 dark:text-white transition-all shadow-sm"
                                         placeholder="email@exemple.com"
                                     />
                                 </div>
@@ -913,7 +913,7 @@ export default function SuperAdminUsers() {
                                     <select
                                         value={inviteRole}
                                         onChange={(e) => setInviteRole(e.target.value)}
-                                        className="w-full px-4 py-2 border border-white/50 dark:border-white/10 rounded-xl focus:border-primary-400 focus:ring-4 focus:ring-primary-100/50 bg-white/50 dark:bg-slate-800/50 dark:text-white transition-all shadow-sm"
+                                        className="w-full px-4 py-2 border border-secondary-200 dark:border-secondary-200/30 rounded-xl focus:border-primary-500 focus:ring-4 focus:ring-primary-500/20 bg-white/50 dark:bg-slate-800/50 dark:text-white transition-all shadow-sm"
                                     >
                                         <option value="student">Étudiant</option>
                                         <option value="org_admin">Admin</option>
@@ -924,7 +924,7 @@ export default function SuperAdminUsers() {
                                     <select
                                         value={inviteOrg}
                                         onChange={(e) => setInviteOrg(e.target.value)}
-                                        className="w-full px-4 py-2 border border-white/50 dark:border-white/10 rounded-xl focus:border-primary-400 focus:ring-4 focus:ring-primary-100/50 bg-white/50 dark:bg-slate-800/50 dark:text-white transition-all shadow-sm"
+                                        className="w-full px-4 py-2 border border-secondary-200 dark:border-secondary-200/30 rounded-xl focus:border-primary-500 focus:ring-4 focus:ring-primary-500/20 bg-white/50 dark:bg-slate-800/50 dark:text-white transition-all shadow-sm"
                                         required
                                     >
                                         <option value="">Sélectionner une organisation</option>
@@ -939,14 +939,14 @@ export default function SuperAdminUsers() {
                                     <button
                                         type="button"
                                         onClick={() => setShowInviteModal(false)}
-                                        className="flex-1 px-4 py-2.5 border border-white/50 dark:border-white/10 bg-white/40 dark:bg-white/5 rounded-xl text-gray-700 dark:text-gray-300 hover:bg-white/60 dark:hover:bg-white/10 transition-colors font-medium"
+                                        className="flex-1 px-4 py-2.5 border border-secondary-200 dark:border-secondary-200/30 bg-white/40 dark:bg-slate-900/20 rounded-xl text-gray-700 dark:text-gray-300 hover:bg-white/60 dark:hover:bg-white/10 transition-colors font-medium"
                                     >
                                         Annuler
                                     </button>
                                     <button
                                         type="submit"
                                         disabled={inviting}
-                                        className="flex-1 px-4 py-2.5 bg-gradient-to-r from-primary-600 to-accent-600 text-white rounded-xl shadow-lg hover:shadow-xl transition-all disabled:opacity-50 font-medium"
+                                        className="flex-1 px-4 py-2.5 bg-primary-600 dark:bg-primary-500 text-white rounded-xl shadow-lg hover:shadow-xl transition-all disabled:opacity-50 font-medium"
                                     >
                                         {inviting ? 'Envoi...' : 'Inviter'}
                                     </button>

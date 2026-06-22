@@ -246,15 +246,15 @@ export default function VideoList({ isReadOnly = false, orgId: propOrgId }) {
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="bg-white/60 dark:bg-slate-900/60 backdrop-blur-2xl rounded-3xl p-6 shadow-lg border border-white/50 dark:border-white/5 relative z-30"
+                className="bg-white/80 dark:bg-slate-900/40 backdrop-blur-sm rounded-3xl p-6 shadow-lg border border-secondary-200 dark:border-secondary-200/20 relative z-30"
             >
                 {/* Glow de fond */}
-                <div className="absolute top-0 right-0 w-64 h-64 bg-primary-500/5 dark:bg-primary-500/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none" />
+                <div className="absolute top-0 right-0 w-64 h-64 bg-primary-600 dark:bg-primary-500/5 dark:bg-primary-600 dark:bg-primary-500/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none" />
 
                 <div className="relative z-10 flex flex-col xl:flex-row xl:items-center xl:justify-between gap-6">
                     <div className="flex flex-wrap items-center gap-6">
-                        <div className="flex items-center gap-3 bg-white/50 dark:bg-white/5 px-4 h-11 rounded-2xl border border-white/50 dark:border-white/5 shadow-sm">
-                            <div className="w-2.5 h-2.5 bg-primary-500 rounded-full animate-pulse shadow-[0_0_10px_rgba(59,130,246,0.5)]" />
+                        <div className="flex items-center gap-3 bg-white/50 dark:bg-slate-900/20 px-4 h-11 rounded-2xl border border-secondary-200 dark:border-secondary-200/20 shadow-sm">
+                            <div className="w-2.5 h-2.5 bg-primary-600 dark:bg-primary-500 rounded-full animate-pulse shadow-[0_0_10px_rgba(59,130,246,0.5)]" />
                             <span className="text-sm font-bold text-gray-700 dark:text-gray-200 uppercase tracking-wide">
                                 {filteredVideos.length} {filteredVideos.length > 1 ? 'vidéos' : 'vidéo'}
                             </span>
@@ -276,12 +276,12 @@ export default function VideoList({ isReadOnly = false, orgId: propOrgId }) {
                             />
                         </div>
 
-                        <div className="flex bg-white/50 dark:bg-white/5 p-1.5 rounded-xl shadow-sm border border-white/50 dark:border-white/5 h-11 items-center">
+                        <div className="flex bg-white/50 dark:bg-slate-900/20 p-1.5 rounded-xl shadow-sm border border-secondary-200 dark:border-secondary-200/20 h-11 items-center">
                             <button
                                 onClick={() => setViewMode('table')}
                                 className={`p-2 rounded-lg transition-all ${
                                     viewMode === 'table'
-                                        ? 'bg-white/80 dark:bg-white/10 text-primary-600 dark:text-primary-400 shadow-sm'
+                                        ? 'bg-white/80 dark:bg-white/10 text-primary-500 dark:text-primary-500 shadow-sm'
                                         : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'
                                 }`}
                                 title="Vue Tableau"
@@ -292,7 +292,7 @@ export default function VideoList({ isReadOnly = false, orgId: propOrgId }) {
                                 onClick={() => setViewMode('cards')}
                                 className={`p-2 rounded-lg transition-all ${
                                     viewMode === 'cards'
-                                        ? 'bg-white/80 dark:bg-white/10 text-primary-600 dark:text-primary-400 shadow-sm'
+                                        ? 'bg-white/80 dark:bg-white/10 text-primary-500 dark:text-primary-500 shadow-sm'
                                         : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'
                                 }`}
                                 title="Vue Cartes"
@@ -305,7 +305,7 @@ export default function VideoList({ isReadOnly = false, orgId: propOrgId }) {
                             whileHover={{ rotate: 180 }}
                             transition={{ duration: 0.3 }}
                             onClick={handleRefresh}
-                            className="w-11 h-11 flex items-center justify-center bg-white/50 dark:bg-white/5 border border-white/50 dark:border-white/5 hover:border-primary-300 dark:hover:border-primary-500 rounded-xl shadow-sm transition-all"
+                            className="w-11 h-11 flex items-center justify-center bg-white/50 dark:bg-slate-900/20 border border-secondary-200 dark:border-secondary-200/20 hover:border-secondary-200 dark:hover:border-secondary-200 rounded-xl shadow-sm transition-all"
                             title="Actualiser"
                             disabled={loading || refreshing}
                         >
@@ -318,9 +318,9 @@ export default function VideoList({ isReadOnly = false, orgId: propOrgId }) {
                                     whileHover={{ scale: 1.05 }}
                                     whileTap={{ scale: 0.95 }}
                                     onClick={handleOpenUploader}
-                                    className="group px-6 h-11 bg-gradient-to-r from-primary-600 to-accent-600 hover:from-primary-500 hover:to-accent-500 text-white rounded-xl shadow-lg shadow-primary-500/25 hover:shadow-xl hover:shadow-primary-500/40 transition-all flex items-center justify-center gap-3 font-bold border border-white/10 shrink-0 w-full sm:w-auto"
+                                    className="group px-6 h-11 bg-primary-600 dark:bg-primary-500 hover:from-primary-500 hover:to-accent-500 text-white rounded-xl shadow-lg shadow-primary-500/25 hover:shadow-xl hover:shadow-primary-500/40 transition-all flex items-center justify-center gap-3 font-bold border border-secondary-200/30 shrink-0 w-full sm:w-auto"
                                 >
-                                    <div className="p-1 bg-white/20 rounded-lg group-hover:bg-white/30 transition-colors">
+                                    <div className="p-1 bg-white/20 rounded-lg group-hover:bg-slate-900/30 transition-colors">
                                         <Plus className="w-4 h-4" />
                                     </div>
                                     Ajouter
@@ -329,7 +329,7 @@ export default function VideoList({ isReadOnly = false, orgId: propOrgId }) {
                                     whileHover={{ scale: 1.05 }}
                                     whileTap={{ scale: 0.95 }}
                                     onClick={handleOpenRecorder}
-                                    className="group px-6 h-11 bg-white/50 dark:bg-slate-800/50 backdrop-blur-md text-gray-700 dark:text-gray-200 rounded-xl shadow-sm hover:shadow-md transition-all flex items-center justify-center gap-3 font-bold border border-gray-200 dark:border-gray-700 shrink-0 w-full sm:w-auto"
+                                    className="group px-6 h-11 bg-white/50 dark:bg-slate-800/50 backdrop-blur-md text-gray-700 dark:text-gray-200 rounded-xl shadow-sm hover:shadow-md transition-all flex items-center justify-center gap-3 font-bold border border-secondary-200 dark:border-secondary-200/20 shrink-0 w-full sm:w-auto"
                                 >
                                     <div className="p-1 bg-gray-100 dark:bg-slate-700 rounded-lg group-hover:bg-gray-200 dark:group-hover:bg-slate-600 transition-colors">
                                         <Monitor className="w-4 h-4" />
@@ -357,7 +357,7 @@ export default function VideoList({ isReadOnly = false, orgId: propOrgId }) {
                             key="uploader-modal"
                             initial={{ scale: 0.95, opacity: 0, y: 20 }}
                             animate={{ scale: 1, opacity: 1, y: 0 }}
-                            className="bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl rounded-3xl max-w-2xl w-full shadow-2xl border border-white/50 dark:border-white/10 ring-1 ring-black/5 relative overflow-hidden"
+                            className="bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl rounded-3xl max-w-2xl w-full shadow-2xl border border-secondary-200 dark:border-secondary-200/30 ring-1 ring-black/5 relative overflow-hidden"
                             onClick={e => e.stopPropagation()}
                         >
                             {/* En-tête avec dégradé premium (Style Piliers) */}
@@ -415,7 +415,7 @@ export default function VideoList({ isReadOnly = false, orgId: propOrgId }) {
                             key="recorder-modal"
                             initial={{ scale: 0.95, opacity: 0, y: 20 }}
                             animate={{ scale: 1, opacity: 1, y: 0 }}
-                            className="bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl rounded-3xl max-w-2xl w-full shadow-2xl border border-white/50 dark:border-white/10 ring-1 ring-black/5 relative overflow-hidden"
+                            className="bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl rounded-3xl max-w-2xl w-full shadow-2xl border border-secondary-200 dark:border-secondary-200/30 ring-1 ring-black/5 relative overflow-hidden"
                             onClick={e => e.stopPropagation()}
                         >
                             {/* En-tête avec dégradé premium (Style Piliers) */}
@@ -480,7 +480,7 @@ export default function VideoList({ isReadOnly = false, orgId: propOrgId }) {
                             key="video-form-modal"
                             initial={{ scale: 0.95, opacity: 0, y: 20 }}
                             animate={{ scale: 1, opacity: 1, y: 0 }}
-                            className="bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl rounded-3xl max-w-2xl w-full shadow-2xl border border-white/50 dark:border-white/10 ring-1 ring-black/5 relative overflow-hidden max-h-[90vh] overflow-y-auto"
+                            className="bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl rounded-3xl max-w-2xl w-full shadow-2xl border border-secondary-200 dark:border-secondary-200/30 ring-1 ring-black/5 relative overflow-hidden max-h-[90vh] overflow-y-auto"
                             onClick={e => e.stopPropagation()}
                         >
                             {/* En-tête avec dégradé premium (Style Piliers) */}
@@ -541,10 +541,10 @@ export default function VideoList({ isReadOnly = false, orgId: propOrgId }) {
                     key="no-videos-message"
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="bg-white/60 dark:bg-slate-900/60 backdrop-blur-2xl rounded-3xl p-12 shadow-lg border border-white/50 dark:border-white/5 text-center relative overflow-hidden"
+                    className="bg-white/80 dark:bg-slate-900/40 backdrop-blur-sm rounded-3xl p-12 shadow-lg border border-secondary-200 dark:border-secondary-200/20 text-center relative overflow-hidden"
                 >
-                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-primary-500/10 rounded-full blur-3xl pointer-events-none" />
-                    <div className="relative z-10 w-24 h-24 bg-gradient-to-br from-primary-100 to-primary-50 dark:from-primary-900/40 dark:to-primary-800/20 rounded-3xl mx-auto mb-6 flex items-center justify-center shadow-inner border border-white/50 dark:border-gray-700 transform rotate-3">
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-primary-600 dark:bg-primary-500/10 rounded-full blur-3xl pointer-events-none" />
+                    <div className="relative z-10 w-24 h-24 bg-gradient-to-br from-primary-100 to-primary-50 dark:from-primary-900/40 dark:to-primary-800/20 rounded-3xl mx-auto mb-6 flex items-center justify-center shadow-inner border border-secondary-200 dark:border-secondary-200/20 transform rotate-3">
                         <Film className="w-12 h-12 text-primary-500 drop-shadow-md" />
                     </div>
                     <h3 className="text-2xl font-extrabold text-gray-800 dark:text-white mb-2 tracking-tight">
@@ -566,10 +566,10 @@ export default function VideoList({ isReadOnly = false, orgId: propOrgId }) {
                     )}
                 </motion.div>
             ) : viewMode === 'table' ? (
-                <div className="bg-white/60 dark:bg-slate-900/60 backdrop-blur-2xl rounded-3xl shadow-lg border border-white/50 dark:border-white/5 overflow-hidden">
+                <div className="bg-white/80 dark:bg-slate-900/40 backdrop-blur-sm rounded-3xl shadow-lg border border-secondary-200 dark:border-secondary-200/20 overflow-hidden">
                     <div className="overflow-x-auto">
                         <table className="w-full min-w-[640px]">
-                            <thead className="bg-white/40 dark:bg-slate-800/40 border-b border-white/50 dark:border-white/5 backdrop-blur-md">
+                            <thead className="bg-white/40 dark:bg-slate-800/40 border-b border-secondary-200 dark:border-secondary-200/20 backdrop-blur-md">
                                 <tr>
                                     <th className="px-6 py-4 text-left text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest">Vidéo</th>
                                     <th className="px-6 py-4 text-left text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest">Pilier</th>

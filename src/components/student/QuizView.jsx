@@ -207,14 +207,14 @@ export default function QuizView() {
                    transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
                    className="relative"
                 >
-                  <div className="w-20 h-20 border-4 border-primary-100/50 dark:border-gray-700 rounded-full shadow-2xl"></div>
-                  <div className="absolute top-0 left-0 w-20 h-20 border-4 border-primary-600 dark:border-primary-400 border-t-transparent rounded-full"></div>
+                  <div className="w-20 h-20 border-4 border-secondary-200/50 dark:border-secondary-200/20 rounded-full shadow-2xl"></div>
+                  <div className="absolute top-0 left-0 w-20 h-20 border-4 border-secondary-200 dark:border-primary-400 border-t-transparent rounded-full"></div>
                 </motion.div>
                 <motion.p
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.5 }}
-                  className="mt-6 text-primary-900 dark:text-primary-300 font-medium tracking-wide animate-pulse"
+                  className="mt-6 text-secondary-900 dark:text-primary-300 font-medium tracking-wide animate-pulse"
                 >
                   Préparation du quiz...
                 </motion.p>
@@ -224,7 +224,7 @@ export default function QuizView() {
 
     if (!quiz) {
         return (
-            <div className="min-h-screen flex items-center justify-center text-gray-500 dark:text-gray-400 italic bg-primary-50 dark:bg-gray-900">
+            <div className="min-h-screen flex items-center justify-center text-gray-500 dark:text-gray-400 italic bg-secondary-50 dark:bg-gray-900">
                 Quiz introuvable
             </div>
         );
@@ -232,7 +232,7 @@ export default function QuizView() {
 
     if (maxAttempts !== -1 && attempts >= maxAttempts && !submitted && !result) {
         return (
-            <div className="min-h-screen bg-primary-50 dark:bg-gray-900 flex items-center justify-center p-4">
+            <div className="min-h-screen bg-secondary-50 dark:bg-gray-900 flex items-center justify-center p-4">
                 <motion.div 
                     initial={{ scale: 0.9, opacity: 0 }}
                     animate={{ scale: 1, opacity: 1 }}
@@ -263,7 +263,7 @@ export default function QuizView() {
                     initial={{ opacity: 0, scale: 0.95, y: 20 }}
                     animate={{ opacity: 1, scale: 1, y: 0 }}
                     transition={{ type: "spring", stiffness: 100, damping: 20 }}
-                    className="max-w-4xl w-full bg-white/60 dark:bg-gray-800/60 backdrop-blur-3xl rounded-[3rem] p-10 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.1)] border border-white/60 dark:border-gray-700/50 overflow-hidden relative mb-12 z-10"
+                    className="max-w-4xl w-full bg-white/60 dark:bg-gray-800/60 backdrop-blur-3xl rounded-[3rem] p-10 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.1)] border border-white/60 dark:border-secondary-200/20/50 overflow-hidden relative mb-12 z-10"
                 >
                     <div className={`absolute top-0 left-0 w-full h-3 ${result.passed ? 'bg-gradient-to-r from-emerald-400 to-green-500' : 'bg-gradient-to-r from-rose-400 to-red-500'}`} />
                     <div className={`absolute top-0 left-1/2 -translate-x-1/2 w-64 h-64 ${result.passed ? 'bg-green-400/20' : 'bg-red-400/20'} rounded-full blur-3xl -z-10`} />
@@ -286,7 +286,7 @@ export default function QuizView() {
                             {result.passed ? 'Quiz validé avec succès' : `Score minimum requis : ${quiz.passing_score}%`}
                         </p>
                         
-                        <div className="mt-10 mb-4 inline-flex items-center justify-center bg-white/50 dark:bg-gray-900/50 backdrop-blur-sm px-10 py-6 rounded-3xl border border-white/60 dark:border-gray-700/50 shadow-inner">
+                        <div className="mt-10 mb-4 inline-flex items-center justify-center bg-white/50 dark:bg-gray-900/50 backdrop-blur-sm px-10 py-6 rounded-3xl border border-white/60 dark:border-secondary-200/20/50 shadow-inner">
                             <div className="flex items-baseline gap-2">
                                 <span className={`text-7xl font-black bg-clip-text text-transparent ${result.passed ? 'bg-gradient-to-tr from-emerald-500 to-green-400' : 'bg-gradient-to-tr from-rose-500 to-red-400'}`}>
                                     {result.score}
@@ -304,9 +304,9 @@ export default function QuizView() {
                         )}
                     </div>
 
-                    <div className="space-y-6 mt-16 bg-white/40 dark:bg-gray-900/40 p-8 sm:p-10 rounded-[2.5rem] border border-white/60 dark:border-gray-700/50 shadow-sm relative z-10">
+                    <div className="space-y-6 mt-16 bg-white/40 dark:bg-gray-900/40 p-8 sm:p-10 rounded-[2.5rem] border border-white/60 dark:border-secondary-200/20/50 shadow-sm relative z-10">
                         <h3 className="text-2xl font-black text-gray-900 dark:text-white flex items-center gap-3 mb-8 tracking-tight">
-                            <div className="p-2.5 bg-gradient-to-br from-primary-100 to-primary-200 dark:from-primary-900 dark:to-primary-800 rounded-xl shadow-inner text-primary-600 dark:text-primary-300">
+                            <div className="p-2.5 bg-gradient-to-br from-primary-100 to-primary-200 dark:from-primary-900 dark:to-primary-800 rounded-xl shadow-inner text-primary-500 dark:text-primary-300">
                                 <HelpCircle className="w-6 h-6" />
                             </div>
                             Correction détaillée
@@ -325,7 +325,7 @@ export default function QuizView() {
                                             </p>
                                             
                                             <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
-                                                <div className="p-3 bg-white/60 dark:bg-gray-800/60 rounded-xl border border-white dark:border-gray-700 shadow-sm">
+                                                <div className="p-3 bg-white/60 dark:bg-gray-800/60 rounded-xl border border-white dark:border-secondary-200/20 shadow-sm">
                                                     <p className="text-[10px] text-gray-400 dark:text-gray-500 font-black uppercase mb-1">Votre réponse</p>
                                                     <p className={`font-medium ${correct ? 'text-green-700 dark:text-green-300' : 'text-red-700 dark:text-red-300'}`}>
                                                         {q.type === 'single' || q.type === 'truefalse' 
@@ -335,9 +335,9 @@ export default function QuizView() {
                                                     </p>
                                                 </div>
                                                 {!correct && (
-                                                    <div className="p-3 bg-primary-50/50 dark:bg-primary-900/30 rounded-xl border border-primary-100 dark:border-primary-800 shadow-sm">
-                                                        <p className="text-[10px] text-primary-400 dark:text-primary-400 font-black uppercase mb-1">Bonne réponse</p>
-                                                        <p className="font-bold text-primary-700 dark:text-primary-300">
+                                                    <div className="p-3 bg-secondary-50/50 dark:bg-primary-900/30 rounded-xl border border-secondary-200 dark:border-primary-800 shadow-sm">
+                                                        <p className="text-[10px] text-primary-500 dark:text-primary-500 font-black uppercase mb-1">Bonne réponse</p>
+                                                        <p className="font-bold text-secondary-900 dark:text-primary-300">
                                                             {q.type === 'single' || q.type === 'truefalse'
                                                                 ? (q.type === 'truefalse' ? (q.answer ? 'Vrai' : 'Faux') : escapeText(untrusted(q.options[q.answer])))
                                                                 : q.answer.map(i => escapeText(untrusted(q.options[i]))).join(', ')
@@ -353,11 +353,11 @@ export default function QuizView() {
                         })}
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-12 bg-white dark:bg-gray-800 sticky bottom-0 py-6 border-t border-gray-100 dark:border-gray-700">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-12 bg-white dark:bg-gray-800 sticky bottom-0 py-6 border-t border-secondary-200 dark:border-secondary-200/20">
                         {!result.passed && (maxAttempts === -1 || attempts < maxAttempts) && (
                             <button
                                 onClick={handleRetry}
-                                className="flex items-center justify-center gap-2 py-5 px-6 bg-primary-50 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 rounded-2xl font-black hover:bg-primary-100 dark:hover:bg-primary-800/50 transition-all border-2 border-primary-100 dark:border-primary-800 active:scale-95"
+                                className="flex items-center justify-center gap-2 py-5 px-6 bg-secondary-50 dark:bg-primary-900/30 text-secondary-900 dark:text-primary-300 rounded-2xl font-black hover:bg-secondary-200 dark:hover:bg-primary-600 dark:bg-primary-500/50 transition-all border-2 border-secondary-200 dark:border-primary-800 active:scale-95"
                             >
                                 <RefreshCw className="w-5 h-5" />
                                 Réessayer
@@ -365,7 +365,7 @@ export default function QuizView() {
                         )}
                         <button
                             onClick={() => result.passed && nextVideoId ? navigate(`/student/video/${nextVideoId}`) : navigate('/student/learning')}
-                            className={`flex items-center justify-center gap-2 py-5 px-6 text-white rounded-2xl font-black shadow-2xl transition-all hover:scale-[1.02] active:scale-95 ${result.passed ? 'bg-primary-600 hover:bg-primary-700 col-span-full md:col-span-1 shadow-primary-200 dark:shadow-primary-900/30' : 'bg-gray-900 dark:bg-gray-700 hover:bg-black dark:hover:bg-gray-600 col-span-full md:col-span-1 shadow-gray-200 dark:shadow-gray-900/30'}`}
+                            className={`flex items-center justify-center gap-2 py-5 px-6 text-white rounded-2xl font-black shadow-2xl transition-all hover:scale-[1.02] active:scale-95 ${result.passed ? 'bg-primary-600 dark:bg-primary-500 hover:bg-primary-600 dark:hover:bg-primary-600 col-span-full md:col-span-1 shadow-primary-200 dark:shadow-primary-900/30' : 'bg-gray-900 dark:bg-gray-700 hover:bg-black dark:hover:bg-gray-600 col-span-full md:col-span-1 shadow-gray-200 dark:shadow-gray-900/30'}`}
                         >
                             {result.passed && nextVideoId ? 'Vidéo suivante' : 'Retour aux modules'}
                             <ArrowRight className="w-5 h-5" />
@@ -385,7 +385,7 @@ export default function QuizView() {
                 {/* Header Timeline/Timer */}
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 mb-10">
                     <div className="flex items-center gap-5">
-                        <div className="w-16 h-16 bg-gradient-to-br from-primary-500 to-primary-700 rounded-[1.5rem] shadow-xl shadow-primary-500/30 flex items-center justify-center text-white font-black text-2xl rotate-3">
+                        <div className="w-16 h-16 bg-gradient-to-br from-primary-500 to-primary-700 rounded-[1.5rem] shadow-xl shadow-sm flex items-center justify-center text-white font-black text-2xl rotate-3">
                             <div className="-rotate-3">{currentQuestionIndex + 1}</div>
                         </div>
                         <div>
@@ -395,7 +395,7 @@ export default function QuizView() {
                                     <div 
                                         key={i} 
                                         className={`h-2 rounded-full transition-all duration-500 ${
-                                            i === currentQuestionIndex ? 'w-10 bg-primary-500 shadow-[0_0_10px_rgba(99,102,241,0.5)]' : i < currentQuestionIndex ? 'w-4 bg-emerald-400' : 'w-4 bg-gray-200 dark:bg-gray-700/50'
+                                            i === currentQuestionIndex ? 'w-10 bg-primary-600 dark:bg-primary-500 shadow-[0_0_10px_rgba(99,102,241,0.5)]' : i < currentQuestionIndex ? 'w-4 bg-emerald-400' : 'w-4 bg-gray-200 dark:bg-gray-700/50'
                                         }`} 
                                     />
                                 ))}
@@ -403,7 +403,7 @@ export default function QuizView() {
                         </div>
                     </div>
                     {timeLeft !== null && (
-                        <div className={`flex items-center justify-center gap-3 px-6 py-4 rounded-[1.5rem] font-mono text-2xl font-black shadow-lg border backdrop-blur-md transition-all ${timeLeft <= 30 ? 'bg-red-50/80 dark:bg-red-900/30 text-red-600 dark:text-red-400 border-red-200 dark:border-red-800 animate-pulse' : 'bg-white/60 dark:bg-gray-800/60 text-gray-800 dark:text-white border-white/60 dark:border-gray-700/50'}`}>
+                        <div className={`flex items-center justify-center gap-3 px-6 py-4 rounded-[1.5rem] font-mono text-2xl font-black shadow-lg border backdrop-blur-md transition-all ${timeLeft <= 30 ? 'bg-red-50/80 dark:bg-red-900/30 text-red-600 dark:text-red-400 border-red-200 dark:border-red-800 animate-pulse' : 'bg-white/60 dark:bg-gray-800/60 text-gray-800 dark:text-white border-white/60 dark:border-secondary-200/20/50'}`}>
                             <Clock className={`w-6 h-6 ${timeLeft <= 30 ? 'text-red-500' : 'text-primary-500'}`} />
                             {formatTime(timeLeft)}
                         </div>
@@ -417,11 +417,11 @@ export default function QuizView() {
                         animate={{ x: 0, opacity: 1 }}
                         exit={{ x: -20, opacity: 0 }}
                         transition={{ type: "spring", stiffness: 200, damping: 20 }}
-                        className="bg-white/60 dark:bg-gray-800/60 backdrop-blur-2xl rounded-[3rem] p-8 md:p-14 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.1)] border border-white/60 dark:border-gray-700/50 relative overflow-hidden z-10"
+                        className="bg-white/60 dark:bg-gray-800/60 backdrop-blur-2xl rounded-[3rem] p-8 md:p-14 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.1)] border border-white/60 dark:border-secondary-200/20/50 relative overflow-hidden z-10"
                     >
                         <div className="absolute -top-20 -right-20 w-64 h-64 bg-primary-200/40 dark:bg-primary-900/20 rounded-full blur-3xl pointer-events-none -z-10"></div>
                         <div className="absolute top-0 right-0 p-10 opacity-5 pointer-events-none">
-                            <HelpCircle className="w-64 h-64 text-primary-600 dark:text-primary-400" />
+                            <HelpCircle className="w-64 h-64 text-primary-500 dark:text-primary-500" />
                         </div>
 
                         <h2 className="text-3xl md:text-4xl font-black text-gray-900 dark:text-white mb-12 leading-tight relative z-10 tracking-tight">
@@ -435,14 +435,14 @@ export default function QuizView() {
                                     onClick={() => handleAnswer(idx)}
                                     className={`w-full p-8 text-left rounded-3xl border-2 transition-all duration-300 flex items-center justify-between group ${
                                         currentAnswer === idx
-                                            ? 'border-primary-600 dark:border-primary-400 bg-primary-50 dark:bg-primary-900/30 shadow-inner'
-                                            : 'border-gray-100 dark:border-gray-700 hover:border-primary-200 dark:hover:border-primary-600 hover:bg-gray-50 dark:hover:bg-gray-700'
+                                            ? 'border-secondary-200 dark:border-primary-400 bg-secondary-50 dark:bg-primary-900/30 shadow-inner'
+                                            : 'border-secondary-200 dark:border-secondary-200/20 hover:border-secondary-200 dark:hover:border-secondary-200 hover:bg-secondary-50 dark:hover:bg-gray-700'
                                     }`}
                                 >
-                                    <span className={`text-xl transition-colors ${currentAnswer === idx ? 'text-primary-900 dark:text-primary-300 font-bold' : 'text-gray-700 dark:text-gray-300 font-medium'}`}>
+                                    <span className={`text-xl transition-colors ${currentAnswer === idx ? 'text-secondary-900 dark:text-primary-300 font-bold' : 'text-gray-700 dark:text-gray-300 font-medium'}`}>
                                         {escapeText(untrusted(opt))}
                                     </span>
-                                    <div className={`w-8 h-8 rounded-full border-2 flex items-center justify-center transition-all ${currentAnswer === idx ? 'border-primary-600 dark:border-primary-400 bg-primary-600 dark:bg-primary-400' : 'border-gray-300 dark:border-gray-600'}`}>
+                                    <div className={`w-8 h-8 rounded-full border-2 flex items-center justify-center transition-all ${currentAnswer === idx ? 'border-secondary-200 dark:border-primary-400 bg-primary-600 dark:bg-primary-500 dark:bg-primary-400' : 'border-gray-300 dark:border-gray-600'}`}>
                                         {currentAnswer === idx && <div className="w-3.5 h-3.5 rounded-full bg-white dark:bg-gray-900 shadow-sm" />}
                                     </div>
                                 </button>
@@ -454,14 +454,14 @@ export default function QuizView() {
                                     onClick={() => handleMultipleAnswer(idx)}
                                     className={`w-full p-8 text-left rounded-3xl border-2 transition-all duration-300 flex items-center justify-between group ${
                                         (currentAnswer || []).includes(idx)
-                                            ? 'border-primary-600 dark:border-primary-400 bg-primary-50 dark:bg-primary-900/30 shadow-inner'
-                                            : 'border-gray-100 dark:border-gray-700 hover:border-primary-200 dark:hover:border-primary-600 hover:bg-gray-50 dark:hover:bg-gray-700'
+                                            ? 'border-secondary-200 dark:border-primary-400 bg-secondary-50 dark:bg-primary-900/30 shadow-inner'
+                                            : 'border-secondary-200 dark:border-secondary-200/20 hover:border-secondary-200 dark:hover:border-secondary-200 hover:bg-secondary-50 dark:hover:bg-gray-700'
                                     }`}
                                 >
-                                    <span className={`text-xl transition-colors ${(currentAnswer || []).includes(idx) ? 'text-primary-900 dark:text-primary-300 font-bold' : 'text-gray-700 dark:text-gray-300 font-medium'}`}>
+                                    <span className={`text-xl transition-colors ${(currentAnswer || []).includes(idx) ? 'text-secondary-900 dark:text-primary-300 font-bold' : 'text-gray-700 dark:text-gray-300 font-medium'}`}>
                                         {escapeText(untrusted(opt))}
                                     </span>
-                                    <div className={`w-8 h-8 rounded-xl border-2 flex items-center justify-center transition-all ${ (currentAnswer || []).includes(idx) ? 'border-primary-600 dark:border-primary-400 bg-primary-600 dark:bg-primary-400' : 'border-gray-300 dark:border-gray-600'}`}>
+                                    <div className={`w-8 h-8 rounded-xl border-2 flex items-center justify-center transition-all ${ (currentAnswer || []).includes(idx) ? 'border-secondary-200 dark:border-primary-400 bg-primary-600 dark:bg-primary-500 dark:bg-primary-400' : 'border-gray-300 dark:border-gray-600'}`}>
                                         {(currentAnswer || []).includes(idx) && <CheckCircle className="w-5 h-5 text-white" />}
                                     </div>
                                 </button>
@@ -478,14 +478,14 @@ export default function QuizView() {
                                             onClick={() => handleAnswer(opt.value)}
                                             className={`py-14 flex flex-col items-center justify-center gap-6 rounded-[2.5rem] border-2 transition-all duration-300 ${
                                                 currentAnswer === opt.value
-                                                    ? 'border-primary-600 dark:border-primary-400 bg-primary-50 dark:bg-primary-900/30 shadow-inner'
-                                                    : 'border-gray-100 dark:border-gray-700 hover:border-primary-200 dark:hover:border-primary-600 hover:bg-gray-50 dark:hover:bg-gray-700'
+                                                    ? 'border-secondary-200 dark:border-primary-400 bg-secondary-50 dark:bg-primary-900/30 shadow-inner'
+                                                    : 'border-secondary-200 dark:border-secondary-200/20 hover:border-secondary-200 dark:hover:border-secondary-200 hover:bg-secondary-50 dark:hover:bg-gray-700'
                                             }`}
                                         >
-                                            <div className={`w-10 h-10 rounded-full border-2 flex items-center justify-center ${currentAnswer === opt.value ? 'border-primary-600 dark:border-primary-400 bg-primary-600 dark:bg-primary-400 shadow-lg shadow-primary-100 dark:shadow-primary-900/30' : 'border-gray-300 dark:border-gray-600'}`}>
+                                            <div className={`w-10 h-10 rounded-full border-2 flex items-center justify-center ${currentAnswer === opt.value ? 'border-secondary-200 dark:border-primary-400 bg-primary-600 dark:bg-primary-500 dark:bg-primary-400 shadow-lg shadow-primary-100 dark:shadow-primary-900/30' : 'border-gray-300 dark:border-gray-600'}`}>
                                                 {currentAnswer === opt.value && <div className="w-4 h-4 rounded-full bg-white dark:bg-gray-900 shadow-sm" />}
                                             </div>
-                                            <span className={`text-2xl font-black ${currentAnswer === opt.value ? 'text-primary-900 dark:text-primary-300' : 'text-gray-500 dark:text-gray-400'}`}>
+                                            <span className={`text-2xl font-black ${currentAnswer === opt.value ? 'text-secondary-900 dark:text-primary-300' : 'text-gray-500 dark:text-gray-400'}`}>
                                                 {opt.label}
                                             </span>
                                         </button>
@@ -498,7 +498,7 @@ export default function QuizView() {
                             <button
                                 onClick={goToPrev}
                                 disabled={currentQuestionIndex === 0}
-                                className="w-full sm:w-auto flex items-center justify-center gap-3 py-4 sm:py-5 px-8 sm:px-10 rounded-[1.5rem] font-black text-gray-500 dark:text-gray-400 hover:bg-white/60 dark:hover:bg-gray-700/50 hover:text-gray-900 dark:hover:text-white disabled:opacity-30 disabled:hover:bg-transparent disabled:hover:text-gray-500 transition-all active:scale-95 border border-transparent shadow-sm hover:shadow-md hover:border-white/50 dark:hover:border-gray-600/50"
+                                className="w-full sm:w-auto flex items-center justify-center gap-3 py-4 sm:py-5 px-8 sm:px-10 rounded-[1.5rem] font-black text-gray-500 dark:text-gray-400 hover:bg-white/60 dark:hover:bg-gray-700/50 hover:text-gray-900 dark:hover:text-white disabled:opacity-30 disabled:hover:bg-transparent disabled:hover:text-gray-500 transition-all active:scale-95 border border-transparent shadow-sm hover:shadow-md hover:border-secondary-200 dark:hover:border-gray-600/50"
                             >
                                 <ArrowLeft className="w-6 h-6" />
                                 Précédent
@@ -507,7 +507,7 @@ export default function QuizView() {
                             {currentQuestionIndex === quiz.questions.length - 1 ? (
                                 <button
                                     onClick={() => handleSubmit()}
-                                    className="w-full sm:w-auto flex items-center justify-center gap-3 py-4 sm:py-5 px-10 sm:px-14 bg-gradient-to-r from-primary-600 to-primary-700 text-white rounded-[1.5rem] font-black shadow-[0_10px_25px_-5px_rgba(79,70,229,0.4)] hover:shadow-[0_20px_35px_-5px_rgba(79,70,229,0.5)] transition-all hover:-translate-y-1 active:scale-95 active:translate-y-0 group border border-primary-500/50"
+                                    className="w-full sm:w-auto flex items-center justify-center gap-3 py-4 sm:py-5 px-10 sm:px-14 bg-gradient-to-r from-primary-600 to-primary-700 text-white rounded-[1.5rem] font-black shadow-[0_10px_25px_-5px_rgba(79,70,229,0.4)] hover:shadow-[0_20px_35px_-5px_rgba(79,70,229,0.5)] transition-all hover:-translate-y-1 active:scale-95 active:translate-y-0 group border border-secondary-200/50"
                                 >
                                     Terminer le quiz
                                     <CheckCircle className="w-6 h-6 group-hover:scale-110 transition-transform" />

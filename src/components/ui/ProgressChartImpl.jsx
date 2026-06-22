@@ -10,12 +10,12 @@ import {
 import { useTheme } from "../../hooks/useTheme";
 
 const COLORS = [
-  "#3b82f6",
+  "#03045e",
   "#10b981",
   "#f59e0b",
   "#ef4444",
-  "#0ea5e9",
-  "#06b6d4",
+  "#0077b6",
+  "#00b4d8",
 ];
 
 export default function ProgressChartImpl({ data }) {

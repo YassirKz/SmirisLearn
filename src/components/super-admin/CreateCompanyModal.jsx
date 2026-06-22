@@ -108,7 +108,7 @@ export default function CreateCompanyModal({ isOpen, onClose, onSuccess }) {
                             className="relative inline-block w-full max-w-md my-8 text-left align-middle"
                         >
                             {/* Carte principale avec effet glassmorphisme */}
-                            <div className="relative bg-white/90 dark:bg-gray-900/90 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/20 dark:border-gray-800">
+                            <div className="relative bg-white/90 dark:bg-gray-900/90 backdrop-blur-xl rounded-3xl shadow-2xl border border-secondary-200/50 dark:border-secondary-200/20">
                                 
                                 {/* Éléments décoratifs */}
                                 <div className="absolute -top-20 -right-20 w-40 h-40 bg-gradient-to-br from-primary-400 to-primary-600 rounded-full opacity-20 blur-3xl" />
@@ -181,7 +181,7 @@ export default function CreateCompanyModal({ isOpen, onClose, onSuccess }) {
                                             <span className="text-red-500 ml-1">*</span>
                                         </label>
                                         <div className="relative group">
-                                            <div className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500 group-focus-within:text-primary-500 dark:group-focus-within:text-primary-400 transition-colors">
+                                            <div className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500 group-focus-within:text-primary-500 dark:group-focus-within:text-primary-500 transition-colors">
                                                 <Building className="w-5 h-5" />
                                             </div>
                                             <input
@@ -191,13 +191,13 @@ export default function CreateCompanyModal({ isOpen, onClose, onSuccess }) {
                                                 onChange={handleChange}
                                                 onBlur={() => handleBlur('name')}
                                                 className={`
-                                                    w-full pl-12 pr-12 py-5 bg-white dark:bg-gray-800 border-2 border-gray-100 dark:border-gray-700 rounded-2xl 
+                                                    w-full pl-12 pr-12 py-5 bg-white dark:bg-gray-800 border-2 border-secondary-200 dark:border-secondary-200/20 rounded-2xl 
                                                     outline-none transition-all duration-300 dark:text-white
                                                     ${nameError && touched.name
                                                         ? 'border-red-300 dark:border-red-600 focus:border-red-500 dark:focus:border-red-500 focus:ring-4 focus:ring-red-100 dark:focus:ring-red-900/30'
                                                         : formData.name && !nameError
                                                             ? 'border-green-300 dark:border-green-600 focus:border-green-500 dark:focus:border-green-500 focus:ring-4 focus:ring-green-100 dark:focus:ring-green-900/30'
-                                                            : 'border-gray-200 dark:border-gray-700 focus:border-primary-400 dark:focus:border-primary-500 focus:ring-4 focus:ring-primary-100 dark:focus:ring-primary-900/30'
+                                                            : 'border-secondary-200 dark:border-secondary-200/20 focus:border-primary-500 dark:focus:border-secondary-200 focus:ring-4 focus:ring-primary-500/20 dark:focus:ring-primary-900/30'
                                                     }
                                                 `}
                                                 placeholder="ex: smiris academy"
@@ -252,7 +252,7 @@ export default function CreateCompanyModal({ isOpen, onClose, onSuccess }) {
                                             <span className="text-red-500 ml-1">*</span>
                                         </label>
                                         <div className="relative group">
-                                            <div className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500 group-focus-within:text-primary-500 dark:group-focus-within:text-primary-400 transition-colors">
+                                            <div className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500 group-focus-within:text-primary-500 dark:group-focus-within:text-primary-500 transition-colors">
                                                 <Mail className="w-5 h-5" />
                                             </div>
                                             <input
@@ -262,13 +262,13 @@ export default function CreateCompanyModal({ isOpen, onClose, onSuccess }) {
                                                 onChange={handleChange}
                                                 onBlur={() => handleBlur('adminEmail')}
                                                 className={`
-                                                    w-full pl-12 pr-12 py-5 bg-white dark:bg-gray-800 border-2 border-gray-100 dark:border-gray-700 rounded-2xl 
+                                                    w-full pl-12 pr-12 py-5 bg-white dark:bg-gray-800 border-2 border-secondary-200 dark:border-secondary-200/20 rounded-2xl 
                                                     outline-none transition-all duration-300 dark:text-white
                                                     ${emailError && touched.adminEmail
                                                         ? 'border-red-300 dark:border-red-600 focus:border-red-500 dark:focus:border-red-500 focus:ring-4 focus:ring-red-100 dark:focus:ring-red-900/30'
                                                         : formData.adminEmail && !emailError
                                                             ? 'border-green-300 dark:border-green-600 focus:border-green-500 dark:focus:border-green-500 focus:ring-4 focus:ring-green-100 dark:focus:ring-green-900/30'
-                                                            : 'border-gray-200 dark:border-gray-700 focus:border-primary-400 dark:focus:border-primary-500 focus:ring-4 focus:ring-primary-100 dark:focus:ring-primary-900/30'
+                                                            : 'border-secondary-200 dark:border-secondary-200/20 focus:border-primary-500 dark:focus:border-secondary-200 focus:ring-4 focus:ring-primary-500/20 dark:focus:ring-primary-900/30'
                                                     }
                                                 `}
                                                 placeholder="admin@entreprise.com"
@@ -323,7 +323,7 @@ export default function CreateCompanyModal({ isOpen, onClose, onSuccess }) {
                                             <span className="text-red-500 ml-1">*</span>
                                         </label>
                                         <div className="relative group">
-                                            <div className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500 group-focus-within:text-primary-500 dark:group-focus-within:text-primary-400 transition-colors">
+                                            <div className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500 group-focus-within:text-primary-500 dark:group-focus-within:text-primary-500 transition-colors">
                                                 <User className="w-5 h-5" />
                                             </div>
                                             <input
@@ -333,13 +333,13 @@ export default function CreateCompanyModal({ isOpen, onClose, onSuccess }) {
                                                 onChange={handleChange}
                                                 onBlur={() => handleBlur('adminName')}
                                                 className={`
-                                                    w-full pl-12 pr-12 py-5 bg-white dark:bg-gray-800 border-2 border-gray-100 dark:border-gray-700 rounded-2xl 
+                                                    w-full pl-12 pr-12 py-5 bg-white dark:bg-gray-800 border-2 border-secondary-200 dark:border-secondary-200/20 rounded-2xl 
                                                     outline-none transition-all duration-300 dark:text-white
                                                     ${adminNameError && touched.adminName
                                                         ? 'border-red-300 dark:border-red-600 focus:border-red-500 dark:focus:border-red-500 focus:ring-4 focus:ring-red-100 dark:focus:ring-red-900/30'
                                                         : formData.adminName && !adminNameError
                                                             ? 'border-green-300 dark:border-green-600 focus:border-green-500 dark:focus:border-green-500 focus:ring-4 focus:ring-green-100 dark:focus:ring-green-900/30'
-                                                            : 'border-gray-200 dark:border-gray-700 focus:border-primary-400 dark:focus:border-primary-500 focus:ring-4 focus:ring-primary-100 dark:focus:ring-primary-900/30'
+                                                            : 'border-secondary-200 dark:border-secondary-200/20 focus:border-primary-500 dark:focus:border-secondary-200 focus:ring-4 focus:ring-primary-500/20 dark:focus:ring-primary-900/30'
                                                     }
                                                 `}
                                                 placeholder="youssef fakir"

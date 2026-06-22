@@ -113,14 +113,14 @@ export default function StudentVideoPage() {
             transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
            className="relative"
         >
-          <div className="w-20 h-20 border-4 border-primary-100/50 dark:border-gray-700 rounded-full shadow-2xl"></div>
-          <div className="absolute top-0 left-0 w-20 h-20 border-4 border-primary-600 dark:border-primary-400 border-t-transparent rounded-full"></div>
+          <div className="w-20 h-20 border-4 border-secondary-200/50 dark:border-secondary-200/20 rounded-full shadow-2xl"></div>
+          <div className="absolute top-0 left-0 w-20 h-20 border-4 border-secondary-200 dark:border-primary-400 border-t-transparent rounded-full"></div>
         </motion.div>
         <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.5 }}
-          className="mt-6 text-primary-900 dark:text-primary-300 font-medium tracking-wide animate-pulse"
+          className="mt-6 text-secondary-900 dark:text-primary-300 font-medium tracking-wide animate-pulse"
         >
           Chargement de la vidéo racontée...
         </motion.p>
@@ -140,7 +140,7 @@ export default function StudentVideoPage() {
       >
         <button
           onClick={() => navigate('/student/learning')}
-          className="inline-flex items-center gap-2 px-4 py-2 bg-white/40 dark:bg-gray-800/40 backdrop-blur-md rounded-xl text-primary-600 dark:text-primary-400 font-bold hover:bg-white/70 dark:hover:bg-gray-800/70 hover:shadow-lg transition-all group border border-white/50 dark:border-gray-700/50"
+          className="inline-flex items-center gap-2 px-4 py-2 bg-white/40 dark:bg-gray-800/40 backdrop-blur-md rounded-xl text-primary-500 dark:text-primary-500 font-bold hover:bg-white/70 dark:hover:bg-gray-800/70 hover:shadow-lg transition-all group border border-secondary-200 dark:border-secondary-200/20/50"
         >
           <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
           <span>Retour aux modules</span>
@@ -151,13 +151,13 @@ export default function StudentVideoPage() {
             <motion.div
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
-              className="p-5 bg-gradient-to-r from-primary-50 to-primary-100/50 dark:from-primary-900/20 dark:to-primary-800/10 backdrop-blur-xl border border-primary-100/50 dark:border-primary-900/50 rounded-2xl flex items-start gap-4 shadow-sm"
+              className="p-5 bg-gradient-to-r from-primary-50 to-primary-100/50 dark:from-primary-900/20 dark:to-primary-800/10 backdrop-blur-xl border border-secondary-200/50 dark:border-primary-900/50 rounded-2xl flex items-start gap-4 shadow-sm"
             >
-              <div className="p-2 bg-primary-100 dark:bg-primary-900/50 rounded-xl shrink-0">
-                  <Info className="w-6 h-6 text-primary-600 dark:text-primary-400" />
+              <div className="p-2 bg-accent-500 text-secondary-900 dark:bg-primary-900/50 rounded-xl shrink-0">
+                  <Info className="w-6 h-6 text-primary-500 dark:text-primary-500" />
               </div>
-              <p className="text-sm md:text-base text-primary-800 dark:text-primary-200 leading-relaxed font-medium mt-0.5">
-                <span className="font-black uppercase tracking-wide text-primary-900 dark:text-primary-100">Lecture linéaire</span> — Vous devez visionner la vidéo en entier pour passer à la suite.
+              <p className="text-sm md:text-base text-secondary-900 dark:text-primary-200 leading-relaxed font-medium mt-0.5">
+                <span className="font-black uppercase tracking-wide text-secondary-900 dark:text-primary-100">Lecture linéaire</span> — Vous devez visionner la vidéo en entier pour passer à la suite.
               </p>
             </motion.div>
 
@@ -169,7 +169,7 @@ export default function StudentVideoPage() {
                     boxShadow: "0 50px 100px -20px rgba(99, 102, 241, 0.25)"
                 }}
                 style={{ transformStyle: "preserve-3d" }}
-                className="rounded-3xl overflow-hidden shadow-2xl border border-black/5 dark:border-white/10 bg-black"
+                className="rounded-3xl overflow-hidden shadow-2xl border border-black/5 dark:border-secondary-200/30 bg-black"
             >
                 <StudentVideoPlayer
                     video={video}
@@ -181,7 +181,7 @@ export default function StudentVideoPage() {
             <motion.div 
                 whileHover={{ z: 20, y: -2 }}
                 style={{ transformStyle: "preserve-3d" }}
-                className="bg-white/40 dark:bg-gray-800/40 backdrop-blur-2xl rounded-[2rem] p-8 sm:p-10 shadow-xl border border-white/60 dark:border-gray-700/50 relative overflow-hidden"
+                className="bg-white/40 dark:bg-gray-800/40 backdrop-blur-2xl rounded-[2rem] p-8 sm:p-10 shadow-xl border border-white/60 dark:border-secondary-200/20/50 relative overflow-hidden"
             >
               <div className="absolute top-0 right-0 p-8 opacity-5 pointer-events-none">
                   <BookOpen className="w-40 h-40" />
@@ -190,17 +190,17 @@ export default function StudentVideoPage() {
                 {escapeText(untrusted(video.title))}
               </h1>
               <div className="flex flex-wrap items-center gap-4 text-sm font-bold uppercase tracking-wider" style={{ transform: "translateZ(10px)" }}>
-                <span className="flex items-center gap-2 px-4 py-2 bg-gradient-to-br from-primary-100 to-primary-200 dark:from-primary-900/60 dark:to-primary-800/60 text-primary-700 dark:text-primary-300 rounded-xl shadow-inner">
-                  <BookOpen className="w-5 h-5 text-primary-600 dark:text-primary-400" />
+                <span className="flex items-center gap-2 px-4 py-2 bg-gradient-to-br from-primary-100 to-primary-200 dark:from-primary-900/60 dark:to-primary-800/60 text-secondary-900 dark:text-primary-300 rounded-xl shadow-inner">
+                  <BookOpen className="w-5 h-5 text-primary-500 dark:text-primary-500" />
                   {video.pillars?.name}
                 </span>
                 <span className="flex items-center gap-2 px-4 py-2 bg-white/60 dark:bg-gray-700/60 text-gray-700 dark:text-gray-300 rounded-xl border border-white dark:border-gray-600 shadow-sm">
-                  <Clock className="w-5 h-5 text-primary-500 dark:text-primary-400" />
+                  <Clock className="w-5 h-5 text-primary-500 dark:text-primary-500" />
                   {formatDuration(video.duration)}
                 </span>
               </div>
               {video.description && (
-                <div className="mt-8 p-6 bg-white/50 dark:bg-gray-900/50 rounded-2xl border border-white/40 dark:border-gray-700 backdrop-blur-md" style={{ transform: "translateZ(5px)" }}>
+                <div className="mt-8 p-6 bg-white/50 dark:bg-gray-900/50 rounded-2xl border border-white/40 dark:border-secondary-200/20 backdrop-blur-md" style={{ transform: "translateZ(5px)" }}>
                   <p className="text-gray-600 dark:text-gray-300 whitespace-pre-line text-lg leading-relaxed font-medium">
                     {escapeText(untrusted(video.description))}
                   </p>
@@ -213,7 +213,7 @@ export default function StudentVideoPage() {
             <motion.div 
                 whileHover={{ rotateY: -2, scale: 1.02 }}
                 style={{ transformStyle: "preserve-3d" }}
-                className="bg-white/40 dark:bg-gray-800/40 backdrop-blur-2xl rounded-[2rem] p-8 shadow-2xl border border-white/60 dark:border-gray-700/50 sticky top-28"
+                className="bg-white/40 dark:bg-gray-800/40 backdrop-blur-2xl rounded-[2rem] p-8 shadow-2xl border border-white/60 dark:border-secondary-200/20/50 sticky top-28"
             >
               <h3 className="text-xl font-black text-gray-900 dark:text-white mb-6 flex items-center gap-4 tracking-tight" style={{ transform: "translateZ(20px)" }}>
                 <div className="w-14 h-14 bg-gradient-to-br from-primary-100 to-primary-200 dark:from-primary-900/60 dark:to-primary-800/60 rounded-xl flex items-center justify-center text-3xl shadow-inner shrink-0">

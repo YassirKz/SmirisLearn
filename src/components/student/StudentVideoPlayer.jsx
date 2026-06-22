@@ -135,7 +135,7 @@ export default function StudentVideoPlayer({ video, nextVideoId, onComplete }) {
           {/* Play/Pause */}
           <button
             onClick={togglePlay}
-            className="w-10 h-10 flex items-center justify-center bg-white/20 hover:bg-white/30 rounded-full backdrop-blur-sm transition-all"
+            className="w-10 h-10 flex items-center justify-center bg-white/20 hover:bg-slate-900/30 rounded-full backdrop-blur-sm transition-all"
           >
             {isPlaying ? <Pause className="w-5 h-5 text-white" /> : <Play className="w-5 h-5 text-white ml-0.5" />}
           </button>

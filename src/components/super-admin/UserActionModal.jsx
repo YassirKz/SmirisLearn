@@ -119,7 +119,7 @@ export default function UserActionModal({ isOpen, onClose, user, action, onSucce
                         exit={{ opacity: 0, scale: 0.9, y: 40 }}
                         className="relative inline-block w-full max-w-md my-8 text-left align-middle"
                     >
-                        <div className="relative bg-white/90 dark:bg-gray-900/90 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/20 dark:border-gray-800 overflow-hidden">
+                        <div className="relative bg-white/90 dark:bg-gray-900/90 backdrop-blur-xl rounded-3xl shadow-2xl border border-secondary-200/50 dark:border-secondary-200/20 overflow-hidden">
                             
                             {/* Header */}
                             <div className={`px-8 pt-8 pb-6 bg-gradient-to-br ${getHeaderGradient()} text-white relative`}>
@@ -178,12 +178,12 @@ export default function UserActionModal({ isOpen, onClose, user, action, onSucce
                                         <div className="space-y-1.5">
                                             <label className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase ml-1">Nom complet</label>
                                             <div className="relative group">
-                                                <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 dark:text-gray-500 group-focus-within:text-primary-500 dark:group-focus-within:text-primary-400 transition-colors" />
+                                                <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 dark:text-gray-500 group-focus-within:text-primary-500 dark:group-focus-within:text-primary-500 transition-colors" />
                                                 <input
                                                     type="text"
                                                     value={formData.full_name}
                                                     disabled
-                                                    className="w-full pl-12 pr-4 py-3.5 bg-gray-50 dark:bg-gray-800 border-2 border-gray-100 dark:border-gray-700 rounded-2xl text-gray-500 dark:text-gray-400 cursor-not-allowed"
+                                                    className="w-full pl-12 pr-4 py-3.5 bg-secondary-50 dark:bg-gray-800 border-2 border-secondary-200 dark:border-secondary-200/20 rounded-2xl text-gray-500 dark:text-gray-400 cursor-not-allowed"
                                                 />
                                             </div>
                                         </div>
@@ -197,7 +197,7 @@ export default function UserActionModal({ isOpen, onClose, user, action, onSucce
                                                     type="email"
                                                     value={formData.email}
                                                     disabled
-                                                    className="w-full pl-12 pr-4 py-3.5 bg-gray-50 dark:bg-gray-800 border-2 border-gray-100 dark:border-gray-700 rounded-2xl text-gray-500 dark:text-gray-400 cursor-not-allowed"
+                                                    className="w-full pl-12 pr-4 py-3.5 bg-secondary-50 dark:bg-gray-800 border-2 border-secondary-200 dark:border-secondary-200/20 rounded-2xl text-gray-500 dark:text-gray-400 cursor-not-allowed"
                                                 />
                                             </div>
                                         </div>
@@ -211,7 +211,7 @@ export default function UserActionModal({ isOpen, onClose, user, action, onSucce
                                                     type="text"
                                                     value={user.organizations?.name || 'Aucune'}
                                                     disabled
-                                                    className="w-full pl-12 pr-4 py-3.5 bg-gray-50 dark:bg-gray-800 border-2 border-gray-100 dark:border-gray-700 rounded-2xl text-gray-500 dark:text-gray-400 cursor-not-allowed"
+                                                    className="w-full pl-12 pr-4 py-3.5 bg-secondary-50 dark:bg-gray-800 border-2 border-secondary-200 dark:border-secondary-200/20 rounded-2xl text-gray-500 dark:text-gray-400 cursor-not-allowed"
                                                 />
                                             </div>
                                         </div>
@@ -220,15 +220,15 @@ export default function UserActionModal({ isOpen, onClose, user, action, onSucce
                                         <div className="space-y-1.5">
                                             <label className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase ml-1">Rôle</label>
                                             <div className="relative group">
-                                                <Shield className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-primary-500 dark:text-primary-400" />
+                                                <Shield className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-primary-500 dark:text-primary-500" />
                                                 <select
                                                     value={formData.role}
                                                     onChange={(e) => setFormData({ ...formData, role: e.target.value })}
                                                     disabled={isView || loading}
                                                     className={`w-full pl-12 pr-4 py-3.5 border-2 rounded-2xl outline-none transition-all appearance-none ${
                                                         isView 
-                                                        ? 'bg-gray-50 dark:bg-gray-800 border-gray-100 dark:border-gray-700 text-gray-500 dark:text-gray-400 cursor-not-allowed'
-                                                        : 'bg-white dark:bg-gray-800 border-gray-100 dark:border-gray-700 focus:border-primary-400 dark:focus:border-primary-500 focus:ring-4 focus:ring-primary-100 dark:focus:ring-primary-900/30 text-gray-800 dark:text-gray-200'
+                                                        ? 'bg-secondary-50 dark:bg-gray-800 border-secondary-200 dark:border-secondary-200/20 text-gray-500 dark:text-gray-400 cursor-not-allowed'
+                                                        : 'bg-white dark:bg-gray-800 border-secondary-200 dark:border-secondary-200/20 focus:border-primary-500 dark:focus:border-secondary-200 focus:ring-4 focus:ring-primary-500/20 dark:focus:ring-primary-900/30 text-gray-800 dark:text-gray-200'
                                                     }`}
                                                 >
                                                     <option value="student">Élève</option>
@@ -277,7 +277,7 @@ export default function UserActionModal({ isOpen, onClose, user, action, onSucce
                                                 <button
                                                     type="submit"
                                                     disabled={loading}
-                                                    className="flex-1 py-4 bg-primary-600 text-white font-semibold rounded-2xl shadow-lg hover:shadow-xl hover:bg-primary-700 transition-all flex items-center justify-center gap-2 disabled:opacity-50 text-sm"
+                                                    className="flex-1 py-4 bg-primary-600 dark:bg-primary-500 text-white font-semibold rounded-2xl shadow-lg hover:shadow-xl hover:bg-primary-600 dark:hover:bg-primary-600 transition-all flex items-center justify-center gap-2 disabled:opacity-50 text-sm"
                                                 >
                                                     {loading ? <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" /> : <Save className="w-5 h-5" />}
                                                     <span>Enregistrer</span>

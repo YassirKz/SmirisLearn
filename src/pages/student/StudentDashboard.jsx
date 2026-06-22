@@ -372,8 +372,8 @@ export default function StudentDashboard() {
            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
            className="relative"
         >
-          <div className="w-20 h-20 border-4 border-primary-100/50 dark:border-gray-700 rounded-full shadow-2xl"></div>
-          <div className="absolute top-0 left-0 w-20 h-20 border-4 border-primary-600 dark:border-primary-400 border-t-transparent rounded-full"></div>
+          <div className="w-20 h-20 border-4 border-secondary-200/50 dark:border-secondary-200/20 rounded-full shadow-2xl"></div>
+          <div className="absolute top-0 left-0 w-20 h-20 border-4 border-secondary-200 dark:border-primary-400 border-t-transparent rounded-full"></div>
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
              <Sparkles className="w-6 h-6 text-primary-500 animate-pulse delay-700" />
           </div>
@@ -382,7 +382,7 @@ export default function StudentDashboard() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.5 }}
-          className="mt-6 text-primary-900 dark:text-primary-300 font-medium tracking-wide animate-pulse"
+          className="mt-6 text-secondary-900 dark:text-primary-300 font-medium tracking-wide animate-pulse"
         >
           Chargement de votre espace...
         </motion.p>
@@ -405,12 +405,12 @@ export default function StudentDashboard() {
   };
 
   const COLORS = [
-    "#4f46e5",
-    "#0ea5e9",
+    "#03045e",
+    "#0077b6",
     "#ec4899",
     "#10b981",
     "#f59e0b",
-    "#6366f1",
+    "#00b4d8",
   ];
 
   return (
@@ -428,7 +428,7 @@ export default function StudentDashboard() {
             animate={{ scale: 1 }}
             className="absolute -top-4 -right-4 hidden sm:flex"
           >
-            <div className="bg-gradient-to-r from-primary-600 to-accent-600 text-white px-4 py-2 rounded-bl-2xl rounded-tr-2xl text-xs font-bold shadow-lg flex items-center gap-1">
+            <div className="bg-primary-600 dark:bg-primary-500 text-white px-4 py-2 rounded-bl-2xl rounded-tr-2xl text-xs font-bold shadow-lg flex items-center gap-1">
               <Sparkles className="w-3 h-3" />
               Espace Étudiant
             </div>
@@ -446,9 +446,9 @@ export default function StudentDashboard() {
               <div className="flex items-center gap-3 mt-1">
                 {orgName && (
                   <p className="text-gray-500 dark:text-gray-400 flex items-center gap-2">
-                    <Shield className="w-4 h-4 text-primary-600 dark:text-primary-400" />
+                    <Shield className="w-4 h-4 text-primary-500 dark:text-primary-500" />
                     Organisation :{" "}
-                    <span className="font-medium text-primary-600 dark:text-primary-400">
+                    <span className="font-medium text-primary-500 dark:text-primary-500">
                       {orgName}
                     </span>
                   </p>
@@ -464,13 +464,13 @@ export default function StudentDashboard() {
             </div>
 
             {/* Progression globale avec cercle */}
-            <div className="bg-white/40 dark:bg-gray-800/40 backdrop-blur-xl px-6 py-4 rounded-3xl shadow-xl border border-white/50 dark:border-gray-700/50 flex items-center gap-5 hover:bg-white/60 dark:hover:bg-gray-800/60 transition-colors">
+            <div className="bg-white/40 dark:bg-gray-800/40 backdrop-blur-xl px-6 py-4 rounded-3xl shadow-xl border border-secondary-200 dark:border-secondary-200/20/50 flex items-center gap-5 hover:bg-white/60 dark:hover:bg-gray-800/60 transition-colors">
               <div className="text-right">
                 <p className="text-[10px] text-gray-500 dark:text-gray-400 uppercase tracking-widest font-black mb-0.5">
                   Progression Globale
                 </p>
                 <div className="flex items-center justify-end gap-1.5">
-                  <p className="text-3xl font-black bg-gradient-to-r from-primary-600 to-accent-500 bg-clip-text text-transparent drop-shadow-sm">
+                  <p className="text-3xl font-black bg-primary-600 dark:bg-primary-500 bg-clip-text text-transparent drop-shadow-sm">
                     {stats.overallProgress}%
                   </p>
                   {stats.overallProgress > 0 && (
@@ -505,8 +505,8 @@ export default function StudentDashboard() {
                   />
                   <defs>
                     <linearGradient id="progressGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                      <stop offset="0%" stopColor="#4f46e5" />
-                      <stop offset="100%" stopColor="#0ea5e9" />
+                      <stop offset="0%" stopColor="#03045e" />
+                      <stop offset="100%" stopColor="#0077b6" />
                     </linearGradient>
                   </defs>
                 </svg>
@@ -522,11 +522,11 @@ export default function StudentDashboard() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.05 }}
             whileHover={{ y: -5, scale: 1.02 }}
-            className="bg-white/60 dark:bg-gray-800/60 backdrop-blur-xl rounded-3xl p-5 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-white/60 dark:border-gray-700/50 flex items-center gap-4 relative overflow-hidden group"
+            className="bg-white/60 dark:bg-gray-800/60 backdrop-blur-xl rounded-3xl p-5 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-white/60 dark:border-secondary-200/20/50 flex items-center gap-4 relative overflow-hidden group"
           >
-            <div className="absolute -right-4 -bottom-4 w-24 h-24 bg-primary-100/50 dark:bg-primary-900/20 rounded-full blur-2xl group-hover:bg-primary-200/50 transition-colors"></div>
+            <div className="absolute -right-4 -bottom-4 w-24 h-24 bg-accent-500 text-secondary-900/50 dark:bg-primary-900/20 rounded-full blur-2xl group-hover:bg-primary-200/50 transition-colors"></div>
             <div className="p-3 bg-gradient-to-br from-primary-50 to-primary-100 dark:from-primary-900/40 dark:to-primary-800/40 rounded-2xl shadow-inner relative z-10">
-              <BookOpen className="w-6 h-6 text-primary-600 dark:text-primary-400" />
+              <BookOpen className="w-6 h-6 text-primary-500 dark:text-primary-500" />
             </div>
             <div className="relative z-10">
               <p className="text-[11px] text-gray-500 dark:text-gray-400 uppercase tracking-wider font-bold">
@@ -543,7 +543,7 @@ export default function StudentDashboard() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
             whileHover={{ y: -5, scale: 1.02 }}
-            className="bg-white/60 dark:bg-gray-800/60 backdrop-blur-xl rounded-3xl p-5 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-white/60 dark:border-gray-700/50 flex items-center gap-4 relative overflow-hidden group"
+            className="bg-white/60 dark:bg-gray-800/60 backdrop-blur-xl rounded-3xl p-5 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-white/60 dark:border-secondary-200/20/50 flex items-center gap-4 relative overflow-hidden group"
           >
             <div className="absolute -right-4 -bottom-4 w-24 h-24 bg-blue-100/50 dark:bg-blue-900/20 rounded-full blur-2xl group-hover:bg-blue-200/50 transition-colors"></div>
             <div className="p-3 bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/40 dark:to-blue-800/40 rounded-2xl shadow-inner relative z-10">
@@ -564,11 +564,11 @@ export default function StudentDashboard() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.15 }}
             whileHover={{ y: -5, scale: 1.02 }}
-            className="bg-white/60 dark:bg-gray-800/60 backdrop-blur-xl rounded-3xl p-5 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-white/60 dark:border-gray-700/50 flex items-center gap-4 relative overflow-hidden group"
+            className="bg-white/60 dark:bg-gray-800/60 backdrop-blur-xl rounded-3xl p-5 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-white/60 dark:border-secondary-200/20/50 flex items-center gap-4 relative overflow-hidden group"
           >
-            <div className="absolute -right-4 -bottom-4 w-24 h-24 bg-accent-100/50 dark:bg-accent-900/20 rounded-full blur-2xl group-hover:bg-accent-200/50 transition-colors"></div>
+            <div className="absolute -right-4 -bottom-4 w-24 h-24 bg-accent-500 text-secondary-900/50 dark:bg-accent-900/20 rounded-full blur-2xl group-hover:bg-accent-200/50 transition-colors"></div>
             <div className="p-3 bg-gradient-to-br from-accent-50 to-accent-100 dark:from-accent-900/40 dark:to-accent-800/40 rounded-2xl shadow-inner relative z-10">
-              <Zap className="w-6 h-6 text-accent-600 dark:text-accent-400" />
+              <Zap className="w-6 h-6 text-primary-500 dark:text-accent-400" />
             </div>
             <div className="relative z-10">
               <p className="text-[11px] text-gray-500 dark:text-gray-400 uppercase tracking-wider font-bold">
@@ -585,7 +585,7 @@ export default function StudentDashboard() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
             whileHover={{ y: -5, scale: 1.02 }}
-            className="bg-white/60 dark:bg-gray-800/60 backdrop-blur-xl rounded-3xl p-5 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-white/60 dark:border-gray-700/50 flex items-center gap-4 relative overflow-hidden group"
+            className="bg-white/60 dark:bg-gray-800/60 backdrop-blur-xl rounded-3xl p-5 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-white/60 dark:border-secondary-200/20/50 flex items-center gap-4 relative overflow-hidden group"
           >
             <div className="absolute -right-4 -bottom-4 w-24 h-24 bg-emerald-100/50 dark:bg-emerald-900/20 rounded-full blur-2xl group-hover:bg-emerald-200/50 transition-colors"></div>
             <div className="p-3 bg-gradient-to-br from-emerald-50 to-emerald-100 dark:from-emerald-900/40 dark:to-emerald-800/40 rounded-2xl shadow-inner relative z-10">
@@ -609,7 +609,7 @@ export default function StudentDashboard() {
             animate={{ opacity: 1, rotateX: 0, scale: 1 }}
             transition={{ delay: 0.5, type: "spring", stiffness: 100 }}
             whileHover={{ rotateX: 2, rotateY: -2 }}
-            className="bg-white/40 dark:bg-gray-800/40 backdrop-blur-xl rounded-[2rem] p-8 sm:p-10 shadow-2xl border border-white/60 dark:border-gray-700/50 hover:shadow-primary-500/10 transition-shadow relative overflow-hidden"
+            className="bg-white/40 dark:bg-gray-800/40 backdrop-blur-xl rounded-[2rem] p-8 sm:p-10 shadow-2xl border border-white/60 dark:border-secondary-200/20/50 hover:shadow-primary-500/10 transition-shadow relative overflow-hidden"
           >
             <div className="absolute top-0 right-0 p-10 opacity-5 pointer-events-none">
                 <TrendingUp className="w-64 h-64 text-primary-500" />
@@ -629,8 +629,8 @@ export default function StudentDashboard() {
               <ProgressChart data={progressByPillar} />
               {progressByPillar.length === 1 && (
                 <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                  <div className="text-center translate-y-[-10px] bg-white/80 dark:bg-gray-900/80 px-6 py-4 rounded-3xl backdrop-blur-md shadow-lg border border-white/50 dark:border-gray-700">
-                    <p className="text-4xl font-black bg-gradient-to-r from-primary-600 to-accent-600 bg-clip-text text-transparent">
+                  <div className="text-center translate-y-[-10px] bg-white/80 dark:bg-gray-900/80 px-6 py-4 rounded-3xl backdrop-blur-md shadow-lg border border-secondary-200 dark:border-secondary-200/20">
+                    <p className="text-4xl font-black bg-primary-600 dark:bg-primary-500 bg-clip-text text-transparent">
                       {progressByPillar[0].value}%
                     </p>
                     <p className="text-[10px] text-gray-500 dark:text-gray-400 uppercase font-bold tracking-widest mt-1">
@@ -649,7 +649,7 @@ export default function StudentDashboard() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6 }}
-            className="bg-white/40 dark:bg-gray-800/40 backdrop-blur-xl rounded-[2rem] p-8 shadow-xl border border-white/60 dark:border-gray-700/50 cursor-default"
+            className="bg-white/40 dark:bg-gray-800/40 backdrop-blur-xl rounded-[2rem] p-8 shadow-xl border border-white/60 dark:border-secondary-200/20/50 cursor-default"
           >
             <h3 className="text-xl font-black text-gray-800 dark:text-white flex items-center gap-3 mb-6 tracking-tight">
               <div className="p-2.5 bg-gradient-to-br from-accent-500 to-amber-500 text-white rounded-xl shadow-md">
@@ -662,22 +662,22 @@ export default function StudentDashboard() {
                 <motion.div
                   key={rec.videoId}
                   whileHover={{ scale: 1.03, y: -2 }}
-                  className="flex items-center gap-4 p-5 bg-gradient-to-br from-white to-primary-50/50 dark:from-gray-800 dark:to-primary-900/20 rounded-2xl border border-white dark:border-gray-700 cursor-pointer shadow-[0_4px_15px_rgb(0,0,0,0.05)] hover:shadow-[0_10px_25px_rgb(99,102,241,0.15)] transition-all group"
+                  className="flex items-center gap-4 p-5 bg-gradient-to-br from-white to-primary-50/50 dark:from-gray-800 dark:to-primary-900/20 rounded-2xl border border-white dark:border-secondary-200/20 cursor-pointer shadow-[0_4px_15px_rgb(0,0,0,0.05)] hover:shadow-[0_10px_25px_rgb(99,102,241,0.15)] transition-all group"
                   onClick={() => navigate(`/student/video/${rec.videoId}`)}
                 >
-                  <div className="w-14 h-14 bg-gradient-to-br from-primary-100 to-primary-200 dark:from-primary-900/60 dark:to-primary-800/60 rounded-2xl flex items-center justify-center text-primary-600 dark:text-primary-300 shadow-inner group-hover:rotate-12 transition-transform">
+                  <div className="w-14 h-14 bg-gradient-to-br from-primary-100 to-primary-200 dark:from-primary-900/60 dark:to-primary-800/60 rounded-2xl flex items-center justify-center text-primary-500 dark:text-primary-300 shadow-inner group-hover:rotate-12 transition-transform">
                     <PlayCircle className="w-7 h-7" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="font-bold text-gray-800 dark:text-white truncate group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
+                    <p className="font-bold text-gray-800 dark:text-white truncate group-hover:text-primary-600 dark:group-hover:text-primary-500 transition-colors">
                       {escapeText(untrusted(rec.title))}
                     </p>
                     <p className="text-[11px] text-gray-500 dark:text-gray-400 font-medium uppercase mt-0.5 tracking-wider">
                       {rec.pillarName} • {formatDuration(rec.duration)}
                     </p>
                   </div>
-                  <div className="w-8 h-8 rounded-full bg-primary-50 dark:bg-gray-700 flex items-center justify-center group-hover:bg-primary-600 group-hover:text-white transition-colors">
-                      <ChevronRight className="w-4 h-4 text-primary-400 group-hover:text-white" />
+                  <div className="w-8 h-8 rounded-full bg-secondary-50 dark:bg-gray-700 flex items-center justify-center group-hover:bg-primary-600 dark:hover:bg-primary-600 group-hover:text-white transition-colors">
+                      <ChevronRight className="w-4 h-4 text-primary-500 group-hover:text-white" />
                   </div>
                 </motion.div>
               ))}
@@ -692,7 +692,7 @@ export default function StudentDashboard() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.7 }}
-            className="bg-white/40 dark:bg-gray-800/40 backdrop-blur-xl rounded-[2rem] p-7 shadow-xl border border-white/60 dark:border-gray-700/50"
+            className="bg-white/40 dark:bg-gray-800/40 backdrop-blur-xl rounded-[2rem] p-7 shadow-xl border border-white/60 dark:border-secondary-200/20/50"
           >
             <div className="flex items-center justify-between mb-6">
               <h3 className="text-xl font-black text-gray-800 dark:text-white flex items-center gap-3 tracking-tight">
@@ -703,14 +703,14 @@ export default function StudentDashboard() {
               </h3>
               <button
                 onClick={() => navigate("/student/learning")}
-                className="text-sm text-primary-600 dark:text-primary-400 font-bold hover:text-primary-800 dark:hover:text-primary-300 flex items-center gap-1 group"
+                className="text-sm text-primary-500 dark:text-primary-500 font-bold hover:text-secondary-100 dark:hover:text-primary-300 flex items-center gap-1 group"
               >
                 Tout voir <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </button>
             </div>
 
             {recentVideos.length === 0 ? (
-              <div className="text-center py-12 bg-white/50 dark:bg-gray-800/50 rounded-2xl border border-dashed border-gray-200 dark:border-gray-700">
+              <div className="text-center py-12 bg-white/50 dark:bg-gray-800/50 rounded-2xl border border-dashed border-secondary-200 dark:border-secondary-200/20">
                 <Video className="w-14 h-14 text-gray-300 dark:text-gray-600 mx-auto mb-4" />
                 <p className="text-gray-500 dark:text-gray-400 font-medium tracking-wide">
                   Aucune vidéo visionnée récemment.
@@ -722,10 +722,10 @@ export default function StudentDashboard() {
                   <motion.div
                     key={video.id}
                     whileHover={{ scale: 1.02 }}
-                    className="flex items-center gap-4 p-4 rounded-2xl bg-white/60 dark:bg-gray-800/60 hover:bg-white/90 dark:hover:bg-gray-700/80 transition-all cursor-pointer border border-white/50 dark:border-gray-700 shadow-sm hover:shadow-md group"
+                    className="flex items-center gap-4 p-4 rounded-2xl bg-white/60 dark:bg-gray-800/60 hover:bg-white/90 dark:hover:bg-gray-700/80 transition-all cursor-pointer border border-secondary-200 dark:border-secondary-200/20 shadow-sm hover:shadow-md group"
                     onClick={() => navigate(`/student/video/${video.id}`)}
                   >
-                    <div className="w-24 h-16 bg-gradient-to-br from-primary-100 to-primary-200 dark:from-primary-900/50 dark:to-primary-800/50 rounded-xl overflow-hidden flex-shrink-0 flex items-center justify-center border border-primary-100/50 dark:border-primary-800/50">
+                    <div className="w-24 h-16 bg-gradient-to-br from-primary-100 to-primary-200 dark:from-primary-900/50 dark:to-primary-800/50 rounded-xl overflow-hidden flex-shrink-0 flex items-center justify-center border border-secondary-200/50 dark:border-primary-800/50">
                       {video.thumbnail_url ? (
                         <img
                           src={video.thumbnail_url}
@@ -734,11 +734,11 @@ export default function StudentDashboard() {
                           loading="lazy"
                         />
                       ) : (
-                        <PlayCircle className="w-8 h-8 text-primary-400 dark:text-primary-500 group-hover:scale-110 transition-transform" />
+                        <PlayCircle className="w-8 h-8 text-primary-500 dark:text-primary-500 group-hover:scale-110 transition-transform" />
                       )}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <h4 className="font-bold text-gray-800 dark:text-white truncate group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
+                      <h4 className="font-bold text-gray-800 dark:text-white truncate group-hover:text-primary-600 dark:group-hover:text-primary-500 transition-colors">
                         {escapeText(untrusted(video.title))}
                       </h4>
                       <p className="text-[11px] text-gray-500 dark:text-gray-400 uppercase tracking-wider font-semibold mt-1 flex items-center gap-1.5">
@@ -756,7 +756,7 @@ export default function StudentDashboard() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.8 }}
-            className="bg-white/40 dark:bg-gray-800/40 backdrop-blur-xl rounded-[2rem] p-7 shadow-xl border border-white/60 dark:border-gray-700/50"
+            className="bg-white/40 dark:bg-gray-800/40 backdrop-blur-xl rounded-[2rem] p-7 shadow-xl border border-white/60 dark:border-secondary-200/20/50"
           >
             <h3 className="text-xl font-black text-gray-800 dark:text-white flex items-center gap-3 mb-6 tracking-tight">
               <div className="p-2 bg-emerald-100 dark:bg-emerald-900/40 rounded-lg">
@@ -766,7 +766,7 @@ export default function StudentDashboard() {
             </h3>
 
             {upcomingQuizzes.length === 0 ? (
-              <div className="text-center py-12 bg-white/50 dark:bg-gray-800/50 rounded-2xl border border-dashed border-gray-200 dark:border-gray-700">
+              <div className="text-center py-12 bg-white/50 dark:bg-gray-800/50 rounded-2xl border border-dashed border-secondary-200 dark:border-secondary-200/20">
                 <div className="w-20 h-20 bg-emerald-50 dark:bg-emerald-900/20 rounded-full flex items-center justify-center mx-auto mb-4">
                     <Award className="w-10 h-10 text-emerald-300 dark:text-emerald-600" />
                 </div>
@@ -783,7 +783,7 @@ export default function StudentDashboard() {
                     className="flex items-center gap-4 p-4 rounded-2xl bg-gradient-to-r from-emerald-50 to-green-50 dark:from-emerald-900/30 dark:to-green-900/20 border border-emerald-100 dark:border-emerald-800/50 hover:shadow-lg transition-all cursor-pointer group"
                     onClick={() => navigate(`/student/quiz/${quiz.id}`)}
                   >
-                    <div className="w-14 h-14 bg-white dark:bg-gray-800 rounded-xl flex items-center justify-center text-emerald-500 shadow-sm border border-emerald-50 dark:border-gray-700 group-hover:rotate-12 transition-transform">
+                    <div className="w-14 h-14 bg-white dark:bg-gray-800 rounded-xl flex items-center justify-center text-emerald-500 shadow-sm border border-emerald-50 dark:border-secondary-200/20 group-hover:rotate-12 transition-transform">
                       <Award className="w-7 h-7" />
                     </div>
                     <div className="flex-1 min-w-0">

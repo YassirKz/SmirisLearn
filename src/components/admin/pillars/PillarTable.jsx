@@ -59,11 +59,11 @@ export default function PillarTable({ pillars, onEdit, onDelete, isReadOnly }) {
         <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-white/60 dark:bg-slate-900/60 backdrop-blur-2xl rounded-3xl shadow-lg border border-white/50 dark:border-white/5 overflow-hidden"
+            className="bg-white/80 dark:bg-slate-900/40 backdrop-blur-sm rounded-3xl shadow-lg border border-secondary-200 dark:border-secondary-200/20 overflow-hidden"
         >
             <div className="overflow-x-auto">
                 <table className="w-full min-w-[640px]">
-                    <thead className="bg-white/40 dark:bg-slate-800/40 border-b border-white/50 dark:border-white/5 backdrop-blur-md">
+                    <thead className="bg-white/40 dark:bg-slate-800/40 border-b border-secondary-200 dark:border-secondary-200/20 backdrop-blur-md">
                         <tr>
                             <th className="px-6 py-4 text-left text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest min-w-[200px]">
                                 Pilier
@@ -139,7 +139,7 @@ export default function PillarTable({ pillars, onEdit, onDelete, isReadOnly }) {
                                                 whileHover={{ scale: 1.1 }}
                                                 whileTap={{ scale: 0.9 }}
                                                 onClick={(e) => handleViewDetails(e, pillar.id)}
-                                                className="p-2 hover:bg-primary-100 dark:hover:bg-primary-900/50 rounded-lg transition-colors text-primary-600 dark:text-primary-400 sm:opacity-0 sm:group-hover:opacity-100"
+                                                className="p-2 hover:bg-secondary-200 dark:hover:bg-primary-900/50 rounded-lg transition-colors text-primary-500 dark:text-primary-500 sm:opacity-0 sm:group-hover:opacity-100"
                                                 title="Voir les détails"
                                             >
                                                 <Eye className="w-4 h-4" />
@@ -151,7 +151,7 @@ export default function PillarTable({ pillars, onEdit, onDelete, isReadOnly }) {
                                                         whileHover={{ scale: 1.1 }}
                                                         whileTap={{ scale: 0.9 }}
                                                         onClick={(e) => handleEditClick(e, pillar)}
-                                                        className="p-2 hover:bg-accent-100 dark:hover:bg-accent-900/50 rounded-lg transition-colors text-accent-600 dark:text-accent-400 sm:opacity-0 sm:group-hover:opacity-100"
+                                                        className="p-2 hover:bg-accent-500 text-secondary-900 dark:hover:bg-accent-900/50 rounded-lg transition-colors text-primary-500 dark:text-accent-400 sm:opacity-0 sm:group-hover:opacity-100"
                                                         title="Modifier"
                                                     >
                                                         <Edit className="w-4 h-4" />
@@ -178,7 +178,7 @@ export default function PillarTable({ pillars, onEdit, onDelete, isReadOnly }) {
             </div>
 
             {totalPages > 1 && (
-                <div className="px-6 py-4 border-t border-white/50 dark:border-white/5 flex items-center justify-between bg-white/20 dark:bg-transparent">
+                <div className="px-6 py-4 border-t border-secondary-200 dark:border-secondary-200/20 flex items-center justify-between bg-white/20 dark:bg-transparent">
                     <p className="text-sm text-gray-600 dark:text-gray-400">
                         Page {page} sur {totalPages}
                     </p>
@@ -186,14 +186,14 @@ export default function PillarTable({ pillars, onEdit, onDelete, isReadOnly }) {
                         <button
                             onClick={() => setPage(p => Math.max(1, p - 1))}
                             disabled={page === 1}
-                            className="p-2 border border-white/50 dark:border-white/5 rounded-lg hover:bg-white/40 dark:hover:bg-white/10 disabled:opacity-50 transition-colors shadow-sm bg-white/20 dark:bg-transparent"
+                            className="p-2 border border-secondary-200 dark:border-secondary-200/20 rounded-lg hover:bg-white/40 dark:hover:bg-white/10 disabled:opacity-50 transition-colors shadow-sm bg-white/20 dark:bg-transparent"
                         >
                             <ChevronLeft className="w-5 h-5 text-gray-600 dark:text-gray-400" />
                         </button>
                         <button
                             onClick={() => setPage(p => Math.min(totalPages, p + 1))}
                             disabled={page === totalPages}
-                            className="p-2 border border-white/50 dark:border-white/5 rounded-lg hover:bg-white/40 dark:hover:bg-white/10 disabled:opacity-50 transition-colors shadow-sm bg-white/20 dark:bg-transparent"
+                            className="p-2 border border-secondary-200 dark:border-secondary-200/20 rounded-lg hover:bg-white/40 dark:hover:bg-white/10 disabled:opacity-50 transition-colors shadow-sm bg-white/20 dark:bg-transparent"
                         >
                             <ChevronRight className="w-5 h-5 text-gray-600 dark:text-gray-400" />
                         </button>
@@ -202,4 +202,4 @@ export default function PillarTable({ pillars, onEdit, onDelete, isReadOnly }) {
             )}
         </motion.div>
     );
-}
+}

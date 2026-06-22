@@ -71,15 +71,15 @@ export default function VideoCard({ video, index, onEdit, onDelete, isReadOnly, 
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.05 }}
                 onClick={handleCardClick}
-                className="hover:bg-white/60 dark:hover:bg-slate-700/40 transition-all duration-300 group cursor-pointer border-b border-transparent hover:border-gray-100 dark:hover:border-gray-700/50"
+                className="hover:bg-white/60 dark:hover:bg-slate-700/40 transition-all duration-300 group cursor-pointer border-b border-transparent hover:border-secondary-200 dark:hover:border-gray-700/50"
             >
                 <td className="px-6 py-4">
                     <div className="flex items-center gap-4">
-                        <div className="w-12 h-12 bg-gradient-to-br from-primary-500 to-accent-600 rounded-2xl flex items-center justify-center text-white shadow-lg shadow-primary-500/20 group-hover:scale-105 transition-transform">
+                        <div className="w-12 h-12 bg-primary-600 dark:bg-primary-500 rounded-2xl flex items-center justify-center text-white shadow-lg shadow-primary-500/20 group-hover:scale-105 transition-transform">
                             <Film className="w-5 h-5" />
                         </div>
                         <div>
-                            <p className="font-bold text-gray-800 dark:text-gray-200 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
+                            <p className="font-bold text-gray-800 dark:text-gray-200 group-hover:text-primary-600 dark:group-hover:text-primary-500 transition-colors">
                                 {escapeText(untrusted(video.title))}
                             </p>
                             {video.description && (
@@ -92,7 +92,7 @@ export default function VideoCard({ video, index, onEdit, onDelete, isReadOnly, 
                 </td>
                 <td className="px-6 py-4">
                     <div className="flex items-center gap-2 flex-wrap">
-                        <span className={`px-3 py-1.5 rounded-xl text-xs font-bold uppercase tracking-wider ${pillarColor} shadow-sm border border-black/5 dark:border-white/5`}>
+                        <span className={`px-3 py-1.5 rounded-xl text-xs font-bold uppercase tracking-wider ${pillarColor} shadow-sm border border-black/5 dark:border-secondary-200/20`}>
                             {escapeText(untrusted(video.pillar?.name))}
                         </span>
                         {video.quizzes?.length > 0 && (
@@ -104,7 +104,7 @@ export default function VideoCard({ video, index, onEdit, onDelete, isReadOnly, 
                     </div>
                 </td>
                 <td className="px-6 py-4">
-                    <div className="flex items-center gap-2 text-sm font-medium text-gray-600 dark:text-gray-300 bg-white/50 dark:bg-white/5 w-fit px-3 py-1.5 rounded-lg border border-gray-100 dark:border-gray-700/50">
+                    <div className="flex items-center gap-2 text-sm font-medium text-gray-600 dark:text-gray-300 bg-white/50 dark:bg-slate-900/20 w-fit px-3 py-1.5 rounded-lg border border-secondary-200 dark:border-secondary-200/20/50">
                         <Clock className="w-4 h-4 text-gray-400" />
                         <span>{formatDuration(video.duration)}</span>
                     </div>
@@ -118,7 +118,7 @@ export default function VideoCard({ video, index, onEdit, onDelete, isReadOnly, 
                             whileHover={{ scale: 1.1 }}
                             whileTap={{ scale: 0.9 }}
                             onClick={handleView}
-                            className="p-2.5 bg-white/50 dark:bg-white/5 hover:bg-primary-100 dark:hover:bg-primary-900/50 border border-gray-200 dark:border-gray-700 hover:border-primary-200 dark:hover:border-primary-800/50 rounded-xl transition-all text-primary-600 dark:text-primary-400 sm:opacity-0 sm:group-hover:opacity-100 shadow-sm"
+                            className="p-2.5 bg-white/50 dark:bg-slate-900/20 hover:bg-secondary-200 dark:hover:bg-primary-900/50 border border-secondary-200 dark:border-secondary-200/20 hover:border-secondary-200 dark:hover:border-primary-800/50 rounded-xl transition-all text-primary-500 dark:text-primary-500 sm:opacity-0 sm:group-hover:opacity-100 shadow-sm"
                             title="Voir les détails"
                         >
                             <Eye className="w-4 h-4" />
@@ -130,7 +130,7 @@ export default function VideoCard({ video, index, onEdit, onDelete, isReadOnly, 
                                     whileHover={{ scale: 1.1 }}
                                     whileTap={{ scale: 0.9 }}
                                     onClick={handleEdit}
-                                    className="p-2.5 bg-white/50 dark:bg-white/5 hover:bg-accent-100 dark:hover:bg-accent-900/50 border border-gray-200 dark:border-gray-700 hover:border-accent-200 dark:hover:border-accent-800/50 rounded-xl transition-all text-accent-600 dark:text-accent-400 sm:opacity-0 sm:group-hover:opacity-100 shadow-sm"
+                                    className="p-2.5 bg-white/50 dark:bg-slate-900/20 hover:bg-accent-500 text-secondary-900 dark:hover:bg-accent-900/50 border border-secondary-200 dark:border-secondary-200/20 hover:border-accent-200 dark:hover:border-accent-800/50 rounded-xl transition-all text-primary-500 dark:text-accent-400 sm:opacity-0 sm:group-hover:opacity-100 shadow-sm"
                                     title="Modifier"
                                 >
                                     <Edit className="w-4 h-4" />
@@ -140,7 +140,7 @@ export default function VideoCard({ video, index, onEdit, onDelete, isReadOnly, 
                                     whileHover={{ scale: 1.1 }}
                                     whileTap={{ scale: 0.9 }}
                                     onClick={handleDelete}
-                                    className="p-2.5 bg-white/50 dark:bg-white/5 hover:bg-red-100 dark:hover:bg-red-900/50 border border-gray-200 dark:border-gray-700 hover:border-red-200 dark:hover:border-red-800/50 rounded-xl transition-all text-red-600 dark:text-red-400 sm:opacity-0 sm:group-hover:opacity-100 shadow-sm"
+                                    className="p-2.5 bg-white/50 dark:bg-slate-900/20 hover:bg-red-100 dark:hover:bg-red-900/50 border border-secondary-200 dark:border-secondary-200/20 hover:border-red-200 dark:hover:border-red-800/50 rounded-xl transition-all text-red-600 dark:text-red-400 sm:opacity-0 sm:group-hover:opacity-100 shadow-sm"
                                     title="Supprimer"
                                 >
                                     <Trash2 className="w-4 h-4" />
@@ -161,7 +161,7 @@ export default function VideoCard({ video, index, onEdit, onDelete, isReadOnly, 
             transition={{ delay: index * 0.1 }}
             whileHover={{ y: -5, scale: 1.01 }}
             onClick={handleCardClick}
-            className="bg-white/60 dark:bg-slate-900/60 backdrop-blur-2xl rounded-3xl p-6 shadow-lg hover:shadow-xl border border-white/50 dark:border-white/5 relative overflow-hidden group cursor-pointer transition-all duration-300"
+            className="bg-white/80 dark:bg-slate-900/40 backdrop-blur-sm rounded-3xl p-6 shadow-lg hover:shadow-xl border border-secondary-200 dark:border-secondary-200/20 relative overflow-hidden group cursor-pointer transition-all duration-300"
         >
             {/* Effet de shine */}
             <div className="absolute inset-0 bg-gradient-to-br from-white/40 to-transparent dark:from-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
@@ -175,7 +175,7 @@ export default function VideoCard({ video, index, onEdit, onDelete, isReadOnly, 
             </div>
 
             {/* Miniature placeholder */}
-            <div className="w-full h-40 bg-gradient-to-br from-primary-100 to-accent-100 dark:from-primary-900/40 dark:to-accent-900/40 rounded-2xl mb-5 flex items-center justify-center relative overflow-hidden group-hover:shadow-inner transition-all border border-white/40 dark:border-white/5">
+            <div className="w-full h-40 bg-gradient-to-br from-primary-100 to-accent-100 dark:from-primary-900/40 dark:to-accent-900/40 rounded-2xl mb-5 flex items-center justify-center relative overflow-hidden group-hover:shadow-inner transition-all border border-white/40 dark:border-secondary-200/20">
                 <div className="absolute inset-0 bg-black/5 group-hover:bg-transparent transition-colors" />
                 <div className="w-14 h-14 bg-white/90 dark:bg-gray-800/90 rounded-full flex items-center justify-center shadow-lg transform group-hover:scale-110 transition-transform duration-300">
                     <Play className="w-6 h-6 text-primary-500 ml-1" />
@@ -185,7 +185,7 @@ export default function VideoCard({ video, index, onEdit, onDelete, isReadOnly, 
             {/* Contenu */}
             <div className="space-y-4 relative z-10">
                 <div>
-                    <h3 className="text-lg font-extrabold text-gray-800 dark:text-white mb-1.5 line-clamp-1 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
+                    <h3 className="text-lg font-extrabold text-gray-800 dark:text-white mb-1.5 line-clamp-1 group-hover:text-primary-600 dark:group-hover:text-primary-500 transition-colors">
                         {escapeText(untrusted(video.title))}
                     </h3>
                     {video.description && (
@@ -197,7 +197,7 @@ export default function VideoCard({ video, index, onEdit, onDelete, isReadOnly, 
 
                 <div className="flex items-center justify-between flex-wrap gap-3">
                     <div className="flex items-center gap-2 flex-wrap">
-                        <span className={`px-3 py-1.5 rounded-xl text-xs font-bold uppercase tracking-wider ${pillarColor} shadow-sm border border-black/5 dark:border-white/5`}>
+                        <span className={`px-3 py-1.5 rounded-xl text-xs font-bold uppercase tracking-wider ${pillarColor} shadow-sm border border-black/5 dark:border-secondary-200/20`}>
                             {escapeText(untrusted(video.pillar?.name))}
                         </span>
                         {video.quizzes?.length > 0 && (
@@ -210,8 +210,8 @@ export default function VideoCard({ video, index, onEdit, onDelete, isReadOnly, 
                 </div>
 
                 {/* Actions */}
-                <div className="flex items-center justify-between pt-4 border-t border-gray-100 dark:border-gray-800/50 mt-2">
-                    <span className="text-xs font-medium text-gray-400 dark:text-gray-500 bg-white/50 dark:bg-white/5 px-2 py-1 rounded-lg border border-gray-100 dark:border-gray-700/50 shadow-sm">
+                <div className="flex items-center justify-between pt-4 border-t border-secondary-200 dark:border-secondary-200/20/50 mt-2">
+                    <span className="text-xs font-medium text-gray-400 dark:text-gray-500 bg-white/50 dark:bg-slate-900/20 px-2 py-1 rounded-lg border border-secondary-200 dark:border-secondary-200/20/50 shadow-sm">
                         {formatDate(video.created_at)}
                     </span>
                     
@@ -220,7 +220,7 @@ export default function VideoCard({ video, index, onEdit, onDelete, isReadOnly, 
                             whileHover={{ scale: 1.1 }}
                             whileTap={{ scale: 0.9 }}
                             onClick={handleView}
-                            className="p-2.5 bg-white/50 dark:bg-white/5 hover:bg-primary-100 dark:hover:bg-primary-900/50 border border-gray-200 dark:border-gray-700/50 hover:border-primary-200 dark:hover:border-primary-800/50 rounded-xl transition-all text-primary-600 dark:text-primary-400 shadow-sm"
+                            className="p-2.5 bg-white/50 dark:bg-slate-900/20 hover:bg-secondary-200 dark:hover:bg-primary-900/50 border border-secondary-200 dark:border-secondary-200/20/50 hover:border-secondary-200 dark:hover:border-primary-800/50 rounded-xl transition-all text-primary-500 dark:text-primary-500 shadow-sm"
                             title="Voir les détails"
                         >
                             <Eye className="w-4 h-4" />
@@ -232,7 +232,7 @@ export default function VideoCard({ video, index, onEdit, onDelete, isReadOnly, 
                                     whileHover={{ scale: 1.1 }}
                                     whileTap={{ scale: 0.9 }}
                                     onClick={handleEdit}
-                                    className="p-2.5 bg-white/50 dark:bg-white/5 hover:bg-accent-100 dark:hover:bg-accent-900/50 border border-gray-200 dark:border-gray-700/50 hover:border-accent-200 dark:hover:border-accent-800/50 rounded-xl transition-all text-accent-600 dark:text-accent-400 shadow-sm"
+                                    className="p-2.5 bg-white/50 dark:bg-slate-900/20 hover:bg-accent-500 text-secondary-900 dark:hover:bg-accent-900/50 border border-secondary-200 dark:border-secondary-200/20/50 hover:border-accent-200 dark:hover:border-accent-800/50 rounded-xl transition-all text-primary-500 dark:text-accent-400 shadow-sm"
                                     title="Modifier"
                                 >
                                     <Edit className="w-4 h-4" />
@@ -242,7 +242,7 @@ export default function VideoCard({ video, index, onEdit, onDelete, isReadOnly, 
                                     whileHover={{ scale: 1.1 }}
                                     whileTap={{ scale: 0.9 }}
                                     onClick={handleDelete}
-                                    className="p-2.5 bg-white/50 dark:bg-white/5 hover:bg-red-100 dark:hover:bg-red-900/50 border border-gray-200 dark:border-gray-700/50 hover:border-red-200 dark:hover:border-red-800/50 rounded-xl transition-all text-red-600 dark:text-red-400 shadow-sm"
+                                    className="p-2.5 bg-white/50 dark:bg-slate-900/20 hover:bg-red-100 dark:hover:bg-red-900/50 border border-secondary-200 dark:border-secondary-200/20/50 hover:border-red-200 dark:hover:border-red-800/50 rounded-xl transition-all text-red-600 dark:text-red-400 shadow-sm"
                                     title="Supprimer"
                                 >
                                     <Trash2 className="w-4 h-4" />
@@ -254,4 +254,4 @@ export default function VideoCard({ video, index, onEdit, onDelete, isReadOnly, 
             </div>
         </motion.div>
     );
-}
+}

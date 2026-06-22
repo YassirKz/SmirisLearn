@@ -4,10 +4,10 @@ import { motion } from 'framer-motion';
 export default function PillarSkeleton({ viewMode = 'table' }) {
     if (viewMode === 'table') {
         return (
-            <div className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-2xl shadow-xl border border-indigo-100 dark:border-gray-700 overflow-hidden">
+            <div className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-2xl shadow-xl border border-indigo-100 dark:border-secondary-200/20 overflow-hidden">
                 <div className="overflow-x-auto">
                     <table className="w-full min-w-[640px]">
-                        <thead className="bg-gray-50 dark:bg-gray-900">
+                        <thead className="bg-secondary-50 dark:bg-gray-900">
                             <tr>
                                 {[1, 2, 3, 4, 5].map(i => (
                                     <th key={i} className="px-6 py-4">
@@ -18,7 +18,7 @@ export default function PillarSkeleton({ viewMode = 'table' }) {
                         </thead>
                         <tbody>
                             {[1, 2, 3, 4, 5].map(row => (
-                                <tr key={row} className="border-t border-gray-100 dark:border-gray-700">
+                                <tr key={row} className="border-t border-secondary-200 dark:border-secondary-200/20">
                                     {[1, 2, 3, 4, 5].map(col => (
                                         <td key={col} className="px-6 py-4">
                                             <div className="flex items-center gap-3">
@@ -55,7 +55,7 @@ export default function PillarSkeleton({ viewMode = 'table' }) {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: i * 0.05 }}
-                    className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-indigo-100 dark:border-gray-700"
+                    className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-indigo-100 dark:border-secondary-200/20"
                 >
                     <div className="flex items-start gap-4 mb-4">
                         <div className="w-16 h-16 bg-gray-200 dark:bg-gray-700 rounded-2xl animate-pulse" />
@@ -67,7 +67,7 @@ export default function PillarSkeleton({ viewMode = 'table' }) {
                     
                     <div className="grid grid-cols-3 gap-2 mb-4">
                         {[1, 2, 3].map(j => (
-                            <div key={j} className="text-center p-2 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                            <div key={j} className="text-center p-2 bg-secondary-50 dark:bg-gray-700 rounded-lg">
                                 <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-8 mx-auto mb-2 animate-pulse" />
                                 <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-12 mx-auto animate-pulse" />
                             </div>

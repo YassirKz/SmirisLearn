@@ -242,7 +242,7 @@ export default function QuizList({ isReadOnly = false, orgId: propOrgId, onEdit,
     if (loading && allQuizzes.length === 0) {
         return (
             <div className="flex justify-center py-12">
-                <div className="w-10 h-10 border-4 border-primary-200 dark:border-primary-800 rounded-full border-t-primary-600 dark:border-t-primary-400 animate-spin" />
+                <div className="w-10 h-10 border-4 border-secondary-200 dark:border-primary-800 rounded-full border-t-primary-500-600 dark:border-t-primary-500-400 animate-spin" />
             </div>
         );
     }
@@ -250,11 +250,11 @@ export default function QuizList({ isReadOnly = false, orgId: propOrgId, onEdit,
     return (
         <div className="space-y-6">
             {/* Barre de filtres */}
-            <div className="bg-white/80 dark:bg-slate-900/60 backdrop-blur-xl rounded-3xl p-5 shadow-lg border border-white/50 dark:border-white/5 relative z-30">
+            <div className="bg-white/80 dark:bg-slate-900/60 backdrop-blur-xl rounded-3xl p-5 shadow-lg border border-secondary-200 dark:border-secondary-200/20 relative z-30">
                 <div className="flex flex-col lg:flex-row lg:items-center gap-5">
                     <div className="flex items-center gap-3 px-2 h-11">
-                        <div className="p-2 bg-primary-50 dark:bg-primary-900/30 rounded-xl">
-                            <Filter className="w-5 h-5 text-primary-600 dark:text-primary-400" />
+                        <div className="p-2 bg-secondary-50 dark:bg-primary-900/30 rounded-xl">
+                            <Filter className="w-5 h-5 text-primary-500 dark:text-primary-500" />
                         </div>
                         <h2 className="text-lg font-bold text-gray-800 dark:text-gray-200 uppercase tracking-tight">Filtres</h2>
                     </div>
@@ -270,14 +270,14 @@ export default function QuizList({ isReadOnly = false, orgId: propOrgId, onEdit,
                                     setFilters({ ...filters, search: e.target.value });
                                     setPage(1);
                                 }}
-                                className="w-full pl-11 pr-4 h-11 bg-gray-50 dark:bg-slate-800/80 border border-gray-200 dark:border-gray-700 rounded-xl focus:border-primary-400 dark:focus:border-primary-500 focus:ring-4 focus:ring-primary-100 dark:focus:ring-primary-900/30 dark:text-white transition-all font-medium placeholder:text-gray-400"
+                                className="w-full pl-11 pr-4 h-11 bg-secondary-50 dark:bg-slate-800/80 border border-secondary-200 dark:border-secondary-200/20 rounded-xl focus:border-primary-500 dark:focus:border-secondary-200 focus:ring-4 focus:ring-primary-500/20 dark:focus:ring-primary-900/30 dark:text-white transition-all font-medium placeholder:text-gray-400"
                             />
                         </div>
 
                         <div className="relative" ref={videoFilterRef}>
                             <button
                                 onClick={() => setIsVideoFilterOpen(!isVideoFilterOpen)}
-                                className="w-full sm:w-auto px-4 h-11 bg-gray-50 dark:bg-slate-800/80 border border-gray-200 dark:border-gray-700 rounded-xl focus:border-primary-400 dark:focus:border-primary-500 focus:ring-4 focus:ring-primary-100 dark:focus:ring-primary-900/30 dark:text-white transition-all font-medium min-w-[200px] flex items-center justify-between gap-2"
+                                className="w-full sm:w-auto px-4 h-11 bg-secondary-50 dark:bg-slate-800/80 border border-secondary-200 dark:border-secondary-200/20 rounded-xl focus:border-primary-500 dark:focus:border-secondary-200 focus:ring-4 focus:ring-primary-500/20 dark:focus:ring-primary-900/30 dark:text-white transition-all font-medium min-w-[200px] flex items-center justify-between gap-2"
                             >
                                 <span className="truncate max-w-[150px]">
                                     {filters.video_id === 'all' 
@@ -293,7 +293,7 @@ export default function QuizList({ isReadOnly = false, orgId: propOrgId, onEdit,
                                         initial={{ opacity: 0, y: -10, scale: 0.95 }}
                                         animate={{ opacity: 1, y: 0, scale: 1 }}
                                         exit={{ opacity: 0, y: -10, scale: 0.95 }}
-                                        className="absolute left-0 mt-2 w-full min-w-[200px] bg-white/80 dark:bg-slate-900/80 backdrop-blur-2xl rounded-2xl shadow-xl border border-white/50 dark:border-white/5 py-2 z-50"
+                                        className="absolute left-0 mt-2 w-full min-w-[200px] bg-white/80 dark:bg-slate-900/40 backdrop-blur-2xl rounded-2xl shadow-xl border border-secondary-200 dark:border-secondary-200/20 py-2 z-50"
                                     >
                                         <button
                                             onClick={() => {
@@ -303,7 +303,7 @@ export default function QuizList({ isReadOnly = false, orgId: propOrgId, onEdit,
                                             }}
                                             className={`w-full px-4 py-2.5 text-left text-sm transition-colors
                                                 ${filters.video_id === 'all' 
-                                                    ? 'bg-primary-500/10 text-primary-600 dark:text-primary-400 font-bold' 
+                                                    ? 'bg-primary-600 dark:bg-primary-500/10 text-primary-500 dark:text-primary-500 font-bold' 
                                                     : 'text-gray-600 dark:text-gray-400 hover:bg-white/50 dark:hover:bg-white/10'
                                                 }`}
                                         >
@@ -319,7 +319,7 @@ export default function QuizList({ isReadOnly = false, orgId: propOrgId, onEdit,
                                                 }}
                                                 className={`w-full px-4 py-2.5 text-left text-sm transition-colors truncate
                                                     ${filters.video_id === v.id 
-                                                        ? 'bg-primary-500/10 text-primary-600 dark:text-primary-400 font-bold' 
+                                                        ? 'bg-primary-600 dark:bg-primary-500/10 text-primary-500 dark:text-primary-500 font-bold' 
                                                         : 'text-gray-600 dark:text-gray-400 hover:bg-white/50 dark:hover:bg-white/10'
                                                     }`}
                                             >
@@ -331,12 +331,12 @@ export default function QuizList({ isReadOnly = false, orgId: propOrgId, onEdit,
                             </AnimatePresence>
                         </div>
 
-                        <div className="flex bg-gray-100/80 dark:bg-slate-800/80 p-1.5 rounded-xl shadow-inner border border-gray-200 dark:border-gray-700 h-11 items-center">
+                        <div className="flex bg-gray-100/80 dark:bg-slate-800/80 p-1.5 rounded-xl shadow-inner border border-secondary-200 dark:border-secondary-200/20 h-11 items-center">
                             <button
                                 onClick={() => setFilters({ ...filters, sortOrder: 'desc' })}
                                 className={`p-2 rounded-lg transition-all ${
                                     filters.sortOrder === 'desc'
-                                        ? 'bg-white dark:bg-gray-700 text-primary-600 dark:text-primary-400 shadow-md'
+                                        ? 'bg-white dark:bg-gray-700 text-primary-500 dark:text-primary-500 shadow-md'
                                         : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'
                                 }`}
                                 title="Plus récents"
@@ -347,7 +347,7 @@ export default function QuizList({ isReadOnly = false, orgId: propOrgId, onEdit,
                                 onClick={() => setFilters({ ...filters, sortOrder: 'asc' })}
                                 className={`p-2 rounded-lg transition-all ${
                                     filters.sortOrder === 'asc'
-                                        ? 'bg-white dark:bg-gray-700 text-primary-600 dark:text-primary-400 shadow-md'
+                                        ? 'bg-white dark:bg-gray-700 text-primary-500 dark:text-primary-500 shadow-md'
                                         : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'
                                 }`}
                                 title="Plus anciens"
@@ -360,7 +360,7 @@ export default function QuizList({ isReadOnly = false, orgId: propOrgId, onEdit,
                             whileHover={{ rotate: 180 }}
                             transition={{ duration: 0.3 }}
                             onClick={handleRefresh}
-                            className="w-11 h-11 flex items-center justify-center bg-white dark:bg-slate-800 border border-gray-200 dark:border-gray-700 hover:border-primary-300 dark:hover:border-primary-500 rounded-xl shadow-sm transition-all shrink-0"
+                            className="w-11 h-11 flex items-center justify-center bg-white dark:bg-slate-900/40 border border-secondary-200 dark:border-secondary-200/20 hover:border-secondary-200 dark:hover:border-secondary-200 rounded-xl shadow-sm transition-all shrink-0"
                             title="Actualiser"
                             disabled={loading && allQuizzes.length === 0}
                         >
@@ -372,9 +372,9 @@ export default function QuizList({ isReadOnly = false, orgId: propOrgId, onEdit,
                                 whileHover={{ scale: 1.05 }}
                                 whileTap={{ scale: 0.95 }}
                                 onClick={() => onCreate?.()}
-                                className="group px-6 h-11 bg-gradient-to-r from-primary-600 to-accent-600 hover:from-primary-500 hover:to-accent-500 text-white rounded-xl shadow-lg shadow-primary-500/25 hover:shadow-xl hover:shadow-primary-500/40 transition-all flex items-center justify-center gap-3 font-bold border border-white/10 shrink-0 w-full sm:w-auto"
+                                className="group px-6 h-11 bg-primary-600 dark:bg-primary-500 hover:from-primary-500 hover:to-accent-500 text-white rounded-xl shadow-lg shadow-primary-500/25 hover:shadow-xl hover:shadow-primary-500/40 transition-all flex items-center justify-center gap-3 font-bold border border-secondary-200/30 shrink-0 w-full sm:w-auto"
                             >
-                                <div className="p-1 bg-white/20 rounded-lg group-hover:bg-white/30 transition-colors">
+                                <div className="p-1 bg-white/20 rounded-lg group-hover:bg-slate-900/30 transition-colors">
                                     <Plus className="w-4 h-4" />
                                 </div>
                                 Nouveau
@@ -389,12 +389,12 @@ export default function QuizList({ isReadOnly = false, orgId: propOrgId, onEdit,
                 <motion.div 
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="bg-white/80 dark:bg-slate-900/60 backdrop-blur-xl rounded-3xl p-16 shadow-xl border border-white/50 dark:border-white/5 text-center relative overflow-hidden"
+                    className="bg-white/80 dark:bg-slate-900/60 backdrop-blur-xl rounded-3xl p-16 shadow-xl border border-secondary-200 dark:border-secondary-200/20 text-center relative overflow-hidden"
                 >
-                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-primary-500/5 dark:bg-primary-500/10 rounded-full blur-3xl pointer-events-none" />
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-primary-600 dark:bg-primary-500/5 dark:bg-primary-600 dark:bg-primary-500/10 rounded-full blur-3xl pointer-events-none" />
                     
                     <div className="relative z-10">
-                        <div className="w-24 h-24 bg-gray-50 dark:bg-slate-800 rounded-full flex items-center justify-center mx-auto mb-6 shadow-inner border border-gray-100 dark:border-gray-700">
+                        <div className="w-24 h-24 bg-secondary-50 dark:bg-slate-800 rounded-full flex items-center justify-center mx-auto mb-6 shadow-inner border border-secondary-200 dark:border-secondary-200/20">
                             <Award className="w-12 h-12 text-gray-300 dark:text-gray-600" />
                         </div>
                         <h3 className="text-xl font-bold text-gray-800 dark:text-gray-200 mb-3">
@@ -406,10 +406,10 @@ export default function QuizList({ isReadOnly = false, orgId: propOrgId, onEdit,
                     </div>
                 </motion.div>
             ) : (
-                <div className="bg-white/80 dark:bg-slate-900/60 backdrop-blur-xl rounded-3xl shadow-xl border border-white/50 dark:border-white/5 overflow-hidden transition-all duration-300 relative">
+                <div className="bg-white/80 dark:bg-slate-900/60 backdrop-blur-xl rounded-3xl shadow-xl border border-secondary-200 dark:border-secondary-200/20 overflow-hidden transition-all duration-300 relative">
                     <div className="overflow-x-auto">
                         <table className="w-full min-w-[800px]">
-                            <thead className="bg-gray-50/80 dark:bg-slate-800/80 backdrop-blur-md border-b border-gray-100 dark:border-gray-700/50">
+                            <thead className="bg-secondary-50/80 dark:bg-slate-800/80 backdrop-blur-md border-b border-secondary-200 dark:border-secondary-200/20/50">
                                 <tr>
                                     <th className="px-6 py-5 text-left text-xs font-black text-gray-500 dark:text-gray-400 uppercase tracking-widest whitespace-nowrap w-2">Vidéo / Pilier</th>
                                     <th className="px-6 py-5 text-center text-xs font-black text-gray-500 dark:text-gray-400 uppercase tracking-widest whitespace-nowrap w-24">Questions</th>
@@ -429,11 +429,11 @@ export default function QuizList({ isReadOnly = false, orgId: propOrgId, onEdit,
                                     >
                                         <td className="px-6 py-4">
                                             <div className="flex items-center gap-4">
-                                                <div className="w-12 h-12 bg-gradient-to-br from-primary-50 to-accent-50 dark:from-primary-900/20 dark:to-accent-900/20 rounded-2xl flex items-center justify-center text-primary-500 dark:text-primary-400 shadow-sm border border-primary-100/50 dark:border-primary-800/30 group-hover:scale-105 transition-transform">
+                                                <div className="w-12 h-12 bg-gradient-to-br from-primary-50 to-accent-50 dark:from-primary-900/20 dark:to-accent-900/20 rounded-2xl flex items-center justify-center text-primary-500 dark:text-primary-500 shadow-sm border border-secondary-200/50 dark:border-primary-800/30 group-hover:scale-105 transition-transform">
                                                     <Award className="w-6 h-6" />
                                                 </div>
                                                 <div>
-                                                    <div className="font-bold text-gray-800 dark:text-gray-200 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
+                                                    <div className="font-bold text-gray-800 dark:text-gray-200 group-hover:text-primary-600 dark:group-hover:text-primary-500 transition-colors">
                                                         {escapeText(untrusted(group.video?.title || 'Vidéo inconnue'))}
                                                     </div>
                                                     <div className="text-xs font-medium text-gray-500 dark:text-gray-400 mt-1">
@@ -444,7 +444,7 @@ export default function QuizList({ isReadOnly = false, orgId: propOrgId, onEdit,
                                         </td>
                                         <td className="px-6 py-4 text-center">
                                             <div className="flex flex-col items-center gap-1">
-                                                <span className="inline-flex items-center justify-center px-3 py-1.5 bg-primary-50 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 rounded-xl text-xs font-bold border border-primary-200/50 dark:border-primary-800/50 shadow-sm">
+                                                <span className="inline-flex items-center justify-center px-3 py-1.5 bg-secondary-50 dark:bg-primary-900/30 text-secondary-900 dark:text-primary-300 rounded-xl text-xs font-bold border border-secondary-200/50 dark:border-primary-800/50 shadow-sm">
                                                     {group.totalQuestions} QS
                                                 </span>
                                                 <span className="text-[10px] font-bold text-amber-600 dark:text-amber-400 uppercase tracking-tighter">
@@ -485,7 +485,7 @@ export default function QuizList({ isReadOnly = false, orgId: propOrgId, onEdit,
                                                     whileHover={{ scale: 1.05 }}
                                                     whileTap={{ scale: 0.95 }}
                                                     onClick={() => navigate(`/admin/videos/${group.videoId}`)}
-                                                    className="flex items-center gap-2 px-4 py-2 bg-primary-50 dark:bg-primary-900/20 text-primary-600 dark:text-primary-400 text-xs font-bold rounded-xl border border-primary-200/50 dark:border-primary-800/50 hover:bg-primary-100 dark:hover:bg-primary-900/40 transition-all shadow-sm"
+                                                    className="flex items-center gap-2 px-4 py-2 bg-secondary-50 dark:bg-primary-900/20 text-primary-500 dark:text-primary-500 text-xs font-bold rounded-xl border border-secondary-200/50 dark:border-primary-800/50 hover:bg-secondary-200 dark:hover:bg-primary-900/40 transition-all shadow-sm"
                                                 >
                                                     <Eye className="w-3.5 h-3.5" />
                                                     Gérer
@@ -499,7 +499,7 @@ export default function QuizList({ isReadOnly = false, orgId: propOrgId, onEdit,
                     </div>
 
                     {totalPages > 1 && (
-                        <div className="px-6 py-4 bg-gray-50/50 dark:bg-slate-800/50 border-t border-gray-100 dark:border-gray-700/50 flex items-center justify-between">
+                        <div className="px-6 py-4 bg-secondary-50/50 dark:bg-slate-800/50 border-t border-secondary-200 dark:border-secondary-200/20/50 flex items-center justify-between">
                             <p className="text-sm font-medium text-gray-500 dark:text-gray-400">
                                 Page {page} sur {totalPages}
                             </p>
@@ -509,7 +509,7 @@ export default function QuizList({ isReadOnly = false, orgId: propOrgId, onEdit,
                                     whileTap={{ scale: 0.95 }}
                                     onClick={() => setPage(p => Math.max(1, p-1))}
                                     disabled={page === 1}
-                                    className="p-2.5 bg-white dark:bg-slate-800 border border-gray-200 dark:border-gray-700 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50 disabled:hover:bg-white dark:disabled:hover:bg-slate-800 shadow-sm transition-all"
+                                    className="p-2.5 bg-white dark:bg-slate-900/40 border border-secondary-200 dark:border-secondary-200/20 rounded-xl hover:bg-secondary-50 dark:hover:bg-gray-700 disabled:opacity-50 disabled:hover:bg-white dark:disabled:hover:bg-slate-800 shadow-sm transition-all"
                                 >
                                     <ChevronLeft className="w-5 h-5 text-gray-600 dark:text-gray-400" />
                                 </motion.button>
@@ -518,7 +518,7 @@ export default function QuizList({ isReadOnly = false, orgId: propOrgId, onEdit,
                                     whileTap={{ scale: 0.95 }}
                                     onClick={() => setPage(p => Math.min(totalPages, p+1))}
                                     disabled={page === totalPages}
-                                    className="p-2.5 bg-white dark:bg-slate-800 border border-gray-200 dark:border-gray-700 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50 disabled:hover:bg-white dark:disabled:hover:bg-slate-800 shadow-sm transition-all"
+                                    className="p-2.5 bg-white dark:bg-slate-900/40 border border-secondary-200 dark:border-secondary-200/20 rounded-xl hover:bg-secondary-50 dark:hover:bg-gray-700 disabled:opacity-50 disabled:hover:bg-white dark:disabled:hover:bg-slate-800 shadow-sm transition-all"
                                 >
                                     <ChevronRight className="w-5 h-5 text-gray-600 dark:text-gray-400" />
                                 </motion.button>

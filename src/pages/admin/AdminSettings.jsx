@@ -277,7 +277,7 @@ export default function AdminSettings() {
                     <motion.div 
                         initial={{ opacity: 0, scale: 0.9 }}
                         animate={{ opacity: 1, scale: 1 }}
-                        className="bg-white/80 dark:bg-slate-900/60 backdrop-blur-xl rounded-3xl p-8 shadow-2xl border border-white/50 dark:border-white/5 flex flex-col items-center gap-4"
+                        className="bg-white/80 dark:bg-slate-900/60 backdrop-blur-xl rounded-3xl p-8 shadow-2xl border border-secondary-200 dark:border-secondary-200/20 flex flex-col items-center gap-4"
                     >
                         <RefreshCw className="w-10 h-10 text-primary-500 animate-spin" />
                         <p className="text-sm font-bold text-gray-500 dark:text-gray-400">Chargement des paramètres...</p>
@@ -295,9 +295,9 @@ export default function AdminSettings() {
                 className="space-y-8"
             >
                 {/* En-tête avec Glassmorphism */}
-                <div className="relative bg-white/60 dark:bg-slate-900/60 backdrop-blur-2xl rounded-3xl p-8 sm:p-10 shadow-lg border border-white/50 dark:border-white/5 overflow-hidden">
+                <div className="relative bg-white/80 dark:bg-slate-900/40 backdrop-blur-sm rounded-3xl p-8 sm:p-10 shadow-lg border border-secondary-200 dark:border-secondary-200/20 overflow-hidden">
                     {/* Background Glows */}
-                    <div className="absolute top-0 right-0 w-64 h-64 bg-primary-500/10 dark:bg-primary-500/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none" />
+                    <div className="absolute top-0 right-0 w-64 h-64 bg-primary-600 dark:bg-primary-500/10 dark:bg-primary-600 dark:bg-primary-500/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none" />
                     <div className="absolute bottom-0 left-0 w-64 h-64 bg-title-500/10 dark:bg-title-500/20 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2 pointer-events-none" />
                     
                     <div className="relative z-10 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
@@ -307,7 +307,7 @@ export default function AdminSettings() {
                                     initial={{ scale: 0, opacity: 0 }}
                                     animate={{ scale: 1, opacity: 1 }}
                                     transition={{ type: "spring", stiffness: 200, damping: 20, delay: 0.1 }}
-                                    className="p-3 bg-gradient-to-br from-primary-500 to-accent-600 rounded-2xl shadow-lg shadow-primary-500/30"
+                                    className="p-3 bg-primary-600 dark:bg-primary-500 rounded-2xl shadow-lg shadow-sm"
                                 >
                                     <Settings className="w-8 h-8 text-white" />
                                 </motion.div>
@@ -315,7 +315,7 @@ export default function AdminSettings() {
                                     initial={{ opacity: 0, x: -20 }}
                                     animate={{ opacity: 1, x: 0 }}
                                     transition={{ delay: 0.2 }}
-                                    className="px-4 py-1.5 bg-white/50 dark:bg-white/5 border border-white/50 dark:border-white/5 rounded-full text-sm font-bold text-primary-700 dark:text-primary-300 shadow-sm flex items-center gap-2 w-fit"
+                                    className="px-4 py-1.5 bg-white/50 dark:bg-slate-900/20 border border-secondary-200 dark:border-secondary-200/20 rounded-full text-sm font-bold text-secondary-900 dark:text-primary-300 shadow-sm flex items-center gap-2 w-fit"
                                 >
                                     <Sparkles className="w-4 h-4" />
                                     Paramètres
@@ -374,15 +374,15 @@ export default function AdminSettings() {
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.1 }}
-                            className="bg-white/60 dark:bg-slate-900/60 backdrop-blur-2xl rounded-3xl p-8 shadow-lg border border-white/50 dark:border-white/5 relative overflow-hidden group"
+                            className="bg-white/80 dark:bg-slate-900/40 backdrop-blur-sm rounded-3xl p-8 shadow-lg border border-secondary-200 dark:border-secondary-200/20 relative overflow-hidden group"
                         >
                             {/* Glow Effect */}
-                            <div className="absolute top-0 right-0 w-64 h-64 bg-primary-500/5 dark:bg-primary-500/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none group-hover:bg-primary-500/10 dark:group-hover:bg-primary-500/20 transition-colors duration-500" />
+                            <div className="absolute top-0 right-0 w-64 h-64 bg-primary-600 dark:bg-primary-500/5 dark:bg-primary-600 dark:bg-primary-500/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none group-hover:bg-secondary-200/10 dark:group-hover:bg-secondary-200/20 transition-colors duration-500" />
                             
                             <div className="relative z-10">
                                 <h2 className="text-xl font-bold text-gray-800 dark:text-white mb-6 flex items-center gap-3">
-                                    <div className="p-2.5 bg-primary-50 dark:bg-primary-900/30 rounded-xl">
-                                        <Building className="w-6 h-6 text-primary-600 dark:text-primary-400" />
+                                    <div className="p-2.5 bg-secondary-50 dark:bg-primary-900/30 rounded-xl">
+                                        <Building className="w-6 h-6 text-primary-500 dark:text-primary-500" />
                                     </div>
                                     Informations générales
                                 </h2>
@@ -400,10 +400,10 @@ export default function AdminSettings() {
                                     className="dark:bg-gray-700 dark:text-white dark:border-gray-600"
                                 />
 
-                                <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-xl">
+                                <div className="bg-secondary-50 dark:bg-gray-700 p-4 rounded-xl">
                                     <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">Email de l'organisation</p>
                                     <p className="text-lg font-medium text-gray-800 dark:text-white flex items-center gap-2">
-                                        <Mail className="w-4 h-4 text-primary-600 dark:text-primary-400" />
+                                        <Mail className="w-4 h-4 text-primary-500 dark:text-primary-500" />
                                         {settings.companyEmail}
                                     </p>
                                     <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
@@ -429,21 +429,21 @@ export default function AdminSettings() {
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.2 }}
-                            className="bg-white/60 dark:bg-slate-900/60 backdrop-blur-2xl rounded-3xl p-8 shadow-lg border border-white/50 dark:border-white/5 relative overflow-hidden group"
+                            className="bg-white/80 dark:bg-slate-900/40 backdrop-blur-sm rounded-3xl p-8 shadow-lg border border-secondary-200 dark:border-secondary-200/20 relative overflow-hidden group"
                         >
                             {/* Glow Effect */}
-                            <div className="absolute top-0 right-0 w-64 h-64 bg-primary-500/5 dark:bg-primary-500/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none group-hover:bg-primary-500/10 dark:group-hover:bg-primary-500/20 transition-colors duration-500" />
+                            <div className="absolute top-0 right-0 w-64 h-64 bg-primary-600 dark:bg-primary-500/5 dark:bg-primary-600 dark:bg-primary-500/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none group-hover:bg-secondary-200/10 dark:group-hover:bg-secondary-200/20 transition-colors duration-500" />
                             
                             <div className="relative z-10">
                                 <h2 className="text-xl font-bold text-gray-800 dark:text-white mb-6 flex items-center gap-3">
-                                    <div className="p-2.5 bg-primary-50 dark:bg-primary-900/30 rounded-xl">
-                                        <Bell className="w-6 h-6 text-primary-600 dark:text-primary-400" />
+                                    <div className="p-2.5 bg-secondary-50 dark:bg-primary-900/30 rounded-xl">
+                                        <Bell className="w-6 h-6 text-primary-500 dark:text-primary-500" />
                                     </div>
                                     Notifications
                                 </h2>
 
                             <div className="space-y-3">
-                                <label className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-xl cursor-pointer hover:bg-primary-50 dark:hover:bg-gray-600 transition-colors">
+                                <label className="flex items-center justify-between p-3 bg-secondary-50 dark:bg-gray-700 rounded-xl cursor-pointer hover:bg-secondary-200 dark:hover:bg-gray-600 transition-colors">
                                     <div>
                                         <p className="font-medium text-gray-700 dark:text-gray-300">Notifications par email</p>
                                         <p className="text-xs text-gray-500 dark:text-gray-400">Recevoir des alertes pour les activités importantes</p>
@@ -456,7 +456,7 @@ export default function AdminSettings() {
                                             className="sr-only"
                                         />
                                         <div className={`w-12 h-6 rounded-full transition-colors ${
-                                            settings.emailNotifications ? 'bg-primary-600' : 'bg-gray-300 dark:bg-gray-600'
+                                            settings.emailNotifications ? 'bg-primary-600 dark:bg-primary-500' : 'bg-gray-300 dark:bg-gray-600'
                                         }`}>
                                             <div className={`w-5 h-5 bg-white rounded-full shadow transform transition-transform ${
                                                 settings.emailNotifications ? 'translate-x-6' : 'translate-x-1'
@@ -472,12 +472,12 @@ export default function AdminSettings() {
                                             { key: 'videoUploaded', label: 'Nouvelle vidéo publiée' },
                                             { key: 'quizCompleted', label: 'Quiz terminé par un étudiant' }
                                         ].map(item => (
-                                            <label key={item.key} className="flex items-center gap-2 p-2 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg">
+                                            <label key={item.key} className="flex items-center gap-2 p-2 hover:bg-secondary-50 dark:hover:bg-gray-700 rounded-lg">
                                                 <input
                                                     type="checkbox"
                                                     checked={settings[item.key]}
                                                     onChange={(e) => setSettings({...settings, [item.key]: e.target.checked})}
-                                                    className="rounded text-primary-600 dark:bg-gray-700 dark:border-gray-600"
+                                                    className="rounded text-primary-500 dark:bg-gray-700 dark:border-gray-600"
                                                     disabled={isReadOnly}
                                                 />
                                                 <span className="text-sm text-gray-600 dark:text-gray-300">{item.label}</span>
@@ -493,15 +493,15 @@ export default function AdminSettings() {
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.3 }}
-                            className="bg-white/60 dark:bg-slate-900/60 backdrop-blur-2xl rounded-3xl p-8 shadow-lg border border-white/50 dark:border-white/5 relative overflow-hidden group"
+                            className="bg-white/80 dark:bg-slate-900/40 backdrop-blur-sm rounded-3xl p-8 shadow-lg border border-secondary-200 dark:border-secondary-200/20 relative overflow-hidden group"
                         >
                             {/* Glow Effect */}
-                            <div className="absolute top-0 right-0 w-64 h-64 bg-primary-500/5 dark:bg-primary-500/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none group-hover:bg-primary-500/10 dark:group-hover:bg-primary-500/20 transition-colors duration-500" />
+                            <div className="absolute top-0 right-0 w-64 h-64 bg-primary-600 dark:bg-primary-500/5 dark:bg-primary-600 dark:bg-primary-500/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none group-hover:bg-secondary-200/10 dark:group-hover:bg-secondary-200/20 transition-colors duration-500" />
                             
                             <div className="relative z-10">
                                 <h2 className="text-xl font-bold text-gray-800 dark:text-white mb-6 flex items-center gap-3">
-                                    <div className="p-2.5 bg-primary-50 dark:bg-primary-900/30 rounded-xl">
-                                        <Globe className="w-6 h-6 text-primary-600 dark:text-primary-400" />
+                                    <div className="p-2.5 bg-secondary-50 dark:bg-primary-900/30 rounded-xl">
+                                        <Globe className="w-6 h-6 text-primary-500 dark:text-primary-500" />
                                     </div>
                                     Apparence
                                 </h2>
@@ -514,8 +514,8 @@ export default function AdminSettings() {
                                             onClick={() => setTheme('light')}
                                             className={`flex-1 p-3 rounded-xl border-2 transition-all ${
                                                 theme === 'light'
-                                                    ? 'border-primary-600 dark:border-primary-400 bg-primary-50 dark:bg-primary-900/30'
-                                                    : 'border-gray-200 dark:border-gray-700 hover:border-primary-200 dark:hover:border-primary-700'
+                                                    ? 'border-secondary-200 dark:border-primary-400 bg-secondary-50 dark:bg-primary-900/30'
+                                                    : 'border-secondary-200 dark:border-secondary-200/20 hover:border-secondary-200 dark:hover:border-primary-700'
                                             }`}
                                         >
                                             <Sun className="w-5 h-5 mx-auto mb-1 text-yellow-500" />
@@ -525,11 +525,11 @@ export default function AdminSettings() {
                                             onClick={() => setTheme('dark')}
                                             className={`flex-1 p-3 rounded-xl border-2 transition-all ${
                                                 theme === 'dark'
-                                                    ? 'border-primary-600 dark:border-primary-400 bg-primary-50 dark:bg-primary-900/30'
-                                                    : 'border-gray-200 dark:border-gray-700 hover:border-primary-200 dark:hover:border-primary-700'
+                                                    ? 'border-secondary-200 dark:border-primary-400 bg-secondary-50 dark:bg-primary-900/30'
+                                                    : 'border-secondary-200 dark:border-secondary-200/20 hover:border-secondary-200 dark:hover:border-primary-700'
                                             }`}
                                         >
-                                            <Moon className="w-5 h-5 mx-auto mb-1 text-primary-600 dark:text-primary-400" />
+                                            <Moon className="w-5 h-5 mx-auto mb-1 text-primary-500 dark:text-primary-500" />
                                             <span className="text-xs dark:text-gray-300">Sombre</span>
                                         </button>
                                     </div>
@@ -542,24 +542,24 @@ export default function AdminSettings() {
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.35 }}
-                            className="bg-white/60 dark:bg-slate-900/60 backdrop-blur-2xl rounded-3xl p-8 shadow-lg border border-white/50 dark:border-white/5 relative overflow-hidden group"
+                            className="bg-white/80 dark:bg-slate-900/40 backdrop-blur-sm rounded-3xl p-8 shadow-lg border border-secondary-200 dark:border-secondary-200/20 relative overflow-hidden group"
                         >
                             {/* Glow Effect */}
-                            <div className="absolute top-0 right-0 w-64 h-64 bg-primary-500/5 dark:bg-primary-500/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none group-hover:bg-primary-500/10 dark:group-hover:bg-primary-500/20 transition-colors duration-500" />
+                            <div className="absolute top-0 right-0 w-64 h-64 bg-primary-600 dark:bg-primary-500/5 dark:bg-primary-600 dark:bg-primary-500/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none group-hover:bg-secondary-200/10 dark:group-hover:bg-secondary-200/20 transition-colors duration-500" />
                             
                             <div className="relative z-10">
                                 <h2 className="text-xl font-bold text-gray-800 dark:text-white mb-6 flex items-center gap-3">
-                                    <div className="p-2.5 bg-primary-50 dark:bg-primary-900/30 rounded-xl">
-                                        <CreditCard className="w-6 h-6 text-primary-600 dark:text-primary-400" />
+                                    <div className="p-2.5 bg-secondary-50 dark:bg-primary-900/30 rounded-xl">
+                                        <CreditCard className="w-6 h-6 text-primary-500 dark:text-primary-500" />
                                     </div>
                                     Abonnement & Facturation
                                 </h2>
 
                             <div className="space-y-6">
                                 {/* Plan Actuel */}
-                                <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700/50 rounded-2xl border border-gray-100 dark:border-gray-700">
+                                <div className="flex items-center justify-between p-4 bg-secondary-50 dark:bg-gray-700/50 rounded-2xl border border-secondary-200 dark:border-secondary-200/20">
                                     <div className="flex items-center gap-4">
-                                        <div className="w-12 h-12 bg-gradient-to-br from-primary-500 to-accent-600 rounded-xl flex items-center justify-center shadow-lg">
+                                        <div className="w-12 h-12 bg-primary-600 dark:bg-primary-500 rounded-xl flex items-center justify-center shadow-lg">
                                             <Sparkles className="w-6 h-6 text-white" />
                                         </div>
                                         <div>
@@ -589,7 +589,7 @@ export default function AdminSettings() {
                                                 createCheckoutSession(import.meta.env.VITE_STRIPE_STARTER_PRICE_ID);
                                             }}
                                             disabled={stripeLoading}
-                                            className="col-span-2 flex items-center justify-center gap-2 p-4 bg-primary-600 hover:bg-primary-700 text-white font-bold rounded-xl shadow-lg transition-all group disabled:opacity-50"
+                                            className="col-span-2 flex items-center justify-center gap-2 p-4 bg-primary-600 dark:bg-primary-500 hover:bg-primary-600 dark:hover:bg-primary-600 text-white font-bold rounded-xl shadow-lg transition-all group disabled:opacity-50"
                                         >
                                             {stripeLoading ? <RefreshCw className="w-5 h-5 animate-spin" /> : <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />}
                                             Passer au plan Starter
@@ -599,7 +599,7 @@ export default function AdminSettings() {
                                             <button
                                                 onClick={createPortalSession}
                                                 disabled={stripeLoading}
-                                                className="flex items-center justify-center gap-2 p-4 bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 font-bold rounded-xl hover:border-primary-500 hover:text-primary-600 dark:hover:text-primary-400 transition-all disabled:opacity-50"
+                                                className="flex items-center justify-center gap-2 p-4 bg-white dark:bg-gray-800 border-2 border-secondary-200 dark:border-secondary-200/20 text-gray-700 dark:text-gray-300 font-bold rounded-xl hover:border-secondary-200 hover:text-primary-600 dark:hover:text-primary-500 transition-all disabled:opacity-50"
                                             >
                                                 {stripeLoading ? <RefreshCw className="w-5 h-5 animate-spin" /> : <History className="w-5 h-5" />}
                                                 Gérer l'abonnement
@@ -607,7 +607,7 @@ export default function AdminSettings() {
                                             <button
                                                 onClick={createPortalSession}
                                                 disabled={stripeLoading}
-                                                className="flex items-center justify-center gap-2 p-4 bg-gray-50 dark:bg-gray-700 text-gray-700 dark:text-gray-300 font-bold rounded-xl hover:bg-gray-100 dark:hover:bg-gray-600 transition-all disabled:opacity-50"
+                                                className="flex items-center justify-center gap-2 p-4 bg-secondary-50 dark:bg-gray-700 text-gray-700 dark:text-gray-300 font-bold rounded-xl hover:bg-gray-100 dark:hover:bg-gray-600 transition-all disabled:opacity-50"
                                             >
                                                 Voir les factures
                                             </button>
@@ -629,15 +629,15 @@ export default function AdminSettings() {
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.4 }}
-                            className="bg-white/60 dark:bg-slate-900/60 backdrop-blur-2xl rounded-3xl p-8 shadow-lg border border-white/50 dark:border-white/5 relative overflow-hidden group"
+                            className="bg-white/80 dark:bg-slate-900/40 backdrop-blur-sm rounded-3xl p-8 shadow-lg border border-secondary-200 dark:border-secondary-200/20 relative overflow-hidden group"
                         >
                             {/* Glow Effect */}
-                            <div className="absolute top-0 right-0 w-64 h-64 bg-primary-500/5 dark:bg-primary-500/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none group-hover:bg-primary-500/10 dark:group-hover:bg-primary-500/20 transition-colors duration-500" />
+                            <div className="absolute top-0 right-0 w-64 h-64 bg-primary-600 dark:bg-primary-500/5 dark:bg-primary-600 dark:bg-primary-500/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none group-hover:bg-secondary-200/10 dark:group-hover:bg-secondary-200/20 transition-colors duration-500" />
                             
                             <div className="relative z-10">
                                 <h2 className="text-xl font-bold text-gray-800 dark:text-white mb-6 flex items-center gap-3">
-                                    <div className="p-2.5 bg-primary-50 dark:bg-primary-900/30 rounded-xl">
-                                        <Lock className="w-6 h-6 text-primary-600 dark:text-primary-400" />
+                                    <div className="p-2.5 bg-secondary-50 dark:bg-primary-900/30 rounded-xl">
+                                        <Lock className="w-6 h-6 text-primary-500 dark:text-primary-500" />
                                     </div>
                                     Sécurité
                                 </h2>
@@ -648,7 +648,7 @@ export default function AdminSettings() {
                                     <button
                                         onClick={() => setIsSessionTimeoutOpen(!isSessionTimeoutOpen)}
                                         disabled={isReadOnly}
-                                        className="w-full p-3 border-2 border-gray-200 dark:border-gray-700 rounded-xl focus:border-primary-400 dark:focus:border-primary-500 focus:ring-4 focus:ring-primary-100 dark:focus:ring-primary-900/30 outline-none transition-all dark:bg-gray-700 dark:text-white flex items-center justify-between gap-2 shadow-sm disabled:opacity-50"
+                                        className="w-full p-3 border-2 border-secondary-200 dark:border-secondary-200/20 rounded-xl focus:border-primary-500 dark:focus:border-secondary-200 focus:ring-4 focus:ring-primary-500/20 dark:focus:ring-primary-900/30 outline-none transition-all dark:bg-gray-700 dark:text-white flex items-center justify-between gap-2 shadow-sm disabled:opacity-50"
                                     >
                                         <span>
                                             {[
@@ -668,7 +668,7 @@ export default function AdminSettings() {
                                                 initial={{ opacity: 0, y: -10, scale: 0.95 }}
                                                 animate={{ opacity: 1, y: 0, scale: 1 }}
                                                 exit={{ opacity: 0, y: -10, scale: 0.95 }}
-                                                className="absolute left-0 mt-2 w-full bg-white/80 dark:bg-slate-900/80 backdrop-blur-2xl rounded-2xl shadow-xl border border-white/50 dark:border-white/5 py-2 z-50 overflow-hidden"
+                                                className="absolute left-0 mt-2 w-full bg-white/80 dark:bg-slate-900/40 backdrop-blur-2xl rounded-2xl shadow-xl border border-secondary-200 dark:border-secondary-200/20 py-2 z-50 overflow-hidden"
                                             >
                                                 {[
                                                     { value: '15', label: '15 minutes' },
@@ -685,7 +685,7 @@ export default function AdminSettings() {
                                                         }}
                                                         className={`w-full px-4 py-2.5 text-left text-sm transition-colors
                                                             ${settings.sessionTimeout === opt.value 
-                                                                ? 'bg-primary-500/10 text-primary-600 dark:text-primary-400 font-bold' 
+                                                                ? 'bg-primary-600 dark:bg-primary-500/10 text-primary-500 dark:text-primary-500 font-bold' 
                                                                 : 'text-gray-600 dark:text-gray-400 hover:bg-white/50 dark:hover:bg-white/10'
                                                             }`}
                                                     >
@@ -704,15 +704,15 @@ export default function AdminSettings() {
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.5 }}
-                            className="bg-white/60 dark:bg-slate-900/60 backdrop-blur-2xl rounded-3xl p-8 shadow-lg border border-white/50 dark:border-white/5 relative overflow-hidden group"
+                            className="bg-white/80 dark:bg-slate-900/40 backdrop-blur-sm rounded-3xl p-8 shadow-lg border border-secondary-200 dark:border-secondary-200/20 relative overflow-hidden group"
                         >
                             {/* Glow Effect */}
-                            <div className="absolute top-0 right-0 w-64 h-64 bg-primary-500/5 dark:bg-primary-500/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none group-hover:bg-primary-500/10 dark:group-hover:bg-primary-500/20 transition-colors duration-500" />
+                            <div className="absolute top-0 right-0 w-64 h-64 bg-primary-600 dark:bg-primary-500/5 dark:bg-primary-600 dark:bg-primary-500/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none group-hover:bg-secondary-200/10 dark:group-hover:bg-secondary-200/20 transition-colors duration-500" />
                             
                             <div className="relative z-10">
                                 <h2 className="text-xl font-bold text-gray-800 dark:text-white mb-6 flex items-center gap-3">
-                                    <div className="p-2.5 bg-primary-50 dark:bg-primary-900/30 rounded-xl">
-                                        <Key className="w-6 h-6 text-primary-600 dark:text-primary-400" />
+                                    <div className="p-2.5 bg-secondary-50 dark:bg-primary-900/30 rounded-xl">
+                                        <Key className="w-6 h-6 text-primary-500 dark:text-primary-500" />
                                     </div>
                                     Mot de passe
                                 </h2>
@@ -732,7 +732,7 @@ export default function AdminSettings() {
                                                     ? 'border-red-300 dark:border-red-600 focus:border-red-500 dark:focus:border-red-400'
                                                     : passwordData.current && !passwordErrors.current
                                                         ? 'border-green-300 dark:border-green-600 focus:border-green-500 dark:focus:border-green-400'
-                                                        : 'border-gray-200 dark:border-gray-700 focus:border-primary-400 dark:focus:border-primary-500'
+                                                        : 'border-secondary-200 dark:border-secondary-200/20 focus:border-primary-500 dark:focus:border-secondary-200'
                                             }`}
                                             placeholder="********"
                                         />
@@ -762,7 +762,7 @@ export default function AdminSettings() {
                                                 ? 'border-red-300 dark:border-red-600 focus:border-red-500 dark:focus:border-red-400'
                                                 : passwordData.new && !passwordErrors.new
                                                     ? 'border-green-300 dark:border-green-600 focus:border-green-500 dark:focus:border-green-400'
-                                                    : 'border-gray-200 dark:border-gray-700 focus:border-primary-400 dark:focus:border-primary-500'
+                                                    : 'border-secondary-200 dark:border-secondary-200/20 focus:border-primary-500 dark:focus:border-secondary-200'
                                         }`}
                                         placeholder="********"
                                     />
@@ -784,7 +784,7 @@ export default function AdminSettings() {
                                                 ? 'border-red-300 dark:border-red-600 focus:border-red-500 dark:focus:border-red-400'
                                                 : passwordData.confirm && !passwordErrors.confirm
                                                     ? 'border-green-300 dark:border-green-600 focus:border-green-500 dark:focus:border-green-400'
-                                                    : 'border-gray-200 dark:border-gray-700 focus:border-primary-400 dark:focus:border-primary-500'
+                                                    : 'border-secondary-200 dark:border-secondary-200/20 focus:border-primary-500 dark:focus:border-secondary-200'
                                         }`}
                                         placeholder="********"
                                     />
@@ -798,7 +798,7 @@ export default function AdminSettings() {
                                     disabled={!isPasswordValid || saving}
                                     className={`w-full py-3 rounded-xl font-medium transition-all ${
                                         isPasswordValid && !saving
-                                            ? 'bg-gradient-to-r from-primary-600 to-accent-600 text-white hover:shadow-lg'
+                                            ? 'bg-primary-600 dark:bg-primary-500 text-white hover:shadow-lg'
                                             : 'bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400 cursor-not-allowed'
                                     }`}
                                 >
@@ -820,7 +820,7 @@ export default function AdminSettings() {
                         <button
                             onClick={handleSaveSettings}
                             disabled={saving}
-                            className="px-6 py-3 bg-gradient-to-r from-primary-600 to-accent-600 text-white rounded-xl shadow-lg hover:shadow-xl flex items-center gap-2 group"
+                            className="px-6 py-3 bg-primary-600 dark:bg-primary-500 text-white rounded-xl shadow-lg hover:shadow-xl flex items-center gap-2 group"
                         >
                             {saving ? (
                                 <>

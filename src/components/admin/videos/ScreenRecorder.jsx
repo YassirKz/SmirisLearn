@@ -172,7 +172,7 @@ export default function ScreenRecorder({ orgId, onRecordSuccess, onClose }) {
     return (
         <div className="space-y-6">
 
-            <div className="p-4 bg-gray-50 dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 space-y-3">
+            <div className="p-4 bg-secondary-50 dark:bg-gray-800 rounded-xl border border-secondary-200 dark:border-secondary-200/20 space-y-3">
                 <p className="text-sm text-gray-600 dark:text-gray-300 flex items-center gap-2">
                     <Mic className="w-4 h-4 text-gray-500 dark:text-gray-400" />
                     Sélectionnez l'onglet ou la fenêtre à enregistrer. Votre micro sera également capturé si autorisé.
@@ -211,13 +211,13 @@ export default function ScreenRecorder({ orgId, onRecordSuccess, onClose }) {
                     <div className="mt-3 space-y-2">
                         <div className="flex justify-between text-sm">
                             <span className="text-gray-600 dark:text-gray-300">Importation en cours...</span>
-                            <span className="font-medium text-primary-600 dark:text-primary-400">{progress}%</span>
+                            <span className="font-medium text-primary-500 dark:text-primary-500">{progress}%</span>
                         </div>
                         <div className="h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
                             <motion.div
                                 initial={{ width: 0 }}
                                 animate={{ width: `${progress}%` }}
-                                className="h-full bg-gradient-to-r from-primary-500 to-accent-600"
+                                className="h-full bg-gradient-to-r from-secondary-900 to-primary-500"
                             />
                         </div>
                     </div>

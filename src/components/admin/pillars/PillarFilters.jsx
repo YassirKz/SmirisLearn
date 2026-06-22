@@ -66,7 +66,7 @@ export default function PillarFilters({ filters, onChange }) {
                         value={filters.search}
                         onChange={handleSearchChange}
                         placeholder="Rechercher un pilier..."
-                        className="pl-9 pr-8 py-2.5 border border-gray-200 dark:border-gray-700 rounded-xl focus:outline-none focus:border-primary-400 dark:focus:border-primary-500 focus:ring-4 focus:ring-primary-100 dark:focus:ring-primary-900/30 transition-all w-full sm:w-48 md:w-64 dark:bg-gray-800 dark:text-white"
+                        className="pl-9 pr-8 py-2.5 border border-secondary-200 dark:border-secondary-200/20 rounded-xl focus:outline-none focus:border-primary-500 dark:focus:border-secondary-200 focus:ring-4 focus:ring-primary-500/20 dark:focus:ring-primary-900/30 transition-all w-full sm:w-48 md:w-64 dark:bg-gray-800 dark:text-white"
                     />
                     {filters.search && (
                         <button
@@ -85,7 +85,7 @@ export default function PillarFilters({ filters, onChange }) {
                     onClick={() => setShowFilters(!showFilters)}
                     className={`p-3 rounded-xl transition-all ${
                         showFilters || filters.sortBy !== 'name'
-                            ? 'bg-primary-100 dark:bg-primary-900/30 text-primary-600 dark:text-primary-400'
+                            ? 'bg-accent-500 text-secondary-900 dark:bg-primary-900/30 text-primary-500 dark:text-primary-500'
                             : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
                     }`}
                 >
@@ -105,7 +105,7 @@ export default function PillarFilters({ filters, onChange }) {
                         left: menuPosition.left,
                         zIndex: 999999,
                     }}
-                    className="w-64 bg-white dark:bg-gray-800 rounded-xl shadow-2xl border border-gray-100 dark:border-gray-700 p-4"
+                    className="w-64 bg-white dark:bg-gray-800 rounded-xl shadow-2xl border border-secondary-200 dark:border-secondary-200/20 p-4"
                 >
                     <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">
                         Trier par
@@ -120,7 +120,7 @@ export default function PillarFilters({ filters, onChange }) {
                             <button
                                 key={option.field}
                                 onClick={() => handleSortChange(option.field)}
-                                className="w-full flex items-center justify-between p-2 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors"
+                                className="w-full flex items-center justify-between p-2 hover:bg-secondary-50 dark:hover:bg-gray-700 rounded-lg transition-colors"
                             >
                                 <span className="text-sm text-gray-600 dark:text-gray-300">
                                     {option.label}
@@ -128,7 +128,7 @@ export default function PillarFilters({ filters, onChange }) {
                                 <div className="flex items-center gap-1">
                                     {filters.sortBy === option.field && (
                                         <ArrowUpDown className={`w-3 h-3 ${
-                                            filters.sortOrder === 'asc' ? 'text-primary-600 dark:text-primary-400' : 'text-primary-600 dark:text-primary-400 rotate-180'
+                                            filters.sortOrder === 'asc' ? 'text-primary-500 dark:text-primary-500' : 'text-primary-500 dark:text-primary-500 rotate-180'
                                         }`} />
                                     )}
                                 </div>
@@ -136,7 +136,7 @@ export default function PillarFilters({ filters, onChange }) {
                         ))}
                     </div>
 
-                    <div className="mt-3 pt-3 border-t border-gray-100 dark:border-gray-700">
+                    <div className="mt-3 pt-3 border-t border-secondary-200 dark:border-secondary-200/20">
                         <button
                             onClick={() => {
                                 onChange({
@@ -146,7 +146,7 @@ export default function PillarFilters({ filters, onChange }) {
                                 });
                                 setShowFilters(false);
                             }}
-                            className="text-xs text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300"
+                            className="text-xs text-primary-500 dark:text-primary-500 hover:text-primary-600 dark:hover:text-primary-300"
                         >
                             Réinitialiser
                         </button>

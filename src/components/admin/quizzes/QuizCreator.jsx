@@ -204,7 +204,7 @@ export default function QuizCreator({ quiz, videoId, onSuccess, onCancel }) {
             )}
 
             {/* Sélection vidéo */}
-            <div className="bg-white/50 dark:bg-slate-800/30 p-5 rounded-2xl border border-gray-100 dark:border-gray-700/50">
+            <div className="bg-white/50 dark:bg-slate-800/30 p-5 rounded-2xl border border-secondary-200 dark:border-secondary-200/20/50">
                 <label className="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">
                     Vidéo associée <span className="text-red-500">*</span>
                 </label>
@@ -219,10 +219,10 @@ export default function QuizCreator({ quiz, videoId, onSuccess, onCancel }) {
                         <button
                             type="button"
                             onClick={() => setIsVideoOpen(!isVideoOpen)}
-                            className={`w-full px-4 py-3 bg-white dark:bg-slate-900 border rounded-xl focus:ring-4 outline-none transition-all font-medium flex items-center justify-between gap-2 shadow-sm ${
+                            className={`w-full px-4 py-3 bg-white dark:bg-slate-900/40 border rounded-xl focus:ring-4 outline-none transition-all font-medium flex items-center justify-between gap-2 shadow-sm ${
                                 errors.video_id 
                                 ? 'border-red-300 dark:border-red-500/50 focus:border-red-500 focus:ring-red-100 dark:focus:ring-red-900/30' 
-                                : 'border-gray-200 dark:border-gray-700 focus:border-primary-500 focus:ring-primary-100 dark:focus:ring-primary-900/30'
+                                : 'border-secondary-200 dark:border-secondary-200/20 focus:border-secondary-200 focus:ring-primary-500/20 dark:focus:ring-primary-900/30'
                             }`}
                         >
                             <span className="truncate">
@@ -239,7 +239,7 @@ export default function QuizCreator({ quiz, videoId, onSuccess, onCancel }) {
                                     initial={{ opacity: 0, y: -10, scale: 0.95 }}
                                     animate={{ opacity: 1, y: 0, scale: 1 }}
                                     exit={{ opacity: 0, y: -10, scale: 0.95 }}
-                                    className="absolute left-0 mt-2 w-full bg-white/80 dark:bg-slate-900/80 backdrop-blur-2xl rounded-2xl shadow-xl border border-white/50 dark:border-white/5 py-2 z-50 overflow-hidden max-h-60 overflow-y-auto"
+                                    className="absolute left-0 mt-2 w-full bg-white/80 dark:bg-slate-900/40 backdrop-blur-2xl rounded-2xl shadow-xl border border-secondary-200 dark:border-secondary-200/20 py-2 z-50 overflow-hidden max-h-60 overflow-y-auto"
                                 >
                                     {videos.map(v => (
                                         <button
@@ -251,7 +251,7 @@ export default function QuizCreator({ quiz, videoId, onSuccess, onCancel }) {
                                             }}
                                             className={`w-full px-4 py-2.5 text-left text-sm transition-colors truncate
                                                 ${form.video_id === v.id 
-                                                    ? 'bg-primary-500/10 text-primary-600 dark:text-primary-400 font-bold' 
+                                                    ? 'bg-primary-600 dark:bg-primary-500/10 text-primary-500 dark:text-primary-500 font-bold' 
                                                     : 'text-gray-600 dark:text-gray-400 hover:bg-white/50 dark:hover:bg-white/10'
                                                 }`}
                                         >
@@ -273,7 +273,7 @@ export default function QuizCreator({ quiz, videoId, onSuccess, onCancel }) {
             </div>
 
             {/* Paramètres */}
-            <div className="bg-white/50 dark:bg-slate-800/30 p-5 rounded-2xl border border-gray-100 dark:border-gray-700/50">
+            <div className="bg-white/50 dark:bg-slate-800/30 p-5 rounded-2xl border border-secondary-200 dark:border-secondary-200/20/50">
                 <h3 className="text-sm font-bold text-gray-800 dark:text-gray-200 mb-4 flex items-center gap-2">
                     Paramètres d'évaluation
                 </h3>
@@ -288,10 +288,10 @@ export default function QuizCreator({ quiz, videoId, onSuccess, onCancel }) {
                             max="100"
                             value={form.passing_score}
                             onChange={(e) => setForm(f => ({ ...f, passing_score: e.target.value }))}
-                            className={`w-full px-4 py-3 bg-white dark:bg-slate-900 border rounded-xl focus:ring-4 outline-none transition-all font-medium ${
+                            className={`w-full px-4 py-3 bg-white dark:bg-slate-900/40 border rounded-xl focus:ring-4 outline-none transition-all font-medium ${
                                 errors.passing_score
                                 ? 'border-red-300 dark:border-red-500/50 focus:border-red-500 focus:ring-red-100 dark:focus:ring-red-900/30'
-                                : 'border-gray-200 dark:border-gray-700 focus:border-primary-500 focus:ring-primary-100 dark:focus:ring-primary-900/30'
+                                : 'border-secondary-200 dark:border-secondary-200/20 focus:border-secondary-200 focus:ring-primary-500/20 dark:focus:ring-primary-900/30'
                             }`}
                         />
                         {errors.passing_score && (
@@ -310,7 +310,7 @@ export default function QuizCreator({ quiz, videoId, onSuccess, onCancel }) {
                             value={form.timer_minutes}
                             onChange={(e) => setForm(f => ({ ...f, timer_minutes: e.target.value }))}
                             placeholder="Optionnel"
-                            className="w-full px-4 py-3 bg-white dark:bg-slate-900 border border-gray-200 dark:border-gray-700 rounded-xl focus:border-primary-500 focus:ring-4 focus:ring-primary-100 dark:focus:ring-primary-900/30 outline-none transition-all font-medium placeholder:text-gray-400"
+                            className="w-full px-4 py-3 bg-white dark:bg-slate-900/40 border border-secondary-200 dark:border-secondary-200/20 rounded-xl focus:border-secondary-200 focus:ring-4 focus:ring-primary-500/20 dark:focus:ring-primary-900/30 outline-none transition-all font-medium placeholder:text-gray-400"
                         />
                     </div>
                     <div>
@@ -324,10 +324,10 @@ export default function QuizCreator({ quiz, videoId, onSuccess, onCancel }) {
                             step="1"
                             value={form.max_attempts}
                             onChange={(e) => setForm(f => ({ ...f, max_attempts: e.target.value }))}
-                            className={`w-full px-4 py-3 bg-white dark:bg-slate-900 border rounded-xl focus:ring-4 outline-none transition-all font-medium ${
+                            className={`w-full px-4 py-3 bg-white dark:bg-slate-900/40 border rounded-xl focus:ring-4 outline-none transition-all font-medium ${
                                 errors.max_attempts
                                 ? 'border-red-300 dark:border-red-500/50 focus:border-red-500 focus:ring-red-100 dark:focus:ring-red-900/30'
-                                : 'border-gray-200 dark:border-gray-700 focus:border-primary-500 focus:ring-primary-100 dark:focus:ring-primary-900/30'
+                                : 'border-secondary-200 dark:border-secondary-200/20 focus:border-secondary-200 focus:ring-primary-500/20 dark:focus:ring-primary-900/30'
                             }`}
                         />
                         {errors.max_attempts && (
@@ -348,7 +348,7 @@ export default function QuizCreator({ quiz, videoId, onSuccess, onCancel }) {
                     <button
                         type="button"
                         onClick={addQuestion}
-                        className="text-sm text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 flex items-center gap-1"
+                        className="text-sm text-primary-500 dark:text-primary-500 hover:text-primary-600 dark:hover:text-primary-300 flex items-center gap-1"
                     >
                         <Plus className="w-4 h-4" />
                         Ajouter une question
@@ -376,11 +376,11 @@ export default function QuizCreator({ quiz, videoId, onSuccess, onCancel }) {
             </div>
 
             {/* Actions */}
-            <div className="flex items-center justify-end gap-3 pt-4 border-t border-gray-100 dark:border-gray-700">
+            <div className="flex items-center justify-end gap-3 pt-4 border-t border-secondary-200 dark:border-secondary-200/20">
                 <button
                     type="button"
                     onClick={onCancel}
-                    className="px-4 py-2 border border-gray-200 dark:border-gray-700 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors text-gray-600 dark:text-gray-300"
+                    className="px-4 py-2 border border-secondary-200 dark:border-secondary-200/20 rounded-xl hover:bg-secondary-50 dark:hover:bg-gray-700 transition-colors text-gray-600 dark:text-gray-300"
                 >
                     Annuler
                 </button>
@@ -388,7 +388,7 @@ export default function QuizCreator({ quiz, videoId, onSuccess, onCancel }) {
                     type="button"
                     onClick={handleSubmit}
                     disabled={saving}
-                    className="px-6 py-2 bg-gradient-to-r from-primary-600 to-accent-600 text-white rounded-xl shadow-lg hover:shadow-xl transition-all flex items-center gap-2 disabled:opacity-60"
+                    className="px-6 py-2 bg-primary-600 dark:bg-primary-500 text-white rounded-xl shadow-lg hover:shadow-xl transition-all flex items-center gap-2 disabled:opacity-60"
                 >
                     {saving ? (
                         <Loader className="w-4 h-4 animate-spin" />
@@ -400,4 +400,4 @@ export default function QuizCreator({ quiz, videoId, onSuccess, onCancel }) {
             </div>
         </div>
     );
-}
+}

@@ -75,7 +75,7 @@ export default function PillarCard({ pillar, index, onEdit, onDelete, isReadOnly
             }}
             style={{ transformStyle: "preserve-3d" }}
             onClick={handleCardClick}
-            className={`${getBgLight(pillar.color)} rounded-3xl p-4 sm:p-6 shadow-lg border border-white/50 dark:border-white/5 relative overflow-hidden group cursor-pointer`}
+            className={`${getBgLight(pillar.color)} rounded-3xl p-4 sm:p-6 shadow-lg border border-secondary-200 dark:border-secondary-200/20 relative overflow-hidden group cursor-pointer`}
         >
             {/* Effet de shine et de fond premium */}
             <div className={`absolute -top-20 -right-20 w-40 h-40 bg-gradient-to-br ${getColorGradient(pillar.color)} rounded-full opacity-0 dark:opacity-20 blur-3xl group-hover:opacity-10 dark:group-hover:opacity-30 transition-opacity duration-700 pointer-events-none`} />
@@ -108,21 +108,21 @@ export default function PillarCard({ pillar, index, onEdit, onDelete, isReadOnly
 
             {/* Statistiques */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-5" style={{ transform: "translateZ(20px)" }}>
-                <div className="flex sm:flex-col items-center justify-between sm:justify-center p-3 sm:py-4 bg-white/60 dark:bg-slate-800/60 rounded-xl border border-white/50 dark:border-white/5 shadow-sm transition-colors group-hover:bg-white/80 dark:group-hover:bg-slate-800/80">
+                <div className="flex sm:flex-col items-center justify-between sm:justify-center p-3 sm:py-4 bg-white/60 dark:bg-slate-800/60 rounded-xl border border-secondary-200 dark:border-secondary-200/20 shadow-sm transition-colors group-hover:bg-white/80 dark:group-hover:bg-slate-800/80">
                     <div className="flex items-center gap-2 sm:block sm:text-center">
                         <Video className="w-4 h-4 sm:mx-auto mb-0 sm:mb-1.5 text-primary-500 sm:group-hover:scale-110 transition-transform" />
                         <p className="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">Vidéos</p>
                     </div>
                     <p className="text-sm sm:text-xl font-black text-gray-800 dark:text-white">{pillar.videoCount}</p>
                 </div>
-                <div className="flex sm:flex-col items-center justify-between sm:justify-center p-3 sm:py-4 bg-white/60 dark:bg-slate-800/60 rounded-xl border border-white/50 dark:border-white/5 shadow-sm transition-colors group-hover:bg-white/80 dark:group-hover:bg-slate-800/80">
+                <div className="flex sm:flex-col items-center justify-between sm:justify-center p-3 sm:py-4 bg-white/60 dark:bg-slate-800/60 rounded-xl border border-secondary-200 dark:border-secondary-200/20 shadow-sm transition-colors group-hover:bg-white/80 dark:group-hover:bg-slate-800/80">
                     <div className="flex items-center gap-2 sm:block sm:text-center">
-                        <Users className="w-4 h-4 sm:mx-auto mb-0 sm:mb-1.5 text-accent-500 sm:group-hover:scale-110 transition-transform" />
+                        <Users className="w-4 h-4 sm:mx-auto mb-0 sm:mb-1.5 text-primary-500 sm:group-hover:scale-110 transition-transform" />
                         <p className="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">Apprenants</p>
                     </div>
                     <p className="text-sm sm:text-xl font-black text-gray-800 dark:text-white">{pillar.studentCount}</p>
                 </div>
-                <div className="flex sm:flex-col items-center justify-between sm:justify-center p-3 sm:py-4 bg-white/60 dark:bg-slate-800/60 rounded-xl border border-white/50 dark:border-white/5 shadow-sm transition-colors group-hover:bg-white/80 dark:group-hover:bg-slate-800/80">
+                <div className="flex sm:flex-col items-center justify-between sm:justify-center p-3 sm:py-4 bg-white/60 dark:bg-slate-800/60 rounded-xl border border-secondary-200 dark:border-secondary-200/20 shadow-sm transition-colors group-hover:bg-white/80 dark:group-hover:bg-slate-800/80">
                     <div className="flex items-center gap-2 sm:block sm:text-center">
                         <Calendar className="w-4 h-4 sm:mx-auto mb-0 sm:mb-1.5 text-emerald-500 sm:group-hover:scale-110 transition-transform" />
                         <p className="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">Création</p>
@@ -134,13 +134,13 @@ export default function PillarCard({ pillar, index, onEdit, onDelete, isReadOnly
             </div>
 
             {/* Actions */}
-            <div className="flex items-center justify-end gap-2 pt-2 border-t border-white/50 dark:border-white/5">
+            <div className="flex items-center justify-end gap-2 pt-2 border-t border-secondary-200 dark:border-secondary-200/20">
                 {/* Bouton Voir détails */}
                 <motion.button
                     whileHover={{ scale: 1.1 }}
                     whileTap={{ scale: 0.9 }}
                     onClick={handleViewDetails}
-                    className="p-2 hover:bg-primary-100 dark:hover:bg-primary-900/50 rounded-lg transition-colors text-primary-600 dark:text-primary-400"
+                    className="p-2 hover:bg-secondary-200 dark:hover:bg-primary-900/50 rounded-lg transition-colors text-primary-500 dark:text-primary-500"
                     title="Voir les détails"
                 >
                     <Eye className="w-4 h-4" />
@@ -153,7 +153,7 @@ export default function PillarCard({ pillar, index, onEdit, onDelete, isReadOnly
                             whileHover={{ scale: 1.1 }}
                             whileTap={{ scale: 0.9 }}
                             onClick={handleEditClick}
-                            className="p-2 hover:bg-accent-100 dark:hover:bg-accent-900/50 rounded-lg transition-colors text-accent-600 dark:text-accent-400"
+                            className="p-2 hover:bg-accent-500 text-secondary-900 dark:hover:bg-accent-900/50 rounded-lg transition-colors text-primary-500 dark:text-accent-400"
                             title="Modifier"
                         >
                             <Edit className="w-4 h-4" />

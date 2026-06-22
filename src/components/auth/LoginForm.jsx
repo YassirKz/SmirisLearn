@@ -87,7 +87,7 @@ export default function LoginForm() {
   };
 
   return (
-      <div className="bg-white/60 dark:bg-slate-900/60 backdrop-blur-2xl rounded-3xl p-8 shadow-2xl border border-white/50 dark:border-white/5 relative overflow-hidden transition-colors duration-300">
+      <div className="bg-white/80 dark:bg-slate-900/40 backdrop-blur-sm rounded-3xl p-8 shadow-2xl border border-secondary-200 dark:border-secondary-200/20 relative overflow-hidden transition-colors duration-300">
         {/* Badge premium - uiverse.io style */}
         <div className="absolute -top-1 -right-1">
           <div className="bg-gradient-to-r from-primary-600 to-primary-800 text-white px-4 py-2 rounded-bl-2xl rounded-tr-2xl text-xs font-bold shadow-lg flex items-center gap-1 animate-pulse">
@@ -105,13 +105,13 @@ export default function LoginForm() {
       </div>
 
       {/* Toggle - uiverse.io style */}
-      <div className="flex p-1 bg-white/40 dark:bg-slate-800/40 backdrop-blur-md rounded-xl mb-6 border border-white/50 dark:border-white/5 shadow-inner">
+      <div className="flex p-1 bg-white/40 dark:bg-slate-800/40 backdrop-blur-md rounded-xl mb-6 border border-secondary-200 dark:border-secondary-200/20 shadow-inner">
         <button
           onClick={() => setIsLogin(true)}
           className={`flex-1 py-2.5 rounded-lg text-sm font-medium transition-all duration-300 transform hover:scale-105 ${
             isLogin
-              ? "bg-white dark:bg-gray-600 text-primary-600 dark:text-primary-400 shadow-md border border-primary-200 dark:border-gray-500"
-              : "text-gray-500 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400"
+              ? "bg-white dark:bg-gray-600 text-primary-500 dark:text-primary-500 shadow-md border border-secondary-200 dark:border-gray-500"
+              : "text-gray-500 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-500"
           }`}
         >
           Connexion
@@ -120,8 +120,8 @@ export default function LoginForm() {
           onClick={() => setIsLogin(false)}
           className={`flex-1 py-2.5 rounded-lg text-sm font-medium transition-all duration-300 transform hover:scale-105 ${
             !isLogin
-              ? "bg-white dark:bg-gray-600 text-primary-600 dark:text-primary-400 shadow-md border border-primary-200 dark:border-gray-500"
-              : "text-gray-500 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400"
+              ? "bg-white dark:bg-gray-600 text-primary-500 dark:text-primary-500 shadow-md border border-secondary-200 dark:border-gray-500"
+              : "text-gray-500 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-500"
           }`}
         >
           Inscription
@@ -153,17 +153,17 @@ export default function LoginForm() {
               value={fullName}
               onChange={(e) => setFullName(e.target.value)}
               onBlur={() => setTouched({ ...touched, fullName: true })}
-              className="w-full px-4 py-3.5 bg-white/50 dark:bg-slate-800/50 backdrop-blur-sm border-2 rounded-xl text-gray-800 dark:text-white outline-none transition-all duration-300 peer
-                border-white/50 dark:border-white/5 focus:border-primary-400 dark:focus:border-primary-500 focus:ring-4 focus:ring-primary-100 dark:focus:ring-primary-900/30
-                hover:border-primary-300 dark:hover:border-primary-500 shadow-sm"
+              className="w-full px-4 py-3.5 bg-white/50 dark:bg-slate-900/20 backdrop-blur-sm border-2 rounded-xl text-gray-800 dark:text-white outline-none transition-all duration-300 peer
+                border-secondary-200 dark:border-secondary-200/20 focus:border-primary-500 dark:focus:border-secondary-200 focus:ring-4 focus:ring-primary-500/20 dark:focus:ring-primary-900/30
+                hover:border-secondary-200 dark:hover:border-secondary-200 shadow-sm"
               placeholder=" "
             />
             <label
               className={`absolute left-4 transition-all duration-300 pointer-events-none
               ${
                 fullName
-                  ? "-top-2 text-xs bg-white/90 dark:bg-slate-800/90 backdrop-blur-md px-2 rounded-md text-primary-600 dark:text-primary-400"
-                  : "top-3.5 text-gray-400 dark:text-gray-500 text-base peer-focus:-top-2 peer-focus:text-xs peer-focus:bg-white/90 dark:peer-focus:bg-slate-800/90 peer-focus:backdrop-blur-md peer-focus:px-2 peer-focus:rounded-md peer-focus:text-primary-600 dark:peer-focus:text-primary-400"
+                  ? "-top-2 text-xs bg-white/90 dark:bg-slate-800/90 backdrop-blur-md px-2 rounded-md text-primary-500 dark:text-primary-500"
+                  : "top-3.5 text-gray-400 dark:text-gray-500 text-base peer-focus:-top-2 peer-focus:text-xs peer-focus:bg-white/90 dark:peer-focus:bg-slate-800/90 peer-focus:backdrop-blur-md peer-focus:px-2 peer-focus:rounded-md peer-focus:text-primary-500 dark:peer-focus:text-primary-500"
               }`}
             >
               <span className="flex items-center gap-1">
@@ -184,17 +184,17 @@ export default function LoginForm() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             onBlur={() => setTouched({ ...touched, email: true })}
-            className="w-full px-4 py-3.5 bg-white/50 dark:bg-slate-800/50 backdrop-blur-sm border-2 rounded-xl text-gray-800 dark:text-white outline-none transition-all duration-300 peer
-              border-white/50 dark:border-white/5 focus:border-primary-400 dark:focus:border-primary-500 focus:ring-4 focus:ring-primary-100 dark:focus:ring-primary-900/30
-              hover:border-primary-300 dark:hover:border-primary-500 shadow-sm"
+            className="w-full px-4 py-3.5 bg-white/50 dark:bg-slate-900/20 backdrop-blur-sm border-2 rounded-xl text-gray-800 dark:text-white outline-none transition-all duration-300 peer
+              border-secondary-200 dark:border-secondary-200/20 focus:border-primary-500 dark:focus:border-secondary-200 focus:ring-4 focus:ring-primary-500/20 dark:focus:ring-primary-900/30
+              hover:border-secondary-200 dark:hover:border-secondary-200 shadow-sm"
             placeholder=" "
           />
           <label
             className={`absolute left-4 transition-all duration-300 pointer-events-none
             ${
               email
-                ? "-top-2 text-xs bg-white/90 dark:bg-slate-800/90 backdrop-blur-md px-2 rounded-md text-primary-600 dark:text-primary-400"
-                : "top-3.5 text-gray-400 dark:text-gray-500 text-base peer-focus:-top-2 peer-focus:text-xs peer-focus:bg-white/90 dark:peer-focus:bg-slate-800/90 peer-focus:backdrop-blur-md peer-focus:px-2 peer-focus:rounded-md peer-focus:text-primary-600 dark:peer-focus:text-primary-400"
+                ? "-top-2 text-xs bg-white/90 dark:bg-slate-800/90 backdrop-blur-md px-2 rounded-md text-primary-500 dark:text-primary-500"
+                : "top-3.5 text-gray-400 dark:text-gray-500 text-base peer-focus:-top-2 peer-focus:text-xs peer-focus:bg-white/90 dark:peer-focus:bg-slate-800/90 peer-focus:backdrop-blur-md peer-focus:px-2 peer-focus:rounded-md peer-focus:text-primary-500 dark:peer-focus:text-primary-500"
             }`}
           >
             <span className="flex items-center gap-1">
@@ -214,17 +214,17 @@ export default function LoginForm() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             onBlur={() => setTouched({ ...touched, password: true })}
-            className="w-full px-4 py-3.5 bg-white/50 dark:bg-slate-800/50 backdrop-blur-sm border-2 rounded-xl text-gray-800 dark:text-white outline-none transition-all duration-300 peer
-              border-white/50 dark:border-white/5 focus:border-primary-400 dark:focus:border-primary-500 focus:ring-4 focus:ring-primary-100 dark:focus:ring-primary-900/30
-              hover:border-primary-300 dark:hover:border-primary-500 shadow-sm"
+            className="w-full px-4 py-3.5 bg-white/50 dark:bg-slate-900/20 backdrop-blur-sm border-2 rounded-xl text-gray-800 dark:text-white outline-none transition-all duration-300 peer
+              border-secondary-200 dark:border-secondary-200/20 focus:border-primary-500 dark:focus:border-secondary-200 focus:ring-4 focus:ring-primary-500/20 dark:focus:ring-primary-900/30
+              hover:border-secondary-200 dark:hover:border-secondary-200 shadow-sm"
             placeholder=" "
           />
           <label
             className={`absolute left-4 transition-all duration-300 pointer-events-none
             ${
               password
-                ? "-top-2 text-xs bg-white/90 dark:bg-slate-800/90 backdrop-blur-md px-2 rounded-md text-primary-600 dark:text-primary-400"
-                : "top-3.5 text-gray-400 dark:text-gray-500 text-base peer-focus:-top-2 peer-focus:text-xs peer-focus:bg-white/90 dark:peer-focus:bg-slate-800/90 peer-focus:backdrop-blur-md peer-focus:px-2 peer-focus:rounded-md peer-focus:text-primary-600 dark:peer-focus:text-primary-400"
+                ? "-top-2 text-xs bg-white/90 dark:bg-slate-800/90 backdrop-blur-md px-2 rounded-md text-primary-500 dark:text-primary-500"
+                : "top-3.5 text-gray-400 dark:text-gray-500 text-base peer-focus:-top-2 peer-focus:text-xs peer-focus:bg-white/90 dark:peer-focus:bg-slate-800/90 peer-focus:backdrop-blur-md peer-focus:px-2 peer-focus:rounded-md peer-focus:text-primary-500 dark:peer-focus:text-primary-500"
             }`}
           >
             <span className="flex items-center gap-1">
@@ -251,7 +251,7 @@ export default function LoginForm() {
                 ? isLogin
                   ? "bg-gradient-to-r from-primary-600 to-primary-800 shadow-lg shadow-primary-200 dark:shadow-primary-900/30 hover:shadow-xl hover:shadow-primary-300 dark:hover:shadow-primary-900/50"
                   : "bg-gradient-to-r from-primary-700 to-primary-600 shadow-lg shadow-primary-200 dark:shadow-primary-900/30 hover:shadow-xl hover:shadow-primary-300 dark:hover:shadow-primary-900/50"
-                : "bg-white/20 dark:bg-white/5 cursor-not-allowed text-gray-500 dark:text-gray-400 border border-white/50 dark:border-white/5 shadow-sm"
+                : "bg-white/20 dark:bg-white/5 cursor-not-allowed text-gray-500 dark:text-gray-400 border border-secondary-200 dark:border-secondary-200/20 shadow-sm"
             }
           `}
         >
@@ -278,13 +278,13 @@ export default function LoginForm() {
       <p className="text-center mt-6">
         <button
           onClick={() => setIsLogin(!isLogin)}
-          className="text-sm text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 hover:underline transition-colors relative group"
+          className="text-sm text-primary-500 dark:text-primary-500 hover:text-primary-600 dark:hover:text-primary-300 hover:underline transition-colors relative group"
         >
           <span className="relative">
             {isLogin
               ? "Pas encore de compte ? S'inscrire"
               : "Déjà un compte ? Se connecter"}
-            <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary-600 dark:bg-primary-400 group-hover:w-full transition-all duration-300" />
+            <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary-600 dark:bg-primary-500 dark:bg-primary-400 group-hover:w-full transition-all duration-300" />
           </span>
         </button>
       </p>
@@ -292,7 +292,7 @@ export default function LoginForm() {
       {/* Séparateur */}
       <div className="relative my-6">
         <div className="absolute inset-0 flex items-center">
-          <div className="w-full border-t border-gray-200 dark:border-gray-600"></div>
+          <div className="w-full border-t border-secondary-200 dark:border-gray-600"></div>
         </div>
         <div className="relative flex justify-center text-sm">
           <span className="px-4 bg-transparent text-gray-500 dark:text-gray-400 backdrop-blur-md rounded-full shadow-sm">ou</span>
@@ -303,7 +303,7 @@ export default function LoginForm() {
       <button
         onClick={signInWithGoogle}
         disabled={loading}
-        className="group relative w-full overflow-hidden rounded-xl bg-white/50 dark:bg-slate-800/50 backdrop-blur-md px-6 py-3.5 border border-white/50 dark:border-white/5 shadow-sm hover:border-primary-300 dark:hover:border-primary-500 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+        className="group relative w-full overflow-hidden rounded-xl bg-white/50 dark:bg-slate-800/50 backdrop-blur-md px-6 py-3.5 border border-secondary-200 dark:border-secondary-200/20 shadow-sm hover:border-secondary-200 dark:hover:border-secondary-200 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
       >
         <div className="absolute inset-0 bg-gradient-to-r from-primary-50 to-primary-100 dark:from-primary-900/20 dark:to-primary-900/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
         <div className="relative flex items-center justify-center gap-3">
@@ -335,13 +335,13 @@ export default function LoginForm() {
       {/* Badges sécurité - uiverse.io style */}
       <div className="flex justify-center gap-6 mt-6">
         <div className="flex items-center gap-1 text-gray-400 dark:text-gray-500 text-xs group cursor-default">
-          <Shield className="w-3 h-3 text-primary-400 dark:text-primary-500 group-hover:text-primary-500 dark:group-hover:text-primary-400 transition-colors" />
+          <Shield className="w-3 h-3 text-primary-500 dark:text-primary-500 group-hover:text-primary-500 dark:group-hover:text-primary-500 transition-colors" />
           <span className="group-hover:text-gray-600 dark:group-hover:text-gray-300 transition-colors">
             Données chiffrées
           </span>
         </div>
         <div className="flex items-center gap-1 text-gray-400 dark:text-gray-500 text-xs group cursor-default">
-          <Zap className="w-3 h-3 text-accent-400 dark:text-accent-500 group-hover:text-accent-500 dark:group-hover:text-accent-400 transition-colors" />
+          <Zap className="w-3 h-3 text-accent-400 dark:text-primary-500 group-hover:text-primary-600 dark:group-hover:text-accent-400 transition-colors" />
           <span className="group-hover:text-gray-600 dark:group-hover:text-gray-300 transition-colors">
             Connexion rapide
           </span>

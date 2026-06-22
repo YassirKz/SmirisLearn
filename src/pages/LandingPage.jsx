@@ -61,7 +61,7 @@ const ScrollProgress = () => {
   const { scrollYProgress } = useScroll();
   return (
     <motion.div
-      className="fixed top-20 left-0 right-0 h-1 bg-primary-600 origin-left z-[60]"
+      className="fixed top-20 left-0 right-0 h-1 bg-primary-600 dark:bg-primary-500 origin-left z-[60]"
       style={{ scaleX: scrollYProgress }}
     />
   );
@@ -78,7 +78,7 @@ const MeshGradient = () => (
         y: [0, 50, 0],
       }}
       transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-      className="absolute -top-[20%] -left-[10%] w-[60%] h-[60%] bg-primary-600/20 rounded-full blur-[120px]"
+      className="absolute -top-[20%] -left-[10%] w-[60%] h-[60%] bg-primary-600 dark:bg-primary-500/20 rounded-full blur-[120px]"
     />
     <motion.div
       animate={{
@@ -139,7 +139,7 @@ const FloatingCard = ({ children, className, delay = 0 }) => (
     initial={{ opacity: 0, y: 20 }}
     animate={{ opacity: 1, y: 0 }}
     transition={{ delay, duration: 1, type: "spring" }}
-    className={`absolute z-20 hidden md:flex items-center gap-3 p-4 bg-white/70 dark:bg-gray-800/70 backdrop-blur-md rounded-2xl border border-white/40 dark:border-gray-700/40 shadow-2xl ${className}`}
+    className={`absolute z-20 hidden md:flex items-center gap-3 p-4 bg-white/70 dark:bg-gray-800/70 backdrop-blur-md rounded-2xl border border-white/40 dark:border-secondary-200/20/40 shadow-2xl ${className}`}
   >
     {children}
   </motion.div>
@@ -155,7 +155,7 @@ const SideNav = ({ sections, activeSection }) => {
   };
 
   return (
-    <div className="fixed right-6 top-1/2 transform -translate-y-1/2 z-50 flex flex-col gap-4 p-3 bg-white/50 dark:bg-slate-900/40 backdrop-blur-xl rounded-full border border-slate-200 dark:border-white/5 shadow-2xl">
+    <div className="fixed right-6 top-1/2 transform -translate-y-1/2 z-50 flex flex-col gap-4 p-3 bg-white/50 dark:bg-slate-900/40 backdrop-blur-xl rounded-full border border-slate-200 dark:border-secondary-200/20 shadow-2xl">
       {sections.map(({ id, label }) => (
         <button
           key={id}
@@ -166,18 +166,18 @@ const SideNav = ({ sections, activeSection }) => {
           {activeSection === id && (
             <motion.div
               layoutId="active-dot-glow"
-              className="absolute inset-[-4px] bg-primary-500/10 dark:bg-primary-400/20 rounded-full border border-primary-500/20 shadow-[0_0_15px_rgba(96,165,250,0.3)]"
+              className="absolute inset-[-4px] bg-primary-600 dark:bg-primary-500/10 dark:bg-primary-400/20 rounded-full border border-secondary-200/20 shadow-[0_0_15px_rgba(96,165,250,0.3)]"
               transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
             />
           )}
           <div
             className={`w-2 h-2 rounded-full transition-all duration-500 relative z-10 ${
               activeSection === id
-                ? "bg-primary-500 scale-[1.8] shadow-[0_0_10px_rgba(96,165,250,0.5)]"
+                ? "bg-primary-600 dark:bg-primary-500 scale-[1.8] shadow-[0_0_10px_rgba(96,165,250,0.5)]"
                 : "bg-slate-300 dark:bg-white/20 hover:bg-slate-400 dark:hover:bg-white/40 scale-100"
             }`}
           />
-          <div className="absolute right-10 px-3 py-1.5 bg-slate-900/90 backdrop-blur-md text-white text-[10px] font-black uppercase tracking-widest rounded-lg opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none border border-white/10 shadow-2xl translate-x-2 group-hover:translate-x-0 whitespace-nowrap">
+          <div className="absolute right-10 px-3 py-1.5 bg-slate-900/90 backdrop-blur-md text-white text-[10px] font-black uppercase tracking-widest rounded-lg opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none border border-secondary-200/30 shadow-2xl translate-x-2 group-hover:translate-x-0 whitespace-nowrap">
             {label}
           </div>
         </button>
@@ -200,14 +200,14 @@ const FeatureCard = ({
     transition={{ duration: 0.6, delay, type: "spring", stiffness: 100 }}
     viewport={{ once: true, margin: "-50px" }}
     whileHover={{ y: -8, scale: 1.02 }}
-    className={`group relative bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-3xl p-8 shadow-xl border border-primary-100 dark:border-gray-700 overflow-hidden ${className}`}
+    className={`group relative bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-3xl p-8 shadow-xl border border-secondary-200 dark:border-secondary-200/20 overflow-hidden ${className}`}
   >
     <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 dark:via-gray-700/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
     <div className="relative z-10">
       <div className="w-16 h-16 bg-gradient-to-br from-primary-500 to-primary-700 rounded-2xl flex items-center justify-center mb-6 shadow-lg group-hover:scale-110 group-hover:rotate-3 transition-all">
         <Icon className="w-8 h-8 text-white" />
       </div>
-      <h3 className="text-xl font-bold text-gray-800 dark:text-white mb-3 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
+      <h3 className="text-xl font-bold text-gray-800 dark:text-white mb-3 group-hover:text-primary-600 dark:group-hover:text-primary-500 transition-colors">
         {title}
       </h3>
       <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
@@ -225,10 +225,10 @@ const TestimonialCard = ({ name, role, content, rating, avatar, delay }) => (
     transition={{ duration: 0.6, delay, type: "spring", damping: 12 }}
     viewport={{ once: true }}
     whileHover={{ y: -10 }}
-    className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-3xl p-8 shadow-xl border border-primary-100 dark:border-gray-700 relative overflow-hidden group"
+    className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-3xl p-8 shadow-xl border border-secondary-200 dark:border-secondary-200/20 relative overflow-hidden group"
   >
     <div className="absolute top-4 right-4 opacity-10 group-hover:opacity-20 transition-opacity">
-      <Quote className="w-16 h-16 text-primary-500 dark:text-primary-400" />
+      <Quote className="w-16 h-16 text-primary-500 dark:text-primary-500" />
     </div>
     <div className="flex gap-1 text-yellow-400 mb-6">
       {[...Array(5)].map((_, i) => (
@@ -242,7 +242,7 @@ const TestimonialCard = ({ name, role, content, rating, avatar, delay }) => (
     <p className="text-gray-600 dark:text-gray-300 mb-6 leading-relaxed italic">
       "{content}"
     </p>
-    <div className="flex items-center gap-4 pt-4 border-t border-gray-100 dark:border-gray-700">
+    <div className="flex items-center gap-4 pt-4 border-t border-secondary-200 dark:border-secondary-200/20">
       <div className="w-12 h-12 bg-gradient-to-br from-primary-500 to-primary-700 rounded-full flex items-center justify-center text-white font-bold text-lg shadow-lg group-hover:rotate-6 transition-transform">
         {avatar || name.charAt(0)}
       </div>
@@ -256,7 +256,7 @@ const TestimonialCard = ({ name, role, content, rating, avatar, delay }) => (
 
 // Composant FAQ
 const FaqItem = ({ question, answer, isOpen, onClick }) => (
-  <div className="border border-primary-100 dark:border-gray-700 rounded-2xl bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm overflow-hidden transition-all">
+  <div className="border border-secondary-200 dark:border-secondary-200/20 rounded-2xl bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm overflow-hidden transition-all">
     <button
       onClick={onClick}
       className="w-full px-6 py-4 flex items-center justify-between text-left focus:outline-none"
@@ -265,7 +265,7 @@ const FaqItem = ({ question, answer, isOpen, onClick }) => (
         {question}
       </span>
       {isOpen ? (
-        <ChevronUp className="w-5 h-5 text-primary-600 dark:text-primary-400 shrink-0" />
+        <ChevronUp className="w-5 h-5 text-primary-500 dark:text-primary-500 shrink-0" />
       ) : (
         <ChevronDown className="w-5 h-5 text-gray-400 dark:text-gray-500 shrink-0" />
       )}
@@ -306,8 +306,8 @@ const PricingCard = ({
     whileHover={{ y: -12, scale: 1.02 }}
     className={`relative bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-3xl p-8 shadow-xl border transition-all duration-300 ${
       isPopular
-        ? "border-primary-500 dark:border-primary-400 lg:scale-105 shadow-primary-500/10"
-        : "border-primary-100 dark:border-gray-700"
+        ? "border-secondary-200 dark:border-primary-400 lg:scale-105 shadow-primary-500/10"
+        : "border-secondary-200 dark:border-secondary-200/20"
     } overflow-hidden group`}
   >
     {isPopular && (
@@ -322,12 +322,12 @@ const PricingCard = ({
     )}
     <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 dark:via-gray-700/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
     <div className="relative z-10">
-      <h3 className="text-2xl font-bold text-gray-800 dark:text-white mb-2 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
+      <h3 className="text-2xl font-bold text-gray-800 dark:text-white mb-2 group-hover:text-primary-600 dark:group-hover:text-primary-500 transition-colors">
         {name}
       </h3>
       <div className="mb-6 h-16">
         <div className="flex items-baseline gap-1">
-          <span className="text-4xl font-bold text-primary-600 dark:text-primary-400">
+          <span className="text-4xl font-bold text-primary-500 dark:text-primary-500">
             {price}
           </span>
           {price !== "0€" && price !== "Sur devis" && (
@@ -617,7 +617,7 @@ export default function LandingPage() {
         initial={{ y: -100 }}
         animate={{ y: 0 }}
         transition={{ type: "spring", stiffness: 100 }}
-        className="fixed top-0 left-0 right-0 z-50 bg-white/70 dark:bg-secondary-950/70 backdrop-blur-xl border-b border-primary-100 dark:border-gray-800"
+        className="fixed top-0 left-0 right-0 z-50 bg-white/70 dark:bg-secondary-950/70 backdrop-blur-xl border-b border-secondary-200 dark:border-secondary-200/20"
       >
         <div className="w-full px-4 sm:px-8 lg:px-12 xl:px-20">
           <div className="flex items-center justify-between h-20">
@@ -625,7 +625,7 @@ export default function LandingPage() {
               <Logo size="md" />
             </div>
 
-            <nav className="hidden lg:flex items-center gap-1 xl:gap-2 px-1.5 py-1.5 bg-gray-100 dark:bg-white/5 rounded-2xl border border-gray-200 dark:border-white/5">
+            <nav className="hidden lg:flex items-center gap-1 xl:gap-2 px-1.5 py-1.5 bg-gray-100 dark:bg-white/5 rounded-2xl border border-secondary-200 dark:border-secondary-200/20">
               {sections.map(({ id, label }) => (
                 <button
                   key={id}
@@ -636,15 +636,15 @@ export default function LandingPage() {
                   }
                   className={`text-sm py-2 px-4 rounded-xl font-bold transition-all relative group ${
                     activeSection === id
-                      ? "text-primary-700 dark:text-primary-400"
-                      : "text-gray-500 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400"
+                      ? "text-secondary-900 dark:text-primary-500"
+                      : "text-gray-500 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-500"
                   }`}
                 >
                   <span className="relative z-10">{label}</span>
                   {activeSection === id && (
                     <motion.div
                       layoutId="nav-pill"
-                      className="absolute inset-0 bg-white dark:bg-gray-800 shadow-[0_4px_12px_-2px_rgba(0,0,0,0.1),0_0_0_1px_rgba(0,0,0,0.02)] dark:shadow-none dark:border dark:border-white/10 rounded-xl"
+                      className="absolute inset-0 bg-white dark:bg-gray-800 shadow-[0_4px_12px_-2px_rgba(0,0,0,0.1),0_0_0_1px_rgba(0,0,0,0.02)] dark:shadow-none dark:border dark:border-secondary-200/30 rounded-xl"
                       transition={{
                         type: "spring",
                         bounce: 0.15,
@@ -671,7 +671,7 @@ export default function LandingPage() {
 
               <button
                 onClick={() => navigate("/login")}
-                className="hidden md:inline-flex items-center gap-2 px-3 lg:px-4 py-2 text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 font-medium transition-colors whitespace-nowrap"
+                className="hidden md:inline-flex items-center gap-2 px-3 lg:px-4 py-2 text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-500 font-medium transition-colors whitespace-nowrap"
               >
                 Se connecter
               </button>
@@ -716,7 +716,7 @@ export default function LandingPage() {
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
-              className="md:hidden bg-white dark:bg-secondary-950 border-t border-primary-100 dark:border-gray-800 overflow-hidden"
+              className="md:hidden bg-white dark:bg-secondary-950 border-t border-secondary-200 dark:border-secondary-200/20 overflow-hidden"
             >
               <div className="px-4 py-6 space-y-4">
                 {sections.map(({ id, label }) => (
@@ -728,14 +728,14 @@ export default function LandingPage() {
                         .scrollIntoView({ behavior: "smooth" });
                       setMenuOpen(false);
                     }}
-                    className="block w-full text-left px-4 py-3 rounded-xl hover:bg-primary-50 dark:hover:bg-gray-800 transition-colors"
+                    className="block w-full text-left px-4 py-3 rounded-xl hover:bg-secondary-200 dark:hover:bg-gray-800 transition-colors"
                   >
                     <span className="text-gray-800 dark:text-white font-medium">
                       {label}
                     </span>
                   </button>
                 ))}
-                <hr className="border-gray-200 dark:border-gray-700" />
+                <hr className="border-secondary-200 dark:border-secondary-200/20" />
                 <button
                   onClick={() => {
                     navigate("/login");
@@ -823,7 +823,7 @@ export default function LandingPage() {
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.1 }}
-                className="inline-flex items-center gap-2 px-4 py-2 bg-white/5 backdrop-blur-md rounded-full border border-white/10 mb-6 shadow-sm group hover:border-primary-300 transition-colors"
+                className="inline-flex items-center gap-2 px-4 py-2 bg-white/5 backdrop-blur-md rounded-full border border-secondary-200/30 mb-6 shadow-sm group hover:border-secondary-200 transition-colors"
               >
                 <div className="flex -space-x-2">
                   {[1, 2, 3].map((i) => (
@@ -834,7 +834,7 @@ export default function LandingPage() {
                   ))}
                 </div>
                 <span className="text-xs font-bold text-gray-300 tracking-tight">
-                  <span className="text-primary-400">500+</span> entreprises
+                  <span className="text-primary-500">500+</span> entreprises
                   nous font confiance
                 </span>
               </motion.div>
@@ -892,9 +892,9 @@ export default function LandingPage() {
                       .getElementById("features")
                       .scrollIntoView({ behavior: "smooth" })
                   }
-                  className="px-8 py-5 bg-white/10 backdrop-blur-md border-2 border-white/5 text-white rounded-2xl text-lg font-bold hover:bg-white/20 transition-all flex items-center gap-2 group shadow-xl"
+                  className="px-8 py-5 bg-white/10 backdrop-blur-md border-2 border-secondary-200/20 text-white rounded-2xl text-lg font-bold hover:bg-white/20 transition-all flex items-center gap-2 group shadow-xl"
                 >
-                  <PlayCircle className="w-5 h-5 text-primary-400 group-hover:scale-110 transition-transform" />
+                  <PlayCircle className="w-5 h-5 text-primary-500 group-hover:scale-110 transition-transform" />
                   Découvrir
                 </button>
               </motion.div>
@@ -916,7 +916,7 @@ export default function LandingPage() {
             ].map((stat, i) => (
               <div
                 key={i}
-                className="text-center p-3 sm:p-4 bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10 shadow-lg"
+                className="text-center p-3 sm:p-4 bg-white/5 backdrop-blur-sm rounded-2xl border border-secondary-200/30 shadow-lg"
               >
                 <div className="text-xl sm:text-2xl md:text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-primary-400 to-primary-600">
                   {stat.value}
@@ -941,7 +941,7 @@ export default function LandingPage() {
                   .getElementById("features")
                   .scrollIntoView({ behavior: "smooth" })
               }
-              className="flex flex-col items-center gap-1 text-gray-500 hover:text-primary-400 transition-colors"
+              className="flex flex-col items-center gap-1 text-gray-500 hover:text-primary-500 transition-colors"
             >
               <span className="text-xs font-medium">Découvrir</span>
               <ChevronDown className="w-5 h-5 animate-scroll-bounce" />
@@ -951,17 +951,17 @@ export default function LandingPage() {
       </Section>
 
       {/* Fonctionnalités - Bento Grid Transformation */}
-      <Section id="features" className="bg-slate-50 dark:bg-slate-900/50">
+      <Section id="features" className="bg-secondary-50 dark:bg-slate-900/50">
         <div className="max-w-7xl mx-auto px-4">
           <div className="text-center mb-16 px-4">
             <motion.div
               initial={{ opacity: 0, scale: 0.8 }}
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
-              className="inline-flex items-center gap-2 px-3 py-1 bg-primary-100 dark:bg-primary-900/30 rounded-full mb-6 border border-primary-200 dark:border-primary-800"
+              className="inline-flex items-center gap-2 px-3 py-1 bg-accent-500 text-secondary-900 dark:bg-primary-900/30 rounded-full mb-6 border border-secondary-200 dark:border-primary-800"
             >
-              <Zap className="w-4 h-4 text-primary-600 dark:text-primary-400" />
-              <span className="text-xs font-black text-primary-700 dark:text-primary-300 uppercase tracking-widest">Fonctionnalités</span>
+              <Zap className="w-4 h-4 text-primary-500 dark:text-primary-500" />
+              <span className="text-xs font-black text-secondary-900 dark:text-primary-300 uppercase tracking-widest">Fonctionnalités</span>
             </motion.div>
             <motion.h2
               initial={{ opacity: 0, y: 20 }}
@@ -980,10 +980,10 @@ export default function LandingPage() {
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="md:col-span-4 h-[400px] md:h-[500px] relative rounded-[2.5rem] bg-white dark:bg-gray-800/40 border border-slate-200 dark:border-white/10 shadow-xl dark:shadow-none overflow-hidden group p-8 md:p-12 flex flex-col justify-between"
+              className="md:col-span-4 h-[400px] md:h-[500px] relative rounded-[2.5rem] bg-white dark:bg-gray-800/40 border border-slate-200 dark:border-secondary-200/30 shadow-xl dark:shadow-none overflow-hidden group p-8 md:p-12 flex flex-col justify-between"
             >
               <div className="relative z-20 max-w-md">
-                <div className="w-14 h-14 bg-primary-500 rounded-2xl flex items-center justify-center text-white mb-8 shadow-lg shadow-primary-500/20 group-hover:rotate-6 transition-transform duration-500">
+                <div className="w-14 h-14 bg-primary-600 dark:bg-primary-500 rounded-2xl flex items-center justify-center text-white mb-8 shadow-lg shadow-primary-500/20 group-hover:rotate-6 transition-transform duration-500">
                   <BookOpen className="w-7 h-7" />
                 </div>
                 <h3 className="text-3xl md:text-4xl font-black text-gray-900 dark:text-white mb-4 tracking-tight">
@@ -1004,15 +1004,15 @@ export default function LandingPage() {
                        whileInView={{ x: 0, opacity: 1 }}
                        transition={{ delay: 0.2 + i*0.1 }}
                        viewport={{ once: true }}
-                       className="w-full max-w-[280px] p-5 rounded-2xl bg-white dark:bg-slate-900 shadow-2xl border border-slate-100 dark:border-white/5 flex items-center gap-4 group/item hover:translate-x-[-10px] transition-transform duration-500"
+                       className="w-full max-w-[280px] p-5 rounded-2xl bg-white dark:bg-slate-900/40 shadow-2xl border border-slate-100 dark:border-secondary-200/20 flex items-center gap-4 group/item hover:translate-x-[-10px] transition-transform duration-500"
                      >
-                       <div className={`w-3 h-3 rounded-full ${i === 1 ? 'bg-emerald-500' : 'bg-primary-500'} animate-pulse`} />
-                       <div className="h-2 w-32 bg-slate-100 dark:bg-white/10 rounded-full" />
+                       <div className={`w-3 h-3 rounded-full ${i === 1 ? 'bg-emerald-500' : 'bg-primary-600 dark:bg-primary-500'} animate-pulse`} />
+                       <div className="h-2 w-32 bg-secondary-200 dark:bg-white/10 rounded-full" />
                        <CheckCircle className={`w-5 h-5 ml-auto ${i === 1 ? 'text-emerald-500' : 'text-slate-200 dark:text-white/5'}`} />
                      </motion.div>
                    ))}
                 </div>
-                <div className="absolute -inset-20 bg-primary-500/20 blur-[120px] rounded-full pointer-events-none" />
+                <div className="absolute -inset-20 bg-primary-600 dark:bg-primary-500/20 blur-[120px] rounded-full pointer-events-none" />
               </div>
             </motion.div>
 
@@ -1022,7 +1022,7 @@ export default function LandingPage() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.1 }}
-              className="md:col-span-2 h-[400px] md:h-[500px] relative rounded-[2.5rem] bg-gradient-to-br from-slate-900 to-black border border-white/10 overflow-hidden p-8 md:p-10 flex flex-col justify-end group shadow-2xl"
+              className="md:col-span-2 h-[400px] md:h-[500px] relative rounded-[2.5rem] bg-gradient-to-br from-slate-900 to-black border border-secondary-200/30 overflow-hidden p-8 md:p-10 flex flex-col justify-end group shadow-2xl"
             >
               <div className="absolute inset-0 z-0">
                 <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent z-10" />
@@ -1047,7 +1047,7 @@ export default function LandingPage() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.2 }}
-              className="md:col-span-2 h-[400px] relative rounded-[2.5rem] bg-white dark:bg-gray-800/40 border border-slate-200 dark:border-white/10 p-8 flex flex-col justify-between group overflow-hidden"
+              className="md:col-span-2 h-[400px] relative rounded-[2.5rem] bg-white dark:bg-gray-800/40 border border-slate-200 dark:border-secondary-200/30 p-8 flex flex-col justify-between group overflow-hidden"
             >
                <div className="w-12 h-12 bg-emerald-500 rounded-2xl flex items-center justify-center text-white mb-6 shadow-lg shadow-emerald-500/20">
                   <Award className="w-6 h-6" />
@@ -1059,13 +1059,13 @@ export default function LandingPage() {
                
                {/* Visual: Quiz card */}
                <div className="mt-8 relative h-32 flex items-center justify-center">
-                  <div className="absolute top-0 w-full p-4 rounded-xl bg-slate-50 dark:bg-black/30 border border-slate-100 dark:border-white/5 rotate-[-5deg] group-hover:rotate-[-2deg] transition-transform duration-500">
+                  <div className="absolute top-0 w-full p-4 rounded-xl bg-secondary-50 dark:bg-black/30 border border-slate-100 dark:border-secondary-200/20 rotate-[-5deg] group-hover:rotate-[-2deg] transition-transform duration-500">
                     <div className="w-6 h-6 rounded bg-emerald-500/20 mb-2" />
                     <div className="h-1.5 w-full bg-slate-200 dark:bg-white/10 rounded-full" />
                   </div>
-                  <div className="absolute top-4 w-full p-4 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 shadow-xl rotate-[5deg] group-hover:rotate-[2deg] transition-transform duration-500">
-                    <div className="w-6 h-6 rounded bg-primary-500/20 mb-2" />
-                    <div className="h-1.5 w-full bg-primary-500/10 rounded-full" />
+                  <div className="absolute top-4 w-full p-4 rounded-xl bg-white dark:bg-slate-900/40 border border-slate-200 dark:border-secondary-200/30 shadow-xl rotate-[5deg] group-hover:rotate-[2deg] transition-transform duration-500">
+                    <div className="w-6 h-6 rounded bg-primary-600 dark:bg-primary-500/20 mb-2" />
+                    <div className="h-1.5 w-full bg-primary-600 dark:bg-primary-500/10 rounded-full" />
                   </div>
                </div>
             </motion.div>
@@ -1076,7 +1076,7 @@ export default function LandingPage() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.3 }}
-              className="md:col-span-4 h-[400px] relative rounded-[2.5rem] bg-gradient-to-br from-indigo-600 to-primary-800 border border-white/20 p-8 md:p-12 flex flex-col md:flex-row items-center gap-10 group overflow-hidden shadow-2xl"
+              className="md:col-span-4 h-[400px] relative rounded-[2.5rem] bg-gradient-to-br from-indigo-600 to-primary-800 border border-secondary-200/50 p-8 md:p-12 flex flex-col md:flex-row items-center gap-10 group overflow-hidden shadow-2xl"
             >
                <div className="flex-1 space-y-4 text-center md:text-left relative z-20">
                   <div className="w-14 h-14 bg-white/20 backdrop-blur-xl rounded-2xl flex items-center justify-center text-white mb-6 mx-auto md:mx-0">
@@ -1088,7 +1088,7 @@ export default function LandingPage() {
                
                {/* Visual: Dashboard Mini Graph */}
                <div className="flex-1 w-full h-full relative flex items-center justify-center">
-                  <div className="w-full h-48 bg-white/10 backdrop-blur-md rounded-3xl border border-white/20 p-6 flex flex-col justify-end group-hover:translate-y-[-10px] transition-transform duration-700">
+                  <div className="w-full h-48 bg-white/10 backdrop-blur-md rounded-3xl border border-secondary-200/50 p-6 flex flex-col justify-end group-hover:translate-y-[-10px] transition-transform duration-700">
                      <div className="flex items-end gap-2 h-full"> 
                         {[40, 70, 45, 90, 65, 80, 55].map((h, i) => (
                           <motion.div
@@ -1116,7 +1116,7 @@ export default function LandingPage() {
       >
         <div className="absolute top-0 left-0 w-full h-full pointer-events-none">
           <div className="absolute top-1/4 -left-20 w-96 h-96 bg-primary-200/20 dark:bg-primary-900/10 rounded-full blur-3xl" />
-          <div className="absolute bottom-1/4 -right-20 w-96 h-96 bg-primary-300/20 dark:bg-primary-800/10 rounded-full blur-3xl" />
+          <div className="absolute bottom-1/4 -right-20 w-96 h-96 bg-primary-300/20 dark:bg-primary-600 dark:bg-primary-500/10 rounded-full blur-3xl" />
         </div>
 
         <div className="max-w-6xl mx-auto w-full relative z-10">
@@ -1172,9 +1172,9 @@ export default function LandingPage() {
                 transition={{ delay: i * 0.2, duration: 0.8 }}
                 viewport={{ once: true }}
                 whileHover={{ y: -10 }}
-                className="relative p-10 bg-white/40 dark:bg-gray-800/40 backdrop-blur-md rounded-[40px] border border-white/50 dark:border-gray-700/50 shadow-2xl transition-all duration-300 group"
+                className="relative p-10 bg-white/40 dark:bg-gray-800/40 backdrop-blur-md rounded-[40px] border border-secondary-200 dark:border-secondary-200/20/50 shadow-2xl transition-all duration-300 group"
               >
-                <div className="absolute -top-6 -right-2 text-8xl font-black text-gray-900/[0.03] dark:text-white/[0.03] select-none pointer-events-none group-hover:text-primary-500/10 dark:group-hover:text-primary-400/10 transition-colors duration-500">
+                <div className="absolute -top-6 -right-2 text-8xl font-black text-gray-900/[0.03] dark:text-white/[0.03] select-none pointer-events-none group-hover:text-primary-500/10 dark:group-hover:text-primary-500/10 transition-colors duration-500">
                   {item.step}
                 </div>
 
@@ -1226,7 +1226,7 @@ export default function LandingPage() {
 
             <div className="flex items-center justify-center gap-4 mb-12">
               <span
-                className={`text-sm font-bold ${!isAnnual ? "text-primary-600 dark:text-primary-400" : "text-gray-500"}`}
+                className={`text-sm font-bold ${!isAnnual ? "text-primary-500 dark:text-primary-500" : "text-gray-500"}`}
               >
                 Mensuel
               </span>
@@ -1236,12 +1236,12 @@ export default function LandingPage() {
               >
                 <motion.div
                   animate={{ x: isAnnual ? 32 : 0 }}
-                  className="w-6 h-6 bg-white dark:bg-primary-500 rounded-full shadow-md"
+                  className="w-6 h-6 bg-white dark:bg-primary-600 dark:bg-primary-500 rounded-full shadow-md"
                 />
               </button>
               <div className="flex items-center gap-2">
                 <span
-                  className={`text-sm font-bold ${isAnnual ? "text-primary-600 dark:text-primary-400" : "text-gray-500"}`}
+                  className={`text-sm font-bold ${isAnnual ? "text-primary-500 dark:text-primary-500" : "text-gray-500"}`}
                 >
                   Annuel
                 </span>
@@ -1404,7 +1404,7 @@ export default function LandingPage() {
                   ].map((testimonial, index) => (
                     <div
                       key={index}
-                      className="w-[350px] md:w-[450px] p-8 rounded-[2rem] bg-white dark:bg-white/5 backdrop-blur-md border border-slate-200 dark:border-white/10 shadow-sm dark:shadow-none flex flex-col justify-between group/card hover:bg-slate-50 dark:hover:bg-white/10 hover:border-primary-500/30 transition-all duration-300"
+                      className="w-[350px] md:w-[450px] p-8 rounded-[2rem] bg-white dark:bg-white/5 backdrop-blur-md border border-slate-200 dark:border-secondary-200/30 shadow-sm dark:shadow-none flex flex-col justify-between group/card hover:bg-secondary-50 dark:hover:bg-white/10 hover:border-secondary-200/30 transition-all duration-300"
                     >
                       <div>
                         <div className="flex justify-between items-start mb-6">
@@ -1412,7 +1412,7 @@ export default function LandingPage() {
                             {[...Array(testimonial.rating)].map((_, i) => (
                               <Star
                                 key={i}
-                                className="w-4 h-4 fill-primary-500 dark:fill-primary-400 text-primary-500 dark:text-primary-400"
+                                className="w-4 h-4 fill-primary-500-500 dark:fill-primary-500-400 text-primary-500 dark:text-primary-500"
                               />
                             ))}
                           </div>
@@ -1422,7 +1422,7 @@ export default function LandingPage() {
                           "{testimonial.content}"
                         </p>
                       </div>
-                      <div className="flex items-center gap-4 pt-6 border-t border-slate-100 dark:border-white/5">
+                      <div className="flex items-center gap-4 pt-6 border-t border-slate-100 dark:border-secondary-200/20">
                         <div className="w-12 h-12 rounded-full bg-gradient-to-br from-primary-500 to-primary-700 flex items-center justify-center text-white font-black text-xl shadow-lg ring-2 ring-slate-100 dark:ring-white/10">
                           {testimonial.avatar}
                         </div>
@@ -1439,7 +1439,7 @@ export default function LandingPage() {
                             {testimonial.role}
                           </p>
                         </div>
-                        <div className="px-3 py-1 bg-slate-100 dark:bg-white/5 rounded-full border border-slate-200 dark:border-white/10">
+                        <div className="px-3 py-1 bg-secondary-200 dark:bg-white/5 rounded-full border border-slate-200 dark:border-secondary-200/30">
                           <span className="text-[8px] font-black text-gray-500 dark:text-gray-400">
                             {testimonial.tag}
                           </span>
@@ -1478,17 +1478,17 @@ export default function LandingPage() {
               initial={{ opacity: 0, scale: 0.9 }}
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
-              className="relative overflow-hidden rounded-[2.5rem] bg-slate-900 shadow-[0_50px_100px_-20px_rgba(0,0,0,0.5),0_0_0_1px_rgba(255,255,255,0.05)] border-t border-white/10"
+              className="relative overflow-hidden rounded-[2.5rem] bg-slate-900 shadow-[0_50px_100px_-20px_rgba(0,0,0,0.5),0_0_0_1px_rgba(255,255,255,0.05)] border-t border-secondary-200/30"
             >
               {/* Browser Status Bar */}
-              <div className="h-12 bg-white/5 border-b border-white/5 px-6 flex items-center justify-between">
+              <div className="h-12 bg-white/5 border-b border-secondary-200/20 px-6 flex items-center justify-between">
                 <div className="flex gap-2">
                   <div className="w-3 h-3 rounded-full bg-rose-500/80" />
                   <div className="w-3 h-3 rounded-full bg-amber-500/80" />
                   <div className="w-3 h-3 rounded-full bg-emerald-500/80" />
                 </div>
                 <div className="flex-1 max-w-md mx-8">
-                  <div className="bg-white/5 rounded-lg h-7 border border-white/5 flex items-center px-4 justify-center">
+                  <div className="bg-white/5 rounded-lg h-7 border border-secondary-200/20 flex items-center px-4 justify-center">
                     <div className="flex items-center gap-2 opacity-40">
                       <Lock className="w-3 h-3" />
                       <span className="text-[10px] font-medium tracking-wide">
@@ -1522,7 +1522,7 @@ export default function LandingPage() {
                     />
                     {/* Caption for current view */}
                     <div className="absolute top-6 right-6 z-40">
-                      <span className="px-4 py-2 bg-black/60 backdrop-blur-md text-[10px] font-black text-white uppercase tracking-[0.2em] rounded-full border border-white/10">
+                      <span className="px-4 py-2 bg-black/60 backdrop-blur-md text-[10px] font-black text-white uppercase tracking-[0.2em] rounded-full border border-secondary-200/30">
                         {demoImages[activeSlide].title}
                       </span>
                     </div>
@@ -1537,7 +1537,7 @@ export default function LandingPage() {
                         prev === 0 ? demoImages.length - 1 : prev - 1,
                       )
                     }
-                    className="w-12 h-12 bg-black/50 backdrop-blur-md rounded-full border border-white/10 flex items-center justify-center text-white hover:bg-primary-500/80 transition-all transform hover:scale-110"
+                    className="w-12 h-12 bg-black/50 backdrop-blur-md rounded-full border border-secondary-200/30 flex items-center justify-center text-white hover:bg-secondary-200/80 transition-all transform hover:scale-110"
                   >
                     <ChevronLeft className="w-6 h-6" />
                   </button>
@@ -1547,7 +1547,7 @@ export default function LandingPage() {
                         prev === demoImages.length - 1 ? 0 : prev + 1,
                       )
                     }
-                    className="w-12 h-12 bg-black/50 backdrop-blur-md rounded-full border border-white/10 flex items-center justify-center text-white hover:bg-primary-500/80 transition-all transform hover:scale-110"
+                    className="w-12 h-12 bg-black/50 backdrop-blur-md rounded-full border border-secondary-200/30 flex items-center justify-center text-white hover:bg-secondary-200/80 transition-all transform hover:scale-110"
                   >
                     <ChevronRight className="w-6 h-6" />
                   </button>
@@ -1618,7 +1618,7 @@ export default function LandingPage() {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-3xl p-8 md:p-12 shadow-2xl border border-primary-100 dark:border-gray-700"
+            className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-3xl p-8 md:p-12 shadow-2xl border border-secondary-200 dark:border-secondary-200/20"
           >
             <h2 className="text-4xl md:text-5xl font-black text-gray-900 dark:text-white mb-4 text-center">
               Contactez-nous
@@ -1644,7 +1644,7 @@ export default function LandingPage() {
                       className={`w-full pl-12 pr-4 py-3 bg-white dark:bg-gray-900 border-2 rounded-xl focus:ring-4 outline-none transition-all dark:text-white ${
                         formErrors.fullName
                           ? "border-red-300 dark:border-red-600 focus:border-red-500 focus:ring-red-100 dark:focus:ring-red-900/30"
-                          : "border-gray-200 dark:border-gray-700 focus:border-primary-400 dark:focus:border-primary-500 focus:ring-primary-100 dark:focus:ring-primary-900/30"
+                          : "border-secondary-200 dark:border-secondary-200/20 focus:border-primary-500 dark:focus:border-secondary-200 focus:ring-primary-500/20 dark:focus:ring-primary-900/30"
                       }`}
                       placeholder="Jean Dupont"
                     />
@@ -1670,7 +1670,7 @@ export default function LandingPage() {
                       className={`w-full pl-12 pr-4 py-3 bg-white dark:bg-gray-900 border-2 rounded-xl focus:ring-4 outline-none transition-all dark:text-white ${
                         formErrors.email
                           ? "border-red-300 dark:border-red-600 focus:border-red-500 focus:ring-red-100 dark:focus:ring-red-900/30"
-                          : "border-gray-200 dark:border-gray-700 focus:border-primary-400 dark:focus:border-primary-500 focus:ring-primary-100 dark:focus:ring-primary-900/30"
+                          : "border-secondary-200 dark:border-secondary-200/20 focus:border-primary-500 dark:focus:border-secondary-200 focus:ring-primary-500/20 dark:focus:ring-primary-900/30"
                       }`}
                       placeholder="contact@exemple.com"
                     />
@@ -1697,7 +1697,7 @@ export default function LandingPage() {
                     name="companyName"
                     value={formData.companyName}
                     onChange={handleInputChange}
-                    className="w-full pl-12 pr-4 py-3 bg-white dark:bg-gray-900 border-2 border-gray-200 dark:border-gray-700 rounded-xl focus:border-primary-400 dark:focus:border-primary-500 focus:ring-4 focus:ring-primary-100 dark:focus:ring-primary-900/30 outline-none transition-all dark:text-white"
+                    className="w-full pl-12 pr-4 py-3 bg-white dark:bg-gray-900 border-2 border-secondary-200 dark:border-secondary-200/20 rounded-xl focus:border-primary-500 dark:focus:border-secondary-200 focus:ring-4 focus:ring-primary-500/20 dark:focus:ring-primary-900/30 outline-none transition-all dark:text-white"
                     placeholder="Smiris Learn"
                   />
                 </div>
@@ -1717,7 +1717,7 @@ export default function LandingPage() {
                     className={`w-full pl-12 pr-4 py-3 bg-white dark:bg-gray-900 border-2 rounded-xl focus:ring-4 outline-none transition-all dark:text-white ${
                       formErrors.message
                         ? "border-red-300 dark:border-red-600 focus:border-red-500 focus:ring-red-100 dark:focus:ring-red-900/30"
-                        : "border-gray-200 dark:border-gray-700 focus:border-primary-400 dark:focus:border-primary-500 focus:ring-primary-100 dark:focus:ring-primary-900/30"
+                        : "border-secondary-200 dark:border-secondary-200/20 focus:border-primary-500 dark:focus:border-secondary-200 focus:ring-primary-500/20 dark:focus:ring-primary-900/30"
                     }`}
                     placeholder="Bonjour, j'aimerais en savoir plus sur..."
                   />
@@ -1769,7 +1769,7 @@ export default function LandingPage() {
               repeat: Infinity,
               ease: "easeInOut",
             }}
-            className="absolute -top-1/4 -left-1/4 w-full h-full bg-primary-100 dark:bg-primary-600/30 rounded-full blur-[120px]"
+            className="absolute -top-1/4 -left-1/4 w-full h-full bg-accent-500 text-secondary-900 dark:bg-primary-600 dark:bg-primary-500/30 rounded-full blur-[120px]"
           />
           <motion.div
             animate={{
@@ -1821,7 +1821,7 @@ export default function LandingPage() {
           viewport={{ once: true }}
           className="max-w-4xl mx-auto text-center relative z-20 px-4"
         >
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary-100 dark:bg-primary-500/10 border border-primary-200 dark:border-primary-500/20 text-primary-700 dark:text-primary-400 text-xs font-black uppercase tracking-[0.2em] mb-8">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-accent-500 text-secondary-900 dark:bg-primary-600 dark:bg-primary-500/10 border border-secondary-200 dark:border-secondary-200/20 text-secondary-900 dark:text-primary-500 text-xs font-black uppercase tracking-[0.2em] mb-8">
             <Zap className="w-4 h-4" />
             <span>Propulsez votre académie</span>
           </div>
@@ -1835,7 +1835,7 @@ export default function LandingPage() {
 
           <p className="text-xl md:text-2xl text-slate-600 dark:text-slate-300/80 mb-12 max-w-2xl mx-auto font-medium leading-relaxed">
             Rejoignez des milliers d'entreprises qui utilisent{" "}
-            <span className="text-primary-700 dark:text-white font-bold">
+            <span className="text-secondary-900 dark:text-white font-bold">
               Smiris Learn
             </span>{" "}
             pour transformer leur savoir en réussite.
@@ -1847,12 +1847,12 @@ export default function LandingPage() {
                 setSelectedPlan("free");
                 setShowSignupModal(true);
               }}
-              className="group relative px-10 py-5 bg-primary-600 dark:bg-white text-white dark:text-slate-950 rounded-2xl text-xl font-black shadow-xl dark:shadow-[0_20px_50px_-15px_rgba(255,255,255,0.3)] hover:shadow-2xl dark:hover:shadow-[0_25px_60px_-15px_rgba(255,255,255,0.4)] transition-all flex items-center gap-3 active:scale-95 hover:bg-primary-700 dark:hover:bg-primary-50 active:bg-primary-600 dark:active:bg-white"
+              className="group relative px-10 py-5 bg-primary-600 dark:bg-primary-500 dark:bg-white text-white dark:text-slate-950 rounded-2xl text-xl font-black shadow-xl dark:shadow-[0_20px_50px_-15px_rgba(255,255,255,0.3)] hover:shadow-2xl dark:hover:shadow-[0_25px_60px_-15px_rgba(255,255,255,0.4)] transition-all flex items-center gap-3 active:scale-95 hover:bg-primary-600 dark:hover:bg-primary-600 dark:hover:bg-secondary-200 active:bg-primary-600 dark:bg-primary-500 dark:active:bg-white"
             >
               Créer mon compte
               <ArrowRight className="w-6 h-6 group-hover:translate-x-1 transition-transform" />
               {/* Outer Glow */}
-              <div className="absolute -inset-1 bg-primary-500/20 dark:bg-white/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity rounded-2xl" />
+              <div className="absolute -inset-1 bg-primary-600 dark:bg-primary-500/20 dark:bg-white/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity rounded-2xl" />
             </button>
 
             <button
@@ -1861,7 +1861,7 @@ export default function LandingPage() {
                   .getElementById("pricing")
                   .scrollIntoView({ behavior: "smooth" })
               }
-              className="px-10 py-5 bg-white/50 dark:bg-white/5 backdrop-blur-md border border-slate-200 dark:border-white/10 text-slate-700 dark:text-white rounded-2xl text-xl font-bold hover:bg-white dark:hover:bg-white/10 transition-all active:scale-95 shadow-sm"
+              className="px-10 py-5 bg-white/50 dark:bg-slate-900/20 backdrop-blur-md border border-slate-200 dark:border-secondary-200/30 text-slate-700 dark:text-white rounded-2xl text-xl font-bold hover:bg-white dark:hover:bg-white/10 transition-all active:scale-95 shadow-sm"
             >
               Voir les tarifs
             </button>
@@ -1891,7 +1891,7 @@ export default function LandingPage() {
         whileInView={{ opacity: 1 }}
         transition={{ duration: 1 }}
         viewport={{ once: true }}
-        className="snap-start bg-white/70 dark:bg-secondary-950/50 backdrop-blur-sm border-y border-primary-100/50 dark:border-gray-800/50 py-8 overflow-hidden"
+        className="snap-start bg-white/70 dark:bg-secondary-950/50 backdrop-blur-sm border-y border-secondary-200/50 dark:border-secondary-200/20/50 py-8 overflow-hidden"
       >
         <p className="text-center text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-6">
           Ils utilisent Smiris Learn
@@ -1933,7 +1933,7 @@ export default function LandingPage() {
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
         viewport={{ once: true }}
-        className="snap-start bg-gradient-to-b from-gray-50 to-white dark:from-secondary-950 dark:to-slate-950 border-t border-primary-100 dark:border-gray-800 py-16"
+        className="snap-start bg-gradient-to-b from-gray-50 to-white dark:from-secondary-950 dark:to-slate-950 border-t border-secondary-200 dark:border-secondary-200/20 py-16"
       >
         <div className="max-w-7xl mx-auto px-4">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-10">
@@ -1950,7 +1950,7 @@ export default function LandingPage() {
                   <a
                     key={i}
                     href="#"
-                    className="w-9 h-9 bg-gray-100 dark:bg-gray-800 rounded-lg flex items-center justify-center text-gray-500 dark:text-gray-400 hover:bg-primary-100 dark:hover:bg-primary-900/30 hover:text-primary-600 dark:hover:text-primary-400 transition-colors text-sm font-bold"
+                    className="w-9 h-9 bg-gray-100 dark:bg-gray-800 rounded-lg flex items-center justify-center text-gray-500 dark:text-gray-400 hover:bg-secondary-200 dark:hover:bg-primary-900/30 hover:text-primary-600 dark:hover:text-primary-500 transition-colors text-sm font-bold"
                   >
                     {s}
                   </a>
@@ -1971,7 +1971,7 @@ export default function LandingPage() {
                           .getElementById(id)
                           .scrollIntoView({ behavior: "smooth" })
                       }
-                      className="text-sm text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+                      className="text-sm text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-500 transition-colors"
                     >
                       {label}
                     </button>
@@ -1988,7 +1988,7 @@ export default function LandingPage() {
                 <li>
                   <a
                     href="#"
-                    className="text-sm text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+                    className="text-sm text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-500 transition-colors"
                   >
                     CGU
                   </a>
@@ -1996,7 +1996,7 @@ export default function LandingPage() {
                 <li>
                   <a
                     href="#"
-                    className="text-sm text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+                    className="text-sm text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-500 transition-colors"
                   >
                     Politique de confidentialité
                   </a>
@@ -2004,7 +2004,7 @@ export default function LandingPage() {
                 <li>
                   <a
                     href="#"
-                    className="text-sm text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+                    className="text-sm text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-500 transition-colors"
                   >
                     Conditions d'utilisation
                   </a>
@@ -2033,7 +2033,7 @@ export default function LandingPage() {
             </div>
           </div>
 
-          <div className="mt-12 pt-8 border-t border-gray-200 dark:border-gray-800 flex flex-col md:flex-row items-center justify-between gap-4">
+          <div className="mt-12 pt-8 border-t border-secondary-200 dark:border-secondary-200/20 flex flex-col md:flex-row items-center justify-between gap-4">
             <p className="text-sm text-gray-400 dark:text-gray-500">
               © 2026 Smiris Learn. Tous droits réservés.
             </p>
@@ -2058,7 +2058,7 @@ export default function LandingPage() {
               initial={{ scale: 0.9, y: 20 }}
               animate={{ scale: 1, y: 0 }}
               exit={{ scale: 0.9, y: 20 }}
-              className="bg-white dark:bg-gray-800 rounded-2xl p-6 max-w-md w-full shadow-2xl border border-primary-100 dark:border-gray-700"
+              className="bg-white dark:bg-gray-800 rounded-2xl p-6 max-w-md w-full shadow-2xl border border-secondary-200 dark:border-secondary-200/20"
               onClick={(e) => e.stopPropagation()}
             >
               <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-2">
@@ -2079,7 +2079,7 @@ export default function LandingPage() {
                   <input
                     type="text"
                     required
-                    className="w-full px-4 py-2 border border-gray-200 dark:border-gray-700 rounded-xl focus:border-primary-400 dark:focus:border-primary-500 focus:ring-4 focus:ring-primary-100 dark:focus:ring-primary-900/30 outline-none transition-all dark:bg-gray-900 dark:text-white"
+                    className="w-full px-4 py-2 border border-secondary-200 dark:border-secondary-200/20 rounded-xl focus:border-primary-500 dark:focus:border-secondary-200 focus:ring-4 focus:ring-primary-500/20 dark:focus:ring-primary-900/30 outline-none transition-all dark:bg-gray-900 dark:text-white"
                     value={signupData.companyName}
                     onChange={(e) =>
                       setSignupData({
@@ -2096,7 +2096,7 @@ export default function LandingPage() {
                   <input
                     type="email"
                     required
-                    className="w-full px-4 py-2 border border-gray-200 dark:border-gray-700 rounded-xl focus:border-primary-400 dark:focus:border-primary-500 focus:ring-4 focus:ring-primary-100 dark:focus:ring-primary-900/30 outline-none transition-all dark:bg-gray-900 dark:text-white"
+                    className="w-full px-4 py-2 border border-secondary-200 dark:border-secondary-200/20 rounded-xl focus:border-primary-500 dark:focus:border-secondary-200 focus:ring-4 focus:ring-primary-500/20 dark:focus:ring-primary-900/30 outline-none transition-all dark:bg-gray-900 dark:text-white"
                     value={signupData.email}
                     onChange={(e) =>
                       setSignupData({ ...signupData, email: e.target.value })
@@ -2110,7 +2110,7 @@ export default function LandingPage() {
                   <input
                     type="password"
                     required
-                    className="w-full px-4 py-2 border border-gray-200 dark:border-gray-700 rounded-xl focus:border-primary-400 dark:focus:border-primary-500 focus:ring-4 focus:ring-primary-100 dark:focus:ring-primary-900/30 outline-none transition-all dark:bg-gray-900 dark:text-white"
+                    className="w-full px-4 py-2 border border-secondary-200 dark:border-secondary-200/20 rounded-xl focus:border-primary-500 dark:focus:border-secondary-200 focus:ring-4 focus:ring-primary-500/20 dark:focus:ring-primary-900/30 outline-none transition-all dark:bg-gray-900 dark:text-white"
                     value={signupData.password}
                     onChange={(e) =>
                       setSignupData({ ...signupData, password: e.target.value })
@@ -2124,7 +2124,7 @@ export default function LandingPage() {
                   <input
                     type="password"
                     required
-                    className="w-full px-4 py-2 border border-gray-200 dark:border-gray-700 rounded-xl focus:border-primary-400 dark:focus:border-primary-500 focus:ring-4 focus:ring-primary-100 dark:focus:ring-primary-900/30 outline-none transition-all dark:bg-gray-900 dark:text-white"
+                    className="w-full px-4 py-2 border border-secondary-200 dark:border-secondary-200/20 rounded-xl focus:border-primary-500 dark:focus:border-secondary-200 focus:ring-4 focus:ring-primary-500/20 dark:focus:ring-primary-900/30 outline-none transition-all dark:bg-gray-900 dark:text-white"
                     value={signupData.confirmPassword}
                     onChange={(e) =>
                       setSignupData({
@@ -2169,14 +2169,14 @@ export default function LandingPage() {
                   En vous inscrivant, vous acceptez nos{" "}
                   <a
                     href="#"
-                    className="text-primary-600 dark:text-primary-400 hover:underline"
+                    className="text-primary-500 dark:text-primary-500 hover:underline"
                   >
                     Conditions d'utilisation
                   </a>{" "}
                   et notre{" "}
                   <a
                     href="#"
-                    className="text-primary-600 dark:text-primary-400 hover:underline"
+                    className="text-primary-500 dark:text-primary-500 hover:underline"
                   >
                     Politique de confidentialité
                   </a>

@@ -106,7 +106,7 @@ export default function SanitizedInput({
                 ? 'border-red-300 dark:border-red-500/50 focus:border-red-500 dark:focus:border-red-400 focus:ring-4 focus:ring-red-100 dark:focus:ring-red-900/30' 
                 : isValid
                     ? 'border-emerald-300 dark:border-emerald-500/50 focus:border-emerald-500 dark:focus:border-emerald-400 focus:ring-4 focus:ring-emerald-100 dark:focus:ring-emerald-900/30'
-                    : 'border-secondary-200 dark:border-gray-600 focus:border-primary-400 dark:focus:border-primary-500 focus:ring-4 focus:ring-primary-100 dark:focus:ring-primary-900/30'
+                    : 'border-secondary-200 dark:border-gray-600 focus:border-primary-500 dark:focus:border-secondary-200 focus:ring-4 focus:ring-primary-500/20 dark:focus:ring-primary-900/30'
                 }
                 ${className}
             `}
