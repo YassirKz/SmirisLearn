@@ -1,4 +1,4 @@
-﻿import { useState } from 'react';
+import { useState } from 'react';
 import { createMemberInvitation, getInvitationByToken as fetchInvitationByToken, acceptMemberInvitation } from '../services/invitationsService';
 import { formatError } from '../lib/errorFormatter';
 
@@ -41,12 +41,12 @@ export function useMemberInvitation() {
     }
   };
 
-  const acceptInvitation = async (token, userId) => {
+  const acceptInvitation = async (token, userId, invitationData = null) => {
     try {
       setLoading(true);
       setError(null);
 
-      const result = await acceptMemberInvitation(token, userId);
+      const result = await acceptMemberInvitation(token, userId, invitationData);
       if (result.error) {
         throw result.error;
       }

@@ -102,10 +102,15 @@ export async function getInvitationByToken(token) {
   return result;
 }
 
-export async function acceptMemberInvitation(token, userId) {
-  const invitationResult = await getInvitationByToken(token);
-  if (invitationResult.error) return { error: invitationResult.error };
-  const invitation = invitationResult.data;
+export async function acceptMemberInvitation(token, userId, invitationData = null) {
+  let invitation = invitationData;
+  
+  if (!invitation) {
+    const invitationResult = await getInvitationByToken(token);
+    if (invitationResult.error) return { error: invitationResult.error };
+    invitation = invitationResult.data;
+  }
+
   if (!invitation) return { error: new Error('Invitation invalide') };
   if (new Date(invitation.expires_at) < new Date()) return { error: new Error('Invitation expirée') };
 

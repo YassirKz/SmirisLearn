@@ -202,7 +202,7 @@ export default function AcceptInvitePage() {
                         password: formData.password,
                     });
                     if (signInError) throw signInError;
-                    await acceptMemberInvitation(token, authData.user.id);
+                    await acceptMemberInvitation(token, authData.user.id, invitation);
                 } else {
                     // Nouvel utilisateur : on crée le compte
                     const { data: authData, error: signUpError } = await supabase.auth.signUp({
@@ -213,7 +213,7 @@ export default function AcceptInvitePage() {
                         }
                     });
                     if (signUpError) throw signUpError;
-                    await acceptMemberInvitation(token, authData.user.id);
+                    await acceptMemberInvitation(token, authData.user.id, invitation);
                 }
                 navigate('/student/learning', { replace: true });
             }
