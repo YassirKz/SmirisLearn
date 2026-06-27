@@ -55,14 +55,29 @@ serve(async (req) => {
         const organizationId = session.metadata.organization_id;
         const planType = session.metadata.plan_type || 'starter'; // Prioriser la metadata
 
+        let subscriptionStatus = 'active';
+        let trialEndsAt = null;
+
+        if (session.subscription) {
+          try {
+            const subscription = await stripe.subscriptions.retrieve(session.subscription);
+            if (subscription.status === 'trialing') {
+              subscriptionStatus = 'trial';
+              trialEndsAt = subscription.trial_end ? new Date(subscription.trial_end * 1000).toISOString() : null;
+            }
+          } catch (err) {
+            console.error('Error retrieving subscription details:', err);
+          }
+        }
+
         const { error: updateError } = await supabase
           .from('organizations')
           .update({
             stripe_customer_id: session.customer,
             stripe_subscription_id: session.subscription,
-            subscription_status: 'active',
+            subscription_status: subscriptionStatus,
             plan_type: planType,
-            trial_ends_at: null,
+            trial_ends_at: trialEndsAt,
           })
           .eq('id', organizationId);
 
@@ -74,14 +89,26 @@ serve(async (req) => {
       case 'customer.subscription.deleted': {
         const subscription = event.data.object;
         const customerId = subscription.customer;
-        const status = subscription.status === 'active' ? 'active' : 
-                     subscription.status === 'canceled' ? 'canceled' : 'past_due';
+        
+        let status = 'past_due';
+        if (subscription.status === 'active') {
+          status = 'active';
+        } else if (subscription.status === 'trialing') {
+          status = 'trial';
+        } else if (subscription.status === 'canceled') {
+          status = 'canceled';
+        }
+
+        const trialEndsAt = subscription.trial_end 
+          ? new Date(subscription.trial_end * 1000).toISOString() 
+          : null;
 
         const { error: updateError } = await supabase
           .from('organizations')
           .update({
             subscription_status: status,
             stripe_subscription_id: subscription.status === 'canceled' ? null : subscription.id,
+            trial_ends_at: trialEndsAt,
             // Mise à jour optionnelle du plan si présent dans metadata
             ...(subscription.metadata?.plan_type ? { plan_type: subscription.metadata.plan_type } : {})
           })

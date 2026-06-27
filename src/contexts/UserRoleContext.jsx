@@ -16,6 +16,7 @@ export const UserRoleProvider = ({ children }) => {
   const { user } = useAuth();
   const [role, setRole] = useState(null);
   const [organizationId, setOrganizationId] = useState(null);
+  const [subscriptionStatus, setSubscriptionStatus] = useState(null);
   const [isAdminAccess, setIsAdminAccess] = useState(false);
   const [loading, setLoading] = useState(true);
   const lastFetchedUserId = React.useRef(null);
@@ -39,7 +40,7 @@ export const UserRoleProvider = ({ children }) => {
 
       const { data: profile, error } = await supabase
         .from("profiles")
-        .select("role, organization_id")
+        .select("role, organization_id, organizations(subscription_status)")
         .eq("id", user.id)
         .maybeSingle();
 
@@ -74,6 +75,7 @@ export const UserRoleProvider = ({ children }) => {
 
       setRole(finalRole);
       setOrganizationId(finalOrgId);
+      setSubscriptionStatus(profile?.organizations?.subscription_status || null);
       setIsAdminAccess(["super_admin", "org_admin"].includes(finalRole));
 
       lastFetchedUserId.current = user.id;
@@ -95,11 +97,12 @@ export const UserRoleProvider = ({ children }) => {
     () => ({
       role,
       organizationId,
+      subscriptionStatus,
       isAdminAccess,
       loading,
       refreshRole: fetchRoleData,
     }),
-    [role, organizationId, isAdminAccess, loading, fetchRoleData],
+    [role, organizationId, subscriptionStatus, isAdminAccess, loading, fetchRoleData],
   );
 
   return (

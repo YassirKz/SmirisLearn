@@ -1,4 +1,4 @@
-import { Navigate } from "react-router-dom";
+import { Navigate, useLocation } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
 import { useUserRole } from "../../hooks/useUserRole";
 import LoadingSpinner from "../ui/LoadingSpinner";
@@ -16,7 +16,9 @@ export default function ProtectedRoute({
   redirectTo = "/login",
 }) {
   const { user, loading: authLoading } = useAuth();
-  const { role, loading: roleLoading } = useUserRole();
+  const { role, subscriptionStatus, loading: roleLoading } = useUserRole();
+  const location = useLocation();
+  const currentPath = location.pathname;
 
   // Afficher un loader pendant la vérification
   if (authLoading || roleLoading) {
@@ -35,6 +37,16 @@ export default function ProtectedRoute({
   // Si des rôles sont spécifiés et que l'utilisateur n'a pas le bon rôle
   if (allowedRoles.length > 0 && !allowedRoles.includes(role)) {
     return <Navigate to="/unauthorized" replace />;
+  }
+
+  // Vérifier le statut de l'abonnement
+  if (subscriptionStatus === 'past_due' || subscriptionStatus === 'canceled' || subscriptionStatus === 'suspended') {
+    // Si c'est un org_admin et qu'il essaie d'accéder aux paramètres (pour payer), on le laisse passer
+    if (role === 'org_admin' && currentPath === '/admin/settings') {
+      return children;
+    }
+    // Sinon, on bloque l'accès
+    return <Navigate to="/unauthorized" state={{ errorType: 'trial_expired' }} replace />;
   }
 
   // Tout est bon, afficher le composant
