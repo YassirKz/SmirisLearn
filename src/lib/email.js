@@ -59,6 +59,13 @@ export const sendInvitationEmail = async ({
     }
 
     // Envoi effectif
+    console.log("📨 [EmailJS] Envoi de l'email...", {
+      serviceId,
+      templateId,
+      templateParams,
+      type
+    });
+    
     const response = await emailjs.send(serviceId, templateId, templateParams);
 
     return { success: true, data: response };

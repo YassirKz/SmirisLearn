@@ -12,3 +12,5 @@ export function createSupabaseClient() {
 }
 
 export const supabase = createSupabaseClient()
+
+console.log('🔄 [Supabase] Client initialisé');

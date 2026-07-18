@@ -31,6 +31,7 @@ export const UserRoleProvider = ({ children }) => {
       return;
     }
 
+    console.log('🎭 [UserRoleContext] Chargement du rôle pour:', user?.id);
     const isInitialFetch = lastFetchedUserId.current !== user.id;
 
     try {
@@ -77,6 +78,8 @@ export const UserRoleProvider = ({ children }) => {
       setOrganizationId(finalOrgId);
       setSubscriptionStatus(profile?.organizations?.subscription_status || null);
       setIsAdminAccess(["super_admin", "org_admin"].includes(finalRole));
+
+      console.log('🎭 [UserRoleContext] Rôle récupéré:', { role: finalRole, organizationId: finalOrgId });
 
       lastFetchedUserId.current = user.id;
     } catch (err) {

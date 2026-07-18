@@ -629,7 +629,7 @@ export default function AdminSettings() {
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.4 }}
-                            className="bg-white/80 dark:bg-slate-900/40 backdrop-blur-sm rounded-3xl p-8 shadow-lg border border-secondary-200 dark:border-secondary-200/20 relative overflow-hidden group"
+                            className={`bg-white/80 dark:bg-slate-900/40 backdrop-blur-sm rounded-3xl p-8 shadow-lg border border-secondary-200 dark:border-secondary-200/20 relative group ${isSessionTimeoutOpen ? 'z-20' : 'z-10'}`}
                         >
                             {/* Glow Effect */}
                             <div className="absolute top-0 right-0 w-64 h-64 bg-primary-600 dark:bg-primary-500/5 dark:bg-primary-600 dark:bg-primary-500/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none group-hover:bg-secondary-200/10 dark:group-hover:bg-secondary-200/20 transition-colors duration-500" />
@@ -668,7 +668,7 @@ export default function AdminSettings() {
                                                 initial={{ opacity: 0, y: -10, scale: 0.95 }}
                                                 animate={{ opacity: 1, y: 0, scale: 1 }}
                                                 exit={{ opacity: 0, y: -10, scale: 0.95 }}
-                                                className="absolute left-0 mt-2 w-full bg-white/80 dark:bg-slate-900/40 backdrop-blur-2xl rounded-2xl shadow-xl border border-secondary-200 dark:border-secondary-200/20 py-2 z-50 overflow-hidden"
+                                                className="absolute left-0 mt-2 w-full bg-white dark:bg-slate-900 rounded-2xl shadow-xl border border-secondary-200 dark:border-secondary-200/20 py-2 z-50 overflow-hidden"
                                             >
                                                 {[
                                                     { value: '15', label: '15 minutes' },
@@ -686,7 +686,7 @@ export default function AdminSettings() {
                                                         className={`w-full px-4 py-2.5 text-left text-sm transition-colors
                                                             ${settings.sessionTimeout === opt.value 
                                                                 ? 'bg-primary-600 dark:bg-primary-500/10 text-primary-500 dark:text-primary-500 font-bold' 
-                                                                : 'text-gray-600 dark:text-gray-400 hover:bg-white/50 dark:hover:bg-white/10'
+                                                                : 'text-gray-600 dark:text-gray-400 hover:bg-secondary-50 dark:hover:bg-white/10'
                                                             }`}
                                                     >
                                                         {opt.label}

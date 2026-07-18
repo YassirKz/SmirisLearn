@@ -11,12 +11,14 @@ serve(async (req) => {
     return new Response("ok", { headers: corsHeaders });
   }
 
+  console.log('📡 [API] delete-student - Début');
   try {
     const { keyData, supabase } = await verifyApiKey(req);
 
     const url = new URL(req.url);
     const pathParts = url.pathname.split("/");
     const studentId = pathParts[pathParts.length - 1];
+    console.log('📡 [API] delete-student - studentId:', studentId);
 
     if (!studentId) {
       throw new Error("Missing student ID in path");
@@ -43,6 +45,8 @@ serve(async (req) => {
     await supabase.from("profiles").delete().eq("id", studentId);
     // Supprimer l'utilisateur auth
     await supabase.auth.admin.deleteUser(studentId);
+
+    console.log('📡 [API] delete-student - Succès:', studentId);
 
     responseBody = {
       success: true,

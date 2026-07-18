@@ -10,6 +10,7 @@ serve(async (req) => {
     return new Response("ok", { headers: corsHeaders });
   }
 
+  console.log('📡 [API] add-student - Début');
   try {
     const { keyData, supabase } = await verifyApiKey(req);
 
@@ -17,6 +18,7 @@ serve(async (req) => {
     const pathParts = url.pathname.split("/");
     // URL attendue : /add-student/organizations/{orgId}/students
     const orgId = pathParts[pathParts.length - 2];
+    console.log('📡 [API] add-student - orgId:', orgId);
 
     if (!orgId) {
       throw new Error("Missing organization ID in path");
@@ -26,6 +28,7 @@ serve(async (req) => {
     checkOrgAccess(keyData, orgId);
 
     const { email, fullName, password, groupIds } = await req.json();
+    console.log('📡 [API] add-student - Payload:', { email, fullName, groupIds });
 
     // Validation des entrées
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -108,6 +111,8 @@ serve(async (req) => {
         console.warn("Some group IDs are invalid or do not belong to the organization");
       }
     }
+
+    console.log('📡 [API] add-student - Succès:', studentId);
 
     responseBody = {
       success: true,

@@ -40,8 +40,15 @@ serve(async (req) => {
     const org = profile.organizations;
 
     // Lire le plan demandé
-    const { priceId, planType } = await req.json();
+    const { priceId, planType, successUrl } = await req.json();
     if (!priceId) throw new Error('Missing priceId');
+
+    // URL de retour après paiement (admin dashboard par défaut)
+    const frontendUrl = Deno.env.get('FRONTEND_URL') || 'http://localhost:5173';
+    const resolvedSuccessUrl = successUrl
+      ? `${successUrl}?session_id={CHECKOUT_SESSION_ID}&payment=success`
+      : `${frontendUrl}/admin?session_id={CHECKOUT_SESSION_ID}&payment=success`;
+    const resolvedCancelUrl = `${frontendUrl}/admin`;
 
     let customerId = org.stripe_customer_id;
     if (!customerId) {
@@ -61,8 +68,8 @@ serve(async (req) => {
       customer: customerId,
       line_items: [{ price: priceId, quantity: 1 }],
       mode: 'subscription',
-      success_url: `${Deno.env.get('FRONTEND_URL')}/admin/settings?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${Deno.env.get('FRONTEND_URL')}/admin/settings`,
+      success_url: resolvedSuccessUrl,
+      cancel_url: resolvedCancelUrl,
       subscription_data: {
         trial_period_days: org.plan_type === 'free' ? 14 : undefined,
         metadata: { 

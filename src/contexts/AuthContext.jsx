@@ -7,6 +7,8 @@ import logger from "../lib/logger";
 import { checkRateLimit, untrusted, validateEmail } from "../utils/security";
 import LoadingSpinner from "../components/ui/LoadingSpinner";
 
+console.log('🔐 [AuthContext] Initialisation');
+
 export const AuthContext = createContext();
 
 // Variants pour animations
@@ -72,6 +74,7 @@ export function AuthProvider({ children }) {
   useEffect(() => {
     // Récupérer session initiale
     const getInitialSession = async () => {
+      console.log('🔐 [AuthContext] Récupération session en cours...');
       try {
         const {
           data: { session },
@@ -82,6 +85,7 @@ export function AuthProvider({ children }) {
         setSession(session);
         const actualUser = session?.user ?? null;
         setRealUser(actualUser);
+        console.log('🔐 [AuthContext] Session récupérée:', session ? '✅ OK' : '❌ Aucune session');
 
         // --- LOGIQUE D'IMPERSONNALISATION SÉCURISÉE ---
         const impId = localStorage.getItem("impersonatedUserId");
@@ -153,6 +157,7 @@ export function AuthProvider({ children }) {
   // ========== FONCTIONS AUTH SÉCURISÉES (toutes mémoïsées) ==========
 
   const signUp = useCallback(async (email, password, metadata = {}) => {
+    console.log('📝 [AuthContext] Tentative d\'inscription:', { email });
     try {
       setError(null);
 
@@ -185,6 +190,7 @@ export function AuthProvider({ children }) {
       });
 
       if (error) throw error;
+      console.log('📝 [AuthContext] Inscription réussie:', data);
       return { data, error: null };
     } catch (error) {
       logger.error("Erreur dans signUp:", error);
@@ -196,6 +202,7 @@ export function AuthProvider({ children }) {
   }, [checkActionLimit]);
 
   const signIn = useCallback(async (email, password) => {
+    console.log('🔑 [AuthContext] Tentative de connexion:', { email });
     try {
       setError(null);
 
@@ -214,6 +221,7 @@ export function AuthProvider({ children }) {
       });
 
       if (error) throw error;
+      console.log('🔑 [AuthContext] Connexion réussie:', data);
       return { data, error: null };
     } catch (error) {
       setError(error.message);
@@ -252,6 +260,7 @@ export function AuthProvider({ children }) {
   }, [checkActionLimit]);
 
   const signOut = useCallback(async () => {
+    console.log('🚪 [AuthContext] Déconnexion');
     try {
       setLoading(true);
       const { error } = await supabase.auth.signOut();
@@ -267,6 +276,7 @@ export function AuthProvider({ children }) {
 
   // Mode Impersonation control
   const startImpersonation = useCallback(async (targetUserId) => {
+    console.log('👤 [AuthContext] Démarrage impersonation:', { targetUserId });
     try {
       // Vérification du rôle dans la DB (pas le JWT)
       const { data: profile } = await supabase
@@ -286,7 +296,7 @@ export function AuthProvider({ children }) {
         .single();
       if (data) {
         localStorage.setItem("impersonatedUserId", targetUserId);
-        setImpersonatedData({
+        const impData = {
           id: data.id,
           email: data.email,
           user_metadata: {
@@ -297,7 +307,9 @@ export function AuthProvider({ children }) {
           isImpersonated: true,
           realUserRole: profile.role,
           realUserEmail: realUser.email,
-        });
+        };
+        setImpersonatedData(impData);
+        console.log('👤 [AuthContext] Impersonation active:', impData);
         window.location.href = data.role === "org_admin" ? "/admin" : "/student";
       }
     } catch (e) {
@@ -309,6 +321,7 @@ export function AuthProvider({ children }) {
   }, [realUser]);
 
   const stopImpersonation = useCallback(() => {
+    console.log('👤 [AuthContext] Arrêt impersonation');
     localStorage.removeItem("impersonatedUserId");
     setImpersonatedData(null);
     const role = realUser?.user_metadata?.role;

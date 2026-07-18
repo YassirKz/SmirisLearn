@@ -131,6 +131,9 @@ export default function QuizCreator({ quiz, videoId, onSuccess, onCancel }) {
                 questions: cleanQuestions
             };
 
+            console.log('📝 [QuizCreator] Sauvegarde du quiz...');
+            console.log('📝 [QuizCreator] Payload:', payload);
+
             let error;
             if (quiz?.id) {
                 ({ error } = await supabase
@@ -145,6 +148,7 @@ export default function QuizCreator({ quiz, videoId, onSuccess, onCancel }) {
 
             if (error) throw error;
 
+            console.log('📝 [QuizCreator] Quiz sauvegardé avec succès');
             success(quiz?.id ? "Quiz modifié avec succès" : "Quiz créé avec succès");
             onSuccess?.();
         } catch (err) {
@@ -239,7 +243,7 @@ export default function QuizCreator({ quiz, videoId, onSuccess, onCancel }) {
                                     initial={{ opacity: 0, y: -10, scale: 0.95 }}
                                     animate={{ opacity: 1, y: 0, scale: 1 }}
                                     exit={{ opacity: 0, y: -10, scale: 0.95 }}
-                                    className="absolute left-0 mt-2 w-full bg-white/80 dark:bg-slate-900/40 backdrop-blur-2xl rounded-2xl shadow-xl border border-secondary-200 dark:border-secondary-200/20 py-2 z-50 overflow-hidden max-h-60 overflow-y-auto"
+                                    className="absolute left-0 mt-2 w-full bg-white dark:bg-slate-900 rounded-2xl shadow-xl border border-secondary-200 dark:border-secondary-200/20 py-2 z-50 overflow-hidden max-h-60 overflow-y-auto"
                                 >
                                     {videos.map(v => (
                                         <button
@@ -252,7 +256,7 @@ export default function QuizCreator({ quiz, videoId, onSuccess, onCancel }) {
                                             className={`w-full px-4 py-2.5 text-left text-sm transition-colors truncate
                                                 ${form.video_id === v.id 
                                                     ? 'bg-primary-600 dark:bg-primary-500/10 text-primary-500 dark:text-primary-500 font-bold' 
-                                                    : 'text-gray-600 dark:text-gray-400 hover:bg-white/50 dark:hover:bg-white/10'
+                                                    : 'text-gray-600 dark:text-gray-400 hover:bg-secondary-50 dark:hover:bg-white/10'
                                                 }`}
                                         >
                                             {escapeText(untrusted(v.title))}

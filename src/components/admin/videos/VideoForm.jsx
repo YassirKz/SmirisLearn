@@ -189,30 +189,32 @@ export default function VideoForm({
             }
 
             if (result.error) throw result.error;
-            const updatedVideoId = result.data[0].id;
+            const updatedVideoId = result.data?.[0]?.id || video?.id;
 
-            // Handle Quiz Association
-            if (associatedQuizId) {
-                // Remove old association if any (though currently enforced 1:1 by UI)
-                await supabase
-                    .from('quizzes')
-                    .update({ video_id: null })
-                    .eq('video_id', updatedVideoId)
-                    .neq('id', associatedQuizId);
+            if (updatedVideoId) {
+                // Handle Quiz Association
+                if (associatedQuizId) {
+                    // Remove old association if any (though currently enforced 1:1 by UI)
+                    await supabase
+                        .from('quizzes')
+                        .update({ video_id: null })
+                        .eq('video_id', updatedVideoId)
+                        .neq('id', associatedQuizId);
 
-                // Add new association
-                const { error: quizErr } = await supabase
-                    .from('quizzes')
-                    .update({ video_id: updatedVideoId })
-                    .eq('id', associatedQuizId);
-                
-                if (quizErr) throw quizErr;
-            } else if (video?.id) {
-                // If quiz was unselected, clear it
-                await supabase
-                    .from('quizzes')
-                    .update({ video_id: null })
-                    .eq('video_id', video.id);
+                    // Add new association
+                    const { error: quizErr } = await supabase
+                        .from('quizzes')
+                        .update({ video_id: updatedVideoId })
+                        .eq('id', associatedQuizId);
+                    
+                    if (quizErr) throw quizErr;
+                } else if (video?.id) {
+                    // If quiz was unselected, clear it
+                    await supabase
+                        .from('quizzes')
+                        .update({ video_id: null })
+                        .eq('video_id', video.id);
+                }
             }
 
             success(video ? 'Vidéo modifiée' : 'Vidéo créée');
@@ -354,7 +356,7 @@ export default function VideoForm({
                                 initial={{ opacity: 0, y: -10, scale: 0.95 }}
                                 animate={{ opacity: 1, y: 0, scale: 1 }}
                                 exit={{ opacity: 0, y: -10, scale: 0.95 }}
-                                className="absolute left-0 mt-2 w-full bg-white/80 dark:bg-slate-900/40 backdrop-blur-2xl rounded-2xl shadow-xl border border-secondary-200 dark:border-secondary-200/20 py-2 z-50 overflow-hidden"
+                                className="absolute left-0 mt-2 w-full bg-white dark:bg-slate-900 rounded-2xl shadow-xl border border-secondary-200 dark:border-secondary-200/20 py-2 z-50 overflow-hidden"
                             >
                                 {pillars.map(pillar => (
                                     <button
@@ -367,7 +369,7 @@ export default function VideoForm({
                                         className={`w-full px-4 py-2.5 text-left text-sm transition-colors
                                             ${formData.pillar_id === pillar.id 
                                                 ? 'bg-primary-600 dark:bg-primary-500/10 text-primary-500 dark:text-primary-500 font-bold' 
-                                                : 'text-gray-600 dark:text-gray-400 hover:bg-white/50 dark:hover:bg-white/10'
+                                                : 'text-gray-600 dark:text-gray-400 hover:bg-secondary-50 dark:hover:bg-white/10'
                                             }`}
                                     >
                                         {escapeText(untrusted(pillar.name))}
@@ -431,7 +433,7 @@ export default function VideoForm({
                                 initial={{ opacity: 0, y: -10, scale: 0.95 }}
                                 animate={{ opacity: 1, y: 0, scale: 1 }}
                                 exit={{ opacity: 0, y: -10, scale: 0.95 }}
-                                className="absolute left-0 mt-2 w-full bg-white/80 dark:bg-slate-900/40 backdrop-blur-2xl rounded-2xl shadow-xl border border-secondary-200 dark:border-secondary-200/20 py-2 z-50 overflow-hidden"
+                                className="absolute left-0 mt-2 w-full bg-white dark:bg-slate-900 rounded-2xl shadow-xl border border-secondary-200 dark:border-secondary-200/20 py-2 z-50 overflow-hidden"
                             >
                                 <button
                                     type="button"
@@ -442,7 +444,7 @@ export default function VideoForm({
                                     className={`w-full px-4 py-2.5 text-left text-sm transition-colors
                                         ${associatedQuizId === '' 
                                             ? 'bg-primary-600 dark:bg-primary-500/10 text-primary-500 dark:text-primary-500 font-bold' 
-                                            : 'text-gray-600 dark:text-gray-400 hover:bg-white/50 dark:hover:bg-white/10'
+                                            : 'text-gray-600 dark:text-gray-400 hover:bg-secondary-50 dark:hover:bg-white/10'
                                         }`}
                                 >
                                     Aucun quiz
@@ -458,7 +460,7 @@ export default function VideoForm({
                                         className={`w-full px-4 py-2.5 text-left text-sm transition-colors
                                             ${associatedQuizId === q.id 
                                                 ? 'bg-primary-600 dark:bg-primary-500/10 text-primary-500 dark:text-primary-500 font-bold' 
-                                                : 'text-gray-600 dark:text-gray-400 hover:bg-white/50 dark:hover:bg-white/10'
+                                                : 'text-gray-600 dark:text-gray-400 hover:bg-secondary-50 dark:hover:bg-white/10'
                                             }`}
                                     >
                                         Quiz de : {escapeText(untrusted(q.video?.title || 'Inconnue'))}

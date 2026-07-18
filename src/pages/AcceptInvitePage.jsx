@@ -191,7 +191,7 @@ export default function AcceptInvitePage() {
 
                 if (rpcError) throw rpcError;
 
-                navigate('/admin', { replace: true });
+                navigate('/admin?firstLogin=true', { replace: true });
 
             } else {
                 // === INVITATION MEMBRE ===

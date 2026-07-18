@@ -1,6 +1,6 @@
 export const STORAGE_CONFIG = {
     BUCKET_NAME: 'videos',
-    MAX_FILE_SIZE: 500 * 1024 * 1024, // 500 Mo
+    MAX_FILE_SIZE: 100 * 1024 * 1024 * 1024, // 100 Go (Pas de limite effective)
     ALLOWED_TYPES: [
         'video/mp4',
         'video/webm',

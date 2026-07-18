@@ -1,6 +1,6 @@
 // src/components/admin/members/MembersList.jsx
-import { useState, useEffect, useCallback, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useState, useEffect, useCallback, useRef } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   Users,
   UserPlus,
@@ -18,33 +18,36 @@ import {
   Plus,
   X,
   Eye,
-  ChevronDown
-} from 'lucide-react';
-import { useAuth } from '../../../hooks/useAuth';
-import { useToast } from '../../../hooks/useToast';
-import { useDebounce } from '../../../hooks/useDebounce';
-import { useMemberInvitation } from '../../../hooks/useMemberInvitation';
-import { supabase } from '../../../lib/supabase';
-import { untrusted, escapeText, validateEmail } from '../../../utils/security';
-import ConfirmationModal from '../../ui/ConfirmationModal';
-import SanitizedInput from '../../ui/SanitizedInput';
+  ChevronDown,
+} from "lucide-react";
+import { useAuth } from "../../../hooks/useAuth";
+import { useToast } from "../../../hooks/useToast";
+import { useDebounce } from "../../../hooks/useDebounce";
+import { useMemberInvitation } from "../../../hooks/useMemberInvitation";
+import { supabase } from "../../../lib/supabase";
+import { untrusted, escapeText, validateEmail } from "../../../utils/security";
+import ConfirmationModal from "../../ui/ConfirmationModal";
+import SanitizedInput from "../../ui/SanitizedInput";
 
 const ROLE_CONFIG = {
   org_admin: {
     label: "Administrateur",
     icon: Shield,
-    color: 'bg-accent-500 text-secondary-900 text-accent-700 border-accent-200 dark:bg-accent-900/30 dark:text-accent-300 dark:border-accent-800'
+    color:
+      "bg-accent-500 text-secondary-900 text-accent-700 border-accent-200 dark:bg-accent-900/30 dark:text-accent-300 dark:border-accent-800",
   },
   student: {
     label: "Étudiant",
     icon: GraduationCap,
-    color: 'bg-accent-500 text-secondary-900 text-secondary-900 border-secondary-200 dark:bg-primary-900/30 dark:text-primary-300 dark:border-primary-800'
+    color:
+      "bg-accent-500 text-secondary-900 text-secondary-900 border-secondary-200 dark:bg-primary-900/30 dark:text-primary-300 dark:border-primary-800",
   },
   super_admin: {
     label: "Super Admin",
     icon: Shield,
-    color: 'bg-red-100 text-red-700 border-red-200 dark:bg-red-900/30 dark:text-red-300 dark:border-red-800'
-  }
+    color:
+      "bg-red-100 text-red-700 border-red-200 dark:bg-red-900/30 dark:text-red-300 dark:border-red-800",
+  },
 };
 
 export default function MembersList({ isReadOnly = false, orgId: propOrgId }) {
@@ -56,15 +59,15 @@ export default function MembersList({ isReadOnly = false, orgId: propOrgId }) {
   const [groups, setGroups] = useState([]);
   const [loading, setLoading] = useState(true);
   const [organizationId, setOrganizationId] = useState(null);
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useState("");
   const debouncedSearch = useDebounce(search, 300);
-  const [selectedGroup, setSelectedGroup] = useState('all');
+  const [selectedGroup, setSelectedGroup] = useState("all");
   const [updatingId, setUpdatingId] = useState(null);
   const [deletingId, setDeletingId] = useState(null);
   const [showInviteForm, setShowInviteForm] = useState(false);
-  const [inviteEmail, setInviteEmail] = useState('');
-  const [inviteRole, setInviteRole] = useState('student');
-  
+  const [inviteEmail, setInviteEmail] = useState("");
+  const [inviteRole, setInviteRole] = useState("student");
+
   const [isGroupFilterOpen, setIsGroupFilterOpen] = useState(false);
   const [isInviteRoleOpen, setIsInviteRoleOpen] = useState(false);
   const groupFilterRef = useRef(null);
@@ -82,9 +85,9 @@ export default function MembersList({ isReadOnly = false, orgId: propOrgId }) {
           setOrganizationId(user.organization_id);
         } else if (user) {
           const { data: profile } = await supabase
-            .from('profiles')
-            .select('organization_id')
-            .eq('id', user.id)
+            .from("profiles")
+            .select("organization_id")
+            .eq("id", user.id)
             .single();
           if (profile?.organization_id) {
             setOrganizationId(profile.organization_id);
@@ -107,10 +110,10 @@ export default function MembersList({ isReadOnly = false, orgId: propOrgId }) {
     const fetchGroups = async () => {
       if (!organizationId) return;
       const { data } = await supabase
-        .from('groups')
-        .select('id, name')
-        .eq('organization_id', organizationId)
-        .order('name');
+        .from("groups")
+        .select("id, name")
+        .eq("organization_id", organizationId)
+        .order("name");
       setGroups(data || []);
     };
     fetchGroups();
@@ -122,20 +125,22 @@ export default function MembersList({ isReadOnly = false, orgId: propOrgId }) {
     setLoading(true);
     try {
       let query = supabase
-        .from('profiles')
-        .select(`
+        .from("profiles")
+        .select(
+          `
           id,
           full_name,
           email,
           role,
           created_at
-        `)
-        .eq('organization_id', organizationId)
-        .in('role', ['student', 'org_admin', 'super_admin']);
+        `,
+        )
+        .eq("organization_id", organizationId)
+        .in("role", ["student", "org_admin", "super_admin"]);
 
       if (debouncedSearch) {
         query = query.or(
-          `full_name.ilike.%${debouncedSearch}%,email.ilike.%${debouncedSearch}%`
+          `full_name.ilike.%${debouncedSearch}%,email.ilike.%${debouncedSearch}%`,
         );
       }
 
@@ -148,38 +153,40 @@ export default function MembersList({ isReadOnly = false, orgId: propOrgId }) {
         return;
       }
 
-      const memberIds = profiles.map(p => p.id);
+      const memberIds = profiles.map((p) => p.id);
       const { data: memberships, error: membershipsError } = await supabase
-        .from('group_members')
-        .select(`
+        .from("group_members")
+        .select(
+          `
           user_id,
           groups ( id, name )
-        `)
-        .in('user_id', memberIds);
+        `,
+        )
+        .in("user_id", memberIds);
 
       if (membershipsError) throw membershipsError;
 
       const groupsByUser = {};
-      memberships?.forEach(m => {
+      memberships?.forEach((m) => {
         if (!groupsByUser[m.user_id]) groupsByUser[m.user_id] = [];
         groupsByUser[m.user_id].push(m.groups);
       });
 
-      const formatted = profiles.map(p => ({
+      const formatted = profiles.map((p) => ({
         ...p,
-        groups: groupsByUser[p.id] || []
+        groups: groupsByUser[p.id] || [],
       }));
 
       let filtered = formatted;
-      if (selectedGroup !== 'all') {
-        filtered = formatted.filter(m =>
-          m.groups.some(g => g.id === selectedGroup)
+      if (selectedGroup !== "all") {
+        filtered = formatted.filter((m) =>
+          m.groups.some((g) => g.id === selectedGroup),
         );
       }
 
       setMembers(filtered);
     } catch (err) {
-      console.error('Erreur chargement membres:', err);
+      console.error("Erreur chargement membres:", err);
       showError("Erreur lors du chargement des membres");
     } finally {
       setLoading(false);
@@ -193,10 +200,16 @@ export default function MembersList({ isReadOnly = false, orgId: propOrgId }) {
   // Fermer les dropdowns si on clique ailleurs
   useEffect(() => {
     function handleClickOutside(event) {
-      if (groupFilterRef.current && !groupFilterRef.current.contains(event.target)) {
+      if (
+        groupFilterRef.current &&
+        !groupFilterRef.current.contains(event.target)
+      ) {
         setIsGroupFilterOpen(false);
       }
-      if (inviteRoleRef.current && !inviteRoleRef.current.contains(event.target)) {
+      if (
+        inviteRoleRef.current &&
+        !inviteRoleRef.current.contains(event.target)
+      ) {
         setIsInviteRoleOpen(false);
       }
     }
@@ -209,17 +222,24 @@ export default function MembersList({ isReadOnly = false, orgId: propOrgId }) {
       showError("Vous ne pouvez pas modifier votre propre rôle");
       return;
     }
-    const newRole = member.role === 'student' ? 'org_admin' : 'student';
-    if (!confirm(`Êtes-vous sûr de vouloir changer le rôle de ${member.full_name || member.email} en ${ROLE_CONFIG[newRole].label} ?`)) return;
+    const newRole = member.role === "student" ? "org_admin" : "student";
+    if (
+      !confirm(
+        `Êtes-vous sûr de vouloir changer le rôle de ${member.full_name || member.email} en ${ROLE_CONFIG[newRole].label} ?`,
+      )
+    )
+      return;
 
     setUpdatingId(member.id);
     try {
       const { error } = await supabase
-        .from('profiles')
+        .from("profiles")
         .update({ role: newRole })
-        .eq('id', member.id);
+        .eq("id", member.id);
       if (error) throw error;
-      setMembers(prev => prev.map(m => m.id === member.id ? { ...m, role: newRole } : m));
+      setMembers((prev) =>
+        prev.map((m) => (m.id === member.id ? { ...m, role: newRole } : m)),
+      );
       success("Rôle mis à jour avec succès");
     } catch (err) {
       showError(err.message);
@@ -231,36 +251,43 @@ export default function MembersList({ isReadOnly = false, orgId: propOrgId }) {
   const handleRemove = async (member) => {
     // Un super_admin peut retirer n'importe qui (sauf lui-même)
     // Un admin normal ne peut retirer que des étudiants
-    const isSuperAdmin = user?.role === 'super_admin';
-    const isAdmin = user?.role === 'org_admin';
+    const isSuperAdmin = user?.role === "super_admin";
+    const isAdmin = user?.role === "org_admin";
 
     if (member.id === user.id) {
       showError("Vous ne pouvez pas vous retirer vous-même");
       return;
     }
 
-    if (!isSuperAdmin && member.role === 'org_admin') {
-      showError("Vous n'avez pas les droits pour retirer un autre administrateur");
+    if (!isSuperAdmin && member.role === "org_admin") {
+      showError(
+        "Vous n'avez pas les droits pour retirer un autre administrateur",
+      );
       return;
     }
 
-    if (!confirm(`Êtes-vous sûr de vouloir retirer ${member.full_name || member.email} de l'entreprise ?`)) return;
+    if (
+      !confirm(
+        `Êtes-vous sûr de vouloir retirer ${member.full_name || member.email} de l'entreprise ?`,
+      )
+    )
+      return;
 
     setDeletingId(member.id);
     try {
       // Pour une suppression propre, on pourrait aussi supprimer ses progrès (cascade ou manuel)
       // Mais ici on se contente de le "détacher" de l'organisation
       const { error } = await supabase
-        .from('profiles')
-        .update({ 
-          organization_id: null, 
-          role: 'student' // On le remet en simple étudiant système
+        .from("profiles")
+        .update({
+          organization_id: null,
+          role: "student", // On le remet en simple étudiant système
         })
-        .eq('id', member.id);
+        .eq("id", member.id);
 
       if (error) throw error;
-      
-      setMembers(prev => prev.filter(m => m.id !== member.id));
+
+      setMembers((prev) => prev.filter((m) => m.id !== member.id));
       success("Membre retiré avec succès");
     } catch (err) {
       console.error("Error removing member:", err);
@@ -282,7 +309,7 @@ export default function MembersList({ isReadOnly = false, orgId: propOrgId }) {
         invited_by: user.id,
       });
       success("Invitation envoyée avec succès");
-      setInviteEmail('');
+      setInviteEmail("");
       setShowInviteForm(false);
       fetchMembers();
     } catch (err) {
@@ -292,8 +319,8 @@ export default function MembersList({ isReadOnly = false, orgId: propOrgId }) {
 
   const stats = {
     total: members.length,
-    admins: members.filter(m => m.role === 'org_admin').length,
-    students: members.filter(m => m.role === 'student').length
+    admins: members.filter((m) => m.role === "org_admin").length,
+    students: members.filter((m) => m.role === "student").length,
   };
 
   return (
@@ -305,7 +332,9 @@ export default function MembersList({ isReadOnly = false, orgId: propOrgId }) {
             <div className="p-2 bg-secondary-50 dark:bg-primary-900/30 rounded-xl">
               <Users className="w-5 h-5 text-primary-500 dark:text-primary-500" />
             </div>
-            <h2 className="text-lg font-bold text-gray-800 dark:text-gray-200">Membres</h2>
+            <h2 className="text-lg font-bold text-gray-800 dark:text-gray-200">
+              Membres
+            </h2>
           </div>
 
           <div className="flex-1 flex flex-col sm:flex-row gap-3 items-center w-full lg:w-auto lg:max-w-3xl justify-end">
@@ -315,7 +344,7 @@ export default function MembersList({ isReadOnly = false, orgId: propOrgId }) {
                 type="text"
                 placeholder="Nom, email..."
                 value={search}
-                onChange={e => setSearch(e.target.value)}
+                onChange={(e) => setSearch(e.target.value)}
                 className="w-full pl-11 pr-4 h-11 bg-white/50 dark:bg-slate-900/20 border border-secondary-200 dark:border-secondary-200/20 rounded-xl focus:border-primary-500 dark:focus:border-secondary-200 focus:ring-4 focus:ring-primary-500/20 dark:focus:ring-primary-900/30 dark:text-white transition-all font-medium placeholder:text-gray-400 shadow-sm backdrop-blur-md"
               />
             </div>
@@ -327,11 +356,19 @@ export default function MembersList({ isReadOnly = false, orgId: propOrgId }) {
                 className="w-full pl-11 pr-4 h-11 bg-white/50 dark:bg-slate-900/20 border border-secondary-200 dark:border-secondary-200/20 rounded-xl focus:border-primary-500 dark:focus:border-secondary-200 focus:ring-4 focus:ring-primary-500/20 dark:focus:ring-primary-900/30 dark:text-white transition-all font-medium flex items-center justify-between gap-2 shadow-sm backdrop-blur-md"
               >
                 <span className="truncate">
-                    {selectedGroup === 'all' 
-                        ? 'Tous les groupes' 
-                        : escapeText(untrusted(groups.find(g => g.id === selectedGroup)?.name || 'Groupe'))}
+                  {selectedGroup === "all"
+                    ? "Tous les groupes"
+                    : escapeText(
+                        untrusted(
+                          groups.find((g) => g.id === selectedGroup)?.name ||
+                            "Groupe",
+                        ),
+                      )}
                 </span>
-                <ChevronDown size={14} className={`transition-transform duration-200 ${isGroupFilterOpen ? 'rotate-180' : ''}`} />
+                <ChevronDown
+                  size={14}
+                  className={`transition-transform duration-200 ${isGroupFilterOpen ? "rotate-180" : ""}`}
+                />
               </button>
 
               <AnimatePresence>
@@ -340,20 +377,21 @@ export default function MembersList({ isReadOnly = false, orgId: propOrgId }) {
                     initial={{ opacity: 0, y: -10, scale: 0.95 }}
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, y: -10, scale: 0.95 }}
-                    className="absolute left-0 mt-2 w-full bg-white/80 dark:bg-slate-900/40 backdrop-blur-2xl rounded-2xl shadow-xl border border-secondary-200 dark:border-secondary-200/20 py-2 z-50 overflow-hidden"
+                    className="absolute left-0 mt-2 w-full bg-white dark:bg-slate-900 rounded-2xl shadow-xl border border-secondary-200 dark:border-secondary-200/20 py-2 z-50 overflow-hidden"
                   >
                     <button
-                        onClick={() => {
-                          setSelectedGroup('all');
-                          setIsGroupFilterOpen(false);
-                        }}
-                        className={`w-full px-4 py-2.5 text-left text-sm transition-colors
-                            ${selectedGroup === 'all' 
-                                ? 'bg-primary-600 dark:bg-primary-500/10 text-primary-500 dark:text-primary-500 font-bold' 
-                                : 'text-gray-600 dark:text-gray-400 hover:bg-white/50 dark:hover:bg-white/10'
+                      onClick={() => {
+                        setSelectedGroup("all");
+                        setIsGroupFilterOpen(false);
+                      }}
+                      className={`w-full px-4 py-2.5 text-left text-sm transition-colors
+                            ${
+                              selectedGroup === "all"
+                                ? "bg-primary-600 dark:bg-primary-500/10 text-primary-500 dark:text-primary-500 font-bold"
+                                : "text-gray-600 dark:text-gray-400 hover:bg-secondary-50 dark:hover:bg-white/10"
                             }`}
                     >
-                        Tous les groupes
+                      Tous les groupes
                     </button>
                     {groups.map((g) => (
                       <button
@@ -363,9 +401,10 @@ export default function MembersList({ isReadOnly = false, orgId: propOrgId }) {
                           setIsGroupFilterOpen(false);
                         }}
                         className={`w-full px-4 py-2.5 text-left text-sm transition-colors
-                            ${selectedGroup === g.id 
-                                ? 'bg-primary-600 dark:bg-primary-500/10 text-primary-500 dark:text-primary-500 font-bold' 
-                                : 'text-gray-600 dark:text-gray-400 hover:bg-white/50 dark:hover:bg-white/10'
+                            ${
+                              selectedGroup === g.id
+                                ? "bg-primary-600 dark:bg-primary-500/10 text-primary-500 dark:text-primary-500 font-bold"
+                                : "text-gray-600 dark:text-gray-400 hover:bg-secondary-50 dark:hover:bg-white/10"
                             }`}
                       >
                         {escapeText(untrusted(g.name))}
@@ -384,7 +423,9 @@ export default function MembersList({ isReadOnly = false, orgId: propOrgId }) {
               title="Actualiser"
               disabled={loading}
             >
-              <RefreshCw className={`w-4 h-4 text-gray-600 dark:text-gray-300 ${loading ? 'animate-spin' : ''}`} />
+              <RefreshCw
+                className={`w-4 h-4 text-gray-600 dark:text-gray-300 ${loading ? "animate-spin" : ""}`}
+              />
             </motion.button>
 
             {!isReadOnly && (
@@ -407,13 +448,16 @@ export default function MembersList({ isReadOnly = false, orgId: propOrgId }) {
       {/* Modale d'invitation */}
       <AnimatePresence>
         {showInviteForm && !isReadOnly && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 dark:bg-black/70 backdrop-blur-sm" onClick={() => setShowInviteForm(false)}>
+          <div
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 dark:bg-black/70 backdrop-blur-sm"
+            onClick={() => setShowInviteForm(false)}
+          >
             <motion.div
               key="invite-member-modal"
               initial={{ scale: 0.95, opacity: 0, y: 20 }}
               animate={{ scale: 1, opacity: 1, y: 0 }}
               exit={{ scale: 0.95, opacity: 0, y: 20 }}
-              onClick={e => e.stopPropagation()}
+              onClick={(e) => e.stopPropagation()}
               className="bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl rounded-3xl max-w-md w-full shadow-2xl border border-secondary-200 dark:border-secondary-200/30 ring-1 ring-black/5 relative overflow-hidden"
             >
               {/* En-tête avec dégradé premium (Style Piliers) */}
@@ -425,7 +469,9 @@ export default function MembersList({ isReadOnly = false, orgId: propOrgId }) {
                     </div>
                     <div>
                       <h2 className="text-2xl font-bold">Inviter un membre</h2>
-                      <p className="text-white/80 text-sm mt-1">Ajoutez un collaborateur à l'équipe</p>
+                      <p className="text-white/80 text-sm mt-1">
+                        Ajoutez un collaborateur à l'équipe
+                      </p>
                     </div>
                   </div>
                   <motion.button
@@ -442,30 +488,41 @@ export default function MembersList({ isReadOnly = false, orgId: propOrgId }) {
               <div className="p-8">
                 <form onSubmit={handleInvite} className="space-y-6">
                   <div className="space-y-2">
-                    <label className="text-sm font-bold text-gray-700 dark:text-gray-300">Adresse email</label>
+                    <label className="text-sm font-bold text-gray-700 dark:text-gray-300">
+                      Adresse email
+                    </label>
                     <div className="relative">
                       <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                       <input
                         type="email"
                         required
                         value={inviteEmail}
-                        onChange={e => setInviteEmail(e.target.value)}
+                        onChange={(e) => setInviteEmail(e.target.value)}
                         placeholder="exemple@email.com"
                         className="w-full pl-12 pr-4 py-3 bg-secondary-50 dark:bg-slate-800/50 border-2 border-secondary-200 dark:border-secondary-200/20 rounded-xl focus:border-primary-500 dark:focus:border-secondary-200 outline-none transition-all dark:text-white"
                       />
                     </div>
                   </div>
-                  
+
                   <div className="space-y-2">
-                    <label className="text-sm font-bold text-gray-700 dark:text-gray-300">Rôle</label>
+                    <label className="text-sm font-bold text-gray-700 dark:text-gray-300">
+                      Rôle
+                    </label>
                     <div className="relative" ref={inviteRoleRef}>
                       <button
                         type="button"
                         onClick={() => setIsInviteRoleOpen(!isInviteRoleOpen)}
                         className="w-full px-4 py-3 bg-secondary-50 dark:bg-slate-800/50 border-2 border-secondary-200 dark:border-secondary-200/20 rounded-xl focus:border-primary-500 dark:focus:border-secondary-200 outline-none transition-all dark:text-white flex items-center justify-between gap-2 shadow-sm"
                       >
-                        <span>{inviteRole === 'student' ? 'Étudiant' : 'Administrateur'}</span>
-                        <ChevronDown size={14} className={`transition-transform duration-200 ${isInviteRoleOpen ? 'rotate-180' : ''}`} />
+                        <span>
+                          {inviteRole === "student"
+                            ? "Étudiant"
+                            : "Administrateur"}
+                        </span>
+                        <ChevronDown
+                          size={14}
+                          className={`transition-transform duration-200 ${isInviteRoleOpen ? "rotate-180" : ""}`}
+                        />
                       </button>
 
                       <AnimatePresence>
@@ -474,18 +531,19 @@ export default function MembersList({ isReadOnly = false, orgId: propOrgId }) {
                             initial={{ opacity: 0, y: -10, scale: 0.95 }}
                             animate={{ opacity: 1, y: 0, scale: 1 }}
                             exit={{ opacity: 0, y: -10, scale: 0.95 }}
-                            className="absolute left-0 mt-2 w-full bg-white dark:bg-slate-900/40 rounded-2xl shadow-xl border border-secondary-200 dark:border-secondary-200/20 py-2 z-50 overflow-hidden"
+                            className="absolute left-0 mt-2 w-full bg-white dark:bg-slate-900 rounded-2xl shadow-xl border border-secondary-200 dark:border-secondary-200/20 py-2 z-50 overflow-hidden"
                           >
                             <button
                               type="button"
                               onClick={() => {
-                                setInviteRole('student');
+                                setInviteRole("student");
                                 setIsInviteRoleOpen(false);
                               }}
                               className={`w-full px-4 py-2.5 text-left text-sm transition-colors
-                                ${inviteRole === 'student' 
-                                  ? 'bg-primary-600 dark:bg-primary-500/10 text-primary-500 dark:text-primary-500 font-bold' 
-                                  : 'text-gray-600 dark:text-gray-400 hover:bg-secondary-50 dark:hover:bg-white/10'
+                                ${
+                                  inviteRole === "student"
+                                    ? "bg-primary-600 dark:bg-primary-500/10 text-primary-500 dark:text-primary-500 font-bold"
+                                    : "text-gray-600 dark:text-gray-400 hover:bg-secondary-50 dark:hover:bg-white/10"
                                 }`}
                             >
                               Étudiant
@@ -493,13 +551,14 @@ export default function MembersList({ isReadOnly = false, orgId: propOrgId }) {
                             <button
                               type="button"
                               onClick={() => {
-                                setInviteRole('org_admin');
+                                setInviteRole("org_admin");
                                 setIsInviteRoleOpen(false);
                               }}
                               className={`w-full px-4 py-2.5 text-left text-sm transition-colors
-                                ${inviteRole === 'org_admin' 
-                                  ? 'bg-primary-600 dark:bg-primary-500/10 text-primary-500 dark:text-primary-500 font-bold' 
-                                  : 'text-gray-600 dark:text-gray-400 hover:bg-secondary-50 dark:hover:bg-white/10'
+                                ${
+                                  inviteRole === "org_admin"
+                                    ? "bg-primary-600 dark:bg-primary-500/10 text-primary-500 dark:text-primary-500 font-bold"
+                                    : "text-gray-600 dark:text-gray-400 hover:bg-secondary-50 dark:hover:bg-white/10"
                                 }`}
                             >
                               Administrateur
@@ -525,7 +584,11 @@ export default function MembersList({ isReadOnly = false, orgId: propOrgId }) {
                       disabled={inviting}
                       className="flex-1 items-center justify-center gap-2 px-6 py-3 bg-primary-600 dark:bg-primary-500 text-white rounded-xl font-bold shadow-lg shadow-primary-500/25 hover:shadow-xl hover:shadow-primary-500/40 transition-all disabled:opacity-50 flex"
                     >
-                      {inviting ? <Loader2 className="w-5 h-5 animate-spin" /> : <Check className="w-5 h-5" />}
+                      {inviting ? (
+                        <Loader2 className="w-5 h-5 animate-spin" />
+                      ) : (
+                        <Check className="w-5 h-5" />
+                      )}
                       Envoyer
                     </motion.button>
                   </div>
@@ -539,14 +602,43 @@ export default function MembersList({ isReadOnly = false, orgId: propOrgId }) {
       {/* Stats */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
         {[
-          { label: "Total membres", value: stats.total, color: 'text-gray-800 dark:text-white', bg: 'bg-white/60 dark:bg-slate-900/60', glow: 'from-gray-400/20 to-transparent' },
-          { label: "Étudiants", value: stats.students, color: 'text-primary-500 dark:text-primary-500', bg: 'bg-secondary-50/60 dark:bg-primary-900/30', glow: 'from-primary-500/20 to-transparent' },
-          { label: "Administrateurs", value: stats.admins, color: 'text-primary-500 dark:text-accent-400', bg: 'bg-accent-50/60 dark:bg-accent-900/30', glow: 'from-accent-500/20 to-transparent' },
+          {
+            label: "Total membres",
+            value: stats.total,
+            color: "text-gray-800 dark:text-white",
+            bg: "bg-white/60 dark:bg-slate-900/60",
+            glow: "from-gray-400/20 to-transparent",
+          },
+          {
+            label: "Étudiants",
+            value: stats.students,
+            color: "text-primary-500 dark:text-primary-500",
+            bg: "bg-secondary-50/60 dark:bg-primary-900/30",
+            glow: "from-primary-500/20 to-transparent",
+          },
+          {
+            label: "Administrateurs",
+            value: stats.admins,
+            color: "text-primary-500 dark:text-accent-400",
+            bg: "bg-accent-50/60 dark:bg-accent-900/30",
+            glow: "from-accent-500/20 to-transparent",
+          },
         ].map((stat, idx) => (
-          <div key={idx} className={`relative backdrop-blur-2xl border border-secondary-200 dark:border-secondary-200/20 rounded-3xl p-6 overflow-hidden shadow-lg ${stat.bg}`}>
-            <div className={`absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl ${stat.glow} rounded-full blur-2xl -translate-y-1/2 translate-x-1/2 pointer-events-none`} />
-            <p className={`text-4xl font-black ${stat.color} mb-1 relative z-10`}>{stat.value}</p>
-            <p className="text-sm font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider relative z-10">{stat.label}</p>
+          <div
+            key={idx}
+            className={`relative backdrop-blur-2xl border border-secondary-200 dark:border-secondary-200/20 rounded-3xl p-6 overflow-hidden shadow-lg ${stat.bg}`}
+          >
+            <div
+              className={`absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl ${stat.glow} rounded-full blur-2xl -translate-y-1/2 translate-x-1/2 pointer-events-none`}
+            />
+            <p
+              className={`text-4xl font-black ${stat.color} mb-1 relative z-10`}
+            >
+              {stat.value}
+            </p>
+            <p className="text-sm font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider relative z-10">
+              {stat.label}
+            </p>
           </div>
         ))}
       </div>
@@ -562,10 +654,14 @@ export default function MembersList({ isReadOnly = false, orgId: propOrgId }) {
             <Users className="w-10 h-10 text-gray-300 dark:text-gray-600" />
           </div>
           <h3 className="text-lg font-bold text-gray-800 dark:text-gray-200 mb-2">
-            {search || selectedGroup !== 'all' ? "Aucun membre trouvé" : "Aucun membre dans cette entreprise"}
+            {search || selectedGroup !== "all"
+              ? "Aucun membre trouvé"
+              : "Aucun membre dans cette entreprise"}
           </h3>
           <p className="text-gray-500 dark:text-gray-400 max-w-sm mx-auto">
-            {search || selectedGroup !== 'all' ? "Essayez de modifier vos critères de recherche ou filtres." : "Commencez par inviter des membres à rejoindre votre organisation."}
+            {search || selectedGroup !== "all"
+              ? "Essayez de modifier vos critères de recherche ou filtres."
+              : "Commencez par inviter des membres à rejoindre votre organisation."}
           </p>
         </div>
       ) : (
@@ -574,19 +670,31 @@ export default function MembersList({ isReadOnly = false, orgId: propOrgId }) {
             <table className="w-full min-w-[800px]">
               <thead className="bg-white/40 dark:bg-slate-800/40 backdrop-blur-md border-b border-secondary-200 dark:border-secondary-200/20">
                 <tr>
-                  <th className="px-6 py-5 text-left text-xs font-black text-gray-500 dark:text-gray-400 uppercase tracking-widest whitespace-nowrap">Membre</th>
-                  <th className="px-6 py-5 text-left text-xs font-black text-gray-500 dark:text-gray-400 uppercase tracking-widest whitespace-nowrap">Rôle</th>
-                  <th className="px-6 py-5 text-left text-xs font-black text-gray-500 dark:text-gray-400 uppercase tracking-widest whitespace-nowrap hidden lg:table-cell">Groupes</th>
-                  <th className="px-6 py-5 text-left text-xs font-black text-gray-500 dark:text-gray-400 uppercase tracking-widest whitespace-nowrap hidden sm:table-cell">Date d'arrivée</th>
+                  <th className="px-6 py-5 text-left text-xs font-black text-gray-500 dark:text-gray-400 uppercase tracking-widest whitespace-nowrap">
+                    Membre
+                  </th>
+                  <th className="px-6 py-5 text-left text-xs font-black text-gray-500 dark:text-gray-400 uppercase tracking-widest whitespace-nowrap">
+                    Rôle
+                  </th>
+                  <th className="px-6 py-5 text-left text-xs font-black text-gray-500 dark:text-gray-400 uppercase tracking-widest whitespace-nowrap hidden lg:table-cell">
+                    Groupes
+                  </th>
+                  <th className="px-6 py-5 text-left text-xs font-black text-gray-500 dark:text-gray-400 uppercase tracking-widest whitespace-nowrap hidden sm:table-cell">
+                    Date d'arrivée
+                  </th>
                   {!isReadOnly && (
-                    <th className="px-6 py-5 text-right text-xs font-black text-gray-500 dark:text-gray-400 uppercase tracking-widest whitespace-nowrap">Actions</th>
+                    <th className="px-6 py-5 text-right text-xs font-black text-gray-500 dark:text-gray-400 uppercase tracking-widest whitespace-nowrap">
+                      Actions
+                    </th>
                   )}
                 </tr>
               </thead>
               <tbody className="divide-y divide-white/50 dark:divide-white/5">
                 {members.map((member, i) => {
                   const rc = ROLE_CONFIG[member.role] || ROLE_CONFIG.student;
-                  const initials = (member.full_name || member.email || '?')[0].toUpperCase();
+                  const initials = (member.full_name ||
+                    member.email ||
+                    "?")[0].toUpperCase();
                   return (
                     <motion.tr
                       key={member.id || `member-${i}`}
@@ -602,32 +710,45 @@ export default function MembersList({ isReadOnly = false, orgId: propOrgId }) {
                           </div>
                           <div className="min-w-0">
                             <p className="font-bold text-gray-800 dark:text-gray-200 text-sm truncate group-hover/row:text-primary-500 dark:group-hover/row:text-primary-500 transition-colors">
-                              {escapeText(untrusted(member.full_name || "Chargement..."))}
+                              {escapeText(
+                                untrusted(member.full_name || "Chargement..."),
+                              )}
                               {member.id === user.id && (
-                                <span className="ml-2 text-xs font-bold text-primary-500 dark:text-primary-500 bg-secondary-50 dark:bg-primary-900/30 px-2 py-0.5 rounded-md">(Vous)</span>
+                                <span className="ml-2 text-xs font-bold text-primary-500 dark:text-primary-500 bg-secondary-50 dark:bg-primary-900/30 px-2 py-0.5 rounded-md">
+                                  (Vous)
+                                </span>
                               )}
                             </p>
-                            <p className="text-xs font-medium text-gray-500 dark:text-gray-400 truncate mt-0.5">{member.email}</p>
+                            <p className="text-xs font-medium text-gray-500 dark:text-gray-400 truncate mt-0.5">
+                              {member.email}
+                            </p>
                           </div>
                         </div>
                       </td>
                       <td className="px-6 py-4">
-                        <span className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold border shadow-sm ${rc.color}`}>
+                        <span
+                          className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold border shadow-sm ${rc.color}`}
+                        >
                           <rc.icon className="w-3.5 h-3.5" />
                           {rc.label}
                         </span>
                       </td>
                       <td className="px-6 py-4 hidden lg:table-cell">
-                          <div className="flex flex-wrap gap-1.5 max-w-xs">
-                            {member.groups.length === 0 ? (
-                              <span className="text-xs font-medium text-gray-400 dark:text-gray-500 bg-white/50 dark:bg-slate-900/20 px-2 py-1 rounded-lg">Aucun groupe</span>
-                            ) : (
-                              member.groups.slice(0, 3).map((g, idx) => (
-                                <span key={g.id || `m-g-${idx}`} className="inline-block px-2.5 py-1 bg-white/50 dark:bg-slate-900/20 text-gray-700 dark:text-gray-300 border border-secondary-200 dark:border-secondary-200/20 rounded-lg text-xs font-medium shadow-sm">
-                                  {escapeText(untrusted(g.name))}
-                                </span>
-                              ))
-                            )}
+                        <div className="flex flex-wrap gap-1.5 max-w-xs">
+                          {member.groups.length === 0 ? (
+                            <span className="text-xs font-medium text-gray-400 dark:text-gray-500 bg-white/50 dark:bg-slate-900/20 px-2 py-1 rounded-lg">
+                              Aucun groupe
+                            </span>
+                          ) : (
+                            member.groups.slice(0, 3).map((g, idx) => (
+                              <span
+                                key={g.id || `m-g-${idx}`}
+                                className="inline-block px-2.5 py-1 bg-white/50 dark:bg-slate-900/20 text-gray-700 dark:text-gray-300 border border-secondary-200 dark:border-secondary-200/20 rounded-lg text-xs font-medium shadow-sm"
+                              >
+                                {escapeText(untrusted(g.name))}
+                              </span>
+                            ))
+                          )}
                           {member.groups.length > 3 && (
                             <span className="inline-flex items-center px-2 py-1 bg-secondary-50 dark:bg-primary-900/30 text-primary-500 dark:text-primary-500 rounded-lg text-xs font-bold border border-secondary-200/50 dark:border-primary-800/50">
                               +{member.groups.length - 3}
@@ -637,7 +758,9 @@ export default function MembersList({ isReadOnly = false, orgId: propOrgId }) {
                       </td>
                       <td className="px-6 py-4 hidden sm:table-cell">
                         <span className="text-sm font-medium text-gray-500 dark:text-gray-400">
-                          {new Date(member.created_at).toLocaleDateString('fr-FR')}
+                          {new Date(member.created_at).toLocaleDateString(
+                            "fr-FR",
+                          )}
                         </span>
                       </td>
                       {!isReadOnly && (
@@ -648,8 +771,15 @@ export default function MembersList({ isReadOnly = false, orgId: propOrgId }) {
                               whileHover={{ scale: 1.1 }}
                               whileTap={{ scale: 0.9 }}
                               onClick={() => handleChangeRole(member)}
-                              disabled={updatingId === member.id || member.id === user.id}
-                              title={member.role === 'student' ? "Promouvoir administrateur" : "Rétrograder étudiant"}
+                              disabled={
+                                updatingId === member.id ||
+                                member.id === user.id
+                              }
+                              title={
+                                member.role === "student"
+                                  ? "Promouvoir administrateur"
+                                  : "Rétrograder étudiant"
+                              }
                               className="p-2.5 bg-white/50 dark:bg-slate-900/20 hover:bg-accent-500 text-secondary-900 dark:hover:bg-accent-900/50 border border-secondary-200 dark:border-secondary-200/20/50 hover:border-accent-200 dark:hover:border-accent-800/50 rounded-xl transition-all disabled:opacity-50 shadow-sm"
                             >
                               {updatingId === member.id ? (
@@ -671,14 +801,18 @@ export default function MembersList({ isReadOnly = false, orgId: propOrgId }) {
                                 <Eye className="w-4 h-4 text-blue-600 dark:text-blue-400" />
                               </motion.button>
                             )}
- 
+
                             {/* Supprimer (étudiants pour les admins, tout le monde pour super_admin) */}
-                            {(member.role === 'student' || user?.role === 'super_admin') && (
+                            {(member.role === "student" ||
+                              user?.role === "super_admin") && (
                               <motion.button
                                 whileHover={{ scale: 1.1 }}
                                 whileTap={{ scale: 0.9 }}
                                 onClick={() => handleRemove(member)}
-                                disabled={deletingId === member.id || member.id === user.id}
+                                disabled={
+                                  deletingId === member.id ||
+                                  member.id === user.id
+                                }
                                 title="Retirer de l'entreprise"
                                 className="p-2.5 bg-white/50 dark:bg-slate-900/20 hover:bg-red-100 dark:hover:bg-red-900/50 border border-secondary-200 dark:border-secondary-200/20/50 hover:border-red-200 dark:hover:border-red-800/50 rounded-xl transition-all disabled:opacity-50 shadow-sm"
                               >

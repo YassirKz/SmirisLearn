@@ -79,7 +79,7 @@ export async function createMemberInvitation({ email, role, organization_id, inv
     to: validatedEmail,
     type: 'member',
     organizationName,
-    invitedBy: inviterName,
+    invitedByName: inviterName,
     token,
   });
 

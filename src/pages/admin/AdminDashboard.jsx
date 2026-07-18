@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   Users,
   Video,
@@ -13,18 +13,35 @@ import {
   Activity,
   UserPlus,
   PlayCircle,
+  X,
+  ArrowRight,
+  CreditCard,
+  Zap,
+  Timer,
 } from "lucide-react";
 import AdminLayout from "../../components/layout/AdminLayout";
 import { supabase } from "../../lib/supabase";
 import { useAuth } from "../../hooks/useAuth";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, useNavigate } from "react-router-dom";
 import { useUserRole } from "../../hooks/useUserRole";
+import { useStripe } from "../../hooks/useStripe";
+
+// Calcule le nombre de jours restants dans la période d'essai
+function getTrialDaysRemaining(endsAt) {
+  if (!endsAt) return 0;
+  const diff = new Date(endsAt) - new Date();
+  const days = Math.ceil(diff / (1000 * 60 * 60 * 24));
+  return days > 0 ? days : 0;
+}
 
 export default function AdminDashboard() {
   const { user } = useAuth();
   const { role, organizationId, loading: roleLoading } = useUserRole();
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const navigate = useNavigate();
+  const { createCheckoutSession, loading: stripeLoading } = useStripe();
   const orgIdFromUrl = searchParams.get("orgId");
+  const firstLogin = searchParams.get("firstLogin") === "true";
   const isReadOnly = role === "super_admin" && orgIdFromUrl;
 
   const [loading, setLoading] = useState(true);
@@ -32,6 +49,52 @@ export default function AdminDashboard() {
   const [error, setError] = useState(null);
   const [lastUpdate, setLastUpdate] = useState(new Date());
   const [isTabVisible, setIsTabVisible] = useState(true);
+
+  // États pour les alertes d'essai
+  const [showWelcomeModal, setShowWelcomeModal] = useState(false);
+  const [showTrialBanner, setShowTrialBanner] = useState(false);
+  const [orgTrialData, setOrgTrialData] = useState({ subscription_status: null, trial_ends_at: null });
+
+  // Affiche le modal de bienvenue si c'est le premier login via invitation
+  useEffect(() => {
+    if (firstLogin) {
+      setShowWelcomeModal(true);
+      // Nettoyer le paramètre firstLogin de l'URL sans recharger
+      const newParams = new URLSearchParams(searchParams);
+      newParams.delete("firstLogin");
+      setSearchParams(newParams, { replace: true });
+    }
+  }, [firstLogin]);
+
+  // Récupère directement les données d'essai depuis la table organizations
+  useEffect(() => {
+    const fetchTrialData = async () => {
+      const targetOrgId = orgIdFromUrl || organizationId;
+      if (!targetOrgId) return;
+      try {
+        const { data: org } = await supabase
+          .from('organizations')
+          .select('subscription_status, trial_ends_at')
+          .eq('id', targetOrgId)
+          .maybeSingle();
+        if (org) {
+          setOrgTrialData(org);
+          if (org.subscription_status === 'trial') {
+            setShowTrialBanner(true);
+          }
+        }
+      } catch (err) {
+        console.error('[AdminDashboard] Erreur fetch trial data:', err);
+      }
+    };
+    fetchTrialData();
+  }, [orgIdFromUrl, organizationId]);
+
+  const handlePayNow = () => {
+    setShowWelcomeModal(false);
+    const priceId = import.meta.env.VITE_STRIPE_STARTER_PRICE_ID;
+    createCheckoutSession(priceId);
+  };
 
   // Monitoring de la visibilité de l'onglet (Performance)
   useEffect(() => {
@@ -45,6 +108,7 @@ export default function AdminDashboard() {
   const fetchDashboardData = useCallback(async () => {
     if (!isTabVisible && dashboardData) return; // Économie de ressources si onglet caché
 
+    console.log('📊 [AdminDashboard] Chargement...');
     try {
       const targetOrgId = orgIdFromUrl || organizationId;
       if (!targetOrgId) {
@@ -68,6 +132,10 @@ export default function AdminDashboard() {
         throw new Error(
           "Accès refusé ou données introuvables. Vérifiez vos permissions.",
         );
+
+      console.log('📊 [AdminDashboard] Organisation:', data.organization?.name);
+      console.log('📊 [AdminDashboard] Stats:', data.stats);
+
       setDashboardData(data);
       setLastUpdate(new Date());
       setError(null);
@@ -174,14 +242,200 @@ export default function AdminDashboard() {
     },
   ];
 
+  const trialDays = getTrialDaysRemaining(orgTrialData.trial_ends_at);
+  const isInTrial = orgTrialData.subscription_status === 'trial';
+
   return (
     <AdminLayout>
+      {/* ================================================ */}
+      {/* MODAL DE BIENVENUE — premier login via invitation */}
+      {/* ================================================ */}
+      <AnimatePresence>
+        {showWelcomeModal && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-md"
+            onClick={() => setShowWelcomeModal(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.85, opacity: 0, y: 40 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.85, opacity: 0, y: 40 }}
+              transition={{ type: "spring", stiffness: 260, damping: 22 }}
+              onClick={(e) => e.stopPropagation()}
+              className="relative w-full max-w-lg bg-white dark:bg-slate-900 rounded-3xl shadow-2xl border border-white/20 dark:border-white/10 overflow-hidden"
+            >
+              {/* Bande de gradient haut */}
+              <div className="relative h-36 bg-gradient-to-br from-primary-600 via-primary-700 to-blue-600 flex items-center justify-center overflow-hidden">
+                <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_rgba(255,255,255,0.15),_transparent)] pointer-events-none" />
+                <div className="absolute -bottom-6 -right-6 w-32 h-32 bg-white/10 rounded-full blur-2xl" />
+                <div className="absolute -top-6 -left-6 w-24 h-24 bg-white/10 rounded-full blur-2xl" />
+                <div className="relative text-center">
+                  <motion.div
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    transition={{ delay: 0.2, type: "spring", stiffness: 300 }}
+                    className="w-16 h-16 bg-white/20 backdrop-blur-md rounded-2xl mx-auto mb-3 flex items-center justify-center shadow-lg border border-white/30"
+                  >
+                    <Zap className="w-8 h-8 text-white" />
+                  </motion.div>
+                  <p className="text-white/90 text-sm font-bold uppercase tracking-widest">Smiris Learn</p>
+                </div>
+                <button
+                  onClick={() => setShowWelcomeModal(false)}
+                  className="absolute top-4 right-4 w-8 h-8 bg-white/10 hover:bg-white/20 rounded-xl flex items-center justify-center transition-all"
+                >
+                  <X className="w-4 h-4 text-white" />
+                </button>
+              </div>
+
+              {/* Corps */}
+              <div className="p-8">
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.15 }}
+                >
+                  <h2 className="text-2xl font-extrabold text-gray-900 dark:text-white mb-2">
+                    Bienvenue ! 🎉
+                  </h2>
+                  <p className="text-gray-500 dark:text-gray-400 mb-6 leading-relaxed">
+                    Votre espace de formation{" "}
+                    <span className="font-bold text-gray-800 dark:text-white">
+                      {dashboardData?.organization?.name}
+                    </span>{" "}
+                    est prêt. Vous bénéficiez actuellement d'une{" "}
+                    <span className="font-bold text-primary-600 dark:text-primary-400">
+                      période d'essai gratuite de 14 jours
+                    </span>.
+                  </p>
+
+                  {/* Alerte essai */}
+                  <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-700/40 rounded-2xl p-4 mb-6 flex items-start gap-3">
+                    <div className="p-2 bg-amber-100 dark:bg-amber-800/30 rounded-xl shrink-0 mt-0.5">
+                      <Timer className="w-4 h-4 text-amber-600 dark:text-amber-400" />
+                    </div>
+                    <div>
+                      <p className="text-sm font-bold text-amber-800 dark:text-amber-300 mb-0.5">
+                        Période d'essai active — {trialDays} jours restants
+                      </p>
+                      <p className="text-xs text-amber-700 dark:text-amber-400 leading-relaxed">
+                        Pour conserver l'accès complet à toutes vos fonctionnalités
+                        après l'essai, activez votre abonnement avant l'expiration.
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Boutons */}
+                  <div className="flex flex-col sm:flex-row gap-3">
+                    <motion.button
+                      whileHover={{ scale: stripeLoading ? 1 : 1.03 }}
+                      whileTap={{ scale: stripeLoading ? 1 : 0.97 }}
+                      onClick={handlePayNow}
+                      disabled={stripeLoading}
+                      className="flex-1 flex items-center justify-center gap-2 px-5 py-3 bg-primary-600 hover:bg-primary-700 text-white font-bold rounded-xl shadow-lg shadow-primary-500/25 hover:shadow-xl transition-all disabled:opacity-60 disabled:cursor-not-allowed"
+                    >
+                      {stripeLoading ? (
+                        <>
+                          <svg className="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
+                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
+                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"/>
+                          </svg>
+                          Redirection...
+                        </>
+                      ) : (
+                        <>
+                          <CreditCard className="w-4 h-4" />
+                          Passer au plan Starter
+                          <ArrowRight className="w-4 h-4" />
+                        </>
+                      )}
+                    </motion.button>
+                    <button
+                      onClick={() => setShowWelcomeModal(false)}
+                      disabled={stripeLoading}
+                      className="flex-1 px-5 py-3 text-gray-500 dark:text-gray-400 font-semibold hover:bg-gray-100 dark:hover:bg-slate-800 rounded-xl transition-all disabled:opacity-50"
+                    >
+                      Plus tard
+                    </button>
+                  </div>
+                </motion.div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         className="space-y-8"
         style={{ perspective: "1200px" }}
       >
+        {/* ============================================== */}
+        {/* BANNIÈRE D'ESSAI — visible tant qu'en période d'essai */}
+        {/* ============================================== */}
+        <AnimatePresence>
+          {isInTrial && showTrialBanner && (
+            <motion.div
+              initial={{ opacity: 0, y: -16, scale: 0.97 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: -16, scale: 0.97 }}
+              transition={{ type: "spring", stiffness: 300, damping: 25 }}
+              className="relative overflow-hidden rounded-2xl border border-primary-200 dark:border-primary-700/40 bg-gradient-to-r from-primary-50 via-blue-50 to-sky-50 dark:from-primary-900/20 dark:via-blue-900/20 dark:to-sky-900/20 shadow-lg shadow-primary-500/10"
+            >
+              {/* Décoration */}
+              <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_right,_rgba(59,130,246,0.08),_transparent)] pointer-events-none" />
+              <div className="relative flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-4 pr-5">
+                <div className="flex items-center gap-4">
+                  <div className="p-2.5 bg-primary-100 dark:bg-primary-800/30 rounded-xl border border-primary-200 dark:border-primary-700/40 shrink-0">
+                    <Timer className="w-5 h-5 text-primary-600 dark:text-primary-400" />
+                  </div>
+                  <div>
+                    <p className="font-bold text-primary-900 dark:text-primary-200 text-sm">
+                      ⏳ Période d'essai —{" "}
+                      <span className="text-primary-600 dark:text-primary-400">
+                        {trialDays} jour{trialDays > 1 ? "s" : ""} restant{trialDays > 1 ? "s" : ""}
+                      </span>
+                    </p>
+                    <p className="text-xs text-primary-700/70 dark:text-primary-400/70 mt-0.5">
+                      Passez au plan Starter pour éviter toute interruption de service.
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-2 shrink-0">
+                  <motion.button
+                    whileHover={{ scale: stripeLoading ? 1 : 1.05 }}
+                    whileTap={{ scale: stripeLoading ? 1 : 0.95 }}
+                    onClick={handlePayNow}
+                    disabled={stripeLoading}
+                    className="flex items-center gap-2 px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white text-sm font-bold rounded-xl shadow-md shadow-primary-500/20 transition-all disabled:opacity-60"
+                  >
+                    {stripeLoading ? (
+                      <svg className="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"/>
+                      </svg>
+                    ) : (
+                      <CreditCard className="w-4 h-4" />
+                    )}
+                    Passer au plan Starter
+                  </motion.button>
+                  <button
+                    onClick={() => setShowTrialBanner(false)}
+                    className="w-8 h-8 flex items-center justify-center hover:bg-primary-100 dark:hover:bg-primary-800/30 rounded-xl transition-all"
+                    title="Fermer"
+                  >
+                    <X className="w-4 h-4 text-primary-500 dark:text-primary-400" />
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
         {/* En-tête */}
         <div className="relative mb-10">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">

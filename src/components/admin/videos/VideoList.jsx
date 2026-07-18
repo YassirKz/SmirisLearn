@@ -88,6 +88,9 @@ export default function VideoList({ isReadOnly = false, orgId: propOrgId }) {
     const fetchVideos = useCallback(async (isSilent = false) => {
         if (fetchingRef.current || !userOrgId) return;
         
+        console.log('🎬 [VideoList] Chargement des vidéos...');
+        console.log('🎬 [VideoList] Filtres:', filters);
+
         fetchingRef.current = true;
         if (isSilent) {
             setRefreshing(true);
@@ -122,7 +125,9 @@ export default function VideoList({ isReadOnly = false, orgId: propOrgId }) {
                 .order('created_at', { ascending: false });
 
             if (error) throw error;
-            setAllVideos(data || []);
+            const videosData = data || [];
+            console.log('🎬 [VideoList] Vidéos chargées:', videosData.length);
+            setAllVideos(videosData);
         } catch (err) {
             console.error('❌ Erreur chargement vidéos:', err);
             showError("Erreur lors du chargement des vidéos");
@@ -197,6 +202,7 @@ export default function VideoList({ isReadOnly = false, orgId: propOrgId }) {
     };
 
     const handleUploadSuccess = (videoData) => {
+        console.log('🎬 [VideoList] Vidéo uploadée:', videoData);
         setUploadedVideo(videoData);
         setShowUploader(false);
         setShowForm(true);

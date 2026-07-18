@@ -879,7 +879,7 @@ export default function SuperAdminSettings() {
                                                     initial={{ opacity: 0, y: -10, scale: 0.95 }}
                                                     animate={{ opacity: 1, y: 0, scale: 1 }}
                                                     exit={{ opacity: 0, y: -10, scale: 0.95 }}
-                                                    className="absolute left-0 mt-2 w-full bg-white/80 dark:bg-slate-900/40 backdrop-blur-2xl rounded-2xl shadow-xl border border-secondary-200 dark:border-secondary-200/20 py-2 z-50 overflow-hidden"
+                                                    className="absolute left-0 mt-2 w-full bg-white dark:bg-slate-900 rounded-2xl shadow-xl border border-secondary-200 dark:border-secondary-200/20 py-2 z-50 overflow-hidden"
                                                 >
                                                     {[
                                                         { value: '15', label: '15 minutes' },
@@ -897,7 +897,7 @@ export default function SuperAdminSettings() {
                                                             className={`w-full px-4 py-2.5 text-left text-sm transition-colors
                                                                 ${preferences.sessionTimeout === opt.value 
                                                                     ? 'bg-primary-600 dark:bg-primary-500/10 text-primary-500 dark:text-primary-500 font-bold' 
-                                                                    : 'text-gray-600 dark:text-gray-400 hover:bg-white/50 dark:hover:bg-white/10'
+                                                                    : 'text-gray-600 dark:text-gray-400 hover:bg-secondary-50 dark:hover:bg-white/10'
                                                                 }`}
                                                         >
                                                             {opt.label}

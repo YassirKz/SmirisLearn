@@ -24,12 +24,15 @@ export default function StudentVideoPage() {
   useEffect(() => {
     const fetchVideoAndNext = async () => {
       if (!user) return;
+      console.log('▶️ [StudentVideoPage] Chargement vidéo:', id);
       try {
         const { data: canAccess, error: accessError } = await supabase
           .rpc('can_access_video', {
             p_student_id: user.id,
             p_video_id: id
           });
+
+        console.log('▶️ [StudentVideoPage] Accès:', canAccess ? '✅ OK' : '❌ REFUSÉ');
 
         if (accessError || !canAccess) {
           showError("Accès refusé ou vidéo non trouvée");
@@ -44,6 +47,8 @@ export default function StudentVideoPage() {
           .single();
 
         if (videoError) throw videoError;
+
+        console.log('▶️ [StudentVideoPage] Vidéo chargée:', videoData?.title);
 
         // --- SÉCURITÉ : Génération d'une URL signée (TTL 1 heure) ---
         // On suppose que l'URL stockée est soit le path relatif, soit on extrait le path
@@ -81,7 +86,9 @@ export default function StudentVideoPage() {
           .limit(1)
           .maybeSingle();
 
-        setNextVideoId(nextVideo?.id || null);
+        const nextId = nextVideo?.id || null;
+        console.log('▶️ [StudentVideoPage] Vidéo suivante:', nextId);
+        setNextVideoId(nextId);
 
         const { data: quizData } = await supabase
           .from('quizzes')

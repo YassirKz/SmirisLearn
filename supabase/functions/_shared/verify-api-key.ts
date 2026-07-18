@@ -23,7 +23,9 @@ function createApiError(message: string, status = 400, requestId?: string) {
  */
 export async function verifyApiKey(req: Request) {
   const requestId = crypto.randomUUID();
+  console.log('🔑 [API] Vérification de la clé API...');
   const apiKey = req.headers.get("x-api-key");
+  console.log('🔑 [API] Clé reçue:', apiKey ? '✅ Présente' : '❌ Absente');
   if (!apiKey) {
     throw createApiError("Missing X-API-Key header", 401, requestId);
   }
@@ -60,6 +62,8 @@ export async function verifyApiKey(req: Request) {
     .eq("key_hash", hashHex)
     .eq("is_active", true)
     .maybeSingle();
+
+  console.log('🔑 [API] Clé valide:', keyData ? '✅' : '❌');
 
   if (keyError || !keyData) {
     throw createApiError("Invalid or inactive API key", 401, requestId);

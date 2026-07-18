@@ -10,9 +10,11 @@ serve(async (req) => {
     return new Response("ok", { headers: corsHeaders });
   }
 
+  console.log('📡 [API] assign-groups - Début');
   try {
     const { keyData, supabase } = await verifyApiKey(req);
     const { studentId, groupIds } = await req.json();
+    console.log('📡 [API] assign-groups - Payload:', { studentId, groupIds });
 
     // Validation
     if (!studentId || !Array.isArray(groupIds) || groupIds.length === 0) {
@@ -54,6 +56,8 @@ serve(async (req) => {
       .upsert(inserts, { onConflict: "user_id, group_id", ignoreDuplicates: true });
 
     if (insertError) throw insertError;
+
+    console.log('📡 [API] assign-groups - Succès:', studentId);
 
     responseBody = {
       success: true,

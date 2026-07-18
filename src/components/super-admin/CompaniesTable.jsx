@@ -189,7 +189,7 @@ export default function CompaniesTable() {
                                             initial={{ opacity: 0, y: -10, scale: 0.95 }}
                                             animate={{ opacity: 1, y: 0, scale: 1 }}
                                             exit={{ opacity: 0, y: -10, scale: 0.95 }}
-                                            className="absolute right-0 mt-2 w-48 bg-white/80 dark:bg-slate-900/40 backdrop-blur-2xl rounded-2xl shadow-xl border border-secondary-200 dark:border-secondary-200/20 py-2 z-50"
+                                            className="absolute right-0 mt-2 w-48 bg-white dark:bg-slate-900 rounded-2xl shadow-xl border border-secondary-200 dark:border-secondary-200/20 py-2 z-50"
                                         >
                                             {[
                                                 { value: 'all', label: 'Filtrer par plan' },
@@ -207,7 +207,7 @@ export default function CompaniesTable() {
                                                     className={`w-full px-4 py-2.5 text-left text-sm transition-colors flex items-center gap-2
                                                         ${selectedPlan === plan.value 
                                                             ? 'bg-primary-600 dark:bg-primary-500/10 text-primary-500 dark:text-primary-500 font-bold' 
-                                                            : 'text-gray-600 dark:text-gray-400 hover:bg-white/50 dark:hover:bg-white/10'
+                                                            : 'text-gray-600 dark:text-gray-400 hover:bg-secondary-50 dark:hover:bg-white/10'
                                                         }`}
                                                 >
                                                     {plan.label}
@@ -372,7 +372,7 @@ export default function CompaniesTable() {
                                                         whileHover={{ scale: 1.1 }}
                                                         whileTap={{ scale: 0.9 }}
                                                         onClick={() => setShowActions(showActions === company.id ? null : company.id)}
-                                                        className="p-2 hover:bg-white/60 dark:hover:bg-white/5 rounded-lg transition-colors"
+className="p-2 hover:bg-white/60 dark:hover:bg-white/5 rounded-lg transition-colors"
                                                     >
                                                         <MoreVertical size={18} className="text-gray-500 dark:text-gray-400" />
                                                     </motion.button>
@@ -382,7 +382,7 @@ export default function CompaniesTable() {
                                                                 initial={{ opacity: 0, scale: 0.95, y: -10 }}
                                                                 animate={{ opacity: 1, scale: 1, y: 0 }}
                                                                 exit={{ opacity: 0, scale: 0.95, y: -10 }}
-                                                                className="absolute right-0 mt-2 w-48 bg-white/80 dark:bg-slate-900/40 backdrop-blur-sm rounded-2xl shadow-lg border border-secondary-200 dark:border-secondary-200/20 py-1.5 z-10"
+                                                                className="absolute right-0 mt-2 w-48 bg-white dark:bg-slate-900 rounded-2xl shadow-lg border border-secondary-200 dark:border-secondary-200/20 py-1.5 z-10"
                                                             >
                                                                 <button 
                                                                     onClick={() => {
@@ -397,33 +397,31 @@ export default function CompaniesTable() {
                                                                 </button>
                                                                 <button 
                                                                     onClick={async () => {
-                                                                        if (window.confirm(`Supprimer définitivement l'entreprise ${company.name} ? Cette action supprimera également tous les piliers, groupes et détachera les membres.`)) {
+                                                                        if (window.confirm(`Supprimer définitivement l'entreprise ${company.name} ? Cette action supprimera également tous les piliers, groupes et TOUS ses membres associés.`)) {
                                                                             setLoading(true);
                                                                             try {
-                                                                                // 1. Détacher les profils un par un pour éviter les erreurs RLS sur les mises à jour en masse
-                                                                                const { data: profilesToDetach, error: fetchProfilesError } = await supabase
+                                                                                // 1. Supprimer les profils de l'organisation un par un pour éviter les erreurs RLS sur les suppressions en masse
+                                                                                const { data: profilesToDelete, error: fetchProfilesError } = await supabase
                                                                                     .from('profiles')
                                                                                     .select('id')
                                                                                     .eq('organization_id', company.id);
                                                                                 
                                                                                 if (fetchProfilesError) throw fetchProfilesError;
 
-                                                                                if (profilesToDetach && profilesToDetach.length > 0) {
-                                                                                    for (const profile of profilesToDetach) {
-                                                                                        const { error: detachError } = await supabase
+                                                                                if (profilesToDelete && profilesToDelete.length > 0) {
+                                                                                    for (const profile of profilesToDelete) {
+                                                                                        const { error: deleteError } = await supabase
                                                                                             .from('profiles')
-                                                                                            .update({ organization_id: null, role: 'student' })
+                                                                                            .delete()
                                                                                             .eq('id', profile.id);
                                                                                         
-                                                                                        if (detachError) {
-                                                                                            console.error(`Erreur détachement profil ${profile.id}:`, detachError);
-                                                                                            // On continue quand même pour les autres, ou on throw ?
-                                                                                            // On throw pour être sûr de ne pas laisser d'incohérences
-                                                                                            throw detachError;
+                                                                                        if (deleteError) {
+                                                                                            console.error(`Erreur de suppression du profil ${profile.id}:`, deleteError);
+                                                                                            throw deleteError;
                                                                                         }
                                                                                     }
                                                                                 }
-
+                                                                            
                                                                                 // 2. Supprimer les piliers
                                                                                 // Note: On pourrait aussi supprimer les video_progress ici si nécessaire
                                                                                 await supabase

@@ -61,8 +61,15 @@ export default function AdminLayout({ children }) {
   const isImpersonating = role === "super_admin" && orgId;
   const isReadOnly = isImpersonating && !isOwnerOrg;
 
+  console.log('🏗️ [AdminLayout] Rendu');
+  console.log('🏗️ [AdminLayout] Sidebar ouverte:', sidebarOpen);
+  console.log('🏗️ [AdminLayout] Utilisateur:', user?.email);
+  console.log('🏗️ [AdminLayout] Impersonation active:', isImpersonating);
+  console.log('🏗️ [AdminLayout] Organisation ID:', organizationId);
+
   // Responsive sidebar
   useEffect(() => {
+    console.log('🏗️ [AdminLayout] useEffect - redimensionnement');
     const handleResize = () => {
       if (window.innerWidth >= 1024) setSidebarOpen(true);
       else setSidebarOpen(false);

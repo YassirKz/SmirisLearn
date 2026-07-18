@@ -10,16 +10,19 @@ export const useStripe = () => {
      * Crée une session de checkout et redirige l'utilisateur vers Stripe
      * @param {string} priceId - L'ID du prix Stripe (ex: price_123...)
      */
-    const createCheckoutSession = async (priceId) => {
+    const createCheckoutSession = async (priceId, successUrl) => {
         if (!priceId) {
             showToastError("ID de prix manquant pour le paiement.");
             return;
         }
 
+        // URL de retour : page admin de l'utilisateur (pas la landing page)
+        const returnUrl = successUrl || `${window.location.origin}/admin`;
+
         setLoading(true);
         try {
             const { data, error } = await supabase.functions.invoke('create-checkout-session', {
-                body: { priceId }
+                body: { priceId, successUrl: returnUrl }
             });
 
             if (error) throw error;

@@ -11,18 +11,21 @@ serve(async (req) => {
     return new Response("ok", { headers: corsHeaders });
   }
 
+  console.log('📡 [API] update-student - Début');
   try {
     const { keyData, supabase } = await verifyApiKey(req);
 
     const url = new URL(req.url);
     const pathParts = url.pathname.split("/");
     const studentId = pathParts[pathParts.length - 1];
+    console.log('📡 [API] update-student - studentId:', studentId);
 
     if (!studentId) {
       throw new Error("Missing student ID in path");
     }
 
     const { fullName, suspended } = await req.json();
+    console.log('📡 [API] update-student - Payload:', { fullName, suspended });
     const updates: any = {};
     if (fullName !== undefined) updates.full_name = fullName;
     if (suspended !== undefined) updates.suspended = suspended;
@@ -59,6 +62,8 @@ serve(async (req) => {
         await supabase.auth.admin.updateUserById(studentId, { ban_duration: "0h" });
       }
     }
+
+    console.log('📡 [API] update-student - Succès:', studentId);
 
     responseBody = {
       success: true,

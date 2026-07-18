@@ -11,12 +11,14 @@ serve(async (req) => {
     return new Response("ok", { headers: corsHeaders });
   }
 
+  console.log('📡 [API] list-students - Début');
   try {
     const { keyData, supabase } = await verifyApiKey(req);
 
     const url = new URL(req.url);
     const pathParts = url.pathname.split("/");
     const orgId = pathParts[pathParts.length - 2];
+    console.log('📡 [API] list-students - orgId:', orgId);
 
     if (!orgId) {
       throw new Error("Missing organization ID in path");
@@ -45,6 +47,8 @@ serve(async (req) => {
     const { data, error, count } = await query;
 
     if (error) throw error;
+
+    console.log('📡 [API] list-students - Succès');
 
     responseBody = {
       success: true,

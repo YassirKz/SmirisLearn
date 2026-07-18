@@ -162,7 +162,7 @@ export default function VideoUploader({ onUploadSuccess, onClose, orgId }) {
                                 Sélectionner un fichier
                             </label>
                             <p className="text-xs text-gray-400 dark:text-gray-500 mt-4">
-                                MP4, WebM ou MOV jusqu'à 100 Mo
+                                MP4, WebM ou MOV (sans limite de taille)
                             </p>
                         </>
                     ) : (

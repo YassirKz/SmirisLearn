@@ -1,14 +1,225 @@
 // src/pages/student/StudentLearningPage.jsx
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Link } from 'react-router-dom';
-import { BookOpen, Lock, PlayCircle, Clock, AlertCircle, Sparkles, Shield, ArrowLeft } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import {
+  BookOpen, Lock, PlayCircle, Clock, Sparkles, Shield,
+  ArrowLeft, ChevronDown, CheckCircle2, LayoutGrid, List,
+  Search, X
+} from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
 import { useToast } from '../../hooks/useToast';
 import { supabase } from '../../lib/supabase';
 import { untrusted, escapeText } from '../../utils/security';
 import MainLayout from '../../components/layout/MainLayout';
-import { useNavigate } from 'react-router-dom';
+
+const PILLAR_COLORS = [
+  { from: 'from-blue-500', to: 'to-cyan-500', light: 'bg-blue-50', text: 'text-blue-600', border: 'border-blue-100', badge: 'bg-blue-100 text-blue-700' },
+  { from: 'from-violet-500', to: 'to-purple-500', light: 'bg-violet-50', text: 'text-violet-600', border: 'border-violet-100', badge: 'bg-violet-100 text-violet-700' },
+  { from: 'from-emerald-500', to: 'to-teal-500', light: 'bg-emerald-50', text: 'text-emerald-600', border: 'border-emerald-100', badge: 'bg-emerald-100 text-emerald-700' },
+  { from: 'from-orange-500', to: 'to-amber-500', light: 'bg-orange-50', text: 'text-orange-600', border: 'border-orange-100', badge: 'bg-orange-100 text-orange-700' },
+  { from: 'from-pink-500', to: 'to-rose-500', light: 'bg-pink-50', text: 'text-pink-600', border: 'border-pink-100', badge: 'bg-pink-100 text-pink-700' },
+  { from: 'from-indigo-500', to: 'to-blue-500', light: 'bg-indigo-50', text: 'text-indigo-600', border: 'border-indigo-100', badge: 'bg-indigo-100 text-indigo-700' },
+];
+
+function VideoCard({ video, formatDuration, colorScheme }) {
+  const [showTooltip, setShowTooltip] = useState(false);
+
+  return (
+    <motion.div
+      whileHover={video.canAccess ? { y: -4, scale: 1.01 } : {}}
+      className={`relative flex flex-col rounded-2xl border overflow-hidden transition-all duration-300 ${
+        video.canAccess
+          ? 'bg-white dark:bg-gray-800/80 border-gray-100 dark:border-white/5 shadow-sm hover:shadow-lg hover:shadow-primary-500/10 cursor-pointer'
+          : 'bg-gray-50 dark:bg-gray-900/50 border-gray-200/60 dark:border-white/5 opacity-70'
+      }`}
+      onMouseEnter={() => !video.canAccess && setShowTooltip(true)}
+      onMouseLeave={() => setShowTooltip(false)}
+    >
+      {/* Thumbnail / top bar */}
+      <div className={`h-2 w-full bg-gradient-to-r ${colorScheme.from} ${colorScheme.to}`} />
+
+      <div className="p-4 flex-1 flex flex-col">
+        {/* Icon + title */}
+        <div className="flex items-start gap-3 mb-3">
+          <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${
+            video.canAccess
+              ? `${colorScheme.light} dark:bg-gray-700 ${colorScheme.text}`
+              : 'bg-gray-100 dark:bg-gray-800 text-gray-400'
+          }`}>
+            {video.canAccess
+              ? <PlayCircle className="w-5 h-5" />
+              : <Lock className="w-5 h-5" />}
+          </div>
+          <p className={`font-semibold text-sm leading-snug line-clamp-2 ${
+            video.canAccess ? 'text-gray-800 dark:text-white' : 'text-gray-400 dark:text-gray-500'
+          }`}>
+            {escapeText(untrusted(video.title))}
+          </p>
+        </div>
+
+        {/* Duration badge */}
+        <div className="flex items-center gap-1.5 mt-auto">
+          <Clock className={`w-3.5 h-3.5 ${video.canAccess ? colorScheme.text : 'text-gray-400'}`} />
+          <span className="text-xs font-semibold text-gray-500 dark:text-gray-400">
+            {formatDuration(video.duration)}
+          </span>
+        </div>
+      </div>
+
+      {/* Action button */}
+      <div className="px-4 pb-4">
+        {video.canAccess ? (
+          <Link
+            to={`/student/video/${video.id}`}
+            className={`flex items-center justify-center w-full py-2.5 rounded-xl text-sm font-bold text-white bg-gradient-to-r ${colorScheme.from} ${colorScheme.to} shadow-md hover:shadow-lg transition-all hover:opacity-95`}
+          >
+            <PlayCircle className="w-4 h-4 mr-1.5" />
+            Lancer
+          </Link>
+        ) : (
+          <div className="relative">
+            <div className="flex items-center justify-center w-full py-2.5 rounded-xl text-sm font-semibold text-gray-400 dark:text-gray-500 bg-gray-100 dark:bg-gray-800 border border-dashed border-gray-200 dark:border-gray-700">
+              <Lock className="w-4 h-4 mr-1.5" /> Verrouillé
+            </div>
+            <AnimatePresence>
+              {showTooltip && (
+                <motion.div
+                  initial={{ opacity: 0, y: 6, scale: 0.95 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: 6, scale: 0.95 }}
+                  className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 z-30 w-52 p-3 bg-gray-900 dark:bg-gray-700 text-white text-xs rounded-xl shadow-2xl text-center"
+                >
+                  Terminez la vidéo précédente pour déverrouiller.
+                  <div className="absolute top-full left-1/2 -translate-x-1/2 w-3 h-3 bg-gray-900 dark:bg-gray-700 rotate-45 -translate-y-1.5" />
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+        )}
+      </div>
+    </motion.div>
+  );
+}
+
+function PillarSection({ pillar, index, formatDuration, viewMode }) {
+  const [collapsed, setCollapsed] = useState(false);
+  const color = PILLAR_COLORS[index % PILLAR_COLORS.length];
+  const completed = pillar.videos.filter(v => v.watched).length;
+  const total = pillar.videos.length;
+  const pct = total > 0 ? Math.round((completed / total) * 100) : 0;
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 24 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: index * 0.08, type: 'spring', stiffness: 160, damping: 20 }}
+      className="bg-white dark:bg-gray-800/70 backdrop-blur-xl rounded-3xl border border-gray-100 dark:border-white/5 shadow-sm overflow-hidden"
+    >
+      {/* Pillar header */}
+      <button
+        onClick={() => setCollapsed(!collapsed)}
+        className="w-full flex items-center gap-4 p-5 sm:p-6 text-left hover:bg-gray-50 dark:hover:bg-white/3 transition-colors"
+      >
+        {/* Color dot / icon */}
+        <div className={`w-12 h-12 rounded-2xl flex items-center justify-center text-2xl bg-gradient-to-br ${color.from} ${color.to} shadow-md shrink-0`}>
+          {pillar.icon || '📚'}
+        </div>
+
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-2 mb-1 flex-wrap">
+            <h2 className="font-black text-gray-800 dark:text-white text-base sm:text-lg truncate">
+              {escapeText(untrusted(pillar.name))}
+            </h2>
+            <span className={`text-xs font-bold px-2.5 py-0.5 rounded-full ${color.badge} dark:bg-opacity-20`}>
+              {total} vidéo{total > 1 ? 's' : ''}
+            </span>
+          </div>
+
+          {/* Progress bar */}
+          <div className="flex items-center gap-3">
+            <div className="flex-1 h-1.5 bg-gray-100 dark:bg-gray-700 rounded-full overflow-hidden max-w-xs">
+              <motion.div
+                initial={{ width: 0 }}
+                animate={{ width: `${pct}%` }}
+                transition={{ duration: 0.8, delay: index * 0.1 }}
+                className={`h-full rounded-full bg-gradient-to-r ${color.from} ${color.to}`}
+              />
+            </div>
+            <span className="text-xs font-bold text-gray-500 dark:text-gray-400 shrink-0">
+              {completed}/{total} — {pct}%
+            </span>
+          </div>
+        </div>
+
+        <motion.div animate={{ rotate: collapsed ? -90 : 0 }} transition={{ duration: 0.2 }}>
+          <ChevronDown className="w-5 h-5 text-gray-400" />
+        </motion.div>
+      </button>
+
+      {/* Videos grid */}
+      <AnimatePresence>
+        {!collapsed && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.25 }}
+            className="overflow-hidden"
+          >
+            {pillar.description && (
+              <p className="px-6 pb-3 text-sm text-gray-500 dark:text-gray-400 leading-relaxed border-b border-gray-100 dark:border-white/5">
+                {escapeText(untrusted(pillar.description))}
+              </p>
+            )}
+            <div className={`p-5 sm:p-6 ${viewMode === 'grid'
+              ? 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4'
+              : 'space-y-3'}`}
+            >
+              {viewMode === 'list'
+                ? pillar.videos.map((video, vi) => (
+                  <motion.div
+                    key={video.id}
+                    initial={{ opacity: 0, x: -8 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: vi * 0.04 }}
+                    className={`flex items-center gap-4 p-3 rounded-xl border transition-all ${
+                      video.canAccess
+                        ? `bg-gray-50 dark:bg-gray-700/30 ${color.border} dark:border-white/5 hover:border-primary-200 dark:hover:border-primary-700/40 cursor-pointer hover:shadow-sm`
+                        : 'bg-gray-50/50 dark:bg-gray-900/30 border-gray-100 dark:border-white/5 opacity-60 cursor-not-allowed'
+                    }`}
+                    onClick={() => video.canAccess && (window.location.href = `/student/video/${video.id}`)}
+                  >
+                    <div className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 ${
+                      video.canAccess ? `${color.light} ${color.text}` : 'bg-gray-100 dark:bg-gray-800 text-gray-400'
+                    }`}>
+                      {video.canAccess ? <PlayCircle className="w-4.5 h-4.5" /> : <Lock className="w-4 h-4" />}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className={`font-semibold text-sm truncate ${video.canAccess ? 'text-gray-800 dark:text-white' : 'text-gray-400'}`}>
+                        {escapeText(untrusted(video.title))}
+                      </p>
+                      <p className="text-xs text-gray-400 flex items-center gap-1 mt-0.5">
+                        <Clock className="w-3 h-3" />{formatDuration(video.duration)}
+                      </p>
+                    </div>
+                    {video.watched && <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />}
+                    {video.canAccess && !video.watched && (
+                      <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${color.badge}`}>Nouveau</span>
+                    )}
+                  </motion.div>
+                ))
+                : pillar.videos.map((video) => (
+                  <VideoCard key={video.id} video={video} formatDuration={formatDuration} colorScheme={color} />
+                ))
+              }
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.div>
+  );
+}
 
 export default function StudentLearningPage() {
   const { user } = useAuth();
@@ -16,7 +227,8 @@ export default function StudentLearningPage() {
   const { error: showError } = useToast();
   const [loading, setLoading] = useState(true);
   const [pillars, setPillars] = useState([]);
-  const [hoveredVideo, setHoveredVideo] = useState(null);
+  const [viewMode, setViewMode] = useState('grid'); // 'grid' | 'list'
+  const [search, setSearch] = useState('');
 
   useEffect(() => {
     if (!user) return;
@@ -25,275 +237,178 @@ export default function StudentLearningPage() {
 
   const fetchAccessibleContent = async () => {
     try {
-      const { data: memberships, error: membersError } = await supabase
-        .from('group_members')
-        .select('group_id')
-        .eq('user_id', user.id);
-      if (membersError) throw membersError;
-      const groupIds = memberships.map(m => m.group_id);
-      if (groupIds.length === 0) {
-        setPillars([]);
-        return;
-      }
+      const { data: memberships } = await supabase.from('group_members').select('group_id').eq('user_id', user.id);
+      const groupIds = (memberships || []).map(m => m.group_id);
+      if (groupIds.length === 0) { setPillars([]); return; }
 
-      const { data: pillarAccess, error: accessError } = await supabase
-        .from('group_pillar_access')
-        .select('pillar_id')
-        .in('group_id', groupIds);
-      if (accessError) throw accessError;
-      const pillarIds = [...new Set(pillarAccess.map(p => p.pillar_id))];
-      if (pillarIds.length === 0) {
-        setPillars([]);
-        return;
-      }
+      const { data: pillarAccess } = await supabase.from('group_pillar_access').select('pillar_id').in('group_id', groupIds);
+      const pillarIds = [...new Set((pillarAccess || []).map(p => p.pillar_id))];
+      if (pillarIds.length === 0) { setPillars([]); return; }
 
-      const { data: pillarsData, error: pillarsError } = await supabase
+      const { data: pillarsData } = await supabase
         .from('pillars')
-        .select(`
-          id,
-          name,
-          description,
-          icon,
-          color,
-          videos (
-            id,
-            title,
-            duration,
-            sequence_order,
-            thumbnail_url,
-            description
-          )
-        `)
+        .select(`id, name, description, icon, color, videos ( id, title, duration, sequence_order, thumbnail_url, description )`)
         .in('id', pillarIds)
         .order('name');
 
-      if (pillarsError) throw pillarsError;
+      // Get user progress
+      const { data: progress } = await supabase.from('user_progress').select('video_id, watched').eq('user_id', user.id);
+      const watchedIds = new Set((progress || []).filter(p => p.watched).map(p => p.video_id));
 
       const pillarsWithAccess = await Promise.all(
         (pillarsData || []).map(async (pillar) => {
           const videosWithAccess = await Promise.all(
             (pillar.videos || []).map(async (video) => {
-              const { data: accessResult } = await supabase
-                .rpc('can_access_video', {
-                  p_student_id: user.id,
-                  p_video_id: video.id
-                });
-              return { ...video, canAccess: accessResult || false };
+              const { data: canAccess } = await supabase.rpc('can_access_video', { p_student_id: user.id, p_video_id: video.id });
+              return { ...video, canAccess: canAccess || false, watched: watchedIds.has(video.id) };
             })
           );
           videosWithAccess.sort((a, b) => a.sequence_order - b.sequence_order);
           return { ...pillar, videos: videosWithAccess };
         })
       );
-
       setPillars(pillarsWithAccess);
     } catch (err) {
       console.error('Erreur chargement contenu:', err);
-      showError("Erreur lors du chargement des modules d'apprentissage.");
+      showError("Erreur lors du chargement des modules.");
     } finally {
       setLoading(false);
     }
   };
 
-  const formatDuration = (seconds) => {
-    if (!seconds) return '--:--';
-    const m = Math.floor(seconds / 60);
-    const s = seconds % 60;
-    return `${m}:${s.toString().padStart(2, '0')}`;
-  };
+  const formatDuration = (s) => { if (!s) return '--:--'; return `${Math.floor(s / 60)}:${(s % 60).toString().padStart(2, '0')}`; };
 
+  // Filter pillars + videos by search
+  const filteredPillars = search.trim()
+    ? pillars.map(p => ({
+        ...p,
+        videos: p.videos.filter(v => v.title.toLowerCase().includes(search.toLowerCase()))
+      })).filter(p => p.videos.length > 0 || p.name.toLowerCase().includes(search.toLowerCase()))
+    : pillars;
+
+  /* ──── LOADING ──── */
   if (loading) {
     return (
-      <div className="min-h-screen bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-primary-50 via-white to-accent-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex flex-col items-center justify-center">
-        <motion.div
-           animate={{ scale: [1, 1.1, 1], rotate: [0, 180, 360] }}
-            transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
-           className="relative"
-        >
-          <div className="w-20 h-20 border-4 border-secondary-200/50 dark:border-secondary-200/20 rounded-full shadow-2xl"></div>
-          <div className="absolute top-0 left-0 w-20 h-20 border-4 border-secondary-200 dark:border-primary-400 border-t-transparent rounded-full"></div>
-          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-             <Sparkles className="w-6 h-6 text-primary-500 animate-pulse delay-300" />
-          </div>
-        </motion.div>
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.5 }}
-          className="mt-6 text-secondary-900 dark:text-primary-300 font-medium tracking-wide animate-pulse"
-        >
-          Chargement des modules...
-        </motion.p>
-      </div>
+      <MainLayout>
+        <div className="min-h-[60vh] flex flex-col items-center justify-center gap-6">
+          <motion.div animate={{ rotate: 360 }} transition={{ duration: 1.2, repeat: Infinity, ease: 'linear' }} className="w-12 h-12 border-4 border-primary-600 border-t-transparent rounded-full" />
+          <p className="text-gray-500 dark:text-gray-400 font-medium animate-pulse">Chargement des modules...</p>
+        </div>
+      </MainLayout>
     );
   }
 
   return (
     <MainLayout>
-      <div className="max-w-6xl mx-auto space-y-8">
-        {/* Bouton Retour */}
+      <div className="max-w-7xl mx-auto space-y-6 pb-10">
+
+        {/* ── Back button ── */}
         <motion.button
           onClick={() => navigate('/student')}
-          initial={{ opacity: 0, x: -20 }}
+          initial={{ opacity: 0, x: -16 }}
           animate={{ opacity: 1, x: 0 }}
-          whileHover={{ x: -5 }}
-          className="inline-flex items-center gap-2 px-4 py-2 bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm rounded-xl text-primary-500 dark:text-primary-500 font-bold hover:bg-white/80 dark:hover:bg-gray-800/80 hover:shadow-md transition-all group border border-white/60 dark:border-secondary-200/20"
+          whileHover={{ x: -4 }}
+          className="inline-flex items-center gap-2 text-sm font-semibold text-gray-500 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
         >
-          <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
-          Tableau de bord
+          <ArrowLeft className="w-4 h-4" /> Tableau de bord
         </motion.button>
-        {/* En-tête avec badge */}
-        <div className="relative bg-white/40 dark:bg-gray-800/40 backdrop-blur-xl p-8 rounded-[2rem] border border-white/60 dark:border-secondary-200/20/50 shadow-xl overflow-hidden">
-          <div className="absolute -right-10 -top-10 w-40 h-40 bg-primary-200/40 dark:bg-primary-900/40 rounded-full blur-3xl pointer-events-none"></div>
-          <div className="relative z-10 flex flex-col md:flex-row gap-6 md:items-center justify-between">
+
+        {/* ── Hero header ── */}
+        <motion.div
+          initial={{ opacity: 0, y: -12 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="relative rounded-3xl bg-gradient-to-br from-primary-600 via-primary-700 to-blue-800 p-6 sm:p-8 overflow-hidden shadow-xl shadow-primary-500/20"
+        >
+          <div className="absolute top-0 right-0 w-72 h-72 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/3 pointer-events-none" />
+          <div className="absolute bottom-0 left-0 w-40 h-40 bg-white/5 rounded-full translate-y-1/2 -translate-x-1/4 pointer-events-none" />
+          <div className="relative flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
-              <div className="inline-flex items-center gap-2 px-3 py-1 bg-gradient-to-r from-primary-500 to-primary-700 text-white rounded-full text-xs font-black shadow-lg mb-4">
-                <Sparkles className="w-3.5 h-3.5" /> MODULES
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/15 text-white/90 text-xs font-bold uppercase tracking-widest mb-3 border border-white/10">
+                <Sparkles className="w-3 h-3" /> Parcours de formation
               </div>
-              <h1 className="text-3xl sm:text-4xl font-black text-gray-900 dark:text-white flex items-center gap-3 tracking-tight">
-                <div className="p-3 bg-gradient-to-br from-primary-100 to-primary-200 dark:from-primary-900 dark:to-primary-800 rounded-2xl shadow-inner text-primary-500 dark:text-primary-500">
-                  <BookOpen className="w-8 h-8" />
-                </div>
-                Parcours d'apprentissage
-              </h1>
-              <p className="text-base text-gray-500 dark:text-gray-400 mt-3 flex items-center gap-2 font-medium">
-                <Shield className="w-5 h-5 text-emerald-500" />
-                Suivez les vidéos dans l'ordre pour débloquer les suivantes.
+              <h1 className="text-2xl sm:text-3xl font-black text-white">Mes modules d'apprentissage</h1>
+              <p className="text-white/60 text-sm mt-1 flex items-center gap-2">
+                <Shield className="w-3.5 h-3.5" /> Suivez les vidéos dans l'ordre pour débloquer les suivantes.
               </p>
             </div>
+            <div className="flex items-center gap-3 bg-white/10 backdrop-blur-md border border-white/10 rounded-2xl px-4 py-3 shrink-0">
+              <BookOpen className="w-6 h-6 text-white/70" />
+              <div>
+                <p className="text-white font-black text-lg leading-none">{pillars.length}</p>
+                <p className="text-white/60 text-xs">module{pillars.length > 1 ? 's' : ''}</p>
+              </div>
+            </div>
           </div>
-        </div>
+        </motion.div>
 
-        {pillars.length === 0 ? (
-          <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl p-8 sm:p-12 shadow-xl border border-secondary-200 dark:border-secondary-200/20 text-center">
-            <BookOpen className="w-12 h-12 sm:w-16 sm:h-16 text-gray-300 dark:text-gray-600 mx-auto mb-4" />
-            <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-2">Aucun module disponible</h3>
-            <p className="text-sm text-gray-500 dark:text-gray-400">Vous n'avez pas encore accès aux modules d'apprentissage.</p>
+        {/* ── Toolbar: search + view toggle ── */}
+        <motion.div
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
+          className="flex flex-col sm:flex-row gap-3 items-start sm:items-center justify-between"
+        >
+          {/* Search */}
+          <div className="relative w-full sm:max-w-xs">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+            <input
+              type="text"
+              value={search}
+              onChange={e => setSearch(e.target.value)}
+              placeholder="Rechercher une vidéo..."
+              className="w-full pl-9 pr-9 py-2.5 text-sm rounded-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-800 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500/30 focus:border-primary-500 transition-all shadow-sm"
+            />
+            {search && (
+              <button onClick={() => setSearch('')} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
+                <X className="w-3.5 h-3.5" />
+              </button>
+            )}
           </div>
+
+          {/* View mode toggle */}
+          <div className="flex items-center gap-1 p-1 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm shrink-0">
+            <button
+              onClick={() => setViewMode('grid')}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${viewMode === 'grid' ? 'bg-primary-600 text-white shadow-sm' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700'}`}
+            >
+              <LayoutGrid className="w-3.5 h-3.5" /> Grille
+            </button>
+            <button
+              onClick={() => setViewMode('list')}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${viewMode === 'list' ? 'bg-primary-600 text-white shadow-sm' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700'}`}
+            >
+              <List className="w-3.5 h-3.5" /> Liste
+            </button>
+          </div>
+        </motion.div>
+
+        {/* ── Content ── */}
+        {filteredPillars.length === 0 ? (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="text-center py-20 bg-white dark:bg-gray-800/70 rounded-3xl border border-gray-100 dark:border-white/5 shadow-sm"
+          >
+            <BookOpen className="w-12 h-12 text-gray-300 dark:text-gray-600 mx-auto mb-4" />
+            <p className="font-semibold text-gray-500 dark:text-gray-400">
+              {search ? 'Aucune vidéo trouvée pour votre recherche.' : "Vous n'avez pas encore accès à des modules."}
+            </p>
+            {search && <button onClick={() => setSearch('')} className="mt-3 text-sm text-primary-600 dark:text-primary-400 font-bold hover:underline">Effacer la recherche</button>}
+          </motion.div>
         ) : (
-          <div className="space-y-8">
-            {pillars.map((pillar, index) => (
-              <motion.div
-                key={pillar.id}
-                initial={{ opacity: 0, rotateX: 10, y: 30 }}
-                animate={{ opacity: 1, rotateX: 0, y: 0 }}
-                transition={{ delay: index * 0.1 }}
-                whileHover={{ 
-                  rotateY: window.innerWidth > 768 ? 2 : 0, 
-                  rotateX: window.innerWidth > 768 ? -2 : 0, 
-                  scale: 1.01,
-                  boxShadow: "0 50px 100px -20px rgba(99, 102, 241, 0.25)"
-                }}
-                style={{ transformStyle: "preserve-3d" }}
-                className="bg-white/60 dark:bg-gray-800/60 backdrop-blur-2xl rounded-[2.5rem] p-6 sm:p-10 shadow-2xl border border-white/60 dark:border-secondary-200/20/50 relative overflow-hidden group"
-              >
-                {/* Effet de shine */}
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 dark:via-gray-700/30 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 pointer-events-none" />
-
-                {/* En-tête du pilier */}
-                <div className="flex flex-col sm:flex-row sm:items-center gap-6 mb-8 border-b border-secondary-200 dark:border-secondary-200/20/50 pb-6" style={{ transform: "translateZ(40px)" }}>
-                  <div className="w-20 h-20 bg-gradient-to-br from-primary-500 to-primary-700 rounded-[1.5rem] flex items-center justify-center text-4xl shadow-xl shadow-sm group-hover:scale-105 group-hover:rotate-6 transition-all shrink-0">
-                    {pillar.icon || '📚'}
-                  </div>
-                  <div>
-                    <h2 className="text-2xl sm:text-3xl font-black text-gray-900 dark:text-white tracking-tight">
-                      {escapeText(untrusted(pillar.name))}
-                    </h2>
-                    {pillar.description && (
-                      <p className="text-sm sm:text-base text-gray-500 dark:text-gray-400 mt-2 font-medium leading-relaxed max-w-3xl">
-                        {escapeText(untrusted(pillar.description))}
-                      </p>
-                    )}
-                  </div>
-                </div>
-
-                {/* Liste des vidéos */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5" style={{ transform: "translateZ(20px)" }}>
-                  {pillar.videos.map((video) => (
-                    <motion.div
-                      key={video.id}
-                      whileHover={{ 
-                        z: 30, 
-                        scale: 1.03,
-                        y: -5
-                      }}
-                      className={`relative flex flex-col justify-between p-5 rounded-[1.5rem] transition-all duration-300 border backdrop-blur-md ${
-                        video.canAccess
-                          ? 'bg-white/80 dark:bg-gray-800/80 border-white dark:border-secondary-200/20 shadow-lg hover:shadow-primary-500/20'
-                          : 'bg-gray-100/50 dark:bg-gray-900/50 border-secondary-200/50 dark:border-secondary-200/20/50 shadow-inner overflow-hidden'
-                      }`}
-                      onMouseEnter={() => setHoveredVideo(video.id)}
-                      onMouseLeave={() => setHoveredVideo(null)}
-                    >
-                      {!video.canAccess && (
-                          <div className="absolute inset-0 bg-gray-900/5 dark:bg-black/20 z-10 backdrop-blur-[1px]"></div>
-                      )}
-                      <div className="flex items-start gap-4 mb-4 relative z-20">
-                        <div className={`w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 shadow-inner group-hover:rotate-12 transition-all duration-300 ${
-                          video.canAccess ? 'bg-gradient-to-br from-primary-100 to-primary-200 dark:from-primary-900/80 dark:to-primary-800/80 text-primary-500 dark:text-primary-300' : 'bg-gray-200 dark:bg-gray-800 text-gray-400 dark:text-gray-500'
-                        }`}>
-                          {video.canAccess ? <PlayCircle className="w-6 h-6" /> : <Lock className="w-6 h-6" />}
-                        </div>
-                        <div className="min-w-0 flex-1">
-                          <p className={`font-bold leading-tight line-clamp-2 ${video.canAccess ? 'text-gray-900 dark:text-white' : 'text-gray-500 dark:text-gray-400'}`}>
-                            {escapeText(untrusted(video.title))}
-                          </p>
-                          <div className={`flex items-center gap-1.5 text-xs mt-2 font-bold uppercase tracking-wider ${video.canAccess ? 'text-primary-500 dark:text-primary-500' : 'text-gray-400 dark:text-gray-500'}`}>
-                            <Clock className="w-3.5 h-3.5" />
-                            <span>{formatDuration(video.duration)}</span>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="mt-auto pt-4 relative z-20">
-                      {video.canAccess ? (
-                        <Link
-                          to={`/student/video/${video.id}`}
-                          className="flex items-center justify-center w-full py-3 bg-gray-900 hover:bg-black dark:bg-primary-600 dark:bg-primary-500 dark:hover:bg-secondary-200 text-white rounded-xl text-sm font-black transition-all shadow-[0_4px_14px_0_rgb(0,0,0,0.2)] dark:shadow-sm hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0"
-                        >
-                          Lancer la vidéo
-                        </Link>
-                      ) : (
-                        <div className="relative w-full">
-                          <div className="flex items-center justify-center w-full py-3 bg-gray-200/50 dark:bg-gray-800/80 text-gray-400 dark:text-gray-500 rounded-xl text-sm font-black cursor-not-allowed border border-secondary-200 dark:border-secondary-200/20/50">
-                            Bloqué
-                          </div>
-
-                          <AnimatePresence>
-                            {hoveredVideo === video.id && (
-                              <motion.div
-                                initial={{ opacity: 0, y: 10, scale: 0.95 }}
-                                animate={{ opacity: 1, y: 0, scale: 1 }}
-                                exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                                className="absolute bottom-full left-1/2 -translate-x-1/2 mb-3 z-30 w-56 p-4 bg-gray-900 dark:bg-gray-700 text-white dark:text-gray-200 text-xs rounded-2xl shadow-2xl border border-gray-700 dark:border-gray-600"
-                              >
-                                <div className="flex items-start gap-3">
-                                  <div className="p-1.5 bg-amber-500/20 rounded-lg shrink-0">
-                                      <Lock className="w-4 h-4 text-amber-400" />
-                                  </div>
-                                  <p className="font-medium leading-relaxed drop-shadow-md">Vidéo verrouillée. Terminez la vidéo précédente.</p>
-                                </div>
-                                <div className="absolute top-full left-1/2 -translate-x-1/2 w-4 h-4 bg-gray-900 dark:bg-gray-700 rotate-45 -translate-y-2 border-r border-b border-gray-700 dark:border-gray-600" />
-                              </motion.div>
-                            )}
-                          </AnimatePresence>
-                        </div>
-                      )}
-                      </div>
-                    </motion.div>
-                  ))}
-                </div>
-              </motion.div>
+          <div className="space-y-5">
+            {filteredPillars.map((pillar, index) => (
+              <PillarSection key={pillar.id} pillar={pillar} index={index} formatDuration={formatDuration} viewMode={viewMode} />
             ))}
           </div>
         )}
 
-        {/* Note de sécurité */}
+        {/* Footer */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.5 }}
-          className="text-center text-xs text-gray-400 dark:text-gray-500 flex items-center justify-center gap-1"
+          className="flex items-center justify-center gap-1.5 text-xs text-gray-400 dark:text-gray-600"
         >
           <Shield className="w-3 h-3" />
           <span>Contenu protégé • Lecture linéaire obligatoire</span>
