@@ -1,11 +1,10 @@
-import { useState, useRef, useCallback } from 'react';
+import { useState, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { Award, Sparkles, Shield, Plus, X, Edit } from 'lucide-react';
 import AdminLayout from '../../components/layout/AdminLayout';
 import QuizList from '../../components/admin/quizzes/QuizList';
 import QuizCreator from '../../components/admin/quizzes/QuizCreator';
 import { useUserRole } from '../../hooks/useUserRole';
-import { useAuth } from '../../hooks/useAuth';
 import { useOwnerOrg } from '../../hooks/useOwnerOrg';
 import { useSearchParams, Navigate } from 'react-router-dom';
 import { untrusted, escapeText } from '../../utils/security';
@@ -13,11 +12,10 @@ import { useToast } from '../../components/ui/Toast';
 import { supabase } from '../../lib/supabase';
 
 export default function QuizPage() {
-    const { user } = useAuth();
     const { role, isAdminAccess, loading: roleLoading } = useUserRole();
     const [searchParams] = useSearchParams();
     const orgIdFromUrl = searchParams.get('orgId');
-    const { isOwnerOrg, loading: orgLoading } = useOwnerOrg(orgIdFromUrl);
+    const { isOwnerOrg } = useOwnerOrg(orgIdFromUrl);
     const isImpersonating = role === 'super_admin' && orgIdFromUrl;
     const isReadOnly = isImpersonating && !isOwnerOrg;
     const { success, error: showError } = useToast();
@@ -128,7 +126,7 @@ export default function QuizPage() {
                     onDelete={handleDelete}
                     onDuplicate={handleDuplicate}
                     onCreate={handleCreate}
-                    onViewStats={(quiz) => {
+                    onViewStats={() => {
                         alert("Les statistiques seront bientôt disponibles.");
                     }}
                 />

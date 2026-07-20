@@ -40,10 +40,6 @@ export default function VideoFilters({ filters, onChange, pillars }) {
         onChange({ ...filters, search: value });
     };
 
-    const handlePillarChange = (e) => {
-        onChange({ ...filters, pillar_id: e.target.value });
-    };
-
     const handleSortChange = (field) => {
         if (filters.sortBy === field) {
             onChange({

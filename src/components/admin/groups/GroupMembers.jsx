@@ -207,7 +207,7 @@ export default function GroupMembers({ isOpen, onClose, group, orgId, onUpdate }
           } else {
             successCount++;
           }
-        } catch (innerErr) {
+        } catch {
           failCount++;
         }
       }
@@ -216,7 +216,7 @@ export default function GroupMembers({ isOpen, onClose, group, orgId, onUpdate }
       fetchMembers();
       fetchAvailableStudents();
       onUpdate?.();
-    } catch (err) {
+    } catch {
       showError("Erreur lors de l'importation CVS");
     } finally {
       setAdding(false);

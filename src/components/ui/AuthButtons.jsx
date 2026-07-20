@@ -26,7 +26,7 @@ export default function AuthButtons() {
       // Animation de sécurité
       setShowSecurity(true);
 
-      const { data, error } = await signInWithGoogle();
+      const { error } = await signInWithGoogle();
 
       if (error) {
         throw error;

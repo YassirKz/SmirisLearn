@@ -29,7 +29,7 @@ export function useOwnerOrg(orgId) {
                 }
 
                 // Fallback : Vérification par nom si l'ID n'est pas configuré
-                const { data, error } = await supabase
+                const { data } = await supabase
                     .from('organizations')
                     .select('name')
                     .eq('id', orgId)

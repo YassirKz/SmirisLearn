@@ -11,7 +11,7 @@ export default function MembersPage() {
   const { role, isAdminAccess, loading: roleLoading } = useUserRole();
   const [searchParams] = useSearchParams();
   const orgIdFromUrl = searchParams.get('orgId');
-  const { isOwnerOrg, loading: orgLoading } = useOwnerOrg(orgIdFromUrl);
+  const { isOwnerOrg } = useOwnerOrg(orgIdFromUrl);
   const isImpersonating = role === 'super_admin' && orgIdFromUrl;
   const isReadOnly = isImpersonating && !isOwnerOrg;
 

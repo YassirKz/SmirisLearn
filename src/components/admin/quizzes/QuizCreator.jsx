@@ -121,7 +121,7 @@ export default function QuizCreator({ quiz, videoId, onSuccess, onCancel }) {
 
         setSaving(true);
         try {
-            const cleanQuestions = form.questions.map(({ id, ...q }) => q);
+            const cleanQuestions = form.questions.map(({ id: _id, ...q }) => q);
 
             const payload = {
                 video_id: form.video_id,

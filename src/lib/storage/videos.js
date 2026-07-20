@@ -24,7 +24,7 @@ export const uploadVideo = async (file, orgId, onProgress) => {
 
         const filePath = generateVideoPath(orgId, file.name);
 
-        const { data, error } = await supabase.storage
+        const { error } = await supabase.storage
             .from(STORAGE_CONFIG.BUCKET_NAME)
             .upload(filePath, file, {
                 cacheControl: '3600',

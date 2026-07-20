@@ -18,7 +18,7 @@ import { useTheme } from '../../hooks/useTheme';
 export default function GrowthChart() {
     const { theme } = useTheme();
     const [period, setPeriod] = useState('6m');
-    const [chartType, setChartType] = useState('area');
+    const [chartType] = useState('area');
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
     const [isMounted, setIsMounted] = useState(false);
@@ -70,10 +70,6 @@ export default function GrowthChart() {
 
     const axisColor = theme === 'dark' ? '#9ca3af' : '#6b7280';
     const gridColor = theme === 'dark' ? '#374151' : '#e5e7eb';
-    const tooltipBg = theme === 'dark' ? '#1f2937' : 'white';
-    const tooltipBorder = theme === 'dark' ? '#374151' : '#e5e7eb';
-    const textColor = theme === 'dark' ? '#f3f4f6' : '#111827';
-
     const CustomTooltip = ({ active, payload, label }) => {
         if (active && payload && payload.length) {
             return (

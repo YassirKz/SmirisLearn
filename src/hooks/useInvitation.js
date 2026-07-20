@@ -69,16 +69,6 @@ export function useInvitation() {
 
             if (error) throw error;
 
-            // Préparer les données pour l'email
-            const emailData = {
-                to: validatedEmail,
-                organizationName: companyData.name.trim(),
-                adminName: companyData.adminName.trim(),
-                token: data.token
-            };
-
-
-
             const { data: { user: superAdmin } } = await supabase.auth.getUser();
             const fromEmail = superAdmin?.email;
 

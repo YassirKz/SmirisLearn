@@ -45,7 +45,6 @@ export default function SuperAdminCompanyDetail() {
     const [filterRole, setFilterRole] = useState('all');
     const [isRoleFilterOpen, setIsRoleFilterOpen] = useState(false);
     const roleFilterRef = useRef(null);
-    const [showActions, setShowActions] = useState(null);
     const [showEditModal, setShowEditModal] = useState(false);
     const [limits, setLimits] = useState(null);
     const [showInviteModal, setShowInviteModal] = useState(false);

@@ -1,19 +1,16 @@
-import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Video, Sparkles, Shield } from 'lucide-react';
+import { Sparkles, Shield } from 'lucide-react';
 import AdminLayout from '../../components/layout/AdminLayout';
 import VideoList from '../../components/admin/videos/VideoList';
 import { useUserRole } from '../../hooks/useUserRole';
-import { useAuth } from '../../hooks/useAuth';
 import { useOwnerOrg } from '../../hooks/useOwnerOrg';
 import { useSearchParams, Navigate } from 'react-router-dom';
 import { untrusted, escapeText } from '../../utils/security';
 export default function VideosPage() {
-    const { user } = useAuth();
     const { role, isAdminAccess, loading: roleLoading } = useUserRole();
     const [searchParams] = useSearchParams();
     const orgIdFromUrl = searchParams.get('orgId');
-    const { isOwnerOrg, loading: orgLoading } = useOwnerOrg(orgIdFromUrl);
+    const { isOwnerOrg } = useOwnerOrg(orgIdFromUrl);
     const isImpersonating = role === 'super_admin' && orgIdFromUrl;
     const isReadOnly = isImpersonating && !isOwnerOrg;
 

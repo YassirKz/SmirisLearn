@@ -22,7 +22,6 @@ import {
   ArrowRight,
 } from "lucide-react";
 import { useAuth } from "../../hooks/useAuth";
-import { useTheme } from "../../hooks/useTheme";
 import { supabase } from "../../lib/supabase";
 import { untrusted, escapeText } from "../../utils/security";
 import MainLayout from "../../components/layout/MainLayout";
@@ -89,7 +88,6 @@ function PillarBar({ name, value, watched, total, index }) {
 
 export default function StudentDashboard() {
   const { user } = useAuth();
-  const { theme } = useTheme();
   const navigate = useNavigate();
 
   const [orgName, setOrgName] = useState("");

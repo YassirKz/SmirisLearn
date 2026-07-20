@@ -1,15 +1,13 @@
 // src/components/student/StudentVideoPlayer.jsx
 import { useEffect, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { Play, Pause, Volume2, VolumeX, Maximize, Sparkles } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import { useAuth } from '../../hooks/useAuth';
 import { useToast } from '../../hooks/useToast';
 
-export default function StudentVideoPlayer({ video, nextVideoId, onComplete }) {
+export default function StudentVideoPlayer({ video, onComplete }) {
   const videoRef = useRef(null);
   const containerRef = useRef(null);
-  const navigate = useNavigate();
   const { user } = useAuth();
   const { success, error: showError, info } = useToast();
 

@@ -8,7 +8,6 @@ import {
 import { supabase } from '../../../lib/supabase';
 import { useAuth } from '../../../hooks/useAuth';
 import { useToast } from '../../ui/Toast';
-import { untrusted, escapeText } from '../../../utils/security';
 import VideoCard from './VideoCard';
 import VideoFilters from './VideoFilters';
 import VideoUploader from './VideoUploader';
@@ -89,8 +88,6 @@ export default function VideoList({ isReadOnly = false, orgId: propOrgId }) {
         if (fetchingRef.current || !userOrgId) return;
         
         console.log('🎬 [VideoList] Chargement des vidéos...');
-        console.log('🎬 [VideoList] Filtres:', filters);
-
         fetchingRef.current = true;
         if (isSilent) {
             setRefreshing(true);

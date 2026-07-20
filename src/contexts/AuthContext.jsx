@@ -1,5 +1,5 @@
 import React, { createContext, useState, useEffect, useCallback, useRef } from "react";
-// eslint-disable-next-line no-unused-vars
+ 
 import { motion, AnimatePresence } from "framer-motion";
 import { supabase } from "../lib/supabase";
 import logger from "../lib/logger";

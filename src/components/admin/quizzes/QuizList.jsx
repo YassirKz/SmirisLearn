@@ -12,17 +12,17 @@ import { useAuth } from '../../../hooks/useAuth';
 import { useToast } from '../../ui/Toast';
 import { untrusted, escapeText } from '../../../utils/security';
 
-export default function QuizList({ isReadOnly = false, orgId: propOrgId, onEdit, onDelete, onDuplicate, onCreate, onViewStats, refreshTrigger = 0 }) {
+export default function QuizList({ isReadOnly = false, orgId: propOrgId, onCreate, refreshTrigger = 0 }) {
     const navigate = useNavigate();
     const { user } = useAuth();
-    const { success, error: showError } = useToast();
+    const { error: showError } = useToast();
     const showErrorRef = useRef(showError);
     useEffect(() => { showErrorRef.current = showError; }, [showError]);
     
     const [allQuizzes, setAllQuizzes] = useState([]);
     const [videos, setVideos] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [refreshing, setRefreshing] = useState(false);
+    const [, setRefreshing] = useState(false);
     const [localRefreshKey, setLocalRefreshKey] = useState(0);
     const fetchingRef = useRef(false);
     
@@ -236,9 +236,6 @@ export default function QuizList({ isReadOnly = false, orgId: propOrgId, onEdit,
     };
 
     const formatDate = (date) => new Date(date).toLocaleDateString('fr-FR');
-    const getVideoTitle = (quiz) => quiz.video?.title || 'Vidéo inconnue';
-    const getPillarName = (quiz) => quiz.video?.pillar?.name || 'Pilier inconnu';
-
     if (loading && allQuizzes.length === 0) {
         return (
             <div className="flex justify-center py-12">

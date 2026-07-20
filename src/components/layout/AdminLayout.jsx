@@ -24,7 +24,6 @@ import {
   NavLink,
   useNavigate,
   useSearchParams,
-  useLocation,
 } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
 import { useTheme } from "../../hooks/useTheme";
@@ -35,7 +34,6 @@ import Header from "./Header";
 import Logo from "../ui/Logo";
 
 export default function AdminLayout({ children }) {
-  const location = useLocation();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const orgId = searchParams.get("orgId");
@@ -56,7 +54,7 @@ export default function AdminLayout({ children }) {
   const { user, signOut } = useAuth();
   const { theme, toggleTheme } = useTheme();
   const { isAdminAccess, loading, role, organizationId } = useUserRole();
-  const { isOwnerOrg, loading: orgLoading } = useOwnerOrg(orgId);
+  const { isOwnerOrg } = useOwnerOrg(orgId);
 
   const isImpersonating = role === "super_admin" && orgId;
   const isReadOnly = isImpersonating && !isOwnerOrg;

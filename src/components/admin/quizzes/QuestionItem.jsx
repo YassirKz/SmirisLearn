@@ -4,7 +4,6 @@ import {
     Copy, Trash2, Plus, X,
     AlertCircle, CheckCircle
 } from 'lucide-react';
-import { untrusted, escapeText } from '../../../utils/security';
 import SanitizedInput from '../../ui/SanitizedInput';
 
 const QUESTION_TYPES = [

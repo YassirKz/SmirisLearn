@@ -21,8 +21,7 @@ import {
 } from "lucide-react";
 import AdminLayout from "../../components/layout/AdminLayout";
 import { supabase } from "../../lib/supabase";
-import { useAuth } from "../../hooks/useAuth";
-import { useSearchParams, useNavigate } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import { useUserRole } from "../../hooks/useUserRole";
 import { useStripe } from "../../hooks/useStripe";
 
@@ -35,14 +34,11 @@ function getTrialDaysRemaining(endsAt) {
 }
 
 export default function AdminDashboard() {
-  const { user } = useAuth();
-  const { role, organizationId, loading: roleLoading } = useUserRole();
+  const { organizationId, loading: roleLoading } = useUserRole();
   const [searchParams, setSearchParams] = useSearchParams();
-  const navigate = useNavigate();
   const { createCheckoutSession, loading: stripeLoading } = useStripe();
   const orgIdFromUrl = searchParams.get("orgId");
   const firstLogin = searchParams.get("firstLogin") === "true";
-  const isReadOnly = role === "super_admin" && orgIdFromUrl;
 
   const [loading, setLoading] = useState(true);
   const [dashboardData, setDashboardData] = useState(null);

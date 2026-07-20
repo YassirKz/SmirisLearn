@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Search, X, Filter, ArrowUpDown } from 'lucide-react';
 import { useState, useRef, useEffect } from 'react';
 import { createPortal } from 'react-dom';
-import { untrusted, escapeText } from '../../../utils/security';
+import { untrusted } from '../../../utils/security';
 
 export default function PillarFilters({ filters, onChange }) {
     const [showFilters, setShowFilters] = useState(false);

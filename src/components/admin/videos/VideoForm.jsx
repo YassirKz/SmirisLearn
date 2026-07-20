@@ -244,7 +244,7 @@ export default function VideoForm({
             } else {
                 showError("Impossible de détecter la durée (vérifiez l'URL)");
             }
-        } catch (err) {
+        } catch {
             showError("Erreur lors de la détection de la durée");
         } finally {
             setLoading(false);
@@ -254,21 +254,6 @@ export default function VideoForm({
     const handleChange = (field, value) => {
         setFormData(prev => ({ ...prev, [field]: value }));
         setErrors(prev => ({ ...prev, [field]: null }));
-    };
-
-    const getPillarColor = (pillarId) => {
-        const pillar = pillars.find(p => p.id === pillarId);
-        const colors = {
-            primary: 'border-secondary-200 bg-secondary-50 dark:border-primary-800 dark:bg-primary-900/30',
-            accent: 'border-accent-200 bg-accent-50 dark:border-accent-800 dark:bg-accent-900/30',
-            purple: 'border-purple-200 bg-purple-50 dark:border-purple-800 dark:bg-purple-900/30',
-            green: 'border-green-200 bg-green-50 dark:border-green-800 dark:bg-green-900/30',
-            red: 'border-red-200 bg-red-50 dark:border-red-800 dark:bg-red-900/30',
-            yellow: 'border-yellow-200 bg-yellow-50 dark:border-yellow-800 dark:bg-yellow-900/30',
-            pink: 'border-pink-200 bg-pink-50 dark:border-pink-800 dark:bg-pink-900/30',
-            orange: 'border-orange-200 bg-orange-50 dark:border-orange-800 dark:bg-orange-900/30'
-        };
-        return colors[pillar?.color] || 'border-secondary-200 bg-secondary-50 dark:border-secondary-200/20 dark:bg-gray-800';
     };
 
     return (

@@ -7,14 +7,12 @@ import {
   Clock,
 } from "lucide-react";
 import { supabase } from "../../lib/supabase";
-import { useTheme } from "../../hooks/useTheme";
 import LoadingSpinner from "../ui/LoadingSpinner";
 
 // Lazy load the chart component
 const RevenueChartImpl = lazy(() => import("./RevenueChartImpl"));
 
 export default function RevenueChart() {
-  const { theme } = useTheme();
   const [data, setData] = useState([]);
   const [stats, setStats] = useState({
     totalCompanies: 0,
@@ -146,10 +144,6 @@ export default function RevenueChart() {
     }
   };
 
-  const textColor = theme === "dark" ? "#f3f4f6" : "#111827";
-  const tooltipBg = theme === "dark" ? "#1f2937" : "white";
-  const tooltipBorder = theme === "dark" ? "#374151" : "#e5e7eb";
-
   const CustomTooltip = ({ active, payload }) => {
     if (active && payload && payload.length) {
       const data = payload[0].payload;
@@ -180,8 +174,7 @@ export default function RevenueChart() {
       <Suspense fallback={<LoadingSpinner size="sm" />}>
         <RevenueChartImpl
           data={data}
-          theme={theme}
-          CustomTooltip={CustomTooltip}
+          TooltipContent={CustomTooltip}
         />
       </Suspense>
     );

@@ -156,7 +156,7 @@ function PillarSection({ pillar, index, formatDuration, viewMode }) {
               : 'space-y-3'}`}
             >
               {viewMode === 'list'
-                ? pillar.videos.map((video, vi) => (
+                ? pillar.videos.map((video) => (
                   <div
                     key={video.id}
                     className={`flex items-center gap-4 p-3 rounded-xl border transition-all ${

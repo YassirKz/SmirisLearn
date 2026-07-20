@@ -25,7 +25,7 @@ import { useToast } from "../../../hooks/useToast";
 import { useDebounce } from "../../../hooks/useDebounce";
 import { useMemberInvitation } from "../../../hooks/useMemberInvitation";
 import { supabase } from "../../../lib/supabase";
-import { untrusted, escapeText, validateEmail } from "../../../utils/security";
+import { untrusted, escapeText } from "../../../utils/security";
 import ConfirmationModal from "../../ui/ConfirmationModal";
 import SanitizedInput from "../../ui/SanitizedInput";
 
@@ -252,8 +252,6 @@ export default function MembersList({ isReadOnly = false, orgId: propOrgId }) {
     // Un super_admin peut retirer n'importe qui (sauf lui-même)
     // Un admin normal ne peut retirer que des étudiants
     const isSuperAdmin = user?.role === "super_admin";
-    const isAdmin = user?.role === "org_admin";
-
     if (member.id === user.id) {
       showError("Vous ne pouvez pas vous retirer vous-même");
       return;

@@ -7,7 +7,7 @@ import {
   Legend,
 } from "recharts";
 
-export default function RevenueChartImpl({ data, theme, CustomTooltip }) {
+export default function RevenueChartImpl({ data, TooltipContent }) {
   if (data.length === 0) {
     return (
       <div className="h-64 flex items-center justify-center">
@@ -47,7 +47,7 @@ export default function RevenueChartImpl({ data, theme, CustomTooltip }) {
             />
           ))}
         </Pie>
-        <Tooltip content={<CustomTooltip />} />
+        <Tooltip content={TooltipContent} />
         <Legend
           verticalAlign="bottom"
           height={36}

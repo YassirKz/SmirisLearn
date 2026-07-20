@@ -24,7 +24,7 @@ export default function AdminSettings() {
     const { theme, setTheme } = useTheme(); 
     const [searchParams] = useSearchParams();
     const orgIdFromUrl = searchParams.get('orgId');
-    const { isOwnerOrg, loading: orgLoading } = useOwnerOrg(orgIdFromUrl);
+    const { isOwnerOrg } = useOwnerOrg(orgIdFromUrl);
     const isReadOnly = (role === 'super_admin' && orgIdFromUrl) && !isOwnerOrg;
 
     const [loading, setLoading] = useState(true);

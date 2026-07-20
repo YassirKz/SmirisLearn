@@ -68,7 +68,7 @@ export default function VideoDetailPage() {
         if (!pillar?.organization_id) return;
         
         try {
-            const { data: videoRows } = await supabase
+            await supabase
                 .from('videos')
                 .select('id')
                 .eq('pillar_id', pillar.id);

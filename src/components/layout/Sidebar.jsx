@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import {
   LayoutDashboard, Building2, Users, Settings, LogOut,
   Sparkles, BookOpen, Sun, Moon, TrendingUp, Flame,
@@ -30,7 +30,6 @@ export default function Sidebar({ onClose }) {
   const { user, signOut } = useAuth();
   const { role } = useUserRole();
   const { theme, toggleTheme } = useTheme();
-  const navigate = useNavigate();
 
   // For student: fetch progress stats
   const [studentStats, setStudentStats] = useState({ progress: 0, streak: 0 });

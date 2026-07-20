@@ -5,9 +5,7 @@ import {
     LayoutGrid, Table as TableIcon,
     BookOpen
 } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
 import { supabase } from '../../../lib/supabase';
-import { useAuth } from '../../../hooks/useAuth';
 import { useToast } from '../../ui/Toast';
 import { useUserRole } from '../../../hooks/useUserRole';
 import PillarCard from './PillarCard';
@@ -18,8 +16,6 @@ import EditPillarModal from './EditPillarModal';
 import PillarSkeleton from './PillarSkeleton';
 
 export default function PillarsList({ isReadOnly = false, orgId: propOrgId }) {
-    const navigate = useNavigate();
-    const { user } = useAuth();
     const { organizationId, loading: roleLoading } = useUserRole();
     const { success, error: showError } = useToast();
     
