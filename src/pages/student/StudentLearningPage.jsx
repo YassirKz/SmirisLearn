@@ -23,21 +23,16 @@ const PILLAR_COLORS = [
 ];
 
 function VideoCard({ video, formatDuration, colorScheme }) {
-  const [showTooltip, setShowTooltip] = useState(false);
-
   return (
-    <motion.div
-      whileHover={video.canAccess ? { y: -4, scale: 1.01 } : {}}
-      className={`relative flex flex-col rounded-2xl border overflow-hidden transition-all duration-300 ${
+    <div
+      className={`relative flex flex-col rounded-2xl border transition-all duration-200 ${
         video.canAccess
-          ? 'bg-white dark:bg-gray-800/80 border-gray-100 dark:border-white/5 shadow-sm hover:shadow-lg hover:shadow-primary-500/10 cursor-pointer'
+          ? 'bg-white dark:bg-gray-800/80 border-gray-100 dark:border-white/5 shadow-sm hover:shadow-md hover:shadow-primary-500/10'
           : 'bg-gray-50 dark:bg-gray-900/50 border-gray-200/60 dark:border-white/5 opacity-70'
       }`}
-      onMouseEnter={() => !video.canAccess && setShowTooltip(true)}
-      onMouseLeave={() => setShowTooltip(false)}
     >
       {/* Thumbnail / top bar */}
-      <div className={`h-2 w-full bg-gradient-to-r ${colorScheme.from} ${colorScheme.to}`} />
+      <div className={`h-2 w-full rounded-t-2xl bg-gradient-to-r ${colorScheme.from} ${colorScheme.to}`} />
 
       <div className="p-4 flex-1 flex flex-col">
         {/* Icon + title */}
@@ -78,27 +73,12 @@ function VideoCard({ video, formatDuration, colorScheme }) {
             Lancer
           </Link>
         ) : (
-          <div className="relative">
-            <div className="flex items-center justify-center w-full py-2.5 rounded-xl text-sm font-semibold text-gray-400 dark:text-gray-500 bg-gray-100 dark:bg-gray-800 border border-dashed border-gray-200 dark:border-gray-700">
-              <Lock className="w-4 h-4 mr-1.5" /> Verrouillé
-            </div>
-            <AnimatePresence>
-              {showTooltip && (
-                <motion.div
-                  initial={{ opacity: 0, y: 6, scale: 0.95 }}
-                  animate={{ opacity: 1, y: 0, scale: 1 }}
-                  exit={{ opacity: 0, y: 6, scale: 0.95 }}
-                  className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 z-30 w-52 p-3 bg-gray-900 dark:bg-gray-700 text-white text-xs rounded-xl shadow-2xl text-center"
-                >
-                  Terminez la vidéo précédente pour déverrouiller.
-                  <div className="absolute top-full left-1/2 -translate-x-1/2 w-3 h-3 bg-gray-900 dark:bg-gray-700 rotate-45 -translate-y-1.5" />
-                </motion.div>
-              )}
-            </AnimatePresence>
+          <div className="flex items-center justify-center w-full py-2.5 rounded-xl text-sm font-semibold text-gray-400 dark:text-gray-500 bg-gray-100 dark:bg-gray-800 border border-dashed border-gray-200 dark:border-gray-700">
+            <Lock className="w-4 h-4 mr-1.5" /> Verrouillé
           </div>
         )}
       </div>
-    </motion.div>
+    </div>
   );
 }
 
@@ -114,12 +94,12 @@ function PillarSection({ pillar, index, formatDuration, viewMode }) {
       initial={{ opacity: 0, y: 24 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.08, type: 'spring', stiffness: 160, damping: 20 }}
-      className="bg-white dark:bg-gray-800/70 backdrop-blur-xl rounded-3xl border border-gray-100 dark:border-white/5 shadow-sm overflow-hidden"
+      className="bg-white dark:bg-gray-800/70 backdrop-blur-xl rounded-3xl border border-gray-100 dark:border-white/5 shadow-sm"
     >
       {/* Pillar header */}
       <button
         onClick={() => setCollapsed(!collapsed)}
-        className="w-full flex items-center gap-4 p-5 sm:p-6 text-left hover:bg-gray-50 dark:hover:bg-white/3 transition-colors"
+        className="w-full flex items-center gap-4 p-5 sm:p-6 text-left bg-transparent rounded-t-[22px] transition-colors"
       >
         {/* Color dot / icon */}
         <div className={`w-12 h-12 rounded-2xl flex items-center justify-center text-2xl bg-gradient-to-br ${color.from} ${color.to} shadow-md shrink-0`}>
@@ -161,34 +141,29 @@ function PillarSection({ pillar, index, formatDuration, viewMode }) {
       <AnimatePresence>
         {!collapsed && (
           <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: 'auto', opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
+            initial={{ height: 0, opacity: 0, overflow: 'hidden' }}
+            animate={{ height: 'auto', opacity: 1, transitionEnd: { overflow: 'visible' } }}
+            exit={{ height: 0, opacity: 0, overflow: 'hidden' }}
             transition={{ duration: 0.25 }}
-            className="overflow-hidden"
           >
             {pillar.description && (
               <p className="px-6 pb-3 text-sm text-gray-500 dark:text-gray-400 leading-relaxed border-b border-gray-100 dark:border-white/5">
                 {escapeText(untrusted(pillar.description))}
               </p>
             )}
-            <div className={`p-5 sm:p-6 ${viewMode === 'grid'
+            <div className={`p-5 sm:p-6 rounded-b-[22px] ${viewMode === 'grid'
               ? 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4'
               : 'space-y-3'}`}
             >
               {viewMode === 'list'
                 ? pillar.videos.map((video, vi) => (
-                  <motion.div
+                  <div
                     key={video.id}
-                    initial={{ opacity: 0, x: -8 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: vi * 0.04 }}
                     className={`flex items-center gap-4 p-3 rounded-xl border transition-all ${
                       video.canAccess
-                        ? `bg-gray-50 dark:bg-gray-700/30 ${color.border} dark:border-white/5 hover:border-primary-200 dark:hover:border-primary-700/40 cursor-pointer hover:shadow-sm`
-                        : 'bg-gray-50/50 dark:bg-gray-900/30 border-gray-100 dark:border-white/5 opacity-60 cursor-not-allowed'
+                        ? `bg-gray-50 dark:bg-gray-700/30 ${color.border} dark:border-white/5 hover:bg-gray-100 dark:hover:bg-gray-700/50`
+                        : 'bg-gray-50/50 dark:bg-gray-900/30 border-gray-100 dark:border-white/5 opacity-60'
                     }`}
-                    onClick={() => video.canAccess && (window.location.href = `/student/video/${video.id}`)}
                   >
                     <div className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 ${
                       video.canAccess ? `${color.light} ${color.text}` : 'bg-gray-100 dark:bg-gray-800 text-gray-400'
@@ -207,7 +182,12 @@ function PillarSection({ pillar, index, formatDuration, viewMode }) {
                     {video.canAccess && !video.watched && (
                       <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${color.badge}`}>Nouveau</span>
                     )}
-                  </motion.div>
+                    {!video.canAccess && (
+                      <span className="text-xs text-gray-400 flex items-center gap-1 shrink-0">
+                        <Lock className="w-3 h-3" /> Verrouillé
+                      </span>
+                    )}
+                  </div>
                 ))
                 : pillar.videos.map((video) => (
                   <VideoCard key={video.id} video={video} formatDuration={formatDuration} colorScheme={color} />

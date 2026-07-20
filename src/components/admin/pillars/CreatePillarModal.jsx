@@ -136,7 +136,10 @@ export default function CreatePillarModal({ isOpen, onClose, onSuccess, orgId: p
                                 </div>
 
                                 {/* En-tête */}
-                                <div className={`relative px-8 pt-8 pb-6 bg-gradient-to-br ${selectedColor.gradient} text-white`}>
+                                <div className={`relative px-8 pt-8 pb-6 bg-gradient-to-br ${selectedColor.gradient} text-white rounded-t-3xl overflow-hidden`}>
+                                    {/* Glows d'arrière-plan */}
+                                    <div className="absolute top-0 right-0 w-48 h-48 bg-white/10 rounded-full blur-2xl pointer-events-none" />
+                                    <div className="absolute bottom-0 left-12 w-32 h-32 bg-white/5 rounded-full blur-xl pointer-events-none" />
                                     <div className="flex items-center justify-between">
                                         <div className="flex items-center gap-4">
                                             <div className="text-4xl">{formData.icon}</div>

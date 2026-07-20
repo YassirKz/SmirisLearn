@@ -39,7 +39,6 @@ function StatCard({ icon: Icon, label, value, color, delay, sub }) {
       whileHover={{ y: -4, scale: 1.02 }}
       className="relative bg-white dark:bg-gray-800/70 backdrop-blur-xl rounded-2xl p-5 shadow-sm border border-gray-100 dark:border-white/5 overflow-hidden group cursor-default"
     >
-      {/* blob décoratif */}
       <div className={`absolute -right-5 -bottom-5 w-24 h-24 ${color.blob} rounded-full blur-2xl opacity-60 group-hover:opacity-90 transition-opacity`} />
       <div className={`inline-flex p-3 rounded-xl ${color.bg} mb-3 relative z-10`}>
         <Icon className={`w-5 h-5 ${color.icon}`} />
@@ -94,6 +93,7 @@ export default function StudentDashboard() {
   const navigate = useNavigate();
 
   const [orgName, setOrgName] = useState("");
+  const [fullName, setFullName] = useState("");   
   const [loading, setLoading] = useState(true);
   const [stats, setStats] = useState({ pillarsCount: 0, completedVideos: 0, passedQuizzes: 0, overallProgress: 0, totalVideos: 0, totalQuizzes: 0, pendingQuizzes: 0 });
   const [recentVideos, setRecentVideos] = useState([]);
@@ -114,11 +114,21 @@ export default function StudentDashboard() {
     const fetchDashboardData = async () => {
       if (!user) return;
       try {
-        const { data: profile } = await supabase.from("profiles").select("id, organization_id").eq("id", user.id).maybeSingle();
-        if (profile?.organization_id) {
-          const { data: org } = await supabase.from("organizations").select("name").eq("id", profile.organization_id).maybeSingle();
-          if (org) setOrgName(escapeText(untrusted(org.name)));
+        // 1. Récupérer le profil avec full_name
+        const { data: profile } = await supabase
+          .from("profiles")
+          .select("id, organization_id, full_name")   // ← ajout
+          .eq("id", user.id)
+          .maybeSingle();
+
+        if (profile) {
+          setFullName(profile.full_name || "");      // ← stocker le nom
+          if (profile?.organization_id) {
+            const { data: org } = await supabase.from("organizations").select("name").eq("id", profile.organization_id).maybeSingle();
+            if (org) setOrgName(escapeText(untrusted(org.name)));
+          }
         }
+
         const { data: memberships } = await supabase.from("group_members").select("group_id").eq("user_id", user.id);
         const groupIds = memberships?.map((m) => m.group_id) || [];
         let pillarIds = [];
@@ -220,7 +230,11 @@ export default function StudentDashboard() {
 
   const formatDuration = (s) => { if (!s) return "--:--"; return `${Math.floor(s / 60)}:${(s % 60).toString().padStart(2, "0")}`; };
   const formatTimeSpent = (s) => { const h = Math.floor(s / 3600), m = Math.floor((s % 3600) / 60); return h > 0 ? `${h}h ${m}min` : `${m} min`; };
-  const displayName = escapeText(untrusted(user?.email?.split("@")[0] || "étudiant"));
+
+  // ← Nouveau calcul du nom affiché
+  const displayName = escapeText(
+    untrusted(fullName || user?.email?.split("@")[0] || "étudiant")
+  );
 
   /* ──────────── LOADING ──────────── */
   if (loading) {
@@ -247,12 +261,10 @@ export default function StudentDashboard() {
           animate={{ opacity: 1, y: 0 }}
           className="relative rounded-3xl overflow-hidden bg-gradient-to-br from-primary-600 via-primary-700 to-blue-800 p-6 sm:p-8 shadow-xl shadow-primary-500/20"
         >
-          {/* décoration */}
           <div className="absolute top-0 right-0 w-80 h-80 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/3 pointer-events-none" />
           <div className="absolute bottom-0 left-0 w-48 h-48 bg-white/5 rounded-full translate-y-1/2 -translate-x-1/4 pointer-events-none" />
 
           <div className="relative flex flex-col sm:flex-row sm:items-center justify-between gap-6">
-            {/* Texte */}
             <div>
               <div className="flex items-center gap-2 mb-2">
                 <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/15 text-white/90 text-xs font-bold uppercase tracking-widest backdrop-blur-sm border border-white/10">
@@ -265,7 +277,7 @@ export default function StudentDashboard() {
                 )}
               </div>
               <h1 className="text-2xl sm:text-3xl font-black text-white leading-tight">
-                {getGreeting()}, {displayName} 👋
+                {getGreeting()}, {displayName}    
               </h1>
               <p className="text-white/60 text-sm mt-1">
                 {stats.overallProgress === 0
@@ -273,7 +285,6 @@ export default function StudentDashboard() {
                   : `Vous avez complété ${stats.completedVideos} vidéo${stats.completedVideos > 1 ? "s" : ""} sur ${stats.totalVideos}.`}
               </p>
 
-              {/* Streak badge */}
               {streak > 0 && (
                 <motion.div
                   initial={{ scale: 0 }}
@@ -287,7 +298,6 @@ export default function StudentDashboard() {
               )}
             </div>
 
-            {/* Bouton Actualiser */}
             <button
               onClick={() => window.location.reload()}
               className="flex items-center gap-2 px-4 py-2.5 bg-white/10 hover:bg-white/20 border border-white/10 hover:border-white/20 text-white/80 hover:text-white text-sm font-semibold rounded-xl backdrop-blur-sm transition-all shrink-0"
@@ -331,7 +341,6 @@ export default function StudentDashboard() {
                   <p className="text-xs text-gray-400 dark:text-gray-500">{progressByPillar.length} module{progressByPillar.length > 1 ? "s" : ""} accessible{progressByPillar.length > 1 ? "s" : ""}</p>
                 </div>
               </div>
-              {/* Mini chart si plusieurs piliers */}
               {progressByPillar.length > 1 && (
                 <div className="hidden md:block h-24 w-48">
                   <ProgressChart data={progressByPillar} />

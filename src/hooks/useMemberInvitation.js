@@ -41,12 +41,12 @@ export function useMemberInvitation() {
     }
   };
 
-  const acceptInvitation = async (token, userId, invitationData = null) => {
+  const acceptInvitation = async (token, userId, fullName = null) => {
     try {
       setLoading(true);
       setError(null);
 
-      const result = await acceptMemberInvitation(token, userId, invitationData);
+      const result = await acceptMemberInvitation(token, userId, fullName);
       if (result.error) {
         throw result.error;
       }

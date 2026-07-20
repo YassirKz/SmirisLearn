@@ -208,8 +208,8 @@ export default function QuizCreator({ quiz, videoId, onSuccess, onCancel }) {
             )}
 
             {/* Sélection vidéo */}
-            <div className="bg-white/50 dark:bg-slate-800/30 p-5 rounded-2xl border border-secondary-200 dark:border-secondary-200/20/50">
-                <label className="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">
+            <div className="bg-white/50 dark:bg-slate-800/20 p-6 rounded-2xl border border-secondary-200 dark:border-slate-800/80">
+                <label className="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-3">
                     Vidéo associée <span className="text-red-500">*</span>
                 </label>
                 {loadingVideos ? (
@@ -223,10 +223,10 @@ export default function QuizCreator({ quiz, videoId, onSuccess, onCancel }) {
                         <button
                             type="button"
                             onClick={() => setIsVideoOpen(!isVideoOpen)}
-                            className={`w-full px-4 py-3 bg-white dark:bg-slate-900/40 border rounded-xl focus:ring-4 outline-none transition-all font-medium flex items-center justify-between gap-2 shadow-sm ${
+                            className={`w-full px-4 py-3 bg-white dark:bg-slate-900/60 border rounded-xl focus:ring-4 outline-none transition-all font-medium flex items-center justify-between gap-2 shadow-sm ${
                                 errors.video_id 
                                 ? 'border-red-300 dark:border-red-500/50 focus:border-red-500 focus:ring-red-100 dark:focus:ring-red-900/30' 
-                                : 'border-secondary-200 dark:border-secondary-200/20 focus:border-secondary-200 focus:ring-primary-500/20 dark:focus:ring-primary-900/30'
+                                : 'border-secondary-200 dark:border-slate-700/60 focus:border-primary-500 dark:focus:border-primary-500 focus:ring-primary-500/10 dark:focus:ring-primary-500/20'
                             }`}
                         >
                             <span className="truncate">
@@ -277,7 +277,7 @@ export default function QuizCreator({ quiz, videoId, onSuccess, onCancel }) {
             </div>
 
             {/* Paramètres */}
-            <div className="bg-white/50 dark:bg-slate-800/30 p-5 rounded-2xl border border-secondary-200 dark:border-secondary-200/20/50">
+            <div className="bg-white/50 dark:bg-slate-800/20 p-6 rounded-2xl border border-secondary-200 dark:border-slate-800/80">
                 <h3 className="text-sm font-bold text-gray-800 dark:text-gray-200 mb-4 flex items-center gap-2">
                     Paramètres d'évaluation
                 </h3>
@@ -292,10 +292,10 @@ export default function QuizCreator({ quiz, videoId, onSuccess, onCancel }) {
                             max="100"
                             value={form.passing_score}
                             onChange={(e) => setForm(f => ({ ...f, passing_score: e.target.value }))}
-                            className={`w-full px-4 py-3 bg-white dark:bg-slate-900/40 border rounded-xl focus:ring-4 outline-none transition-all font-medium ${
+                            className={`w-full px-4 py-3 bg-white dark:bg-slate-900/60 border rounded-xl focus:ring-4 outline-none transition-all font-medium ${
                                 errors.passing_score
                                 ? 'border-red-300 dark:border-red-500/50 focus:border-red-500 focus:ring-red-100 dark:focus:ring-red-900/30'
-                                : 'border-secondary-200 dark:border-secondary-200/20 focus:border-secondary-200 focus:ring-primary-500/20 dark:focus:ring-primary-900/30'
+                                : 'border-secondary-200 dark:border-slate-700/60 focus:border-primary-500 dark:focus:border-primary-500 focus:ring-primary-500/10 dark:focus:ring-primary-500/20'
                             }`}
                         />
                         {errors.passing_score && (
@@ -314,7 +314,7 @@ export default function QuizCreator({ quiz, videoId, onSuccess, onCancel }) {
                             value={form.timer_minutes}
                             onChange={(e) => setForm(f => ({ ...f, timer_minutes: e.target.value }))}
                             placeholder="Optionnel"
-                            className="w-full px-4 py-3 bg-white dark:bg-slate-900/40 border border-secondary-200 dark:border-secondary-200/20 rounded-xl focus:border-secondary-200 focus:ring-4 focus:ring-primary-500/20 dark:focus:ring-primary-900/30 outline-none transition-all font-medium placeholder:text-gray-400"
+                            className="w-full px-4 py-3 bg-white dark:bg-slate-900/60 border border-secondary-200 dark:border-slate-700/60 rounded-xl focus:border-primary-500 dark:focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 dark:focus:ring-primary-500/20 outline-none transition-all font-medium placeholder:text-gray-400"
                         />
                     </div>
                     <div>
@@ -328,10 +328,10 @@ export default function QuizCreator({ quiz, videoId, onSuccess, onCancel }) {
                             step="1"
                             value={form.max_attempts}
                             onChange={(e) => setForm(f => ({ ...f, max_attempts: e.target.value }))}
-                            className={`w-full px-4 py-3 bg-white dark:bg-slate-900/40 border rounded-xl focus:ring-4 outline-none transition-all font-medium ${
+                            className={`w-full px-4 py-3 bg-white dark:bg-slate-900/60 border rounded-xl focus:ring-4 outline-none transition-all font-medium ${
                                 errors.max_attempts
                                 ? 'border-red-300 dark:border-red-500/50 focus:border-red-500 focus:ring-red-100 dark:focus:ring-red-900/30'
-                                : 'border-secondary-200 dark:border-secondary-200/20 focus:border-secondary-200 focus:ring-primary-500/20 dark:focus:ring-primary-900/30'
+                                : 'border-secondary-200 dark:border-slate-700/60 focus:border-primary-500 dark:focus:border-primary-500 focus:ring-primary-500/10 dark:focus:ring-primary-500/20'
                             }`}
                         />
                         {errors.max_attempts && (
@@ -380,11 +380,11 @@ export default function QuizCreator({ quiz, videoId, onSuccess, onCancel }) {
             </div>
 
             {/* Actions */}
-            <div className="flex items-center justify-end gap-3 pt-4 border-t border-secondary-200 dark:border-secondary-200/20">
+            <div className="flex items-center justify-end gap-3 pt-6 border-t border-secondary-200 dark:border-slate-800">
                 <button
                     type="button"
                     onClick={onCancel}
-                    className="px-4 py-2 border border-secondary-200 dark:border-secondary-200/20 rounded-xl hover:bg-secondary-50 dark:hover:bg-gray-700 transition-colors text-gray-600 dark:text-gray-300"
+                    className="px-5 py-2.5 border border-secondary-200 dark:border-slate-700 rounded-xl hover:bg-secondary-50 dark:hover:bg-slate-800 transition-colors text-gray-600 dark:text-gray-300 font-semibold"
                 >
                     Annuler
                 </button>

@@ -70,7 +70,11 @@ export default function Sidebar({ onClose }) {
           }
         }
         setStudentStats({ progress: pct, streak });
-      } catch {}
+      } catch (error) {
+        if (import.meta.env.DEV) {
+          console.warn("Erreur chargement statistiques sidebar:", error);
+        }
+      }
     };
     fetchStats();
   }, [user, role]);

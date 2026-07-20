@@ -132,6 +132,8 @@ export default function AdminStats() {
             let avgCompletion = 0;
             let previousAvgCompletion = 0;
 
+            let members = [];
+
             if (profiles && profiles.length > 0) {
                 const userIds = profiles.map(p => p.id);
                 const { data: progressData } = await supabase
@@ -139,7 +141,7 @@ export default function AdminStats() {
                     .select('user_id, watched')
                     .in('user_id', userIds);
 
-                const members = profiles.map(profile => ({
+                members = profiles.map(profile => ({
                     ...profile,
                     user_progress: progressData?.filter(p => p.user_id === profile.id) || []
                 }));

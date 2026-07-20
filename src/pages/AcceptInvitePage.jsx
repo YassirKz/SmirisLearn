@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Building, Mail, Lock, AlertCircle, Eye, EyeOff, Users } from 'lucide-react';
+import { Building, Mail, Lock, AlertCircle, Eye, EyeOff, Users, User } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { isTokenExpired } from '../utils/tokenGenerator';
 import { useMemberInvitation } from '../hooks/useMemberInvitation';
@@ -20,12 +20,14 @@ export default function AcceptInvitePage() {
 
     // Formulaire d'inscription
     const [formData, setFormData] = useState({
+        fullName: '',
         password: '',
         confirmPassword: ''
     });
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [touched, setTouched] = useState({
+        fullName: false,
         password: false,
         confirmPassword: false
     });
@@ -127,10 +129,26 @@ export default function AcceptInvitePage() {
         return "";
     };
 
+    const validateFullName = (value) => {
+        if (invitationType === 'member' && !existingUser) {
+            if (!value || !value.trim()) return "Le nom complet est requis";
+            if (value.trim().length < 2) return "Le nom est trop court (min. 2 caractères)";
+        }
+        return "";
+    };
+
+    const fullNameError = touched.fullName ? validateFullName(formData.fullName) : "";
     const passwordError = touched.password ? validatePassword(formData.password) : "";
     const confirmError = touched.confirmPassword ? validateConfirmPassword(formData.confirmPassword) : "";
 
-    const isValid = !passwordError && !confirmError && formData.password && formData.confirmPassword;
+    const isExistingMember = invitationType === 'member' && existingUser;
+
+    const isValid = !passwordError && 
+                    (isExistingMember || !confirmError) && 
+                    (isExistingMember || !fullNameError) && 
+                    formData.password && 
+                    (isExistingMember || formData.confirmPassword) && 
+                    (invitationType !== 'member' || existingUser || (formData.fullName && formData.fullName.trim()));
 
     // ============================================
     // CRÉATION DU COMPTE ET ACCEPTATION
@@ -195,6 +213,8 @@ export default function AcceptInvitePage() {
 
             } else {
                 // === INVITATION MEMBRE ===
+                let userId;
+
                 if (existingUser) {
                     // L'utilisateur existe déjà : on le connecte puis on accepte l'invitation
                     const { data: authData, error: signInError } = await supabase.auth.signInWithPassword({
@@ -202,20 +222,50 @@ export default function AcceptInvitePage() {
                         password: formData.password,
                     });
                     if (signInError) throw signInError;
-                    await acceptMemberInvitation(token, authData.user.id, invitation);
+                    userId = authData.user.id;
+                    // Pour un utilisateur existant, on ne change pas son nom
+                    await acceptMemberInvitation(token, userId);
                 } else {
                     // Nouvel utilisateur : on crée le compte
                     const { data: authData, error: signUpError } = await supabase.auth.signUp({
                         email: invitation.email,
                         password: formData.password,
                         options: {
-                            data: { full_name: invitation.full_name || '' }
+                            data: { full_name: formData.fullName.trim() }
                         }
                     });
-                    if (signUpError) throw signUpError;
-                    await acceptMemberInvitation(token, authData.user.id, invitation);
+
+                    if (signUpError) {
+                        // Si l'utilisateur existe déjà dans Auth (tentative précédente échouée),
+                        // on essaie de se connecter directement
+                        if (signUpError.message?.includes('already registered')) {
+                            const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({
+                                email: invitation.email,
+                                password: formData.password
+                            });
+                            if (signInError) throw signInError;
+                            userId = signInData.user.id;
+                        } else {
+                            throw signUpError;
+                        }
+                    } else {
+                        if (!authData.user) throw new Error("Erreur à la création du compte");
+                        userId = authData.user.id;
+
+                        // CONNEXION IMMÉDIATE pour pouvoir effectuer les requêtes de liaison
+                        const { error: signInError } = await supabase.auth.signInWithPassword({
+                            email: invitation.email,
+                            password: formData.password
+                        });
+                        if (signInError) throw signInError;
+                    }
+
+                    // Passer le nom saisi dans le formulaire pour le nouveau membre
+                    await acceptMemberInvitation(token, userId, formData.fullName);
                 }
-                navigate('/student/learning', { replace: true });
+                // Rediriger selon le rôle de l'invitation
+                const redirectPath = invitation.role === 'org_admin' ? '/admin' : '/student/learning';
+                navigate(redirectPath, { replace: true });
             }
 
         } catch (err) {
@@ -303,7 +353,7 @@ export default function AcceptInvitePage() {
                     <p className="text-gray-500 dark:text-gray-400 text-sm">
                         {invitationType === 'company' 
                             ? `Vous avez été invité à administrer ${invitation?.name}`
-                            : `Rejoignez ${invitation?.organizations?.name} en tant que ${invitation?.role === 'org_admin' ? 'Administrateur' : 'Étudiant'}`
+                            : `Rejoignez ${invitation?.org_name} en tant que ${invitation?.role === 'org_admin' ? 'Administrateur' : 'Étudiant'}`
                         }
                     </p>
                 </div>
@@ -330,7 +380,7 @@ export default function AcceptInvitePage() {
                         <>
                             <div className="flex items-center gap-3 mb-3">
                                 <Building className="w-5 h-5 text-blue-600" />
-                                <span className="text-gray-700 dark:text-gray-200 font-medium">{invitation?.organizations?.name}</span>
+                                <span className="text-gray-700 dark:text-gray-200 font-medium">{invitation?.org_name}</span>
                             </div>
                             <div className="flex items-center gap-3">
                                 <Mail className="w-5 h-5 text-blue-600" />
@@ -357,6 +407,47 @@ export default function AcceptInvitePage() {
 
                     {!(invitationType === 'member' && existingUser) && (
                         <>
+                            {/* Nom complet (pour l'inscription d'un nouveau membre) */}
+                            {invitationType === 'member' && !existingUser && (
+                                <div className="space-y-1">
+                                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                                        Nom complet <span className="text-red-500">*</span>
+                                    </label>
+                                    <div className="relative group">
+                                        <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500 w-5 h-5" />
+                                        <input
+                                            type="text"
+                                            value={formData.fullName}
+                                            onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
+                                            onBlur={() => setTouched({ ...touched, fullName: true })}
+                                            className={`
+                                                w-full pl-10 pr-4 py-3 border-2 rounded-xl outline-none transition-all bg-white/50 dark:bg-slate-900/20 backdrop-blur-sm dark:text-white
+                                                ${fullNameError && touched.fullName
+                                                    ? 'border-red-300 dark:border-red-500/50 focus:border-red-500 focus:ring-4 focus:ring-red-100 dark:focus:ring-red-900/30'
+                                                    : formData.fullName && !fullNameError
+                                                        ? 'border-green-300 dark:border-green-500/50 focus:border-green-500 focus:ring-4 focus:ring-green-100 dark:focus:ring-green-900/30'
+                                                        : 'border-secondary-200 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-500 focus:ring-4 focus:ring-blue-100 dark:focus:ring-blue-900/30'
+                                                }
+                                            `}
+                                            placeholder="Jean Dupont"
+                                        />
+                                    </div>
+                                    <AnimatePresence>
+                                        {fullNameError && touched.fullName && (
+                                            <motion.p
+                                                initial={{ opacity: 0, y: -10 }}
+                                                animate={{ opacity: 1, y: 0 }}
+                                                exit={{ opacity: 0, y: -10 }}
+                                                className="text-sm text-red-500 flex items-center gap-1"
+                                            >
+                                                <AlertCircle className="w-4 h-4" />
+                                                {fullNameError}
+                                            </motion.p>
+                                        )}
+                                    </AnimatePresence>
+                                </div>
+                            )}
+
                             {/* Mot de passe */}
                             <div className="space-y-1">
                                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">

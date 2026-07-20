@@ -321,8 +321,8 @@ export default function AdminLayout({ children }) {
 
       {/* Main content */}
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
         transition={{ delay: 0.2 }}
         className={`transition-all duration-300 ${sidebarOpen ? "lg:ml-72" : "ml-0"}`}
       >

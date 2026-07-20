@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowLeft, BookOpen, Clock, Info, Shield, ChevronRight } from 'lucide-react';
+import { ArrowLeft, BookOpen, Clock, Info, Shield, ChevronRight, Lock } from 'lucide-react'; // <-- Lock ajouté ici
 import { supabase } from '../../lib/supabase';
 import { useAuth } from '../../hooks/useAuth';
 import { useToast } from '../../hooks/useToast';
@@ -51,7 +51,6 @@ export default function StudentVideoPage() {
         console.log('▶️ [StudentVideoPage] Vidéo chargée:', videoData?.title);
 
         // --- SÉCURITÉ : Génération d'une URL signée (TTL 1 heure) ---
-        // On suppose que l'URL stockée est soit le path relatif, soit on extrait le path
         const videoPath = videoData.video_url.includes('storage/v1/object/public/videos/') 
             ? videoData.video_url.split('storage/v1/object/public/videos/')[1]
             : videoData.video_url;
@@ -147,7 +146,7 @@ export default function StudentVideoPage() {
       >
         <button
           onClick={() => navigate('/student/learning')}
-          className="inline-flex items-center gap-2 px-4 py-2 bg-white/40 dark:bg-gray-800/40 backdrop-blur-md rounded-xl text-primary-500 dark:text-primary-500 font-bold hover:bg-white/70 dark:hover:bg-gray-800/70 hover:shadow-lg transition-all group border border-secondary-200 dark:border-secondary-200/20/50"
+          className="inline-flex items-center gap-2 px-4 py-2 bg-white/40 dark:bg-gray-800/40 backdrop-blur-md rounded-xl text-primary-500 dark:text-primary-500 font-bold hover:bg-white/70 dark:hover:bg-gray-800/70 hover:shadow-lg transition-all group border border-secondary-200 dark:border-slate-800"
         >
           <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
           <span>Retour aux modules</span>
@@ -188,7 +187,7 @@ export default function StudentVideoPage() {
             <motion.div 
                 whileHover={{ z: 20, y: -2 }}
                 style={{ transformStyle: "preserve-3d" }}
-                className="bg-white/40 dark:bg-gray-800/40 backdrop-blur-2xl rounded-[2rem] p-8 sm:p-10 shadow-xl border border-white/60 dark:border-secondary-200/20/50 relative overflow-hidden"
+                className="bg-white/40 dark:bg-gray-800/40 backdrop-blur-2xl rounded-[2rem] p-8 sm:p-10 shadow-xl border border-white/60 dark:border-slate-800 relative overflow-hidden"
             >
               <div className="absolute top-0 right-0 p-8 opacity-5 pointer-events-none">
                   <BookOpen className="w-40 h-40" />
@@ -220,7 +219,7 @@ export default function StudentVideoPage() {
             <motion.div 
                 whileHover={{ rotateY: -2, scale: 1.02 }}
                 style={{ transformStyle: "preserve-3d" }}
-                className="bg-white/40 dark:bg-gray-800/40 backdrop-blur-2xl rounded-[2rem] p-8 shadow-2xl border border-white/60 dark:border-secondary-200/20/50 sticky top-28"
+                className="bg-white/40 dark:bg-gray-800/40 backdrop-blur-2xl rounded-[2rem] p-8 shadow-2xl border border-white/60 dark:border-slate-800 sticky top-28"
             >
               <h3 className="text-xl font-black text-gray-900 dark:text-white mb-6 flex items-center gap-4 tracking-tight" style={{ transform: "translateZ(20px)" }}>
                 <div className="w-14 h-14 bg-gradient-to-br from-primary-100 to-primary-200 dark:from-primary-900/60 dark:to-primary-800/60 rounded-xl flex items-center justify-center text-3xl shadow-inner shrink-0">

@@ -73,11 +73,11 @@ export default function QuestionItem({ question, index, onChange, onRemove, onDu
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
-            className="bg-secondary-50/50 dark:bg-slate-800/30 hover:bg-white dark:hover:bg-slate-800 rounded-2xl p-6 border border-secondary-200/60 dark:border-secondary-200/20/50 relative group transition-all duration-300 shadow-sm hover:shadow-lg"
+            className="bg-secondary-50/30 dark:bg-slate-800/20 hover:bg-white dark:hover:bg-slate-800/40 rounded-2xl p-6 border border-secondary-200/60 dark:border-slate-800/80 relative group transition-all duration-300 shadow-sm hover:shadow-lg"
         >
             {/* En-tête avec numéro et actions */}
             <div className="flex items-center justify-between mb-6">
-                <span className="text-sm font-black text-primary-500 dark:text-primary-500 bg-accent-500 text-secondary-900 dark:bg-primary-900/30 px-3.5 py-1.5 rounded-xl uppercase tracking-wider shadow-sm border border-secondary-200/50 dark:border-primary-800/50">
+                <span className="text-xs font-bold text-primary-600 dark:text-primary-400 bg-primary-50 dark:bg-primary-950/40 border border-primary-200 dark:border-primary-800/50 px-3 py-1.5 rounded-xl uppercase tracking-wider shadow-sm">
                     Question {index + 1}
                 </span>
                 <div className="flex gap-2">
@@ -107,7 +107,7 @@ export default function QuestionItem({ question, index, onChange, onRemove, onDu
                     <select
                         value={question.type}
                         onChange={(e) => handleTypeChange(e.target.value)}
-                        className="w-full sm:w-64 px-4 py-3 bg-white dark:bg-slate-900/40 border border-secondary-200 dark:border-secondary-200/20 rounded-xl focus:border-secondary-200 focus:ring-4 focus:ring-primary-500/20 dark:focus:ring-primary-900/30 outline-none transition-all font-medium appearance-none cursor-pointer"
+                        className="w-full sm:w-64 px-4 py-3 bg-white dark:bg-slate-900/60 border border-secondary-200 dark:border-slate-700/60 rounded-xl focus:border-primary-500 dark:focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 dark:focus:ring-primary-500/20 outline-none transition-all font-medium appearance-none cursor-pointer"
                     >
                         {QUESTION_TYPES.map(t_opt => (
                             <option key={t_opt.value} value={t_opt.value}>{t_opt.label}</option>
@@ -128,18 +128,18 @@ export default function QuestionItem({ question, index, onChange, onRemove, onDu
                     validate="text"
                     required
                     placeholder="Saisir la question de manière claire et concise..."
-                    className='px-4 py-3 bg-white dark:bg-slate-900/40 border-secondary-200 dark:border-secondary-200/20 rounded-xl focus:ring-4 focus:ring-primary-500/20 dark:focus:ring-primary-900/30 font-medium'
+                    className="w-full border border-secondary-200 dark:border-slate-700/60 bg-white dark:bg-slate-900/60"
                 />
             </div>
 
             {/* Options pour QCM */}
             {(question.type === 'single' || question.type === 'multiple') && (
-                <div className="space-y-4 mb-6 bg-white/50 dark:bg-slate-900/50 p-5 rounded-2xl border border-secondary-200 dark:border-secondary-200/20/50">
+                <div className="space-y-4 mb-6 bg-white/50 dark:bg-slate-900/30 p-5 rounded-2xl border border-secondary-200 dark:border-slate-800">
                     <label className="block text-xs font-bold text-gray-600 dark:text-gray-400 uppercase tracking-wider">Options de réponse</label>
                     <div className="space-y-3">
                         {question.options?.map((opt, optIdx) => (
                             <div key={optIdx} className="flex items-center gap-3">
-                                <div className="flex bg-white dark:bg-slate-900/40 p-2 rounded-xl shadow-sm border border-secondary-200 dark:border-secondary-200/20 cursor-pointer hover:border-secondary-200 dark:hover:border-primary-700 transition-colors">
+                                <div className="flex bg-white dark:bg-slate-900/60 p-2.5 rounded-xl shadow-sm border border-secondary-200 dark:border-slate-700/60 cursor-pointer hover:border-primary-500 dark:hover:border-primary-500 transition-colors">
                                     <input
                                         type={question.type === 'single' ? 'radio' : 'checkbox'}
                                         name={`answer-${index}`}
@@ -159,13 +159,13 @@ export default function QuestionItem({ question, index, onChange, onRemove, onDu
                                     value={opt}
                                     onChange={(e) => handleOptionChange(optIdx, e.target.value)}
                                     placeholder={`Saisir l'option ${optIdx + 1}`}
-                                    className="flex-1 px-4 py-3 bg-white dark:bg-slate-900/40 border border-secondary-200 dark:border-secondary-200/20 rounded-xl focus:border-secondary-200 focus:ring-4 focus:ring-primary-500/20 dark:focus:ring-primary-900/30 outline-none transition-all font-medium"
+                                    className="flex-1 px-4 py-3 bg-white dark:bg-slate-900/60 border border-secondary-200 dark:border-slate-700/60 rounded-xl focus:border-primary-500 dark:focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 dark:focus:ring-primary-500/20 outline-none transition-all font-medium"
                                 />
                                 <button
                                     type="button"
                                     onClick={() => removeOption(optIdx)}
                                     disabled={question.options.length <= 2}
-                                    className="p-3 bg-white dark:bg-slate-900/40 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-xl shadow-sm border border-secondary-200 dark:border-secondary-200/20 disabled:opacity-30 transition-all group/opt"
+                                    className="p-3 bg-white dark:bg-slate-900/60 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-xl shadow-sm border border-secondary-200 dark:border-slate-700/60 disabled:opacity-30 transition-all group/opt"
                                 >
                                     <X className="w-4 h-4 text-gray-400 group-hover/opt:text-red-500 transition-colors" />
                                 </button>
@@ -175,7 +175,7 @@ export default function QuestionItem({ question, index, onChange, onRemove, onDu
                     <button
                         type="button"
                         onClick={addOption}
-                        className="inline-flex items-center gap-2 px-4 py-2 bg-secondary-50 dark:bg-primary-900/20 text-primary-500 dark:text-primary-500 font-bold text-sm rounded-xl hover:bg-secondary-200 dark:hover:bg-primary-900/40 transition-colors border border-secondary-200/50 dark:border-primary-800/50"
+                        className="inline-flex items-center gap-2 px-4 py-2.5 bg-secondary-50 dark:bg-primary-950/40 text-primary-600 dark:text-primary-400 font-bold text-sm rounded-xl hover:bg-secondary-100 dark:hover:bg-primary-950/60 transition-colors border border-secondary-200 dark:border-primary-900/60"
                     >
                         <Plus className="w-4 h-4" /> Ajouter une option
                     </button>
@@ -184,8 +184,8 @@ export default function QuestionItem({ question, index, onChange, onRemove, onDu
 
             {/* Vrai/Faux */}
             {question.type === 'truefalse' && (
-                <div className="flex gap-4 mb-6 bg-white/50 dark:bg-slate-900/50 p-5 rounded-2xl border border-secondary-200 dark:border-secondary-200/20/50">
-                    <label className="flex-1 flex items-center justify-center gap-3 p-4 bg-white dark:bg-slate-900/40 rounded-xl shadow-sm border border-secondary-200 dark:border-secondary-200/20 cursor-pointer hover:border-secondary-200 dark:hover:border-primary-700 transition-all font-medium">
+                <div className="flex gap-4 mb-6 bg-white/50 dark:bg-slate-900/30 p-5 rounded-2xl border border-secondary-200 dark:border-slate-800">
+                    <label className="flex-1 flex items-center justify-center gap-3 p-4 bg-white dark:bg-slate-900/60 rounded-xl shadow-sm border border-secondary-200 dark:border-slate-700/60 cursor-pointer hover:border-primary-500 dark:hover:border-primary-500 transition-all font-medium">
                         <input
                             type="radio"
                             name={`truefalse-${index}`}
@@ -196,7 +196,7 @@ export default function QuestionItem({ question, index, onChange, onRemove, onDu
                         />
                         <span className="text-gray-800 dark:text-gray-200 text-lg">Vrai</span>
                     </label>
-                    <label className="flex-1 flex items-center justify-center gap-3 p-4 bg-white dark:bg-slate-900/40 rounded-xl shadow-sm border border-secondary-200 dark:border-secondary-200/20 cursor-pointer hover:border-secondary-200 dark:hover:border-primary-700 transition-all font-medium">
+                    <label className="flex-1 flex items-center justify-center gap-3 p-4 bg-white dark:bg-slate-900/60 rounded-xl shadow-sm border border-secondary-200 dark:border-slate-700/60 cursor-pointer hover:border-primary-500 dark:hover:border-primary-500 transition-all font-medium">
                         <input
                             type="radio"
                             name={`truefalse-${index}`}
@@ -211,7 +211,7 @@ export default function QuestionItem({ question, index, onChange, onRemove, onDu
             )}
 
             {/* Aide pour la réponse */}
-            <div className="mt-4 pt-4 border-t border-secondary-200/50 dark:border-secondary-200/20/50">
+            <div className="mt-4 pt-4 border-t border-secondary-200/50 dark:border-slate-800">
                 <button
                     type="button"
                     onClick={() => setShowAnswerHelp(!showAnswerHelp)}

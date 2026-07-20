@@ -87,44 +87,45 @@ export function AuthProvider({ children }) {
         setRealUser(actualUser);
         console.log('🔐 [AuthContext] Session récupérée:', session ? '✅ OK' : '❌ Aucune session');
 
-        // --- LOGIQUE D'IMPERSONNALISATION SÉCURISÉE ---
-        const impId = localStorage.getItem("impersonatedUserId");
-        
-        // On récupère le VRAI rôle depuis la table profiles pour éviter toute falsification
-        const { data: realProfile } = await supabase
-          .from("profiles")
-          .select("role")
-          .eq("id", actualUser.id)
-          .single();
-        
-        const role = realProfile?.role || "student";
+        if (actualUser) {
+          // On récupère le VRAI rôle depuis la table profiles pour éviter toute falsification
+          const { data: realProfile } = await supabase
+            .from("profiles")
+            .select("role")
+            .eq("id", actualUser.id)
+            .single();
+          
+          const role = realProfile?.role || "student";
 
-        if (impId && actualUser && ["super_admin", "org_admin"].includes(role)) {
-          try {
-            const { data } = await supabase
-              .from("profiles")
-              .select("id, email, role, full_name, organization_id")
-              .eq("id", impId)
-              .single();
-            if (data) {
-              setImpersonatedData({
-                id: data.id,
-                email: data.email,
-                user_metadata: {
-                  role: data.role,
-                  full_name: data.full_name,
-                  organization_id: data.organization_id,
-                },
-                isImpersonated: true,
-                realUserRole: role,
-                realUserEmail: actualUser.email,
-              });
-            } else {
+          // --- LOGIQUE D'IMPERSONNALISATION SÉCURISÉE ---
+          const impId = localStorage.getItem("impersonatedUserId");
+          if (impId && ["super_admin", "org_admin"].includes(role)) {
+            try {
+              const { data } = await supabase
+                .from("profiles")
+                .select("id, email, role, full_name, organization_id")
+                .eq("id", impId)
+                .single();
+              if (data) {
+                setImpersonatedData({
+                  id: data.id,
+                  email: data.email,
+                  user_metadata: {
+                    role: data.role,
+                    full_name: data.full_name,
+                    organization_id: data.organization_id,
+                  },
+                  isImpersonated: true,
+                  realUserRole: role,
+                  realUserEmail: actualUser.email,
+                });
+              } else {
+                localStorage.removeItem("impersonatedUserId");
+              }
+            } catch (e) {
+              logger.error("Erreur chargement impersonation:", e);
               localStorage.removeItem("impersonatedUserId");
             }
-          } catch (e) {
-            logger.error("Erreur chargement impersonation:", e);
-            localStorage.removeItem("impersonatedUserId");
           }
         }
       } catch (error) {

@@ -142,8 +142,12 @@ export default function QuizPage() {
                             className="bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl rounded-3xl max-w-4xl w-full max-h-[90vh] overflow-y-auto shadow-2xl border border-secondary-200 dark:border-secondary-200/30 ring-1 ring-black/5 relative overflow-hidden"
                         >
                             {/* En-tête avec dégradé premium (Style Piliers) */}
-                            <div className="relative px-8 pt-8 pb-6 bg-gradient-to-br from-primary-600 to-accent-600 text-white">
-                                <div className="flex items-center justify-between">
+                            <div className="relative px-8 pt-8 pb-6 bg-gradient-to-br from-primary-600 to-accent-600 text-white rounded-t-3xl overflow-hidden">
+                                {/* Glows d'arrière-plan */}
+                                <div className="absolute top-0 right-0 w-48 h-48 bg-white/10 rounded-full blur-2xl pointer-events-none" />
+                                <div className="absolute bottom-0 left-12 w-32 h-32 bg-accent-500/20 rounded-full blur-xl pointer-events-none" />
+
+                                <div className="relative z-10 flex items-center justify-between">
                                     <div className="flex items-center gap-4">
                                         <div className="p-3 bg-white/20 rounded-2xl backdrop-blur-md">
                                             {editingQuiz ? <Edit className="w-6 h-6 text-white" /> : <Plus className="w-6 h-6 text-white" />}
@@ -172,21 +176,23 @@ export default function QuizPage() {
                                     </motion.button>
                                 </div>
                             </div>
-                            <QuizCreator
-                                quiz={editingQuiz}
-                                videoId={selectedVideoId}
-                                onSuccess={() => {
-                                    setShowCreateModal(false);
-                                    setEditingQuiz(null);
-                                    setSelectedVideoId(null);
-                                    handleRefreshList();
-                                }}
-                                onCancel={() => {
-                                    setShowCreateModal(false);
-                                    setEditingQuiz(null);
-                                    setSelectedVideoId(null);
-                                }}
-                            />
+                            <div className="p-6 sm:p-8">
+                                <QuizCreator
+                                    quiz={editingQuiz}
+                                    videoId={selectedVideoId}
+                                    onSuccess={() => {
+                                        setShowCreateModal(false);
+                                        setEditingQuiz(null);
+                                        setSelectedVideoId(null);
+                                        handleRefreshList();
+                                    }}
+                                    onCancel={() => {
+                                        setShowCreateModal(false);
+                                        setEditingQuiz(null);
+                                        setSelectedVideoId(null);
+                                    }}
+                                />
+                            </div>
                         </motion.div>
                     </div>
                 )}

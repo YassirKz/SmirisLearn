@@ -1172,7 +1172,7 @@ export default function LandingPage() {
                 transition={{ delay: i * 0.2, duration: 0.8 }}
                 viewport={{ once: true }}
                 whileHover={{ y: -10 }}
-                className="relative p-10 bg-white/40 dark:bg-gray-800/40 backdrop-blur-md rounded-[40px] border border-secondary-200 dark:border-secondary-200/20/50 shadow-2xl transition-all duration-300 group"
+                className="relative p-10 bg-white/40 dark:bg-gray-800/40 backdrop-blur-md rounded-[40px] border border-secondary-200 dark:border-slate-800 shadow-2xl transition-all duration-300 group"
               >
                 <div className="absolute -top-6 -right-2 text-8xl font-black text-gray-900/[0.03] dark:text-white/[0.03] select-none pointer-events-none group-hover:text-primary-500/10 dark:group-hover:text-primary-500/10 transition-colors duration-500">
                   {item.step}
@@ -1891,7 +1891,7 @@ export default function LandingPage() {
         whileInView={{ opacity: 1 }}
         transition={{ duration: 1 }}
         viewport={{ once: true }}
-        className="snap-start bg-white/70 dark:bg-secondary-950/50 backdrop-blur-sm border-y border-secondary-200/50 dark:border-secondary-200/20/50 py-8 overflow-hidden"
+        className="snap-start bg-white/70 dark:bg-secondary-950/50 backdrop-blur-sm border-y border-secondary-200/50 dark:border-slate-800 py-8 overflow-hidden"
       >
         <p className="text-center text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-6">
           Ils utilisent Smiris Learn

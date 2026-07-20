@@ -490,7 +490,7 @@ export default function VideoDetailPage() {
                                         availableQuizzes.map(q => (
                                             <div 
                                                 key={q.id}
-                                                className="p-4 bg-secondary-50 dark:bg-slate-800/40 rounded-2xl border border-secondary-200 dark:border-secondary-200/20/50 flex items-center justify-between group hover:border-secondary-200 dark:hover:border-secondary-200 transition-all"
+                                                className="p-4 bg-secondary-50 dark:bg-slate-800/40 rounded-2xl border border-secondary-200 dark:border-slate-800 flex items-center justify-between group hover:border-secondary-200 dark:hover:border-secondary-200 transition-all"
                                             >
                                                 <div className="min-w-0 flex-1">
                                                     <p className="font-bold text-gray-800 dark:text-gray-200 truncate">

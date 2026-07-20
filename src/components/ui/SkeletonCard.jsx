@@ -30,6 +30,8 @@ const animations = {
   }
 };
 
+const chartSkeletonHeights = [42, 68, 55, 80, 36, 74, 48, 62, 88, 52, 70, 46];
+
 /**
  * Skeleton loader avec multiples variantes
  */
@@ -238,7 +240,7 @@ export function ChartSkeleton() {
             <motion.div
               key={i}
               initial={{ height: 0 }}
-              animate={{ height: `${Math.random() * 60 + 20}%` }}
+              animate={{ height: `${chartSkeletonHeights[i]}%` }}
               transition={{ 
                 duration: 1, 
                 delay: i * 0.1,

@@ -4,7 +4,6 @@ import { generateInvitationToken, getExpirationDate } from '../utils/tokenGenera
 import { checkRateLimit } from '../utils/rateLimit';
 import { untrusted, validateEmail } from '../utils/security';
 import { sendInvitationEmail } from '../lib/email';
-import { sendNotification } from '../utils/notifications';
 import logger from '../lib/logger';
 
 export async function createMemberInvitation({ email, role, organization_id, invited_by }) {
@@ -43,16 +42,9 @@ export async function createMemberInvitation({ email, role, organization_id, inv
     return { error: new Error('Cet email est déjà rattaché à une organisation.') };
   }
 
-  if (existingUser) {
-    const updateResult = await executeSupabase(
-      supabase.from('profiles').update({ organization_id, role }).eq('id', existingUser.id),
-      'invitationsService.updateExistingProfile'
-    );
-
-    if (updateResult.error) return { error: updateResult.error };
-
-    return { user: existingUser, alreadyExisted: true };
-  }
+  // Que l'utilisateur existe déjà ou non, on crée une invitation avec token.
+  // La mise à jour directe du profil d'un autre utilisateur échouerait à cause de RLS.
+  // L'utilisateur cliquera sur le lien et son propre session permettra la mise à jour.
 
   const token = generateInvitationToken();
   const expiresAt = getExpirationDate();
@@ -84,62 +76,34 @@ export async function createMemberInvitation({ email, role, organization_id, inv
   });
 
   if (!emailResult.success) {
-    logger.warn('Invitation créée, mais l’email n’a pas pu être envoyé.', {
+    logger.warn('Invitation créée, mais l\'email n\'a pas pu être envoyé.', {
       email: validatedEmail,
       invitationId: insertResult.data?.id,
     });
   }
 
-  return { invitation: insertResult.data };
+  return { invitation: insertResult.data, alreadyExisted: !!existingUser };
 }
 
+// Appel RPC pour récupérer une invitation par token
 export async function getInvitationByToken(token) {
-  const result = await executeSupabase(
-    supabase.from('member_invitations').select('*, organizations(name)').eq('token', token).maybeSingle(),
-    'invitationsService.getInvitationByToken'
-  );
-
-  return result;
+  const { data, error } = await supabase.rpc('get_member_invitation_by_token', {
+    p_token: token
+  });
+  if (error) return { error };
+  // Le RPC retourne un tableau ; on extrait le premier résultat
+  const invitation = Array.isArray(data) ? data[0] || null : data;
+  return { data: invitation };
 }
 
-export async function acceptMemberInvitation(token, userId, invitationData = null) {
-  let invitation = invitationData;
-  
-  if (!invitation) {
-    const invitationResult = await getInvitationByToken(token);
-    if (invitationResult.error) return { error: invitationResult.error };
-    invitation = invitationResult.data;
-  }
+// Appel RPC pour accepter une invitation membre
+export async function acceptMemberInvitation(token, userId, fullName = null) {
+  const { error } = await supabase.rpc('accept_member_invitation', {
+    p_token: token,
+    p_user_id: userId,
+    p_full_name: fullName ? fullName.trim() : null
+  });
 
-  if (!invitation) return { error: new Error('Invitation invalide') };
-  if (new Date(invitation.expires_at) < new Date()) return { error: new Error('Invitation expirée') };
-
-  const updateResult = await executeSupabase(
-    supabase
-      .from('profiles')
-      .update({ organization_id: invitation.organization_id, role: invitation.role })
-      .eq('id', userId),
-    'invitationsService.acceptInvitation'
-  );
-
-  if (updateResult.error) return { error: updateResult.error };
-
-  const deleteResult = await executeSupabase(
-    supabase.from('member_invitations').delete().eq('token', token),
-    'invitationsService.deleteInvitation'
-  );
-
-  if (deleteResult.error) return { error: deleteResult.error };
-
-  if (invitation.invited_by) {
-    await sendNotification(
-      invitation.invited_by,
-      'Invitation acceptée ! 🤝',
-      `${invitation.email} a rejoint votre organisation.`,
-      'success',
-      '/admin/members'
-    );
-  }
-
-  return { invitation };
+  if (error) return { error };
+  return { success: true };
 }
