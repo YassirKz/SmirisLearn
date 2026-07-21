@@ -77,7 +77,6 @@ export default function QuizView() {
         if (timeLeft === 0 && !submitted) {
             handleSubmit(true);
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [timeLeft]);
 
     const handleAnswer = (value) => {

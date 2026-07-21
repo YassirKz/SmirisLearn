@@ -41,7 +41,6 @@ export default function SuperAdminUsers() {
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedOrg, setSelectedOrg] = useState('all');
     const [selectedRole, setSelectedRole] = useState('all');
-    const [showFilters, setShowFilters] = useState(false);
     const [showActions, setShowActions] = useState(null);
     const [isOrgFilterOpen, setIsOrgFilterOpen] = useState(false);
     const [isRoleFilterOpen, setIsRoleFilterOpen] = useState(false);

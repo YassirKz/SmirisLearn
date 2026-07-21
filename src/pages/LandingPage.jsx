@@ -51,7 +51,6 @@ import {
 import { useAuth } from "../hooks/useAuth";
 import { useTheme } from "../hooks/useTheme";
 import { useToast } from "../hooks/useToast";
-import { useUserRole } from "../hooks/useUserRole";
 import { supabase } from "../lib/supabase";
 import { untrusted, escapeText, validateEmail } from "../utils/security";
 import SEO from "../components/ui/SEO";
@@ -218,7 +217,7 @@ const FeatureCard = ({
 );
 
 // Carte de témoignage
-const TestimonialCard = ({ name, role, content, rating, avatar, delay }) => (
+const TestimonialCard = ({ name, role, content, avatar, delay }) => (
   <motion.div
     initial={{ opacity: 0, scale: 0.9, y: 20 }}
     whileInView={{ opacity: 1, scale: 1, y: 0 }}
@@ -375,7 +374,6 @@ const PricingCard = ({
 
 export default function LandingPage() {
   const { user } = useAuth();
-  const { role } = useUserRole();
   const { theme, toggleTheme } = useTheme();
   const navigate = useNavigate();
   const { success, error: showError } = useToast();
@@ -498,8 +496,6 @@ export default function LandingPage() {
   const { scrollYProgress } = useScroll();
   const heroOpacity = useTransform(scrollYProgress, [0, 0.2], [1, 0]);
   const heroScale = useTransform(scrollYProgress, [0, 0.2], [1, 0.95]);
-  const heroImageY = useTransform(scrollYProgress, [0, 0.3], [0, 60]);
-
   // Validation du formulaire de contact
   const validateForm = () => {
     const errors = {};

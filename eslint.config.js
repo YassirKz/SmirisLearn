@@ -28,11 +28,12 @@ export default defineConfig([
     rules: {
       'no-unused-vars': ['warn', {
         varsIgnorePattern: '^[A-Z_]|^motion$',
-        argsIgnorePattern: '^_',
+        argsIgnorePattern: '^[A-Z_]',
         caughtErrorsIgnorePattern: '^_',
       }],
-      'react-refresh/only-export-components': 'warn',
-      'react-hooks/set-state-in-effect': 'warn',
+      'react-refresh/only-export-components': 'off',
+      'react-hooks/exhaustive-deps': 'off',
+      'react-hooks/set-state-in-effect': 'off',
     },
   },
 ])

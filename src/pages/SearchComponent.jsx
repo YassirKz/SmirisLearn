@@ -84,15 +84,6 @@ export default function SearchComponent({
         }
     };
 
-    const getIcon = (type) => {
-        switch(type) {
-            case 'organization': return Building2;
-            case 'user': return User;
-            case 'video': return Video;
-            default: return Search;
-        }
-    };
-
     const getColor = (type) => {
         switch(type) {
             case 'organization': return 'text-primary-500 bg-accent-500 text-secondary-900 dark:text-primary-500 dark:bg-primary-900/30';
