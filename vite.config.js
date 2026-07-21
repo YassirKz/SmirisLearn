@@ -6,7 +6,7 @@ import { VitePWA } from 'vite-plugin-pwa';
 export default defineConfig(({ mode }) => ({
   plugins: [
     react(),
-    visualizer({ open: false, filename: 'stats.html' }),
+    process.env.ANALYZE === 'true' && visualizer({ open: false, filename: 'stats.html' }),
     VitePWA({
       registerType: 'autoUpdate',
       workbox: {
@@ -37,6 +37,14 @@ export default defineConfig(({ mode }) => ({
       output: {
         manualChunks(id) {
           if (id.includes('node_modules')) {
+            if (id.includes('react-router-dom')) return 'vendor-router';
+            if (id.includes('react-dom') || id.includes('/react/')) return 'vendor-react';
+            if (id.includes('@supabase')) return 'vendor-supabase';
+            if (id.includes('@stripe') || id.includes('/stripe/')) return 'vendor-stripe';
+            if (id.includes('@emailjs')) return 'vendor-email';
+            if (id.includes('date-fns')) return 'vendor-date';
+            if (id.includes('dompurify')) return 'vendor-sanitize';
+            if (id.includes('@headlessui') || id.includes('@radix-ui')) return 'vendor-ui-primitives';
             if (id.includes('lucide-react')) return 'vendor-ui-icons';
             if (id.includes('framer-motion')) return 'vendor-animation';
             if (id.includes('recharts')) return 'vendor-charts';
