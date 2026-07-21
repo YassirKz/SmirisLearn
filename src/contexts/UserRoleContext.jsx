@@ -9,6 +9,7 @@ import {
 import React from "react";
 import { supabase } from "../lib/supabase";
 import { useAuth } from "../hooks/useAuth";
+import logger from "../lib/logger";
 
 const UserRoleContext = createContext();
 
@@ -31,7 +32,7 @@ export const UserRoleProvider = ({ children }) => {
       return;
     }
 
-    console.log('🎭 [UserRoleContext] Chargement du rôle pour:', user?.id);
+    logger.debug("[UserRoleContext] Chargement du rôle", { userId: user.id });
     const isInitialFetch = lastFetchedUserId.current !== user.id;
 
     try {
@@ -70,7 +71,7 @@ export const UserRoleProvider = ({ children }) => {
             },
           });
         } catch (syncErr) {
-          console.error("Erreur de synchronisation du token JWT:", syncErr);
+          logger.error("Erreur de synchronisation du token JWT:", syncErr);
         }
       }
 
@@ -79,11 +80,11 @@ export const UserRoleProvider = ({ children }) => {
       setSubscriptionStatus(profile?.organizations?.subscription_status || null);
       setIsAdminAccess(["super_admin", "org_admin"].includes(finalRole));
 
-      console.log('🎭 [UserRoleContext] Rôle récupéré:', { role: finalRole, organizationId: finalOrgId });
+      logger.debug("[UserRoleContext] Rôle récupéré", { role: finalRole, organizationId: finalOrgId });
 
       lastFetchedUserId.current = user.id;
     } catch (err) {
-      console.error("Error fetching role data:", err);
+      logger.error("Error fetching role data:", err);
       setRole("student");
     } finally {
       // Always release the loading state, regardless of whether it's

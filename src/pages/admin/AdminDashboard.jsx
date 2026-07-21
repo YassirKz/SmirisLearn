@@ -21,6 +21,7 @@ import {
 } from "lucide-react";
 import AdminLayout from "../../components/layout/AdminLayout";
 import { supabase } from "../../lib/supabase";
+import logger from "../../lib/logger";
 import { useSearchParams } from "react-router-dom";
 import { useUserRole } from "../../hooks/useUserRole";
 import { useStripe } from "../../hooks/useStripe";
@@ -80,7 +81,7 @@ export default function AdminDashboard() {
           }
         }
       } catch (err) {
-        console.error('[AdminDashboard] Erreur fetch trial data:', err);
+        logger.error('[AdminDashboard] Erreur fetch trial data:', err);
       }
     };
     fetchTrialData();
@@ -104,7 +105,7 @@ export default function AdminDashboard() {
   const fetchDashboardData = useCallback(async () => {
     if (!isTabVisible && dashboardData) return; // Économie de ressources si onglet caché
 
-    console.log('📊 [AdminDashboard] Chargement...');
+    logger.debug('[AdminDashboard] Chargement');
     try {
       const targetOrgId = orgIdFromUrl || organizationId;
       if (!targetOrgId) {
@@ -129,14 +130,16 @@ export default function AdminDashboard() {
           "Accès refusé ou données introuvables. Vérifiez vos permissions.",
         );
 
-      console.log('📊 [AdminDashboard] Organisation:', data.organization?.name);
-      console.log('📊 [AdminDashboard] Stats:', data.stats);
+      logger.debug('[AdminDashboard] Données chargées', {
+        organizationId: data.organization?.id,
+        hasStats: Boolean(data.stats)
+      });
 
       setDashboardData(data);
       setLastUpdate(new Date());
       setError(null);
     } catch (err) {
-      console.error("Erreur lors du chargement du tableau de bord:", err);
+      logger.error("Erreur lors du chargement du tableau de bord:", err);
       setError(
         err.message ||
           (typeof err === "object" ? JSON.stringify(err) : String(err)),

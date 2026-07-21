@@ -4,6 +4,7 @@ import { generateInvitationToken, getExpirationDate } from '../utils/tokenGenera
 import { checkRateLimit } from '../utils/rateLimit';
 import { untrusted, validateEmail } from '../utils/security';
 import { sendInvitationEmail } from '../lib/email';
+import logger from '../lib/logger';
 
 export function useInvitation() {
     const [loading, setLoading] = useState(false);
@@ -84,7 +85,7 @@ export function useInvitation() {
 
             if (!emailResult.success) {
                 // Si l'email échoue, on peut décider de supprimer l'invitation ou simplement logger
-                console.warn("L'email n'a pas pu être envoyé, mais l'invitation a été créée.");
+                logger.warn("L'email n'a pas pu être envoyé, mais l'invitation a été créée.");
                 // Optionnel : supprimer l'invitation ?
                 // await supabase.from('pending_companies').delete().eq('token', token);
                 throw new Error(emailResult.error);
@@ -93,7 +94,7 @@ export function useInvitation() {
             return { data, error: null };
 
         } catch (err) {
-            console.error('Erreur création invitation:', err);
+            logger.error('Erreur création invitation:', err);
             setError(err.message);
             return { data: null, error: err };
         } finally {
@@ -116,7 +117,7 @@ export function useInvitation() {
 
             return { data, error: null };
         } catch (err) {
-            console.error('Erreur récupération invitation:', err);
+            logger.error('Erreur récupération invitation:', err);
             setError(err.message);
             return { data: null, error: err };
         } finally {
@@ -138,7 +139,7 @@ export function useInvitation() {
 
             return { error: null };
         } catch (err) {
-            console.error('Erreur suppression invitation:', err);
+            logger.error('Erreur suppression invitation:', err);
             setError(err.message);
             return { error: err };
         } finally {
@@ -156,11 +157,11 @@ export function useInvitation() {
 
             if (error) throw error;
             
-            console.log('✅ Nettoyage effectué:', data);
+            logger.debug('Nettoyage effectué', { result: data });
             return { data, error: null };
 
         } catch (err) {
-            console.error('Erreur nettoyage invitations:', err);
+            logger.error('Erreur nettoyage invitations:', err);
             setError(err.message);
             return { data: null, error: err };
         } finally {
@@ -185,7 +186,7 @@ export function useInvitation() {
             };
 
         } catch (err) {
-            console.error('Erreur vérification limites:', err);
+            logger.error('Erreur vérification limites:', err);
             return { data: null, error: err };
         }
     }, []);

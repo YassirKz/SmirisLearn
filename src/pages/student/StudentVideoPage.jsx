@@ -4,6 +4,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowLeft, BookOpen, Clock, Info, Shield, ChevronRight, Lock } from 'lucide-react'; // <-- Lock ajouté ici
 import { supabase } from '../../lib/supabase';
+import logger from '../../lib/logger';
 import { useAuth } from '../../hooks/useAuth';
 import { useToast } from '../../hooks/useToast';
 import MainLayout from '../../components/layout/MainLayout';
@@ -24,7 +25,7 @@ export default function StudentVideoPage() {
   useEffect(() => {
     const fetchVideoAndNext = async () => {
       if (!user) return;
-      console.log('▶️ [StudentVideoPage] Chargement vidéo:', id);
+      logger.debug('[StudentVideoPage] Chargement vidéo', { videoId: id });
       try {
         const { data: canAccess, error: accessError } = await supabase
           .rpc('can_access_video', {
@@ -32,7 +33,7 @@ export default function StudentVideoPage() {
             p_video_id: id
           });
 
-        console.log('▶️ [StudentVideoPage] Accès:', canAccess ? '✅ OK' : '❌ REFUSÉ');
+        logger.debug('[StudentVideoPage] Accès vidéo', { videoId: id, canAccess: Boolean(canAccess) });
 
         if (accessError || !canAccess) {
           showError("Accès refusé ou vidéo non trouvée");
@@ -48,7 +49,7 @@ export default function StudentVideoPage() {
 
         if (videoError) throw videoError;
 
-        console.log('▶️ [StudentVideoPage] Vidéo chargée:', videoData?.title);
+        logger.debug('[StudentVideoPage] Vidéo chargée', { videoId: videoData?.id });
 
         // --- SÉCURITÉ : Génération d'une URL signée (TTL 1 heure) ---
         const videoPath = videoData.video_url.includes('storage/v1/object/public/videos/') 
@@ -60,7 +61,7 @@ export default function StudentVideoPage() {
             .createSignedUrl(videoPath, 3600);
 
         if (signedError) {
-            console.error('Erreur URL signée:', signedError);
+            logger.error('Erreur URL signée:', signedError);
         } else {
             videoData.video_url = signedData.signedUrl;
         }
@@ -86,7 +87,7 @@ export default function StudentVideoPage() {
           .maybeSingle();
 
         const nextId = nextVideo?.id || null;
-        console.log('▶️ [StudentVideoPage] Vidéo suivante:', nextId);
+        logger.debug('[StudentVideoPage] Vidéo suivante', { nextVideoId: nextId });
         setNextVideoId(nextId);
 
         const { data: quizData } = await supabase
@@ -96,7 +97,7 @@ export default function StudentVideoPage() {
           .maybeSingle();
         setQuizId(quizData?.id || null);
       } catch (err) {
-        console.error('Erreur chargement vidéo:', err);
+        logger.error('Erreur chargement vidéo:', err);
       } finally {
         setLoading(false);
       }

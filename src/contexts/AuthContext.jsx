@@ -7,8 +7,6 @@ import logger from "../lib/logger";
 import { checkRateLimit, untrusted, validateEmail } from "../utils/security";
 import LoadingSpinner from "../components/ui/LoadingSpinner";
 
-console.log('🔐 [AuthContext] Initialisation');
-
 export const AuthContext = createContext();
 
 // Variants pour animations
@@ -74,7 +72,7 @@ export function AuthProvider({ children }) {
   useEffect(() => {
     // Récupérer session initiale
     const getInitialSession = async () => {
-      console.log('🔐 [AuthContext] Récupération session en cours...');
+      logger.debug("[AuthContext] Récupération session en cours");
       try {
         const {
           data: { session },
@@ -85,7 +83,7 @@ export function AuthProvider({ children }) {
         setSession(session);
         const actualUser = session?.user ?? null;
         setRealUser(actualUser);
-        console.log('🔐 [AuthContext] Session récupérée:', session ? '✅ OK' : '❌ Aucune session');
+        logger.debug("[AuthContext] Session récupérée", { hasSession: Boolean(session) });
 
         if (actualUser) {
           // On récupère le VRAI rôle depuis la table profiles pour éviter toute falsification
@@ -158,7 +156,7 @@ export function AuthProvider({ children }) {
   // ========== FONCTIONS AUTH SÉCURISÉES (toutes mémoïsées) ==========
 
   const signUp = useCallback(async (email, password, metadata = {}) => {
-    console.log('📝 [AuthContext] Tentative d\'inscription:', { email });
+    logger.debug("[AuthContext] Tentative d'inscription", { email });
     try {
       setError(null);
 
@@ -191,7 +189,7 @@ export function AuthProvider({ children }) {
       });
 
       if (error) throw error;
-      console.log('📝 [AuthContext] Inscription réussie:', data);
+      logger.debug("[AuthContext] Inscription réussie", { userId: data?.user?.id });
       return { data, error: null };
     } catch (error) {
       logger.error("Erreur dans signUp:", error);
@@ -203,7 +201,7 @@ export function AuthProvider({ children }) {
   }, [checkActionLimit]);
 
   const signIn = useCallback(async (email, password) => {
-    console.log('🔑 [AuthContext] Tentative de connexion:', { email });
+    logger.debug("[AuthContext] Tentative de connexion", { email });
     try {
       setError(null);
 
@@ -222,7 +220,7 @@ export function AuthProvider({ children }) {
       });
 
       if (error) throw error;
-      console.log('🔑 [AuthContext] Connexion réussie:', data);
+      logger.debug("[AuthContext] Connexion réussie", { userId: data?.user?.id });
       return { data, error: null };
     } catch (error) {
       setError(error.message);
@@ -261,7 +259,7 @@ export function AuthProvider({ children }) {
   }, [checkActionLimit]);
 
   const signOut = useCallback(async () => {
-    console.log('🚪 [AuthContext] Déconnexion');
+    logger.debug("[AuthContext] Déconnexion");
     try {
       setLoading(true);
       const { error } = await supabase.auth.signOut();
@@ -277,7 +275,7 @@ export function AuthProvider({ children }) {
 
   // Mode Impersonation control
   const startImpersonation = useCallback(async (targetUserId) => {
-    console.log('👤 [AuthContext] Démarrage impersonation:', { targetUserId });
+    logger.debug("[AuthContext] Démarrage impersonation", { targetUserId });
     try {
       // Vérification du rôle dans la DB (pas le JWT)
       const { data: profile } = await supabase
@@ -310,19 +308,19 @@ export function AuthProvider({ children }) {
           realUserEmail: realUser.email,
         };
         setImpersonatedData(impData);
-        console.log('👤 [AuthContext] Impersonation active:', impData);
+        logger.debug("[AuthContext] Impersonation active", { targetUserId: data.id, role: data.role });
         window.location.href = data.role === "org_admin" ? "/admin" : "/student";
       }
     } catch (e) {
       logger.error(e);
-      alert("Erreur lors de l'impersonation");
+      setError("Erreur lors de l'impersonation");
     } finally {
       setLoading(false);
     }
   }, [realUser]);
 
   const stopImpersonation = useCallback(() => {
-    console.log('👤 [AuthContext] Arrêt impersonation');
+    logger.debug("[AuthContext] Arrêt impersonation");
     localStorage.removeItem("impersonatedUserId");
     setImpersonatedData(null);
     const role = realUser?.user_metadata?.role;

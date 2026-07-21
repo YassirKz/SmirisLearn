@@ -1,4 +1,5 @@
 import emailjs from '@emailjs/browser';
+import logger from './logger';
 
 emailjs.init(import.meta.env.VITE_EMAILJS_PUBLIC_KEY);
 
@@ -59,10 +60,10 @@ export const sendInvitationEmail = async ({
     }
 
     // Envoi effectif
-    console.log("📨 [EmailJS] Envoi de l'email...", {
+    logger.debug("[EmailJS] Envoi de l'email", {
       serviceId,
       templateId,
-      templateParams,
+      to: templateParams.to_email,
       type
     });
     
@@ -71,7 +72,7 @@ export const sendInvitationEmail = async ({
     return { success: true, data: response };
 
   } catch (error) {
-    console.error('Erreur envoi email:', error.message);
+    logger.error('Erreur envoi email:', error.message);
     return { 
       success: false, 
       error: error.text || error.message || 'Erreur inconnue' 

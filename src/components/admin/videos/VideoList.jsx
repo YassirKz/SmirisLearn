@@ -6,6 +6,7 @@ import {
     X, Monitor, BookOpen
 } from 'lucide-react';
 import { supabase } from '../../../lib/supabase';
+import logger from '../../../lib/logger';
 import { useAuth } from '../../../hooks/useAuth';
 import { useToast } from '../../ui/Toast';
 import VideoCard from './VideoCard';
@@ -60,7 +61,7 @@ export default function VideoList({ isReadOnly = false, orgId: propOrgId }) {
                     .maybeSingle();
 
                 if (error) {
-                    console.error('❌ Erreur récupération profil:', error);
+                    logger.error('Erreur récupération profil:', error);
                     return;
                 }
                 if (profile?.organization_id) {
@@ -87,7 +88,7 @@ export default function VideoList({ isReadOnly = false, orgId: propOrgId }) {
     const fetchVideos = useCallback(async (isSilent = false) => {
         if (fetchingRef.current || !userOrgId) return;
         
-        console.log('🎬 [VideoList] Chargement des vidéos...');
+        logger.debug('[VideoList] Chargement des vidéos', { organizationId: userOrgId });
         fetchingRef.current = true;
         if (isSilent) {
             setRefreshing(true);
@@ -123,10 +124,10 @@ export default function VideoList({ isReadOnly = false, orgId: propOrgId }) {
 
             if (error) throw error;
             const videosData = data || [];
-            console.log('🎬 [VideoList] Vidéos chargées:', videosData.length);
+            logger.debug('[VideoList] Vidéos chargées', { count: videosData.length });
             setAllVideos(videosData);
         } catch (err) {
-            console.error('❌ Erreur chargement vidéos:', err);
+            logger.error('Erreur chargement vidéos:', err);
             showError("Erreur lors du chargement des vidéos");
         } finally {
             setLoading(false);
@@ -199,7 +200,10 @@ export default function VideoList({ isReadOnly = false, orgId: propOrgId }) {
     };
 
     const handleUploadSuccess = (videoData) => {
-        console.log('🎬 [VideoList] Vidéo uploadée:', videoData);
+        logger.debug('[VideoList] Vidéo uploadée', {
+            path: videoData?.path,
+            size: videoData?.size
+        });
         setUploadedVideo(videoData);
         setShowUploader(false);
         setShowForm(true);
@@ -238,7 +242,7 @@ export default function VideoList({ isReadOnly = false, orgId: propOrgId }) {
             success('Vidéo supprimée');
             fetchVideos(true);
         } catch (err) {
-            console.error('❌ Erreur suppression:', err);
+            logger.error('Erreur suppression:', err);
             showError("Erreur lors de la suppression de la vidéo");
         }
     };

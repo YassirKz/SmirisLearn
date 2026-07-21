@@ -5,6 +5,7 @@ import { Menu, X } from "lucide-react";
 import Sidebar from "./Sidebar";
 import Header from "./Header";
 import { useAuth } from "../../hooks/useAuth";
+import logger from "../../lib/logger";
 import { Navigate } from "react-router-dom";
 
 export default function MainLayout({ children }) {
@@ -16,12 +17,12 @@ export default function MainLayout({ children }) {
     return true;
   });
 
-  console.log('🏗️ [MainLayout] Rendu');
-  console.log('🏗️ [MainLayout] Sidebar ouverte:', sidebarOpen);
-  console.log('🏗️ [MainLayout] Utilisateur:', user?.email);
+  logger.debug("[MainLayout] Rendu", {
+    sidebarOpen,
+    hasUser: Boolean(user),
+  });
 
   useEffect(() => {
-    console.log('🏗️ [MainLayout] useEffect - redimensionnement');
     const handleResize = () => {
       if (window.innerWidth >= 1024) setSidebarOpen(true);
       else setSidebarOpen(false);

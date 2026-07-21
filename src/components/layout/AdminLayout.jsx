@@ -28,6 +28,7 @@ import {
 import { useAuth } from "../../hooks/useAuth";
 import { useTheme } from "../../hooks/useTheme";
 import { supabase } from "../../lib/supabase";
+import logger from "../../lib/logger";
 import { useUserRole } from "../../hooks/useUserRole";
 import { useOwnerOrg } from "../../hooks/useOwnerOrg";
 import Header from "./Header";
@@ -59,15 +60,15 @@ export default function AdminLayout({ children }) {
   const isImpersonating = role === "super_admin" && orgId;
   const isReadOnly = isImpersonating && !isOwnerOrg;
 
-  console.log('🏗️ [AdminLayout] Rendu');
-  console.log('🏗️ [AdminLayout] Sidebar ouverte:', sidebarOpen);
-  console.log('🏗️ [AdminLayout] Utilisateur:', user?.email);
-  console.log('🏗️ [AdminLayout] Impersonation active:', isImpersonating);
-  console.log('🏗️ [AdminLayout] Organisation ID:', organizationId);
+  logger.debug("[AdminLayout] Rendu", {
+    sidebarOpen,
+    hasUser: Boolean(user),
+    isImpersonating,
+    organizationId,
+  });
 
   // Responsive sidebar
   useEffect(() => {
-    console.log('🏗️ [AdminLayout] useEffect - redimensionnement');
     const handleResize = () => {
       if (window.innerWidth >= 1024) setSidebarOpen(true);
       else setSidebarOpen(false);
@@ -115,7 +116,7 @@ export default function AdminLayout({ children }) {
           });
         }
       } catch (err) {
-        console.error("Error fetching company info:", err);
+        logger.error("Error fetching company info:", err);
       }
     };
 

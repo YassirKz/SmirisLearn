@@ -27,7 +27,10 @@ const logger = {
     if (!isDebug) return;
     log('debug', ...args);
   },
-  info: (...args) => log('info', ...args),
+  info: (...args) => {
+    if (!isDebug) return;
+    log('info', ...args);
+  },
   warn: (...args) => log('warn', ...args),
   error: (...args) => log('error', ...args),
 };

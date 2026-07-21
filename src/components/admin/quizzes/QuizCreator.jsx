@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Plus, Save, X, AlertCircle, Loader, ChevronDown } from 'lucide-react';
 import { supabase } from '../../../lib/supabase';
+import logger from '../../../lib/logger';
 import { useAuth } from '../../../hooks/useAuth';
 import { useToast } from '../../ui/Toast';
 import { untrusted, escapeText } from '../../../utils/security';
@@ -55,7 +56,7 @@ export default function QuizCreator({ quiz, videoId, onSuccess, onCancel }) {
 
                 setVideos(data || []);
             } catch (err) {
-                console.error('Erreur chargement vidéos:', err);
+                logger.error('Erreur chargement vidéos:', err);
             } finally {
                 setLoadingVideos(false);
             }
@@ -131,8 +132,11 @@ export default function QuizCreator({ quiz, videoId, onSuccess, onCancel }) {
                 questions: cleanQuestions
             };
 
-            console.log('📝 [QuizCreator] Sauvegarde du quiz...');
-            console.log('📝 [QuizCreator] Payload:', payload);
+            logger.debug('[QuizCreator] Sauvegarde du quiz', {
+                quizId: quiz?.id,
+                videoId: payload.video_id,
+                questionCount: payload.questions.length
+            });
 
             let error;
             if (quiz?.id) {
@@ -148,11 +152,11 @@ export default function QuizCreator({ quiz, videoId, onSuccess, onCancel }) {
 
             if (error) throw error;
 
-            console.log('📝 [QuizCreator] Quiz sauvegardé avec succès');
+            logger.debug('[QuizCreator] Quiz sauvegardé avec succès');
             success(quiz?.id ? "Quiz modifié avec succès" : "Quiz créé avec succès");
             onSuccess?.();
         } catch (err) {
-            console.error('Erreur sauvegarde quiz:', err);
+            logger.error('Erreur sauvegarde quiz:', err);
             showError("Erreur lors de la sauvegarde du quiz");
         } finally {
             setSaving(false);

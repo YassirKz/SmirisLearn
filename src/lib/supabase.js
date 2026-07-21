@@ -1,4 +1,5 @@
 import { createClient } from '@supabase/supabase-js'
+import logger from './logger'
 
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
@@ -13,4 +14,4 @@ export function createSupabaseClient() {
 
 export const supabase = createSupabaseClient()
 
-console.log('🔄 [Supabase] Client initialisé');
+logger.info('[Supabase] Client initialisé');

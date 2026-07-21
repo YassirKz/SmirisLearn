@@ -6,6 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "check": "npm run env:check && npm run lint && npm run build",
+    "env:check": "node scripts/check-env.mjs",
     "lint": "eslint .",
     "preview": "vite preview"
   },
