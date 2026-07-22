@@ -1,5 +1,5 @@
 // src/components/admin/videos/ScreenRecorder.jsx
-import { useState, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Monitor, Mic, Square, Circle, AlertCircle, Loader2 } from 'lucide-react';
 import { uploadVideo } from '../../../lib/storage/videos';
@@ -11,10 +11,27 @@ export default function ScreenRecorder({ orgId, onRecordSuccess, onClose }) {
     const [uploading, setUploading] = useState(false);
     const [progress, setProgress] = useState(0);
     const [error, setError] = useState(null);
-    const [startTime, setStartTime] = useState(null);
+    const [elapsedSeconds, setElapsedSeconds] = useState(0);
     const mediaRecorderRef = useRef(null);
     const chunksRef = useRef([]);
     const streamRef = useRef(null);
+    const recordingStartedAtRef = useRef(null);
+    const timerRef = useRef(null);
+
+    const stopTimer = () => {
+        if (timerRef.current) {
+            clearInterval(timerRef.current);
+            timerRef.current = null;
+        }
+    };
+
+    const formatElapsedTime = (seconds) => {
+        const minutes = Math.floor(seconds / 60);
+        const remainingSeconds = seconds % 60;
+        return `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
+    };
+
+    useEffect(() => () => stopTimer(), []);
 
     const stopStream = () => {
         if (streamRef.current) {
@@ -107,7 +124,9 @@ export default function ScreenRecorder({ orgId, onRecordSuccess, onClose }) {
             mediaRecorder.onstop = async () => {
                 try {
                     const blob = new Blob(chunksRef.current, { type: 'video/webm' });
-                    const recordDuration = startTime ? Math.round((Date.now() - startTime) / 1000) : 0;
+                    const recordDuration = recordingStartedAtRef.current
+                        ? Math.round((Date.now() - recordingStartedAtRef.current) / 1000)
+                        : 0;
                     
                     const file = new File(
                         [blob],
@@ -138,13 +157,20 @@ export default function ScreenRecorder({ orgId, onRecordSuccess, onClose }) {
                     showError(err.message);
                 } finally {
                     stopStream();
+                    stopTimer();
+                    recordingStartedAtRef.current = null;
                     setRecording(false);
                 }
             };
 
             mediaRecorderRef.current = mediaRecorder;
             mediaRecorder.start();
-            setStartTime(Date.now());
+            recordingStartedAtRef.current = Date.now();
+            setElapsedSeconds(0);
+            stopTimer();
+            timerRef.current = setInterval(() => {
+                setElapsedSeconds(Math.floor((Date.now() - recordingStartedAtRef.current) / 1000));
+            }, 1000);
             setRecording(true);
 
         } catch (err) {
@@ -152,6 +178,8 @@ export default function ScreenRecorder({ orgId, onRecordSuccess, onClose }) {
             setError(err.message);
             showError(err.message);
             stopStream();
+            stopTimer();
+            recordingStartedAtRef.current = null;
             setRecording(false);
         }
     };
@@ -233,7 +261,8 @@ export default function ScreenRecorder({ orgId, onRecordSuccess, onClose }) {
                 {recording && !uploading && (
                     <div className="mt-2 inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-50 dark:bg-red-900/30 text-xs text-red-700 dark:text-red-300">
                         <Loader2 className="w-3 h-3 animate-spin" />
-                        <span>Enregistrement en cours...</span>
+                        <span>Enregistrement en cours</span>
+                        <span className="font-mono font-semibold tabular-nums">{formatElapsedTime(elapsedSeconds)}</span>
                     </div>
                 )}
             </div>

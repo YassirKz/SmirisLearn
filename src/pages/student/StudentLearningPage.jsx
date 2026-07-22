@@ -82,6 +82,47 @@ function VideoCard({ video, formatDuration, colorScheme }) {
   );
 }
 
+function ListVideoRow({ video, formatDuration, colorScheme }) {
+  const rowClassName = `flex items-center gap-4 p-3 rounded-xl border transition-all ${
+    video.canAccess
+      ? `bg-gray-50 dark:bg-gray-700/30 ${colorScheme.border} dark:border-white/5 hover:bg-gray-100 dark:hover:bg-gray-700/50`
+      : 'bg-gray-50/50 dark:bg-gray-900/30 border-gray-100 dark:border-white/5 opacity-60'
+  }`;
+
+  const content = (
+    <>
+      <div className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 ${
+        video.canAccess ? `${colorScheme.light} ${colorScheme.text}` : 'bg-gray-100 dark:bg-gray-800 text-gray-400'
+      }`}>
+        {video.canAccess ? <PlayCircle className="w-4.5 h-4.5" /> : <Lock className="w-4 h-4" />}
+      </div>
+      <div className="flex-1 min-w-0">
+        <p className={`font-semibold text-sm truncate ${video.canAccess ? 'text-gray-800 dark:text-white' : 'text-gray-400'}`}>
+          {escapeText(untrusted(video.title))}
+        </p>
+        <p className="text-xs text-gray-400 flex items-center gap-1 mt-0.5">
+          <Clock className="w-3 h-3" />{formatDuration(video.duration)}
+        </p>
+      </div>
+      {video.watched && <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />}
+      {video.canAccess && !video.watched && (
+        <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${colorScheme.badge}`}>Nouveau</span>
+      )}
+      {!video.canAccess && (
+        <span className="text-xs text-gray-400 flex items-center gap-1 shrink-0">
+          <Lock className="w-3 h-3" /> VerrouillÃ©
+        </span>
+      )}
+    </>
+  );
+
+  return video.canAccess ? (
+    <Link to={`/student/video/${video.id}`} className={`${rowClassName} cursor-pointer`}>
+      {content}
+    </Link>
+  ) : <div className={rowClassName}>{content}</div>;
+}
+
 function PillarSection({ pillar, index, formatDuration, viewMode }) {
   const [collapsed, setCollapsed] = useState(false);
   const color = PILLAR_COLORS[index % PILLAR_COLORS.length];
@@ -157,8 +198,12 @@ function PillarSection({ pillar, index, formatDuration, viewMode }) {
             >
               {viewMode === 'list'
                 ? pillar.videos.map((video) => (
-                  <div
+                  <Link
                     key={video.id}
+                    to={video.canAccess ? `/student/video/${video.id}` : '#'}
+                    onClick={(event) => {
+                      if (!video.canAccess) event.preventDefault();
+                    }}
                     className={`flex items-center gap-4 p-3 rounded-xl border transition-all ${
                       video.canAccess
                         ? `bg-gray-50 dark:bg-gray-700/30 ${color.border} dark:border-white/5 hover:bg-gray-100 dark:hover:bg-gray-700/50`
@@ -187,7 +232,7 @@ function PillarSection({ pillar, index, formatDuration, viewMode }) {
                         <Lock className="w-3 h-3" /> Verrouillé
                       </span>
                     )}
-                  </div>
+                  </Link>
                 ))
                 : pillar.videos.map((video) => (
                   <VideoCard key={video.id} video={video} formatDuration={formatDuration} colorScheme={color} />
@@ -227,7 +272,7 @@ export default function StudentLearningPage() {
 
       const { data: pillarsData } = await supabase
         .from('pillars')
-        .select(`id, name, description, icon, color, videos ( id, title, duration, sequence_order, thumbnail_url, description )`)
+        .select(`id, name, description, icon, color, videos ( id, title, duration, sequence_order, created_at, thumbnail_url, description )`)
         .in('id', pillarIds)
         .order('name');
 
@@ -237,13 +282,27 @@ export default function StudentLearningPage() {
 
       const pillarsWithAccess = await Promise.all(
         (pillarsData || []).map(async (pillar) => {
-          const videosWithAccess = await Promise.all(
-            (pillar.videos || []).map(async (video) => {
-              const { data: canAccess } = await supabase.rpc('can_access_video', { p_student_id: user.id, p_video_id: video.id });
-              return { ...video, canAccess: canAccess || false, watched: watchedIds.has(video.id) };
-            })
+          const orderedVideos = [...(pillar.videos || [])].sort((a, b) =>
+            a.sequence_order - b.sequence_order ||
+            new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
           );
-          videosWithAccess.sort((a, b) => a.sequence_order - b.sequence_order);
+          const videosWithAccess = [];
+
+          for (const [index, video] of orderedVideos.entries()) {
+            const { data: canAccess } = await supabase.rpc('can_access_video', {
+              p_student_id: user.id,
+              p_video_id: video.id,
+            });
+            const previousVideo = videosWithAccess[index - 1];
+            const previousVideoCompleted = !previousVideo || previousVideo.watched;
+
+            videosWithAccess.push({
+              ...video,
+              watched: watchedIds.has(video.id),
+              canAccess: Boolean(canAccess) && previousVideoCompleted,
+            });
+          }
+
           return { ...pillar, videos: videosWithAccess };
         })
       );
