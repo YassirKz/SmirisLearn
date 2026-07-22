@@ -68,7 +68,7 @@ serve(async (req) => {
         .eq("id", studentId);
     } else {
       // Créer un nouvel utilisateur
-      const userPassword = password || Math.random().toString(36).slice(-12);
+      const userPassword = password || crypto.randomUUID();
       const { data: newUser, error: createError } = await supabase.auth.admin.createUser({
         email,
         password: userPassword,

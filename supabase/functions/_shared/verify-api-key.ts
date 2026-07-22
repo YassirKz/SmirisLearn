@@ -92,6 +92,27 @@ export async function verifyApiKey(req: Request) {
     throw createApiError(`Rate limit exceeded (${limit} requests/hour)`, 429, requestId);
   }
 
+  // Reserve the request before executing the handler so failed calls also count
+  // towards the rate limit and cannot be used to bypass it.
+  const requestUrl = new URL(req.url);
+  const { error: requestLogError } = await supabase.from("api_logs").insert({
+    api_key_id: keyData.id,
+    method: req.method,
+    endpoint: requestUrl.pathname,
+    status_code: 202,
+    ip: req.headers.get("x-real-ip") || req.headers.get("x-forwarded-for") || "unknown",
+    user_agent: req.headers.get("user-agent"),
+    response_time_ms: 0,
+  });
+  if (requestLogError) {
+    throw createApiError("Unable to register API request", 500, requestId);
+  }
+
+  await supabase
+    .from("api_keys")
+    .update({ last_used_at: now.toISOString() })
+    .eq("id", keyData.id);
+
   return { keyData, supabase, settings };
 }
 
@@ -102,6 +123,24 @@ export function checkOrgAccess(keyData: any, orgId: string) {
   if (keyData.is_super_admin) return true;
   if (keyData.organization_id === orgId) return true;
   throw new Error("Unauthorized: API key does not have access to this organization");
+}
+
+export function requireSuperAdminKey(keyData: any) {
+  if (!keyData.is_super_admin) {
+    throw createApiError("Unauthorized: Super admin API key required", 403);
+  }
+}
+
+export function getPathParameter(req: Request, endpoint: string, parameterName: string) {
+  const segments = new URL(req.url).pathname.split("/").filter(Boolean);
+  const endpointIndex = segments.lastIndexOf(endpoint);
+  const value = endpointIndex >= 0 ? segments[endpointIndex + 1] : null;
+
+  if (!value) {
+    throw createApiError(`Missing ${parameterName} in path`, 400);
+  }
+
+  return value;
 }
 
 /**

@@ -436,9 +436,9 @@ export default function SuperAdminSettings() {
     // GESTION DES CLÉS API
     // ============================================
     const generateApiKey = () => {
-        const timestamp = Date.now().toString(36);
-        const random = Math.random().toString(36).substring(2, 10);
-        return `sm_live_${timestamp}_${random}`;
+        const bytes = crypto.getRandomValues(new Uint8Array(32));
+        const randomPart = Array.from(bytes, byte => byte.toString(16).padStart(2, '0')).join('');
+        return `sm_live_${randomPart}`;
     };
 
     const handleCreateKey = async (e) => {

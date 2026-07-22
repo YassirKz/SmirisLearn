@@ -1,6 +1,6 @@
 // supabase/functions/create-account/index.ts
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-import { verifyApiKey, logApiCall, corsHeaders } from "../_shared/verify-api-key.ts";
+import { verifyApiKey, corsHeaders, requireSuperAdminKey } from "../_shared/verify-api-key.ts";
 
 serve(async (req) => {
   const startTime = performance.now();
@@ -11,10 +11,17 @@ serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response("ok", { headers: corsHeaders });
   }
+  if (req.method !== "POST") {
+    return new Response(JSON.stringify({ success: false, error: "Method not allowed" }), {
+      status: 405,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+  }
 
   try {
     // 1. Vérifier la clé API
     const { keyData, supabase } = await verifyApiKey(req);
+    requireSuperAdminKey(keyData);
 
     // 2. Récupérer les données du body
     const { companyName, adminEmail, adminPassword, plan = "free" } = await req.json();
@@ -55,7 +62,7 @@ serve(async (req) => {
       .toLowerCase()
       .replace(/[^\w\s-]/g, "")
       .replace(/[\s_-]+/g, "-")
-      .replace(/^-+|-+$/g, "") + "-" + Math.random().toString(36).substring(2, 7);
+      .replace(/^-+|-+$/g, "") + "-" + crypto.randomUUID().slice(0, 8);
 
     // 6. Créer l'organisation
     const { data: newOrg, error: orgError } = await supabase
@@ -88,7 +95,7 @@ serve(async (req) => {
     };
 
   } catch (error) {
-    statusCode = 400;
+    statusCode = (error as any).status || 400;
     responseBody = { success: false, error: error.message };
   } finally {
     const responseTimeMs = Math.round(performance.now() - startTime);

@@ -1,6 +1,6 @@
 // supabase/functions/list-students/index.ts
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-import { verifyApiKey, logApiCall, corsHeaders, checkOrgAccess } from "../_shared/verify-api-key.ts";
+import { verifyApiKey, corsHeaders, checkOrgAccess, getPathParameter } from "../_shared/verify-api-key.ts";
 
 serve(async (req) => {
   const startTime = performance.now();
@@ -10,14 +10,19 @@ serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response("ok", { headers: corsHeaders });
   }
+  if (req.method !== "GET") {
+    return new Response(JSON.stringify({ success: false, error: "Method not allowed" }), {
+      status: 405,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+  }
 
   console.log('📡 [API] list-students - Début');
   try {
     const { keyData, supabase } = await verifyApiKey(req);
 
     const url = new URL(req.url);
-    const pathParts = url.pathname.split("/");
-    const orgId = pathParts[pathParts.length - 2];
+    const orgId = getPathParameter(req, "list-students", "organization ID");
     console.log('📡 [API] list-students - orgId:', orgId);
 
     if (!orgId) {
@@ -27,9 +32,13 @@ serve(async (req) => {
     // VÉRIFICATION DE SÉCURITÉ (IDOR)
     checkOrgAccess(keyData, orgId);
 
-    const page = parseInt(url.searchParams.get("page") || "1");
-    const limit = parseInt(url.searchParams.get("limit") || "20");
+    const page = Number(url.searchParams.get("page") || "1");
+    const limit = Number(url.searchParams.get("limit") || "20");
     const search = url.searchParams.get("search") || "";
+
+    if (!Number.isInteger(page) || page < 1 || !Number.isInteger(limit) || limit < 1 || limit > 100) {
+      throw new Error("page must be >= 1 and limit must be between 1 and 100");
+    }
 
     let query = supabase
       .from("profiles")
@@ -62,7 +71,7 @@ serve(async (req) => {
     };
 
   } catch (error) {
-    statusCode = 400;
+    statusCode = (error as any).status || 400;
     responseBody = { success: false, error: error.message };
   } finally {
     const responseTimeMs = Math.round(performance.now() - startTime);

@@ -1,5 +1,5 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-import { verifyApiKey, logApiCall, corsHeaders } from "../_shared/verify-api-key.ts";
+import { verifyApiKey, corsHeaders, checkOrgAccess } from "../_shared/verify-api-key.ts";
 
 serve(async (req) => {
   const startTime = performance.now();
@@ -32,6 +32,8 @@ serve(async (req) => {
     if (studentError || !student) {
       throw new Error("Student not found or not a student");
     }
+
+    checkOrgAccess(keyData, student.organization_id);
 
     // 2. Vérifier que les groupes appartiennent à la même organisation que l'étudiant
     const { data: groups, error: groupsError } = await supabase

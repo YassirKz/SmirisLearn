@@ -1,6 +1,6 @@
 // supabase/functions/list-accounts/index.ts
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-import { verifyApiKey, logApiCall, corsHeaders } from "../_shared/verify-api-key.ts";
+import { verifyApiKey, corsHeaders, requireSuperAdminKey } from "../_shared/verify-api-key.ts";
 
 serve(async (req) => {
   const startTime = performance.now();
@@ -10,20 +10,28 @@ serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response("ok", { headers: corsHeaders });
   }
+  if (req.method !== "GET") {
+    return new Response(JSON.stringify({ success: false, error: "Method not allowed" }), {
+      status: 405,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+  }
 
   try {
     const { keyData, supabase } = await verifyApiKey(req);
 
     // Seules les clés super_admin peuvent lister toutes les organisations
-    if (!keyData.is_super_admin) {
-      throw new Error("Unauthorized: Only super admin API keys can list all accounts");
-    }
+    requireSuperAdminKey(keyData);
 
     const url = new URL(req.url);
-    const page = parseInt(url.searchParams.get("page") || "1");
-    const limit = parseInt(url.searchParams.get("limit") || "20");
+    const page = Number(url.searchParams.get("page") || "1");
+    const limit = Number(url.searchParams.get("limit") || "20");
     const plan = url.searchParams.get("plan") || undefined;
     const status = url.searchParams.get("status") || undefined;
+
+    if (!Number.isInteger(page) || page < 1 || !Number.isInteger(limit) || limit < 1 || limit > 100) {
+      throw new Error("page must be >= 1 and limit must be between 1 and 100");
+    }
 
     let query = supabase
       .from("organizations")
