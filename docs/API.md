@@ -37,3 +37,25 @@ curl "https://frftiwiqqehyiyjybemx.supabase.co/functions/v1/list-students/ORGANI
 Les reponses utilisent le format `{ "success": true, "data": ... }`. Les listes ajoutent un objet `pagination`.
 
 Les appels de paiement (`create-checkout-session`, `create-portal-session`) utilisent la session Supabase de l'utilisateur, pas une cle API externe. Le webhook Stripe est appele uniquement par Stripe.
+
+## Script de verification
+
+Le script PowerShell reutilisable [test-api.ps1](../scripts/test-api.ps1) ne contient aucune cle. Il teste seulement la lecture par defaut :
+
+```powershell
+.\scripts\test-api.ps1
+```
+
+Pour executer le cycle complet de creation, lecture, modification et suppression de donnees temporaires :
+
+```powershell
+.\scripts\test-api.ps1 -RunWriteTests -Cleanup
+```
+
+Vous pouvez aussi fournir la cle par variable d'environnement temporaire :
+
+```powershell
+$env:SMIRIS_API_KEY = Read-Host "API key"
+.\scripts\test-api.ps1 -RunWriteTests -Cleanup
+Remove-Item Env:SMIRIS_API_KEY
+```
