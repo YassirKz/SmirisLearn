@@ -36,7 +36,7 @@ export default function ProtectedRoute({
 
   // Si des rôles sont spécifiés et que l'utilisateur n'a pas le bon rôle
   if (allowedRoles.length > 0 && !allowedRoles.includes(role)) {
-    return <Navigate to="/unauthorized" replace />;
+    return <Navigate to="/unauthorized" state={{ requiredRole: allowedRoles[0] }} replace />;
   }
 
   // Vérifier le statut de l'abonnement

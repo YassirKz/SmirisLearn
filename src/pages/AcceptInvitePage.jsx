@@ -5,12 +5,14 @@ import { Building, Mail, Lock, AlertCircle, Eye, EyeOff, Users, User } from 'luc
 import { supabase } from '../lib/supabase';
 import { isTokenExpired } from '../utils/tokenGenerator';
 import { useMemberInvitation } from '../hooks/useMemberInvitation';
+import { useUserRole } from '../hooks/useUserRole';
 
 export default function AcceptInvitePage() {
     const [searchParams] = useSearchParams();
     const navigate = useNavigate();
     const token = searchParams.get('token');
 
+    const { refreshRole } = useUserRole();
     const { getInvitationByToken: getMemberInvitation, acceptInvitation: acceptMemberInvitation } = useMemberInvitation();
 
     const [loading, setLoading] = useState(true);
@@ -209,6 +211,9 @@ export default function AcceptInvitePage() {
 
                 if (rpcError) throw rpcError;
 
+                // Rafraîchir explicitement le rôle avant la navigation pour synchroniser UserRoleContext
+                await refreshRole();
+
                 navigate('/admin?firstLogin=true', { replace: true });
 
             } else {
@@ -263,6 +268,10 @@ export default function AcceptInvitePage() {
                     // Passer le nom saisi dans le formulaire pour le nouveau membre
                     await acceptMemberInvitation(token, userId, formData.fullName);
                 }
+
+                // Rafraîchir le rôle avant la redirection
+                await refreshRole();
+
                 // Rediriger selon le rôle de l'invitation
                 const redirectPath = invitation.role === 'org_admin' ? '/admin' : '/student/learning';
                 navigate(redirectPath, { replace: true });

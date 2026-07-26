@@ -33,12 +33,12 @@ export const UserRoleProvider = ({ children }) => {
     }
 
     logger.debug("[UserRoleContext] Chargement du rôle", { userId: user.id });
-    const isInitialFetch = lastFetchedUserId.current !== user.id;
+    if (lastFetchedUserId.current !== user.id) {
+      hasAttemptedSync.current = false;
+    }
 
     try {
-      if (isInitialFetch) {
-        setLoading(true);
-      }
+      setLoading(true);
 
       const { data: profile, error } = await supabase
         .from("profiles")
@@ -83,9 +83,11 @@ export const UserRoleProvider = ({ children }) => {
       logger.debug("[UserRoleContext] Rôle récupéré", { role: finalRole, organizationId: finalOrgId });
 
       lastFetchedUserId.current = user.id;
+      return { role: finalRole, organizationId: finalOrgId };
     } catch (err) {
       logger.error("Error fetching role data:", err);
       setRole("student");
+      return { role: "student", organizationId: null };
     } finally {
       // Always release the loading state, regardless of whether it's
       // the first fetch or a subsequent refresh.
