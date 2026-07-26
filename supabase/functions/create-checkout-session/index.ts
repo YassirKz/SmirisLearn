@@ -32,22 +32,29 @@ serve(async (req) => {
     // --- OPTIMISATION 1 : Jointure DB en une seule passe ---
     const { data: profile, error: profileError } = await supabase
       .from('profiles')
-      .select('organization_id, organizations(stripe_customer_id, plan_type)')
+      .select('organization_id, role, organizations(stripe_customer_id, plan_type)')
       .eq('id', user.id)
       .single();
 
     if (profileError || !profile?.organization_id) throw new Error('Organization not found');
+    if (!['org_admin', 'super_admin'].includes(profile.role)) {
+      const error = new Error('Forbidden');
+      (error as Error & { status?: number }).status = 403;
+      throw error;
+    }
     const org = profile.organizations;
 
     // Lire le plan demandé
-    const { priceId, planType, successUrl } = await req.json();
-    if (!priceId) throw new Error('Missing priceId');
+    const { plan = 'starter' } = await req.json();
+    const priceByPlan: Record<string, string | undefined> = {
+      starter: Deno.env.get('STRIPE_STARTER_PRICE_ID'),
+    };
+    const priceId = priceByPlan[plan];
+    if (!priceId) throw new Error('Invalid or unavailable plan');
 
     // URL de retour après paiement (admin dashboard par défaut)
     const frontendUrl = Deno.env.get('FRONTEND_URL') || 'http://localhost:5173';
-    const resolvedSuccessUrl = successUrl
-      ? `${successUrl}?session_id={CHECKOUT_SESSION_ID}&payment=success`
-      : `${frontendUrl}/admin?session_id={CHECKOUT_SESSION_ID}&payment=success`;
+    const resolvedSuccessUrl = `${frontendUrl}/admin/settings?session_id={CHECKOUT_SESSION_ID}&payment=success`;
     const resolvedCancelUrl = `${frontendUrl}/admin`;
 
     let customerId = org.stripe_customer_id;
@@ -74,12 +81,12 @@ serve(async (req) => {
         trial_period_days: org.plan_type === 'free' ? 14 : undefined,
         metadata: { 
             organization_id: profile.organization_id,
-            plan_type: planType || 'starter' 
+            plan_type: plan
         }
       },
       metadata: {
         organization_id: profile.organization_id,
-        plan_type: planType || 'starter' // Utilisé par le webhook checkout.session.completed
+        plan_type: plan // Used by the checkout.session.completed webhook.
       },
     });
 
@@ -90,7 +97,7 @@ serve(async (req) => {
   } catch (err) {
     console.error('Checkout error:', err.message);
     return new Response(JSON.stringify({ error: err.message }), {
-      status: 400,
+      status: (err as Error & { status?: number }).status || 400,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
   }

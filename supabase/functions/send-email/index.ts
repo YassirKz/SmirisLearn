@@ -149,6 +149,12 @@ serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response("ok", { headers: corsHeaders });
   }
+  if (req.method !== "POST") {
+    return new Response(JSON.stringify({ success: false, error: "Method not allowed" }), {
+      status: 405,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+  }
 
   try {
     // 1. Vérifier l'authentification via le JWT Supabase
@@ -182,15 +188,56 @@ serve(async (req) => {
 
 
     // 2. Récupérer les données de la requête
-    const { to, type = "company", organizationName, token, invitedByName, adminName, fromEmail, fromName } =
+    const adminSupabase = createClient(
+      Deno.env.get("SUPABASE_URL")!,
+      Deno.env.get("SERVICE_ROLE_KEY")!,
+      { auth: { persistSession: false } },
+    );
+    const { data: callerProfile, error: callerError } = await adminSupabase
+      .from("profiles")
+      .select("role, organization_id")
+      .eq("id", user.id)
+      .single();
+    if (callerError || !callerProfile || !["org_admin", "super_admin"].includes(callerProfile.role)) {
+      const error = new Error("Forbidden");
+      (error as Error & { status?: number }).status = 403;
+      throw error;
+    }
+
+    let { to, type = "company", organizationName, token, invitedByName, adminName } =
       await req.json();
 
     if (!to) throw new Error("Le champ 'to' (email destinataire) est requis");
     if (!token) throw new Error("Le champ 'token' est requis");
+    if (!["company", "member"].includes(type)) throw new Error("Invalid invitation type");
+
+    if (type === "company" && callerProfile.role !== "super_admin") {
+      const error = new Error("Forbidden");
+      (error as Error & { status?: number }).status = 403;
+      throw error;
+    }
+
+    if (type === "member") {
+      const { data: invitation, error: invitationError } = await adminSupabase
+        .from("member_invitations")
+        .select("email, organization_id, organizations(name)")
+        .eq("token", token)
+        .gte("expires_at", new Date().toISOString())
+        .single();
+      if (invitationError || !invitation) throw new Error("Invitation invalide ou expiree");
+      if (callerProfile.role !== "super_admin" && callerProfile.organization_id !== invitation.organization_id) {
+        const error = new Error("Forbidden");
+        (error as Error & { status?: number }).status = 403;
+        throw error;
+      }
+
+      to = invitation.email;
+      organizationName = invitation.organizations?.name || organizationName;
+    }
 
     // 3. Construire le lien d'invitation
     // On utilise l'origin envoyé par le frontend ou un fallback
-    const origin = req.headers.get("Origin") || req.headers.get("Referer")?.replace(/\/$/, "") || "https://smiris-learn.vercel.app";
+    const origin = Deno.env.get("FRONTEND_URL") || "https://smiris-learn.vercel.app";
     const inviteLink =
       type === "member"
         ? `${origin}/accept-member-invite?token=${token}`
@@ -259,7 +306,7 @@ serve(async (req) => {
     return new Response(
       JSON.stringify({ success: false, error: error.message }),
       {
-        status: 200, // On renvoie 200 pour que le SDK Supabase ne masque pas l'erreur dans un status HTTP 400
+        status: (error as Error & { status?: number }).status || 400,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       }
     );

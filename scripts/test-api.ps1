@@ -111,7 +111,7 @@ try {
     if (-not (Assert-ApiSuccess $student "Add test student")) { throw "Cannot continue." }
     $studentId = $student.Data.student_id
 
-    $listStudents = Invoke-SmirisApi -Method "GET" -Endpoint "/list-students/$organizationId?page=1&limit=20"
+    $listStudents = Invoke-SmirisApi -Method "GET" -Endpoint "/list-students/${organizationId}?page=1&limit=20"
     if (-not (Assert-ApiSuccess $listStudents "List test students")) { throw "Cannot continue." }
 
     $updateStudent = Invoke-SmirisApi -Method "PATCH" -Endpoint "/update-student/$studentId" -Body @{

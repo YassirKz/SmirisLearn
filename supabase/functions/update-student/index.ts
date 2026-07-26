@@ -71,7 +71,7 @@ serve(async (req) => {
     };
 
   } catch (error) {
-    statusCode = 400;
+    statusCode = (error as any).status || 400;
     responseBody = { success: false, error: error.message };
   } finally {
     const responseTimeMs = Math.round(performance.now() - startTime);

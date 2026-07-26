@@ -30,7 +30,7 @@ const variants = {
 /**
  * LoadingSpinner avec multiples variantes et animations
  */
-export default React.memo(function LoadingSpinner({
+const LoadingSpinner = React.memo(function LoadingSpinner({
   size = "md",
   color = "primary",
   variant = "circle",
@@ -156,6 +156,8 @@ export default React.memo(function LoadingSpinner({
     </motion.div>
   );
 });
+
+export default LoadingSpinner;
 
 // Variante avec overlay pour chargement page entière
 export function FullPageSpinner({

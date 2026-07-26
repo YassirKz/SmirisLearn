@@ -10,6 +10,12 @@ const corsHeaders = {
 
 serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
+  if (req.method !== "POST") {
+    return new Response(JSON.stringify({ error: "Method not allowed" }), {
+      status: 405,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+  }
 
   try {
     const supabaseClient = createClient(
@@ -41,6 +47,12 @@ serve(async (req) => {
 
     // 3. Récupérer les paramètres
     const { targetUserId, newRole } = await req.json();
+    if (!["student", "org_admin"].includes(newRole)) {
+      throw new Error("Role invalide");
+    }
+    if (targetUserId === caller.id) {
+      throw new Error("Vous ne pouvez pas modifier votre propre role");
+    }
     if (!targetUserId || !newRole) throw new Error("Paramètres manquants");
 
     // 4. Récupérer le profil de la cible
@@ -63,6 +75,18 @@ serve(async (req) => {
     // Un Org Admin ne peut pas promouvoir quelqu'un en Super Admin
     if (!isSuperAdmin && newRole === "super_admin") {
       throw new Error("Action non autorisée");
+    }
+
+    if (targetProfile.role === "org_admin" && newRole !== "org_admin") {
+      const { count, error: adminCountError } = await supabaseAdmin
+        .from("profiles")
+        .select("id", { count: "exact", head: true })
+        .eq("organization_id", targetProfile.organization_id)
+        .eq("role", "org_admin");
+      if (adminCountError) throw adminCountError;
+      if ((count || 0) <= 1) {
+        throw new Error("Une organisation doit conserver au moins un administrateur");
+      }
     }
 
     // 6. Appliquer les changements (Profile + Auth Metadata)

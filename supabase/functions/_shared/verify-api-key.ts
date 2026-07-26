@@ -122,7 +122,7 @@ export async function verifyApiKey(req: Request) {
 export function checkOrgAccess(keyData: any, orgId: string) {
   if (keyData.is_super_admin) return true;
   if (keyData.organization_id === orgId) return true;
-  throw new Error("Unauthorized: API key does not have access to this organization");
+  throw createApiError("Unauthorized: API key does not have access to this organization", 403);
 }
 
 export function requireSuperAdminKey(keyData: any) {

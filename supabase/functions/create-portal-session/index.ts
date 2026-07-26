@@ -29,10 +29,15 @@ serve(async (req) => {
 
     const { data: profile, error: profileError } = await supabase
       .from('profiles')
-      .select('organization_id')
+      .select('organization_id, role')
       .eq('id', user.id)
       .single();
     if (profileError || !profile?.organization_id) throw new Error('Organization not found');
+    if (!['org_admin', 'super_admin'].includes(profile.role)) {
+      const error = new Error('Forbidden');
+      (error as Error & { status?: number }).status = 403;
+      throw error;
+    }
 
     const { data: org, error: orgError } = await supabase
       .from('organizations')
@@ -64,7 +69,7 @@ serve(async (req) => {
   } catch (err) {
     console.error('Portal error:', err);
     return new Response(JSON.stringify({ error: err.message }), {
-      status: 400,
+      status: (err as Error & { status?: number }).status || 400,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
   }

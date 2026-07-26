@@ -30,6 +30,9 @@ const RATE_LIMITS = {
   SIGNUP: { limit: 3, window: 3600000 }, // 3 inscriptions par heure
   RESET: { limit: 3, window: 3600000 },  // 3 reset par heure
 };
+// A UI-only identity switch leaves the Supabase JWT unchanged. Keep it disabled
+// until a server-side delegation flow with audit logging is implemented.
+const IMPERSONATION_ENABLED = false;
 
 export function AuthProvider({ children }) {
   const [realUser, setRealUser] = useState(null);
@@ -41,7 +44,6 @@ export function AuthProvider({ children }) {
   // Use a ref for lastAttempt so reads/writes don't cause re-renders
   const lastAttemptRef = useRef({});
 
-  // Computes the effective user (stays stable when neither changes)
   const user = React.useMemo(() => {
     if (impersonatedData) return impersonatedData;
     return realUser;
@@ -97,7 +99,7 @@ export function AuthProvider({ children }) {
 
           // --- LOGIQUE D'IMPERSONNALISATION SÉCURISÉE ---
           const impId = localStorage.getItem("impersonatedUserId");
-          if (impId && ["super_admin", "org_admin"].includes(role)) {
+          if (IMPERSONATION_ENABLED && impId && ["super_admin", "org_admin"].includes(role)) {
             try {
               const { data } = await supabase
                 .from("profiles")
@@ -284,7 +286,7 @@ export function AuthProvider({ children }) {
         .eq("id", realUser.id)
         .single();
 
-      if (!profile || !["super_admin", "org_admin"].includes(profile.role)) {
+      if (!IMPERSONATION_ENABLED || !profile || !["super_admin", "org_admin"].includes(profile.role)) {
         throw new Error("Droit insuffisant pour impersonifier.");
       }
 

@@ -10,7 +10,7 @@
     "env:check": "node scripts/check-env.mjs",
     "lint": "eslint .",
     "preview": "vite preview",
-    "test": "node --test"
+    "test": "vitest run"
   },
   "dependencies": {
     "@emailjs/browser": "^4.4.1",
@@ -22,25 +22,28 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
-    "dompurify": "^3.3.1",
+    "dompurify": "^3.4.12",
     "framer-motion": "^12.34.5",
-    "i18next-http-backend": "^3.0.2",
+    "i18next-http-backend": "^4.0.0",
     "ldrs": "^1.1.9",
     "lucide-react": "^0.576.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-helmet-async": "^3.0.0",
     "react-hot-toast": "^2.6.0",
-    "react-router-dom": "^7.13.1",
+    "react-router-dom": "^7.18.1",
     "recharts": "^3.8.0",
     "stripe": "^20.4.1",
     "tailwind-merge": "^3.5.0",
-    "uuid": "^13.0.0",
+    "uuid": "^14.0.1",
     "web-vitals": "^5.2.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.1",
     "@playwright/test": "^1.58.2",
+    "@testing-library/jest-dom": "^7.0.0",
+    "@testing-library/react": "^16.3.2",
+    "@testing-library/user-event": "^14.6.1",
     "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^5.1.1",
@@ -50,12 +53,14 @@
     "eslint-plugin-react-hooks": "^7.0.1",
     "eslint-plugin-react-refresh": "^0.4.24",
     "globals": "^16.5.0",
+    "jsdom": "^29.1.1",
     "postcss": "^8.4.31",
     "rollup-plugin-visualizer": "^7.0.1",
     "tailwindcss": "^3.4.1",
     "vite": "^8.0.0-beta.13",
     "vite-plugin-compression": "^0.5.1",
-    "vite-plugin-pwa": "^1.2.0"
+    "vite-plugin-pwa": "^1.2.0",
+    "vitest": "^4.1.10"
   },
   "overrides": {
     "vite": "^8.0.0-beta.13"
