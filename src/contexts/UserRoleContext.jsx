@@ -33,13 +33,16 @@ export const UserRoleProvider = ({ children }) => {
     }
 
     logger.debug("[UserRoleContext] Chargement du rôle", { userId: user.id });
-    if (lastFetchedUserId.current !== user.id) {
+
+    // Premier chargement pour cet utilisateur : afficher le spinner
+    // Refresh silen cieux (même user.id) : ne pas remettre loading=true
+    const isFirstLoad = lastFetchedUserId.current !== user.id;
+    if (isFirstLoad) {
       hasAttemptedSync.current = false;
+      setLoading(true);
     }
 
     try {
-      setLoading(true);
-
       const { data: profile, error } = await supabase
         .from("profiles")
         .select("role, organization_id, organizations(subscription_status)")
@@ -89,8 +92,7 @@ export const UserRoleProvider = ({ children }) => {
       setRole("student");
       return { role: "student", organizationId: null };
     } finally {
-      // Always release the loading state, regardless of whether it's
-      // the first fetch or a subsequent refresh.
+      // Toujours relacher le loading (ne bloque que le premier chargement)
       setLoading(false);
     }
   }, [user]);

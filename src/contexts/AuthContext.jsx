@@ -1,6 +1,6 @@
 import React, { createContext, useState, useEffect, useCallback, useRef } from "react";
  
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { supabase } from "../lib/supabase";
 import logger from "../lib/logger";
 // eslint-disable-next-line no-unused-vars
@@ -9,27 +9,13 @@ import LoadingSpinner from "../components/ui/LoadingSpinner";
 
 export const AuthContext = createContext();
 
-// Variants pour animations
-const pageVariants = {
-  initial: { opacity: 0, x: -100 },
-  animate: {
-    opacity: 1,
-    x: 0,
-    transition: { type: "spring", stiffness: 100, damping: 20 },
-  },
-  exit: {
-    opacity: 0,
-    x: 100,
-    transition: { duration: 0.3 },
-  },
-};
-
 // Rate limiting config (outside component — never recreated)
 const RATE_LIMITS = {
   LOGIN: { limit: 5, window: 60000 },   // 5 tentatives par minute
   SIGNUP: { limit: 3, window: 3600000 }, // 3 inscriptions par heure
   RESET: { limit: 3, window: 3600000 },  // 3 reset par heure
 };
+
 // A UI-only identity switch leaves the Supabase JWT unchanged. Keep it disabled
 // until a server-side delegation flow with audit logging is implemented.
 const IMPERSONATION_ENABLED = false;
@@ -142,6 +128,12 @@ export function AuthProvider({ children }) {
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange(async (event, session) => {
+      // Ignorer les événements qui ne sont pas de vraies connexions/déconnexions :
+      // - TOKEN_REFRESHED : rafraîchissement silencieux du JWT au retour sur l'onglet
+      // - USER_UPDATED    : déclenché par updateUser() dans UserRoleContext lors de la
+      //                     synchronisation des métadonnées (role, organization_id)
+      if (event === 'TOKEN_REFRESHED' || event === 'USER_UPDATED') return;
+
       setSession(session);
       setRealUser(session?.user ?? null);
       setError(null);
@@ -366,20 +358,11 @@ export function AuthProvider({ children }) {
     );
   }
 
+  // On n'utilise plus AnimatePresence ici pour éviter le flash de rechargement
+  // visuel quand l'utilisateur revient sur l'onglet (TOKEN_REFRESHED).
   return (
     <AuthContext.Provider value={value}>
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={user ? "authenticated" : "unauthenticated"}
-          variants={pageVariants}
-          initial="initial"
-          animate="animate"
-          exit="exit"
-          className="min-h-screen"
-        >
-          {children}
-        </motion.div>
-      </AnimatePresence>
+      {children}
     </AuthContext.Provider>
   );
 }
